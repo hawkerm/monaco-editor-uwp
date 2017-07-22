@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        /* Just have Monaco Fill All Available Space within control */
+        #container {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="container"></div>
+
+    <!-- TODO: Remove dev directory and use 'min' here -->
+    <script src="ms-appx-web:///Monaco/monaco-editor/dev/vs/loader.js"></script>
+    <script>
+        Debug.log("Starting");
+        require.config({ paths: { 'vs': 'ms-appx-web:///Monaco/monaco-editor/dev/vs' }});
+	    require(['vs/editor/editor.main'], function() {
+		    var editor = monaco.editor.create(document.getElementById('container'), {
+			    value: [
+				    'function x() {',
+				    '\tconsole.log("Hello world!");',
+				    '}'
+			    ].join('\n'),
+			    language: 'javascript'
+		    });
+	    });
+    </script>
+</body>
+</html>

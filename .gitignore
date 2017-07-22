@@ -10,6 +10,9 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+# Monaco Dependency (Download from https://microsoft.github.io/monaco-editor/)
+MonacoEditorComponent/monaco-editor
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
