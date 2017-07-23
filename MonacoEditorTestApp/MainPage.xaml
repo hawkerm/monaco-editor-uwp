@@ -9,6 +9,7 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <monaco:EditorComponent></monaco:EditorComponent>
+        <monaco:EditorComponent x:Name="Editor">
+        </monaco:EditorComponent>
     </Grid>
 </Page>

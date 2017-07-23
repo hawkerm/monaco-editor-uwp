@@ -25,6 +25,16 @@ namespace MonacoEditorTestApp
         public MainPage()
         {
             this.InitializeComponent();
+
+            Editor.Content = "public class Program {\n\tpublic static void Main(string[] args) {\n\t\tConsole.WriteLine(\"Hello, World!\");\n\t}\n}";
+
+            Editor.Loaded += Editor_Loaded;
+        }
+
+        private async void Editor_Loaded(object sender, RoutedEventArgs e)
+        {
+            var languages = await new Monaco.LanguagesHelper(Editor).GetLanguagesAsync();
+
         }
     }
 }

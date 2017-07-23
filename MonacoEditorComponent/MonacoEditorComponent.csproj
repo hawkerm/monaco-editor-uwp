@@ -108,7 +108,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="EditorComponent.cs" />
+    <Compile Include="EditorComponent.Properties.cs" />
     <Compile Include="Helpers\DebugLogger.cs" />
+    <Compile Include="Helpers\ParentAccessor.cs" />
+    <Compile Include="Monaco\Languages\ILanguageExtensionPoint.cs" />
+    <Compile Include="Monaco\LanguagesHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

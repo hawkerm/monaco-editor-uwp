@@ -1,23 +1,37 @@
 ﻿using Monaco.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace Monaco
 {
     public partial class EditorComponent
     {
+        // Override default Loaded event so we can make sure we've initialized our WebView contents with the Editor.
+        public new event RoutedEventHandler Loaded;
+
         private void WebView_DOMContentLoaded(WebView sender, WebViewDOMContentLoadedEventArgs args)
         {
+            Debug.WriteLine("DOM Content Loaded");
             this._initialized = true;
         }
 
         private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
         {
+            Debug.WriteLine("Navigation Starting");
+            var parent = new ParentAccessor(this);
+            parent.RegisterAction("Loaded", () =>
+            {
+                Loaded?.Invoke(this, new RoutedEventArgs());
+            });
+
             this._view.AddWebAllowedObject("Debug", new DebugLogger());
+            this._view.AddWebAllowedObject("Parent", parent);
         }
     }
 }

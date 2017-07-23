@@ -1,14 +1,8 @@
-﻿using Monaco.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+﻿using System;
+using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Documents;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 
 // The Templated Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234235
 
@@ -44,6 +38,26 @@ namespace Monaco
             }
 
             base.OnApplyTemplate();
+        }
+
+        internal async Task<string> SendScriptAsync(string script)
+        {
+            if (_initialized)
+            {
+                return await this._view.InvokeScriptAsync("eval", new string[] { script });
+            }
+
+            return string.Empty;
+        }
+
+        internal async Task<string> InvokeScriptAsync(string method, params string[] args)
+        {
+            if (_initialized)
+            {
+                return await this._view.InvokeScriptAsync(method, args);
+            }
+
+            return string.Empty;
         }
     }
 }

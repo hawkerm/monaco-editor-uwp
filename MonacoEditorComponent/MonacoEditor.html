@@ -26,14 +26,14 @@
         require.config({ paths: { 'vs': 'ms-appx-web:///Monaco/monaco-editor/dev/vs' }});
 	    require(['vs/editor/editor.main'], function() {
 		    var editor = monaco.editor.create(document.getElementById('container'), {
-			    value: [
-				    'function x() {',
-				    '\tconsole.log("Hello world!");',
-				    '}'
-			    ].join('\n'),
-			    language: 'javascript'
-		    });
-	    });
+			    value: Parent.getValue("Content"), // TODO: Move to IModel.Value?
+                language: Parent.getValue("CodeLanguage") // TODO: Move to an IEditorOptions
+            });
+
+            // Callback to Parent that we're loaded
+            Debug.log("Loaded Monaco");
+            Parent.callAction("Loaded");
+        });
     </script>
 </body>
 </html>
