@@ -6,10 +6,29 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:monaco="using:Monaco"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <monaco:EditorComponent x:Name="Editor">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <monaco:EditorComponent x:Name="Editor"
+                                Grid.Row="0"
+                                Text="{x:Bind CodeContent, Mode=TwoWay}"
+                                >
         </monaco:EditorComponent>
+        <TextBlock Text="{x:Bind CodeContent, Mode=OneWay}" Grid.Row="1"/>
+        <TextBox x:Name="TextEditor"
+                 AcceptsReturn="True"
+                 ScrollViewer.VerticalScrollBarVisibility="Visible"
+                 Grid.Row="2"
+                 Text="{x:Bind CodeContent, Mode=OneTime}"
+                 >
+        </TextBox>
+        <Button Content="Set Text" Click="Button_Click" Grid.Row="3"/>
     </Grid>
 </Page>

@@ -22,11 +22,21 @@ namespace MonacoEditorTestApp
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        public string CodeContent
+        {
+            get { return (string)GetValue(CodeContentProperty); }
+            set { SetValue(CodeContentProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Content.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CodeContentProperty =
+            DependencyProperty.Register("CodeContent", typeof(string), typeof(MainPage), new PropertyMetadata(""));
+
         public MainPage()
         {
-            this.InitializeComponent();
+            this.CodeContent = "public class Program {\n\tpublic static void Main(string[] args) {\n\t\tConsole.WriteLine(\"Hello, World!\");\n\t}\n}";
 
-            Editor.Content = "public class Program {\n\tpublic static void Main(string[] args) {\n\t\tConsole.WriteLine(\"Hello, World!\");\n\t}\n}";
+            this.InitializeComponent();
 
             Editor.Loaded += Editor_Loaded;
         }
@@ -35,6 +45,11 @@ namespace MonacoEditorTestApp
         {
             var languages = await new Monaco.LanguagesHelper(Editor).GetLanguagesAsync();
 
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            CodeContent = TextEditor.Text;
         }
     }
 }

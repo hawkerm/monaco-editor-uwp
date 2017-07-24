@@ -22,18 +22,34 @@
     <!-- TODO: Remove dev directory and use 'min' here -->
     <script src="ms-appx-web:///Monaco/monaco-editor/dev/vs/loader.js"></script>
     <script>
+        var editor;
+        var model;
+
         Debug.log("Starting");
         require.config({ paths: { 'vs': 'ms-appx-web:///Monaco/monaco-editor/dev/vs' }});
 	    require(['vs/editor/editor.main'], function() {
-		    var editor = monaco.editor.create(document.getElementById('container'), {
-			    value: Parent.getValue("Content"), // TODO: Move to IModel.Value?
+		    editor = monaco.editor.create(document.getElementById('container'), {
+			    value: Parent.getValue("Text"), // TODO: Move to IModel.Value?
                 language: Parent.getValue("CodeLanguage") // TODO: Move to an IEditorOptions
+            });
+            model = editor.getModel();
+
+            // Listen for Content Changes
+            model.onDidChangeContent((event) => {
+                Parent.setValue("Text", model.getValue());
             });
 
             // Callback to Parent that we're loaded
             Debug.log("Loaded Monaco");
             Parent.callAction("Loaded");
         });
+
+        var updateContent = function (content) {
+            // Need to ignore updates from us notifying of a change
+            if (content != model.getValue()) {
+                model.setValue(content);
+            }
+        }
     </script>
 </body>
 </html>
