@@ -16,11 +16,11 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <monaco:EditorComponent x:Name="Editor"
+        <monaco:Editor x:Name="Editor"
                                 Grid.Row="0"
                                 Text="{x:Bind CodeContent, Mode=TwoWay}"
                                 >
-        </monaco:EditorComponent>
+        </monaco:Editor>
         <TextBlock Text="{x:Bind CodeContent, Mode=OneWay}" Grid.Row="1"/>
         <TextBox x:Name="TextEditor"
                  AcceptsReturn="True"

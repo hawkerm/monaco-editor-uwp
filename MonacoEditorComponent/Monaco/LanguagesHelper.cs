@@ -15,9 +15,9 @@ namespace Monaco
     /// </summary>
     public sealed class LanguagesHelper
     {
-        private EditorComponent editor;
+        private Editor editor;
 
-        public LanguagesHelper(EditorComponent editor)
+        public LanguagesHelper(Editor editor)
         {
             // We need the editor component in order to execute JavaScript within 
             // the WebView environment to retrieve data (even though this Monaco class is static).

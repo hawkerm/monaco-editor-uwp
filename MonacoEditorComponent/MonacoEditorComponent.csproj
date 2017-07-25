@@ -91,6 +91,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
+    <DocumentationFile>bin\x64\Debug\Monaco.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <PlatformTarget>x64</PlatformTarget>
@@ -102,13 +103,14 @@
     <PlatformTarget>x64</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
+    <DocumentationFile>bin\x64\Release\Monaco.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="EditorComponent.cs" />
-    <Compile Include="EditorComponent.Properties.cs" />
+    <Compile Include="Editor.cs" />
+    <Compile Include="Editor.Properties.cs" />
     <Compile Include="Helpers\DebugLogger.cs" />
     <Compile Include="Helpers\ParentAccessor.cs" />
     <Compile Include="Helpers\ThemeListener.cs" />
@@ -248,7 +250,7 @@
     <Content Include="MonacoEditor.html" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EditorComponent.Events.cs" />
+    <Compile Include="Editor.Events.cs" />
     <None Include="monaco-editor\CHANGELOG.md" />
     <None Include="monaco-editor\dev\vs\base\worker\workerMain.js.map" />
     <None Include="monaco-editor\dev\vs\editor\editor.main.js.map" />

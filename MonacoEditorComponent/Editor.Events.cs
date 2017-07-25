@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Monaco
 {
-    public partial class EditorComponent
+    public partial class Editor
     {
         // Override default Loaded event so we can make sure we've initialized our WebView contents with the Editor.
         public new event RoutedEventHandler Loaded;

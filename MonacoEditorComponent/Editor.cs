@@ -8,8 +8,12 @@ using Windows.UI.Xaml.Controls;
 
 namespace Monaco
 {
+    /// <summary>
+    /// UWP Windows Runtime Component wrapper for the Monaco Editor
+    /// https://microsoft.github.io/monaco-editor/
+    /// </summary>
     [TemplatePart(Name = "View", Type = typeof(WebView))]
-    public sealed partial class EditorComponent : Control
+    public sealed partial class Editor : Control
     {
         private bool _initialized;
         private WebView _view;        
@@ -25,7 +29,7 @@ namespace Monaco
 
         // Using a DependencyProperty as the backing store for HorizontalLayout.  This enables animation, styling, binding, etc...
         private static readonly DependencyProperty IsLoadedPropertyField =
-            DependencyProperty.Register("IsLoaded", typeof(string), typeof(EditorComponent), new PropertyMetadata(false));
+            DependencyProperty.Register("IsLoaded", typeof(string), typeof(Editor), new PropertyMetadata(false));
 
         public static DependencyProperty IsLoadedProperty
         {
@@ -35,9 +39,9 @@ namespace Monaco
             }
         }
 
-        public EditorComponent()
+        public Editor()
         {
-            this.DefaultStyleKey = typeof(EditorComponent);            
+            this.DefaultStyleKey = typeof(Editor);            
         }
 
         protected override void OnApplyTemplate()
