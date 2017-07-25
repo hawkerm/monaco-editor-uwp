@@ -15,6 +15,8 @@ namespace Monaco
         // Override default Loaded event so we can make sure we've initialized our WebView contents with the Editor.
         public new event RoutedEventHandler Loaded;
 
+        private ThemeListener _themeListener;
+
         private void WebView_DOMContentLoaded(WebView sender, WebViewDOMContentLoadedEventArgs args)
         {
             Debug.WriteLine("DOM Content Loaded");
@@ -30,8 +32,20 @@ namespace Monaco
                 Loaded?.Invoke(this, new RoutedEventArgs());
             });
 
+            _themeListener = new ThemeListener();
+            _themeListener.ThemeChanged += _themeListener_ThemeChanged;
+
             this._view.AddWebAllowedObject("Debug", new DebugLogger());
             this._view.AddWebAllowedObject("Parent", parent);
+            this._view.AddWebAllowedObject("Theme", _themeListener);
+        }
+
+        private async void _themeListener_ThemeChanged(ThemeListener sender)
+        {
+            await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+            {
+                await this.InvokeScriptAsync("changeTheme", sender.CurrentTheme.ToString(), sender.IsHighContrast.ToString());
+            });
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Monaco
 
         public EditorComponent()
         {
-            this.DefaultStyleKey = typeof(EditorComponent);
+            this.DefaultStyleKey = typeof(EditorComponent);            
         }
 
         protected override void OnApplyTemplate()

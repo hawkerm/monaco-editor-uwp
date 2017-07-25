@@ -39,6 +39,9 @@
                 Parent.setValue("Text", model.getValue());
             });
 
+            // Set theme
+            changeTheme(Theme.currentThemeName.toString(), Theme.isHighContrast.toString());
+
             // Callback to Parent that we're loaded
             Debug.log("Loaded Monaco");
             Parent.callAction("Loaded");
@@ -49,6 +52,17 @@
             if (content != model.getValue()) {
                 model.setValue(content);
             }
+        }
+
+        var changeTheme = function (theme, highcontrast) {
+            var newTheme = 'vs';
+            if (highcontrast == "True" || highcontrast == "true") {
+                newTheme = 'hc-black';
+            } else if (theme == "Dark") {
+                newTheme = 'vs-dark';
+            }
+
+            monaco.editor.setTheme(newTheme);
         }
     </script>
 </body>
