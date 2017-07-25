@@ -12,7 +12,7 @@ namespace Monaco.Helpers
     public sealed class ParentAccessor
     {
         private object parent;
-        private TypeInfo typeinfo;
+        private Type typeinfo;
         private Dictionary<string, Action> actions;
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace Monaco.Helpers
         public ParentAccessor(object parent)
         { 
             this.parent = parent;
-            this.typeinfo = parent.GetType().GetTypeInfo();
+            this.typeinfo = parent.GetType();
             this.actions = new Dictionary<string, Action>();
         }
 
@@ -59,7 +59,7 @@ namespace Monaco.Helpers
         /// <returns>Property Value or null.</returns>
         public object GetValue(string name)
         {
-            var propinfo = typeinfo.GetDeclaredProperty(name);
+            var propinfo = typeinfo.GetProperty(name);
             return propinfo?.GetValue(this.parent);
         }
 
@@ -73,11 +73,12 @@ namespace Monaco.Helpers
         /// <returns>Value of Child Property or null.</returns>
         public object GetChildValue(string name, string child)
         {
-            var propinfo = typeinfo.GetDeclaredProperty(name);
+            // TODO: Support params for multi-level digging?
+            var propinfo = typeinfo.GetProperty(name);
             var prop = propinfo?.GetValue(this.parent);
             if (prop != null)
             {
-                var childinfo = prop.GetType().GetTypeInfo().GetDeclaredProperty(child);
+                var childinfo = prop.GetType().GetProperty(child);
                 return childinfo?.GetValue(prop);
             }
 
@@ -91,7 +92,7 @@ namespace Monaco.Helpers
         /// <param name="value">Value to set.</param>
         public void SetValue(string name, object value)
         {
-            var propinfo = typeinfo.GetDeclaredProperty(name); // TODO: Cache these?
+            var propinfo = typeinfo.GetProperty(name); // TODO: Cache these?
             propinfo?.SetValue(this.parent, value);
         }
     }
