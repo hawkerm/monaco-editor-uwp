@@ -15,6 +15,15 @@ An x64 NuGet Package is provided.
 Install-Package Monaco.Editor
 ```
 
+Look at the TestApp for current usage.
+
+Current Features
+----------------
+ - Two-way Text Binding for Code Content Setting and Retrieval
+ - CodeLanguage property to set initial syntax highlighting (must be set in XAML declaration).
+ - Support for *await new Monaco.LanguagesHelper(Editor).GetLanguagesAsync()* call to retrieve supported languages, use **Id** field in property above.
+ - Theme Aware: Control automatically picks theme based on system/app light/dark theme and high contrast settings.
+
 Build Notes
 -----------
 Built using Visual Studio 2017 for Windows 10 14393 and above.
