@@ -23,6 +23,11 @@ namespace Monaco
             this._initialized = true;
         }
 
+        private void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+        {
+            this.IsLoaded = true;
+        }
+
         private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
         {
             Debug.WriteLine("Navigation Starting");

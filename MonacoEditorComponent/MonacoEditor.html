@@ -64,6 +64,11 @@
 
             monaco.editor.setTheme(newTheme);
         }
+
+        // Update Monaco Size when we receive a window resize event
+        window.addEventListener("resize", () => {
+            editor.layout();
+        });
     </script>
 </body>
 </html>

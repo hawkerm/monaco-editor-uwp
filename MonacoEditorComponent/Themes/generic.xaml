@@ -15,6 +15,7 @@
                         VerticalAlignment="Stretch">
                         <WebView x:Name="View"
                                  Margin="{TemplateBinding Padding}"
+                                 Visibility="{Binding IsLoaded,RelativeSource={RelativeSource TemplatedParent}}"
                                  HorizontalAlignment="Stretch"
                                  VerticalAlignment="Stretch"/>
                     </Border>
