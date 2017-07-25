@@ -42,6 +42,14 @@
             // Set theme
             changeTheme(Theme.currentThemeName.toString(), Theme.isHighContrast.toString());
 
+            // Update Monaco Size when we receive a window resize event
+            window.addEventListener("resize", () => {
+                editor.layout();
+            });
+
+            // Disable WebView Scrollbar so Monaco Scrollbar can do heavy lifting
+            document.body.style.overflow = 'hidden';
+
             // Callback to Parent that we're loaded
             Debug.log("Loaded Monaco");
             Parent.callAction("Loaded");
@@ -64,11 +72,6 @@
 
             monaco.editor.setTheme(newTheme);
         }
-
-        // Update Monaco Size when we receive a window resize event
-        window.addEventListener("resize", () => {
-            editor.layout();
-        });
     </script>
 </body>
 </html>
