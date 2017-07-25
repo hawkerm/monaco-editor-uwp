@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Monaco.Editor</id>
+    <version>0.1</version>
+    <title>Monaco Editor UWP Component</title>
+    <authors>Michael A. Hawker</authors>
+    <owners>Michael A. Hawker</owners>
+    <licenseUrl>https://github.com/hawkerm/monaco-editor-uwp/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/hawkerm/monaco-editor-uwp</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A Windows Runtime Component wrapper around the web-based Monaco Editor</description>
+    <releaseNotes>First Release.</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>uwp monaco editor controls</tags>
+  </metadata>
+  <files>
+    <!-- WinMd and IntelliSense files -->
+    <file src="bin\x64\Release\Monaco.pri" target="lib\uap10.0"/>
+    <file src="bin\x64\Release\Monaco.winmd" target="lib\uap10.0"/>
+    <file src="bin\x64\Release\Monaco.xml" target="lib\uap10.0"/>
+    <file src="bin\x64\Release\MonacoEditorComponent.xr.xml" target="lib\uap10.0\Monaco"/>
+    <!-- XAML controls -->
+    <file src="Themes\Generic.xaml" target="lib\uap10.0\Themes"/>
+    <!-- Dependencies -->
+    <file src="MonacoEditor.html" target="lib\uap10.0\Monaco"/>
+    <file src="monaco-editor\**\*.*" target="lib\uap10.0\Monaco\monaco-editor"/>
+  </files>
+</package>

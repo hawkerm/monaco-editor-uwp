@@ -4,6 +4,17 @@ A *Windows Runtime Component* wrapper around the web-based [Monaco Editor](https
 
 This project is not affiliated with the Monaco team and is provided for convenience.  Please direct issues related to the use of this control wrapper to this repository.
 
+This control is still in an early alpha state.
+
+Usage
+-----
+
+An x64 NuGet Package is provided.
+
+```
+Install-Package Monaco.Editor
+```
+
 Build Notes
 -----------
 Built using Visual Studio 2017 for Windows 10 14393 and above.
