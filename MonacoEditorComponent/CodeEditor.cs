@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Monaco.Helpers;
+using System;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Xaml;
@@ -9,11 +10,11 @@ using Windows.UI.Xaml.Controls;
 namespace Monaco
 {
     /// <summary>
-    /// UWP Windows Runtime Component wrapper for the Monaco Editor
+    /// UWP Windows Runtime Component wrapper for the Monaco CodeEditor
     /// https://microsoft.github.io/monaco-editor/
     /// </summary>
     [TemplatePart(Name = "View", Type = typeof(WebView))]
-    public sealed partial class Editor : Control
+    public sealed partial class CodeEditor : Control
     {
         private bool _initialized;
         private WebView _view;        
@@ -29,7 +30,7 @@ namespace Monaco
 
         // Using a DependencyProperty as the backing store for HorizontalLayout.  This enables animation, styling, binding, etc...
         private static readonly DependencyProperty IsLoadedPropertyField =
-            DependencyProperty.Register("IsLoaded", typeof(string), typeof(Editor), new PropertyMetadata(false));
+            DependencyProperty.Register("IsLoaded", typeof(string), typeof(CodeEditor), new PropertyMetadata(false));
 
         public static DependencyProperty IsLoadedProperty
         {
@@ -39,9 +40,9 @@ namespace Monaco
             }
         }
 
-        public Editor()
+        public CodeEditor()
         {
-            this.DefaultStyleKey = typeof(Editor);            
+            this.DefaultStyleKey = typeof(CodeEditor);            
         }
 
         protected override void OnApplyTemplate()
@@ -71,7 +72,16 @@ namespace Monaco
         {
             if (_initialized)
             {
-                return await this._view.InvokeScriptAsync("eval", new string[] { script });
+                if (Dispatcher.HasThreadAccess)
+                {
+                    return await this._view.InvokeScriptAsync("eval", new string[] { script });
+                }
+                else
+                {
+                    return await Dispatcher.RunTaskAsync(async () => {
+                        return await _view.InvokeScriptAsync("eval", new string[] { script });
+                    });
+                }                
             }
 
             return string.Empty;
@@ -81,7 +91,17 @@ namespace Monaco
         {
             if (_initialized)
             {
-                return await this._view.InvokeScriptAsync(method, args);
+                if (Dispatcher.HasThreadAccess)
+                {
+                    return await this._view.InvokeScriptAsync(method, args);
+                }
+                else
+                {
+                    return await Dispatcher.RunTaskAsync(async () =>
+                    {
+                        return await this._view.InvokeScriptAsync(method, args);
+                    });
+                }
             }
 
             return string.Empty;

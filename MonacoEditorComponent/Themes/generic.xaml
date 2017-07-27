@@ -3,10 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:monaco="using:Monaco">
 
-    <Style TargetType="monaco:Editor" >
+    <Style TargetType="monaco:CodeEditor" >
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="monaco:Editor">
+                <ControlTemplate TargetType="monaco:CodeEditor">
                     <Border
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"

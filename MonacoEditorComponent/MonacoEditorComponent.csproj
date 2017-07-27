@@ -109,13 +109,25 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Editor.cs" />
-    <Compile Include="Editor.Properties.cs" />
+    <Compile Include="CodeEditor.cs" />
+    <Compile Include="CodeEditor.Methods.cs" />
+    <Compile Include="CodeEditor.Properties.cs" />
     <Compile Include="Helpers\DebugLogger.cs" />
+    <Compile Include="Helpers\DispatcherTaskExtensions.cs" />
     <Compile Include="Helpers\ParentAccessor.cs" />
     <Compile Include="Helpers\ThemeListener.cs" />
+    <Compile Include="Monaco\Editor\IModelDecorationOptions.cs" />
+    <Compile Include="Monaco\Editor\IModelDeltaDecoration.cs" />
+    <Compile Include="Monaco\Helpers\CssInlineStyle.cs" />
+    <Compile Include="Monaco\Helpers\CssLineStyle.cs" />
+    <Compile Include="Monaco\Helpers\CssStyleBroker.cs" />
+    <Compile Include="Monaco\Helpers\Json.cs" />
+    <Compile Include="Monaco\IPosition.cs" />
+    <Compile Include="Monaco\IRange.cs" />
     <Compile Include="Monaco\Languages\ILanguageExtensionPoint.cs" />
     <Compile Include="Monaco\LanguagesHelper.cs" />
+    <Compile Include="Monaco\Position.cs" />
+    <Compile Include="Monaco\Range.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -248,9 +260,10 @@
     <Content Include="monaco-editor\min\vs\loader.js" />
     <Content Include="monaco-editor\ThirdPartyNotices.txt" />
     <Content Include="MonacoEditor.html" />
+    <Compile Include="Monaco\Helpers\CssGlyphStyle.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Editor.Events.cs" />
+    <Compile Include="CodeEditor.Events.cs" />
     <None Include="monaco-editor\CHANGELOG.md" />
     <None Include="monaco-editor\dev\vs\base\worker\workerMain.js.map" />
     <None Include="monaco-editor\dev\vs\editor\editor.main.js.map" />

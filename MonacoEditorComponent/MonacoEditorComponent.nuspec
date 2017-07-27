@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Monaco.Editor</id>
-    <version>0.1</version>
+    <version>0.2</version>
     <title>Monaco Editor UWP Component</title>
     <authors>Michael A. Hawker</authors>
     <owners>Michael A. Hawker</owners>
@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/hawkerm/monaco-editor-uwp</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A Windows Runtime Component wrapper around the web-based Monaco Editor</description>
-    <releaseNotes>First Release.</releaseNotes>
+    <releaseNotes>Breaking Change, renamed Editor to CodeEditor.  Added Basic Line Highlight Support.</releaseNotes>
     <copyright>Copyright 2017</copyright>
     <tags>uwp monaco editor controls</tags>
   </metadata>

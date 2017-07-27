@@ -7,10 +7,10 @@ using Windows.UI.Xaml;
 
 namespace Monaco
 {
-    partial class Editor
+    partial class CodeEditor
     {
         /// <summary>
-        /// Get or Set the Editor Text.
+        /// Get or Set the CodeEditor Text.
         /// </summary>
         public string Text
         {
@@ -20,11 +20,11 @@ namespace Monaco
 
         // Using a DependencyProperty as the backing store for HorizontalLayout.  This enables animation, styling, binding, etc...
         private static readonly DependencyProperty TextPropertyField =
-            DependencyProperty.Register("Text", typeof(string), typeof(Editor), new PropertyMetadata("", (d, e) => {
+            DependencyProperty.Register("Text", typeof(string), typeof(CodeEditor), new PropertyMetadata("", (d, e) => {
                 //(d as Canvas)?.InvokeScriptAsync("updateToolbox", new string[] { e.NewValue.ToString() });
-                //(d as Editor).CodeChanged?.Invoke(d, e);
+                //(d as CodeEditor).CodeChanged?.Invoke(d, e);
 
-                (d as Editor)?.InvokeScriptAsync("updateContent", e.NewValue.ToString());
+                (d as CodeEditor)?.InvokeScriptAsync("updateContent", e.NewValue.ToString());
             }));
 
         public static DependencyProperty TextProperty
@@ -36,7 +36,7 @@ namespace Monaco
         }
         
         /// <summary>
-        /// Set the Syntax Language for the Code Editor.
+        /// Set the Syntax Language for the Code CodeEditor.
         /// 
         /// Note: Most likely to change or move location.
         /// </summary>
@@ -48,9 +48,9 @@ namespace Monaco
 
         // Using a DependencyProperty as the backing store for HorizontalLayout.  This enables animation, styling, binding, etc...
         private static readonly DependencyProperty CodeLanguagePropertyField =
-            DependencyProperty.Register("CodeLanguage", typeof(string), typeof(Editor), new PropertyMetadata("csharp", (d, e) => {
+            DependencyProperty.Register("CodeLanguage", typeof(string), typeof(CodeEditor), new PropertyMetadata("csharp", (d, e) => {
                 //(d as Canvas)?.InvokeScriptAsync("updateToolbox", new string[] { e.NewValue.ToString() });
-                //(d as Editor).CodeChanged?.Invoke(d, e);
+                //(d as CodeEditor).CodeChanged?.Invoke(d, e);
             }));
 
         internal static DependencyProperty CodeLanguageProperty
@@ -58,6 +58,30 @@ namespace Monaco
             get
             {
                 return CodeLanguagePropertyField;
+            }
+        }
+
+        /// <summary>
+        /// Get or Set the CodeEditor Text.
+        /// </summary>
+        public bool HasGlyphMargin
+        {
+            get { return (bool)GetValue(HasGlyphMarginProperty); }
+            set { SetValue(HasGlyphMarginProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for HorizontalLayout.  This enables animation, styling, binding, etc...
+        private static readonly DependencyProperty HasGlyphMarginPropertyField =
+            DependencyProperty.Register("HasGlyphMargin", typeof(bool), typeof(CodeEditor), new PropertyMetadata(false, (d, e) => {
+                // TODO: Enable Post Change in Monaco, if possible?
+                //(d as CodeEditor)?.InvokeScriptAsync("updateContent", e.NewValue.ToString());
+            }));
+
+        public static DependencyProperty HasGlyphMarginProperty
+        {
+            get
+            {
+                return HasGlyphMarginPropertyField;
             }
         }
     }

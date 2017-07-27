@@ -14,6 +14,8 @@
             width: 100%;
         }
     </style>
+    <style id="dynamic">
+    </style>
 </head>
 <body>
 
@@ -30,7 +32,8 @@
 	    require(['vs/editor/editor.main'], function() {
 		    editor = monaco.editor.create(document.getElementById('container'), {
 			    value: Parent.getValue("Text"), // TODO: Move to IModel.Value?
-                language: Parent.getValue("CodeLanguage") // TODO: Move to an IEditorOptions
+                language: Parent.getValue("CodeLanguage"), // TODO: Move to an IEditorOptions
+                glyphMargin: Parent.getValue("HasGlyphMargin")
             });
             model = editor.getModel();
 
@@ -60,6 +63,11 @@
             if (content != model.getValue()) {
                 model.setValue(content);
             }
+        }
+
+        var updateStyle = function (innerStyle) {
+            var style = document.getElementById("dynamic");
+            style.innerHTML = innerStyle;
         }
 
         var changeTheme = function (theme, highcontrast) {

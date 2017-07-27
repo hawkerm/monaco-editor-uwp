@@ -16,11 +16,11 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <monaco:Editor x:Name="Editor"
-                                Grid.Row="0"
-                                Text="{x:Bind CodeContent, Mode=TwoWay}"
-                                >
-        </monaco:Editor>
+        <monaco:CodeEditor x:Name="Editor"
+                           Grid.Row="0"
+                           HasGlyphMargin="True"
+                           Text="{x:Bind CodeContent, Mode=TwoWay}">
+        </monaco:CodeEditor>
         <TextBlock Text="{x:Bind CodeContent, Mode=OneWay}" Grid.Row="1"/>
         <TextBox x:Name="TextEditor"
                  AcceptsReturn="True"
@@ -29,6 +29,13 @@
                  Text="{x:Bind CodeContent, Mode=OneTime}"
                  >
         </TextBox>
-        <Button Content="Set Text" Click="Button_Click" Grid.Row="3"/>
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="3">
+            <Button Content="Set Text" Click="ButtonSetText_Click" />
+            <Button Content="Reveal Position 10, 5 In Center" Click="ButtonRevealPositionInCenter_Click" />
+            <Button Content="Highlight Range 3,1-10" Click="ButtonHighlightRange_Click" />
+            <Button Content="Highlight Line 2 &amp; 4" Click="ButtonHighlightLine_Click" />
+            <Button Content="Clear Highlights" Click="ButtonClearHighlights_Click" />
+        </StackPanel>
     </Grid>
 </Page>
