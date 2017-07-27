@@ -12,7 +12,7 @@ Usage
 An x64 NuGet Package is provided.
 
 ```
-Install-Package Monaco.Editor
+Install-Package Monaco.Editor -Version 0.2.0
 ```
 
 Look at the TestApp for current usage.
