@@ -4,7 +4,7 @@ A *Windows Runtime Component* wrapper around the web-based [Monaco Editor](https
 
 This project is not affiliated with the Monaco team and is provided for convenience.  Please direct issues related to the use of this control wrapper to this repository.
 
-This control is still in an early alpha state.
+This control is still in an early alpha state.  Currently, every minor version change will signal breaking changes.
 
 Usage
 -----
@@ -16,13 +16,7 @@ Install-Package Monaco.Editor
 ```
 
 Look at the TestApp for current usage.
-
-Current Features
-----------------
- - Two-way Text Binding for Code Content Setting and Retrieval
- - CodeLanguage property to set initial syntax highlighting (must be set in XAML declaration).
- - Support for *await new Monaco.LanguagesHelper(Editor).GetLanguagesAsync()* call to retrieve supported languages, use **Id** field in property above.
- - Theme Aware: Control automatically picks theme based on system/app light/dark theme and high contrast settings.
+See changelog for more info.
 
 Build Notes
 -----------
