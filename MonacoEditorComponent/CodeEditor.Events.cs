@@ -12,8 +12,17 @@ namespace Monaco
 {
     public partial class CodeEditor
     {
-        // Override default Loaded event so we can make sure we've initialized our WebView contents with the CodeEditor.
-        public new event RoutedEventHandler Loaded;
+        // Override default Loaded/Loading event so we can make sure we've initialized our WebView contents with the CodeEditor.
+
+        /// <summary>
+        /// When Editor is Loading, it is ready to receive commands to the Monaco Engine.
+        /// </summary>
+        public new event RoutedEventHandler Loading;
+
+        /// <summary>
+        /// When Editor is Loaded, it has been rendered and is ready to be displayed.
+        /// </summary>
+        public new event RoutedEventHandler Loaded;        
 
         private ThemeListener _themeListener;
 
@@ -26,6 +35,7 @@ namespace Monaco
         private void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
             this.IsLoaded = true;
+            Loaded?.Invoke(this, new RoutedEventArgs());
         }
 
         private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
@@ -34,7 +44,7 @@ namespace Monaco
             var parent = new ParentAccessor(this);
             parent.RegisterAction("Loaded", () =>
             {
-                Loaded?.Invoke(this, new RoutedEventArgs());
+                Loading?.Invoke(this, new RoutedEventArgs());
             });
 
             _themeListener = new ThemeListener();

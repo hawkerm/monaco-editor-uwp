@@ -45,13 +45,20 @@ namespace MonacoEditorTestApp
 
             this.InitializeComponent();
 
+            Editor.Loading += Editor_Loading;
             Editor.Loaded += Editor_Loaded;
         }
 
-        private async void Editor_Loaded(object sender, RoutedEventArgs e)
+        private async void Editor_Loading(object sender, RoutedEventArgs e)
         {
+            // Ready for Code
             var languages = await new Monaco.LanguagesHelper(Editor).GetLanguagesAsync();
             //Debugger.Break();
+        }
+
+        private void Editor_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Ready for Display
         }
 
         private void ButtonSetText_Click(object sender, RoutedEventArgs e)
