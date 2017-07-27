@@ -19,6 +19,7 @@
         <monaco:CodeEditor x:Name="Editor"
                            Grid.Row="0"
                            HasGlyphMargin="True"
+                           KeyDown="Editor_KeyDown"
                            Text="{x:Bind CodeContent, Mode=TwoWay}">
         </monaco:CodeEditor>
         <TextBlock Text="{x:Bind CodeContent, Mode=OneWay}" Grid.Row="1"/>

@@ -114,6 +114,7 @@
     <Compile Include="CodeEditor.Properties.cs" />
     <Compile Include="Helpers\DebugLogger.cs" />
     <Compile Include="Helpers\DispatcherTaskExtensions.cs" />
+    <Compile Include="Helpers\KeyboardListener.cs" />
     <Compile Include="Helpers\ParentAccessor.cs" />
     <Compile Include="Helpers\ThemeListener.cs" />
     <Compile Include="Monaco\Editor\IModelDecorationOptions.cs" />

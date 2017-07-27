@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 
 namespace Monaco
 {
@@ -22,7 +23,12 @@ namespace Monaco
         /// <summary>
         /// When Editor is Loaded, it has been rendered and is ready to be displayed.
         /// </summary>
-        public new event RoutedEventHandler Loaded;        
+        public new event RoutedEventHandler Loaded;
+
+        /// <summary>
+        /// Custom Keyboard Handler.
+        /// </summary>
+        public new event WebKeyEventHandler KeyDown;
 
         private ThemeListener _themeListener;
 
@@ -53,6 +59,7 @@ namespace Monaco
             this._view.AddWebAllowedObject("Debug", new DebugLogger());
             this._view.AddWebAllowedObject("Parent", parent);
             this._view.AddWebAllowedObject("Theme", _themeListener);
+            this._view.AddWebAllowedObject("Keyboard", new KeyboardListener(this));
         }
 
         private async void _themeListener_ThemeChanged(ThemeListener sender)
@@ -61,6 +68,13 @@ namespace Monaco
             {
                 await this.InvokeScriptAsync("changeTheme", sender.CurrentTheme.ToString(), sender.IsHighContrast.ToString());
             });
+        }
+
+        internal bool TriggerKeyDown(WebKeyEventArgs args)
+        {
+            this.KeyDown?.Invoke(this, args);
+
+            return args.Handled;
         }
     }
 }

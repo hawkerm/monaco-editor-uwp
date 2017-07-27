@@ -131,5 +131,19 @@ namespace MonacoEditorTestApp
             _decorations = (await this.Editor.DeltaDecorationsAsync(this._decorations, Array.Empty<IModelDeltaDecoration>())).ToArray();
             _decorations = Array.Empty<string>();
         }
+
+        private void Editor_KeyDown(object sender, WebKeyEventArgs e)
+        {
+            Debug.WriteLine("KeyDown: " + e.KeyCode + " " + e.CtrlKey);
+
+            if (e.KeyCode == 112) // F1
+            {
+                e.Handled = true;
+            } else if (e.KeyCode == 13 && e.CtrlKey)
+            {
+                Debug.WriteLine("Execute");
+                e.Handled = true;
+            }
+        }
     }
 }
