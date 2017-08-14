@@ -29,12 +29,11 @@
 
         Debug.log("Starting");
         require.config({ paths: { 'vs': 'ms-appx-web:///Monaco/monaco-editor/dev/vs' }});
-	    require(['vs/editor/editor.main'], function() {
-		    editor = monaco.editor.create(document.getElementById('container'), {
-			    value: Parent.getValue("Text"), // TODO: Move to IModel.Value?
-                language: Parent.getValue("CodeLanguage"), // TODO: Move to an IEditorOptions
-                glyphMargin: Parent.getValue("HasGlyphMargin")
-            });
+        require(['vs/editor/editor.main'], function () {
+            let opt = getOptions();
+            opt["value"] = Parent.getValue("Text");
+
+		    editor = monaco.editor.create(document.getElementById('container'), opt);
             model = editor.getModel();
 
             // Listen for Content Changes
@@ -68,6 +67,38 @@
         var updateStyle = function (innerStyle) {
             var style = document.getElementById("dynamic");
             style.innerHTML = innerStyle;
+        }
+
+        var getOptions = function () {
+            let opt = null;
+            try {
+                opt = JSON.parse(Parent.getJsonValue("Options"));
+            } finally {
+
+            }
+
+            if (opt != null && typeof opt === "object") {
+                return opt;
+            }
+
+            return {};
+        }
+
+        var updateOptions = function (newOptions) {
+            let opt = null;
+            try {
+                opt = JSON.parse(newOptions);
+            } finally {
+
+            }
+
+            if (opt != null && typeof opt === "object") {
+                editor.updateOptions(opt);
+            }
+        }
+
+        var updateLanguage = function (language) {
+            monaco.editor.setModelLanguage(model, language);
         }
 
         var changeTheme = function (theme, highcontrast) {

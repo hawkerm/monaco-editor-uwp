@@ -145,5 +145,24 @@ namespace MonacoEditorTestApp
                 e.Handled = true;
             }
         }
+
+        private void ButtonFolding_Click(object sender, RoutedEventArgs e)
+        {
+            Editor.Options.Folding = !Editor.Options.Folding ?? true;
+        }
+
+        private void ButtonMinimap_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: Need to propagate the INotifyPropertyChanged from the Sub-Option Objects
+            Editor.Options.Minimap = new IEditorMinimapOptions()
+            {
+                Enabled = !Editor.Options.Minimap?.Enabled ?? false
+            };
+        }
+
+        private void ButtonChangeLanguage_Click(object sender, RoutedEventArgs e)
+        {
+            Editor.CodeLanguage = (Editor.CodeLanguage == "csharp") ? "xml" : "csharp";
+        }
     }
 }

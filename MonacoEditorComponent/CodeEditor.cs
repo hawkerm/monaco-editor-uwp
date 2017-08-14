@@ -1,5 +1,8 @@
-﻿using Monaco.Helpers;
+﻿using Monaco.Editor;
+using Monaco.Helpers;
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Xaml;
@@ -14,10 +17,12 @@ namespace Monaco
     /// https://microsoft.github.io/monaco-editor/
     /// </summary>
     [TemplatePart(Name = "View", Type = typeof(WebView))]
-    public sealed partial class CodeEditor : Control
+    public sealed partial class CodeEditor : Control, INotifyPropertyChanged
     {
         private bool _initialized;
-        private WebView _view;        
+        private WebView _view;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Template Property used during loading to prevent blank control visibility when it's still loading WebView.
@@ -42,7 +47,20 @@ namespace Monaco
 
         public CodeEditor()
         {
-            this.DefaultStyleKey = typeof(CodeEditor);            
+            this.DefaultStyleKey = typeof(CodeEditor);    
+            
+            if (this.Options != null)
+            {
+                // Set Pass-Thru Properties
+                this.Options.GlyphMargin = this.HasGlyphMargin;
+                this.Options.Language = this.CodeLanguage;
+
+                // Register for changes
+                this.Options.PropertyChanged += async (s, p) =>
+                {
+                    await this.InvokeScriptAsync("updateOptions", new string[] { (s as IEditorConstructionOptions)?.ToJson() });
+                };
+            }
         }
 
         protected override void OnApplyTemplate()
@@ -105,6 +123,14 @@ namespace Monaco
             }
 
             return string.Empty;
+        }
+
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }

@@ -63,6 +63,18 @@ namespace Monaco.Helpers
             return propinfo?.GetValue(this.parent);
         }
 
+        public string GetJsonValue(string name)
+        {
+            var propinfo = typeinfo.GetProperty(name);
+            var obj = propinfo?.GetValue(this.parent);
+            if (obj is IJsonable)
+            {
+                return (obj as IJsonable).ToJson();
+            }
+
+            return "{}";
+        }
+
         /// <summary>
         /// Returns the winrt primative object value for a child property off of the specified Property.
         /// 

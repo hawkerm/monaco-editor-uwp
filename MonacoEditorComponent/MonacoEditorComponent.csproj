@@ -117,6 +117,11 @@
     <Compile Include="Helpers\KeyboardListener.cs" />
     <Compile Include="Helpers\ParentAccessor.cs" />
     <Compile Include="Helpers\ThemeListener.cs" />
+    <Compile Include="Monaco\Editor\IEditorConstructionOptions.cs" />
+    <Compile Include="Monaco\Editor\IEditorFindOptions.cs" />
+    <Compile Include="Monaco\Editor\IEditorMinimapOptions.cs" />
+    <Compile Include="Monaco\Editor\IEditorOptions.cs" />
+    <Compile Include="Monaco\Editor\IEditorScrollbarOptions.cs" />
     <Compile Include="Monaco\Editor\IModelDecorationOptions.cs" />
     <Compile Include="Monaco\Editor\IModelDeltaDecoration.cs" />
     <Compile Include="Monaco\Helpers\CssInlineStyle.cs" />
@@ -134,6 +139,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>5.2.3</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>10.0.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

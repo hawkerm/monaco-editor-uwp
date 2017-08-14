@@ -19,6 +19,7 @@
         <monaco:CodeEditor x:Name="Editor"
                            Grid.Row="0"
                            HasGlyphMargin="True"
+                           CodeLanguage="csharp"
                            KeyDown="Editor_KeyDown"
                            Text="{x:Bind CodeContent, Mode=TwoWay}">
         </monaco:CodeEditor>
@@ -37,6 +38,9 @@
             <Button Content="Highlight Range 3,1-10" Click="ButtonHighlightRange_Click" />
             <Button Content="Highlight Line 2 &amp; 4" Click="ButtonHighlightLine_Click" />
             <Button Content="Clear Highlights" Click="ButtonClearHighlights_Click" />
+            <Button Content="Code Folding" Click="ButtonFolding_Click" />
+            <Button Content="Minimap" Click="ButtonMinimap_Click" />
+            <Button Content="Change Language" Click="ButtonChangeLanguage_Click" />
         </StackPanel>
     </Grid>
 </Page>
