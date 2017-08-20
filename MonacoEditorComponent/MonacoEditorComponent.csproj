@@ -143,6 +143,12 @@
     <PackageReference Include="Newtonsoft.Json">
       <Version>10.0.3</Version>
     </PackageReference>
+    <PackageReference Include="Nito.AsyncEx">
+      <Version>5.0.0-pre-02</Version>
+    </PackageReference>
+    <PackageReference Include="ObservableVector">
+      <Version>2.1.0</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Themes\Generic.xaml">

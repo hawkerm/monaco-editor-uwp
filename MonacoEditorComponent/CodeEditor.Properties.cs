@@ -1,9 +1,12 @@
 ﻿using Monaco.Editor;
+using Nito.AsyncEx;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 
 namespace Monaco
@@ -117,6 +120,68 @@ namespace Monaco
             get
             {
                 return HasGlyphMarginPropertyField;
+            }
+        }
+
+        /// <summary>
+        /// Get or set the Line Decorations.
+        /// </summary>
+        public IObservableVector<IModelDeltaDecoration> Decorations
+        {
+            get { return (IObservableVector<IModelDeltaDecoration>)GetValue(DecorationsProperty); }
+            set { SetValue(DecorationsProperty, value); }
+        }
+
+        private AsyncLock _mutexLineDecorations = new AsyncLock();
+        private string[] _decorations = Array.Empty<string>();
+
+        // Using a DependencyProperty as the backing store for Options.  This enables animation, styling, binding, etc...
+        private static readonly DependencyProperty DecorationsPropertyField =
+            DependencyProperty.Register("Decorations", typeof(IModelDeltaDecoration), typeof(CodeEditor), new PropertyMetadata(null, async (d, e) => {
+                var editor = d as CodeEditor;
+                if (editor != null)
+                {
+                    // We only want to do this one at a time per editor.
+                    using (await editor._mutexLineDecorations.LockAsync())
+                    {
+                        var old = e.OldValue as IObservableVector<IModelDeltaDecoration>;
+                        // Clear out the old line decorations if we're replacing them or setting back to null
+                        if ((old != null && old.Count > 0) ||
+                             e.NewValue == null)
+                        {
+                            editor._decorations = (await editor.DeltaDecorationsAsync(editor._decorations, null)).ToArray();
+                        }
+                        var value = e.NewValue as IObservableVector<IModelDeltaDecoration>;
+
+                        if (value != null)
+                        {
+                            if (value.Count > 0)
+                            {
+                                editor._decorations = (await editor.DeltaDecorationsAsync(editor._decorations, value.ToArray())).ToArray();
+                            }
+
+                            value.VectorChanged += async (s, cce) =>
+                            {
+                                var collection = s as IObservableVector<IModelDeltaDecoration>;
+                                if (collection != null)
+                                {
+                                    // Need to recall mutex as this is called from outside of this initial callback setting it up.
+                                    using (await editor._mutexLineDecorations.LockAsync())
+                                    {
+                                        editor._decorations = (await editor.DeltaDecorationsAsync(editor._decorations, collection.ToArray())).ToArray();
+                                    }
+                                }
+                            };
+                        }
+                    }
+                }
+            }));
+
+        public static DependencyProperty DecorationsProperty
+        {
+            get
+            {
+                return DecorationsPropertyField;
             }
         }
     }

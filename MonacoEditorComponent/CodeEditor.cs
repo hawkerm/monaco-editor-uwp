@@ -1,6 +1,8 @@
-﻿using Monaco.Editor;
+﻿using Collections.Generic;
+using Monaco.Editor;
 using Monaco.Helpers;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -61,6 +63,9 @@ namespace Monaco
                     await this.InvokeScriptAsync("updateOptions", new string[] { (s as IEditorConstructionOptions)?.ToJson() });
                 };
             }
+
+            // Initialize this here so property changed event will fire and register collection changed event.
+            this.Decorations = new ObservableVector<IModelDeltaDecoration>();
         }
 
         protected override void OnApplyTemplate()

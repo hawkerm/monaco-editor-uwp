@@ -25,22 +25,33 @@ namespace Monaco
 
         /// <summary>
         /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.icommoncodeeditor.html#deltadecorations
+        /// 
+        /// Recommand using ThreadSafe Property Decorations to manipulate decorations instead of calling this directly.
         /// </summary>
         /// <param name="oldDecoractions"></param>
         /// <param name="newDecorations"></param>
         /// <returns></returns>
+        [Obsolete("Recommand using ThreadSafe Property Decorations to manipulate decorations instead of calling this directly.")]
         public IAsyncOperation<IEnumerable<string>> DeltaDecorationsAsync([ReadOnlyArray] string[] oldDecoractions, [ReadOnlyArray] IModelDeltaDecoration[] newDecorations)
         {
+            var newDecorationsAdjust = newDecorations ?? new IModelDeltaDecoration[0];
+
             // Update Styles
             return InvokeScriptAsync("updateStyle", CssStyleBroker.Instance.GetStyles()).ContinueWith((noop) =>
             {
                 // Send Command to Modify Decorations
                 return SendScriptAsync(String.Format("JSON.stringify(editor.deltaDecorations({0}, {1}));",
-                                                            Json.Parse(Json.StringArray(oldDecoractions)), Json.Parse(Json.ObjectArray(newDecorations.Cast<IJsonable>()))));
+                                                            Json.Parse(Json.StringArray(oldDecoractions)), Json.Parse(Json.ObjectArray(newDecorationsAdjust.Cast<IJsonable>()))));
             }).ContinueWith((result) =>
             {
                 // TODO: Figure out how to unwrap as I go?
-                var jsondecorations = JsonArray.Parse(result.Result.Result);
+                var ret = result?.Result?.Result;
+                if (string.IsNullOrWhiteSpace(ret)) // Guard against Issue #5?
+                {
+                    ret = "[]";
+                }
+
+                var jsondecorations = JsonArray.Parse(ret);
 
                 IList<string> decorations = new List<string>(jsondecorations.Count);
                 for (int i = 0; i < jsondecorations.Count; i++)
@@ -49,7 +60,7 @@ namespace Monaco
                 }
 
                 return decorations.AsEnumerable<string>();
-            }).AsAsyncOperation();
+            }).AsAsyncOperation(); // TODO: Do Array Cast Here once making this private/protected.
         }
     }
 }
