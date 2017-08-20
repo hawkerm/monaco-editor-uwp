@@ -38,7 +38,28 @@ namespace Monaco
                 return TextPropertyField;
             }
         }
-        
+
+        /// <summary>
+        /// Get the current Primary Selected CodeEditor Text.
+        /// </summary>
+        public string SelectedText
+        {
+            get { return (string)GetValue(SelectedTextProperty); }
+            private set { SetValue(SelectedTextProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for HorizontalLayout.  This enables animation, styling, binding, etc...
+        private static readonly DependencyProperty SelectedTextPropertyField =
+            DependencyProperty.Register("SelectedText", typeof(string), typeof(CodeEditor), new PropertyMetadata(string.Empty));
+
+        public static DependencyProperty SelectedTextProperty
+        {
+            get
+            {
+                return SelectedTextPropertyField;
+            }
+        }
+
         /// <summary>
         /// Set the Syntax Language for the Code CodeEditor.
         /// 

@@ -41,6 +41,11 @@
                 Parent.setValue("Text", model.getValue());
             });
 
+            // Listen for Selection Changes
+            editor.onDidChangeCursorSelection((event) => {
+                Parent.setValue("SelectedText", model.getValueInRange(event.selection));
+            })
+
             // Set theme
             changeTheme(Theme.currentThemeName.toString(), Theme.isHighContrast.toString());
 
