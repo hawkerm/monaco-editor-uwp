@@ -125,8 +125,11 @@
     <Compile Include="Monaco\Editor\IEditorMinimapOptions.cs" />
     <Compile Include="Monaco\Editor\IEditorOptions.cs" />
     <Compile Include="Monaco\Editor\IEditorScrollbarOptions.cs" />
+    <Compile Include="Monaco\Editor\IModel.cs" />
     <Compile Include="Monaco\Editor\IModelDecorationOptions.cs" />
     <Compile Include="Monaco\Editor\IModelDeltaDecoration.cs" />
+    <Compile Include="Monaco\Editor\WordAtPosition.cs" />
+    <Compile Include="Monaco\Editor\IWordAtPosition.cs" />
     <Compile Include="Monaco\Helpers\CssInlineStyle.cs" />
     <Compile Include="Monaco\Helpers\CssLineStyle.cs" />
     <Compile Include="Monaco\Helpers\CssStyleBroker.cs" />
@@ -137,6 +140,7 @@
     <Compile Include="Monaco\KeyMod.cs" />
     <Compile Include="Monaco\Languages\ILanguageExtensionPoint.cs" />
     <Compile Include="Monaco\LanguagesHelper.cs" />
+    <Compile Include="Monaco\ModelHelper.cs" />
     <Compile Include="Monaco\Position.cs" />
     <Compile Include="Monaco\Range.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

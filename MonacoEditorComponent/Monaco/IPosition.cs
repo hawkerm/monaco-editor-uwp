@@ -1,15 +1,13 @@
 ﻿using Monaco.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Monaco
 {
     public interface IPosition: IJsonable
     {
+        [JsonProperty("column")]
         uint Column { get; }
+        [JsonProperty("lineNumber")]
         uint LineNumber { get; }
     }
 }

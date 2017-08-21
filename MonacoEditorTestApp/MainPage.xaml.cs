@@ -60,6 +60,31 @@ namespace MonacoEditorTestApp
                 Editor.Focus(FocusState.Programmatic);
             }, _myCondition.Key);
 
+            await Editor.AddCommandAsync(Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KEY_W, async () =>
+            {
+                var word = await Editor.GetModel().GetWordAtPositionAsync(await Editor.GetPositionAsync());
+
+                var md = new MessageDialog("Word: " + word.Word + "[" + word.StartColumn + ", " + word.EndColumn + "]");
+                await md.ShowAsync();
+            });
+
+            await Editor.AddCommandAsync(Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KEY_L, async () =>
+            {
+                var line = await Editor.GetModel().GetLineContentAsync((await Editor.GetPositionAsync()).LineNumber);
+
+                var md = new MessageDialog("Line: " + line);
+                await md.ShowAsync();
+            });
+
+            await Editor.AddCommandAsync(Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KEY_U, async () =>
+            {
+                var range = new Range(2, 10, 3, 8);
+                var seg = await Editor.GetModel().GetValueInRangeAsync(range);
+
+                var md = new MessageDialog("Segment " + range.ToString() + ": " + seg);
+                await md.ShowAsync();
+            });
+
             await Editor.AddActionAsync(new TestAction());
         }
 

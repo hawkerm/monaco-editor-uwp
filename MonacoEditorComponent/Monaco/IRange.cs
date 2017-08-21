@@ -1,17 +1,17 @@
 ﻿using Monaco.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Monaco
 {
     public interface IRange: IJsonable
     {
+        [JsonProperty("startLineNumber")]
         uint StartLineNumber { get; }
+        [JsonProperty("startColumn")]
         uint StartColumn { get; }
+        [JsonProperty("endLineNumber")]
         uint EndLineNumber { get; }
+        [JsonProperty("endColumn")]
         uint EndColumn { get; }
     }
 }

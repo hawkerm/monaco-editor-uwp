@@ -126,6 +126,26 @@ namespace Monaco
             }).AsAsyncOperation();
         }
 
+        public IModel GetModel()
+        {
+            // TODO: Cache model helper?
+            return new ModelHelper(this);
+        }
+
+        public IAsyncOperation<Position> GetPositionAsync()
+        {
+            return this.SendScriptAsync("JSON.stringify(editor.getPosition());").ContinueWith((result) =>
+            {
+                var value = result?.Result;
+                if (value != null)
+                {
+                    return JsonConvert.DeserializeObject<Position>(value);
+                }
+
+                return null;
+            }).AsAsyncOperation();
+        }
+
         /// <summary>
         /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.icommoncodeeditor.html#deltadecorations
         /// 
