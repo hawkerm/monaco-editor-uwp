@@ -22,7 +22,7 @@ The following Monaco Editor features are currently supported by this component b
 Usage
 -----
 
-An x64 NuGet Package is provided.
+A NuGet Package is provided:
 
 ```
 Install-Package Monaco.Editor -Version 0.3.0-alpha
