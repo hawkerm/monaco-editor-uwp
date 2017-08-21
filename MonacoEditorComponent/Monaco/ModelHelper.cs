@@ -10,6 +10,7 @@ namespace Monaco.Editor
     /// Helper to access IModel interface methods off of CodeEditor object.
     /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.imodel.html
     /// </summary>
+    #pragma warning disable CS1591
     public sealed class ModelHelper : IModel
     {
         private CodeEditor _editor;
@@ -336,4 +337,5 @@ namespace Monaco.Editor
             }).AsAsyncOperation();
         }
     }
+    #pragma warning restore CS1591
 }

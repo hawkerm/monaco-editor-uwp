@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,17 +11,27 @@ namespace Monaco.Languages
     /// <summary>
     /// Object Parser for https://microsoft.github.io/monaco-editor/api/interfaces/monaco.languages.ilanguageextensionpoint.html
     /// </summary>
-    public sealed class ILanguageExtensionPoint
+    public sealed class ILanguageExtensionPoint // TODO: Convert to Interface
     {
+        #pragma warning disable CS1591
+        [JsonProperty("id")]
         public string Id { get; private set; }
+        [JsonProperty("aliases")]
         public string[] Aliases { get; private set; }
+        [JsonProperty("configuration")]
         public string Configuration { get; private set; }
+        [JsonProperty("extensions")]
         public string[] Extensions { get; private set; }
+        [JsonProperty("filenames")]
         public string[] Filenames { get; private set; }
+        [JsonProperty("filenamePatterns")]
         public string[] FilenamePatterns { get; private set; }
+        [JsonProperty("firstLine")]
         public string FirstLine { get; private set; }        
+        [JsonProperty("mimetypes")]
         public string[] Mimetypes { get; private set; }
-
+        
+        [Obsolete("TODO: Use JsonConvert Instead.")]
         public static ILanguageExtensionPoint Create(IJsonValue languageValue)
         {
             ILanguageExtensionPoint language = new ILanguageExtensionPoint();
@@ -43,5 +54,6 @@ namespace Monaco.Languages
 
             return language;
         }
+        #pragma warning restore CS1591
     }
 }

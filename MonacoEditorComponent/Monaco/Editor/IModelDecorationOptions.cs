@@ -11,6 +11,7 @@ namespace Monaco.Editor
     /// <summary>
     /// Object Parser for https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.imodeldecorationoptions.html
     /// </summary>
+    #pragma warning disable CS1591
     public sealed class IModelDecorationOptions: IJsonable
     {
         public bool IsWholeLine { get; set; }
@@ -20,29 +21,7 @@ namespace Monaco.Editor
         public CssGlyphStyle GlyphMarginClassName { get; set; }
         public CssInlineStyle InlineClassName { get; set; }
 
-        /*public static IModelDeltaDecoration Create(IJsonValue languageValue)
-        {
-            ILanguageExtensionPoint language = new ILanguageExtensionPoint();
-            var jsonObject = languageValue.GetObject();
-
-            language.Id = jsonObject.GetNamedString("id");
-            language.Aliases = jsonObject.GetNamedArray("aliases", new JsonArray()).Select(value => value.GetString()).ToArray();
-            if (jsonObject.ContainsKey("configuration"))
-            {
-                language.Configuration = jsonObject.GetNamedString("configuration", string.Empty);
-            }
-            language.Extensions = jsonObject.GetNamedArray("extensions", new JsonArray()).Select(value => value.GetString()).ToArray();
-            language.Filenames = jsonObject.GetNamedArray("filenames", new JsonArray()).Select(value => value.GetString()).ToArray();
-            language.FilenamePatterns = jsonObject.GetNamedArray("filenamePatterns", new JsonArray()).Select(value => value.GetString()).ToArray();
-            if (jsonObject.ContainsKey("firstLine"))
-            {
-                language.FirstLine = jsonObject.GetNamedString("firstLine", string.Empty);
-            }
-            language.Mimetypes = jsonObject.GetNamedArray("mimetypes", new JsonArray()).Select(value => value.GetString()).ToArray();
-
-            return language;
-        }*/
-
+        // TODO: Use JsonConvert
         public string ToJson()
         {
             StringBuilder output = new StringBuilder("{", 100);
@@ -81,4 +60,5 @@ namespace Monaco.Editor
             return output.ToString();
         }
     }
+    #pragma warning restore CS1591
 }

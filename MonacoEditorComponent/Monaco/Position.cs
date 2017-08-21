@@ -12,6 +12,7 @@ namespace Monaco
     /// A position in the editor.
     /// https://microsoft.github.io/monaco-editor/api/classes/monaco.position.html
     /// </summary>
+    #pragma warning disable CS1591
     public sealed class Position: IPosition
     {
         public uint Column { get; private set; }
@@ -113,4 +114,5 @@ namespace Monaco
             return String.Format("{{ \"lineNumber\": {0}, \"column\": {1} }}", this.LineNumber, this.Column);
         }
     }
+    #pragma warning restore CS1591
 }

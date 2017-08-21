@@ -8,6 +8,7 @@ namespace Monaco.Editor
     /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.iactiondescriptor.html
     /// https://microsoft.github.io/monaco-editor/playground.html#interacting-with-the-editor-adding-an-action-to-an-editor-instance
     /// </summary>
+    #pragma warning disable CS1591
     public interface IActionDescriptor
     {
         /**
@@ -30,7 +31,7 @@ namespace Monaco.Editor
         string Id { get; }
 
         /// <summary>
-        /// <see cref="IContextKey{T}"/>
+        /// <see cref="IContextKey"/>
         /// </summary>
         [JsonProperty("keybindingContext", NullValueHandling = NullValueHandling.Ignore)]
         string KeybindingContext { get; }
@@ -45,11 +46,12 @@ namespace Monaco.Editor
         string Label { get; }
 
         /// <summary>
-        /// <see cref="IContextKey{T}"/>
+        /// <see cref="IContextKey"/>
         /// </summary>
         [JsonProperty("precondition", NullValueHandling = NullValueHandling.Ignore)]
         string Precondition { get; }
 
         void Run(CodeEditor editor);
     }
+    #pragma warning restore CS1591
 }

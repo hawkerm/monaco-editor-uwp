@@ -7,6 +7,7 @@ using Windows.Foundation;
 
 namespace Monaco.Editor
 {
+    #pragma warning disable CS1591
     /// <summary>
     /// https://github.com/Microsoft/vscode/blob/master/src/vs/editor/common/editorCommon.ts#L228
     /// </summary>
@@ -86,4 +87,5 @@ namespace Monaco.Editor
         IAsyncOperation<Position> ValidatePositionAsync(IPosition position);
         IAsyncOperation<Range> ValidateRangeAsync(IRange range);
     }
+    #pragma warning restore CS1591
 }

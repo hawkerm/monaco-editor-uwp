@@ -11,6 +11,7 @@ namespace Monaco
     /// Monaco Range in the editor. (startLineNumber,startColumn) is &lt;= (endLineNumber,endColumn)
     /// https://microsoft.github.io/monaco-editor/api/classes/monaco.range.html
     /// </summary>
+    #pragma warning disable CS1591
     public sealed class Range : IRange
     {
         public uint EndColumn { get; private set; }
@@ -112,4 +113,5 @@ namespace Monaco
 
         // TODO: Weed out unique static method to put here.
     }
+    #pragma warning restore CS1591
 }

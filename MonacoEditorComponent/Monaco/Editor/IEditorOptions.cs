@@ -13,6 +13,7 @@ namespace Monaco.Editor
     /// <summary>
     /// Object Parser for https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditoroptions.html
     /// </summary>
+    #pragma warning disable CS1591
     public interface IEditorOptions
     {
         [JsonProperty("acceptSuggestionOnCommitCharacter")]
@@ -160,4 +161,5 @@ namespace Monaco.Editor
         [JsonProperty("wrappingIndent")]
         string WrappingIndent { get; set; } // = "none"; same, indent
     }
+    #pragma warning restore CS1591
 }

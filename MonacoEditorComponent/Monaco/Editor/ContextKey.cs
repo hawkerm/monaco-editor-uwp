@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Monaco.Editor
 {
+    #pragma warning disable CS1591
     public sealed class ContextKey : IContextKey
     {
         [JsonIgnore]
@@ -57,4 +58,5 @@ namespace Monaco.Editor
             return JsonConvert.SerializeObject(this);
         }
     }
+    #pragma warning restore CS1591
 }

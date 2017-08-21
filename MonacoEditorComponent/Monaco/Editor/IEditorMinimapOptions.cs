@@ -7,6 +7,7 @@ namespace Monaco.Editor
     /// <summary>
     /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditorminimapoptions.html
     /// </summary>
+    #pragma warning disable CS1591
     public sealed class IEditorMinimapOptions : IJsonable
     {
         [JsonProperty("enabled")]
@@ -23,4 +24,5 @@ namespace Monaco.Editor
             return JsonConvert.SerializeObject(this);
         }
     }
+    #pragma warning restore CS1591
 }

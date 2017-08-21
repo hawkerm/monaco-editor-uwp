@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 
 namespace Monaco
 {
+    #pragma warning disable CS1591
     public interface IPosition: IJsonable
     {
         [JsonProperty("column")]
@@ -10,4 +11,5 @@ namespace Monaco
         [JsonProperty("lineNumber")]
         uint LineNumber { get; }
     }
+    #pragma warning restore CS1591
 }

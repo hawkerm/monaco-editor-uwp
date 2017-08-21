@@ -12,6 +12,7 @@ namespace Monaco
     /// </summary>
     public static class KeyCode
     {
+        #pragma warning disable CS1591
         /**
          * Placed first to cover the 0 value of the enum.
          */
@@ -107,7 +108,7 @@ namespace Monaco
         public static int US_EQUAL => 81;
         /**
          * For any country/region, the ',' key
-         * For the US standard keyboard, the ',<' key
+         * For the US standard keyboard, the ',&lt;' key
          */
         public static int US_COMMA => 82;
         /**
@@ -180,5 +181,6 @@ namespace Monaco
         public static int KEY_IN_COMPOSITION => 109;
         public static int ABNT_C1 => 110;
         public static int ABNT_C2 => 111;
+        #pragma warning restore CS1591
     }
 }

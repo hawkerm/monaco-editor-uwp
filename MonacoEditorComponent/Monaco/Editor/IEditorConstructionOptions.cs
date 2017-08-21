@@ -13,6 +13,7 @@ namespace Monaco.Editor
     /// <summary>
     /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditorconstructionoptions.html
     /// </summary>
+    #pragma warning disable CS1591
     public sealed class IEditorConstructionOptions : IEditorOptions, IJsonable, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -115,7 +116,7 @@ namespace Monaco.Editor
 
         private readonly Dictionary<string, object> _propertyBackingDictionary = new Dictionary<string, object>();
 
-        protected T GetPropertyValue<T>([CallerMemberName] string propertyName = null)
+        private T GetPropertyValue<T>([CallerMemberName] string propertyName = null)
         {
             if (propertyName == null) throw new ArgumentNullException("propertyName");
 
@@ -128,7 +129,7 @@ namespace Monaco.Editor
             return default(T);
         }
 
-        protected bool SetPropertyValue<T>(T newValue, [CallerMemberName] string propertyName = null)
+        private bool SetPropertyValue<T>(T newValue, [CallerMemberName] string propertyName = null)
         {
             if (propertyName == null) throw new ArgumentNullException("propertyName");
 
@@ -139,4 +140,5 @@ namespace Monaco.Editor
             return true;
         }
     }
+    #pragma warning restore CS1591
 }
