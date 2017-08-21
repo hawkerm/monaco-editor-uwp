@@ -44,11 +44,13 @@ namespace Monaco
             Loaded?.Invoke(this, new RoutedEventArgs());
         }
 
+        private ParentAccessor _parentAccessor;
+
         private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
         {
             Debug.WriteLine("Navigation Starting");
-            var parent = new ParentAccessor(this);
-            parent.RegisterAction("Loaded", () =>
+            _parentAccessor = new ParentAccessor(this);
+            _parentAccessor.RegisterAction("Loaded", () =>
             {
                 Loading?.Invoke(this, new RoutedEventArgs());
             });
@@ -57,7 +59,7 @@ namespace Monaco
             _themeListener.ThemeChanged += _themeListener_ThemeChanged;
 
             this._view.AddWebAllowedObject("Debug", new DebugLogger());
-            this._view.AddWebAllowedObject("Parent", parent);
+            this._view.AddWebAllowedObject("Parent", _parentAccessor);
             this._view.AddWebAllowedObject("Theme", _themeListener);
             this._view.AddWebAllowedObject("Keyboard", new KeyboardListener(this));
         }

@@ -117,7 +117,10 @@
     <Compile Include="Helpers\KeyboardListener.cs" />
     <Compile Include="Helpers\ParentAccessor.cs" />
     <Compile Include="Helpers\ThemeListener.cs" />
+    <Compile Include="Monaco\Editor\ContextKey.cs" />
+    <Compile Include="Monaco\Editor\IContextKey.cs" />
     <Compile Include="Monaco\Editor\IEditorConstructionOptions.cs" />
+    <Compile Include="Monaco\Editor\IActionDescriptor.cs" />
     <Compile Include="Monaco\Editor\IEditorFindOptions.cs" />
     <Compile Include="Monaco\Editor\IEditorMinimapOptions.cs" />
     <Compile Include="Monaco\Editor\IEditorOptions.cs" />
@@ -130,6 +133,8 @@
     <Compile Include="Monaco\Helpers\Json.cs" />
     <Compile Include="Monaco\IPosition.cs" />
     <Compile Include="Monaco\IRange.cs" />
+    <Compile Include="Monaco\KeyCode.cs" />
+    <Compile Include="Monaco\KeyMod.cs" />
     <Compile Include="Monaco\Languages\ILanguageExtensionPoint.cs" />
     <Compile Include="Monaco\LanguagesHelper.cs" />
     <Compile Include="Monaco\Position.cs" />

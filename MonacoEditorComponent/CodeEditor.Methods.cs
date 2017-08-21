@@ -1,5 +1,6 @@
 ﻿using Monaco.Editor;
 using Monaco.Helpers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ using Windows.Foundation;
 
 namespace Monaco
 {
+    public delegate void CommandHandler();
+
     /// <summary>
     /// This file contains Monaco IEditor method implementations we can call on our control.
     /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditor.html
@@ -18,9 +21,109 @@ namespace Monaco
     /// </summary>
     public partial class CodeEditor
     {
-        public IAsyncAction RevealPositionInCenterAsync(Position position)
+        #region Reveal Methods
+        public IAsyncAction RevealLineAsync(uint lineNumber)
+        {
+            return this.SendScriptAsync("editor.revealLine(" + lineNumber + ")").AsAsyncAction();
+        }
+
+        public IAsyncAction RevealLineInCenterAsync(uint lineNumber)
+        {
+            return this.SendScriptAsync("editor.revealLineInCenter(" + lineNumber + ")").AsAsyncAction();
+        }
+
+        public IAsyncAction RevealLineInCenterIfOutsideViewportAsync(uint lineNumber)
+        {
+            return this.SendScriptAsync("editor.revealLineInCenterIfOutsideViewport(" + lineNumber + ")").AsAsyncAction();
+        }
+
+        public IAsyncAction RevealLinesAsync(uint startLineNumber, uint endLineNumber)
+        {
+            return this.SendScriptAsync("editor.revealLines(" + startLineNumber + ", " + endLineNumber + ")").AsAsyncAction();
+        }
+
+        public IAsyncAction RevealLinesInCenterAsync(uint startLineNumber, uint endLineNumber)
+        {
+            return this.SendScriptAsync("editor.revealLinesInCenter(" + startLineNumber + ", " + endLineNumber + ")").AsAsyncAction();
+        }
+
+        public IAsyncAction RevealLinesInCenterIfOutsideViewportAsync(uint startLineNumber, uint endLineNumber)
+        {
+            return this.SendScriptAsync("editor.revealLinesInCenterIfOutsideViewport(" + startLineNumber + ", " + endLineNumber + ")").AsAsyncAction();
+        }
+
+        public IAsyncAction RevealPositionAsync(IPosition position)
+        {
+            return RevealPositionAsync(position, false, false);
+        }
+
+        public IAsyncAction RevealPositionAsync(IPosition position, bool revealVerticalInCenter)
+        {
+            return RevealPositionAsync(position, revealVerticalInCenter, false);
+        }
+
+        public IAsyncAction RevealPositionAsync(IPosition position, bool revealVerticalInCenter, bool revealHorizontal)
+        {
+            return this.SendScriptAsync("editor.revealPosition(JSON.parse('" + position.ToJson() + "'), " + JsonConvert.ToString(revealVerticalInCenter) + ", " + JsonConvert.ToString(revealHorizontal) + ")").AsAsyncAction();
+        }
+
+        public IAsyncAction RevealPositionInCenterAsync(IPosition position)
         {
             return this.SendScriptAsync("editor.revealPositionInCenter(JSON.parse('" + position.ToJson() + "'))").AsAsyncAction();
+        }
+
+        public IAsyncAction RevealPositionInCenterIfOutsideViewportAsync(IPosition position)
+        {
+            return this.SendScriptAsync("editor.revealPositionInCenterIfOutsideViewport(JSON.parse('" + position.ToJson() + "'))").AsAsyncAction();
+        }
+
+        public IAsyncAction RevealRangeAsync(IRange range)
+        {
+            return this.SendScriptAsync("editor.revealRange(JSON.parse('" + range.ToJson() + "'))").AsAsyncAction();
+        }
+
+        public IAsyncAction RevealRangeAtTopAsync(IRange range)
+        {
+            return this.SendScriptAsync("editor.revealRangeAtTop(JSON.parse('" + range.ToJson() + "'))").AsAsyncAction();
+        }
+
+        public IAsyncAction RevealRangeInCenterAsync(IRange range)
+        {
+            return this.SendScriptAsync("editor.revealRangeInCenter(JSON.parse('" + range.ToJson() + "'))").AsAsyncAction();
+        }
+
+        public IAsyncAction RevealRangeInCenterIfOutsideViewportAsync(IRange range)
+        {
+            return this.SendScriptAsync("editor.revealRangeInCenterIfOutsideViewport(JSON.parse('" + range.ToJson() + "'))").AsAsyncAction();
+        }
+        #endregion
+
+        public IAsyncAction AddActionAsync(IActionDescriptor action)
+        {
+            _parentAccessor.RegisterAction("Action" + action.Id, new Action(() => { action?.Run(this); }));
+            return this.InvokeScriptAsync("addAction", JsonConvert.SerializeObject(action)).AsAsyncAction();
+        }
+
+        public IAsyncOperation<string> AddCommandAsync(int keybinding, CommandHandler handler)
+        {
+            return this.AddCommandAsync(keybinding, handler, string.Empty);
+        }
+
+        public IAsyncOperation<string> AddCommandAsync(int keybinding, CommandHandler handler, string context)
+        {
+            var name = "Command" + keybinding;
+            _parentAccessor.RegisterAction(name, new Action(() => { handler?.Invoke(); }));
+            return this.InvokeScriptAsync("addCommand", keybinding.ToString(), name, context).AsAsyncOperation();
+        }
+
+        public IAsyncOperation<ContextKey> CreateContextKeyAsync(string key, bool defaultValue)
+        {
+            var ck = new ContextKey(this, key, defaultValue);
+
+            return this.InvokeScriptAsync("createContext", JsonConvert.SerializeObject(ck)).ContinueWith((noop) =>
+            {
+                return ck;
+            }).AsAsyncOperation();
         }
 
         /// <summary>
