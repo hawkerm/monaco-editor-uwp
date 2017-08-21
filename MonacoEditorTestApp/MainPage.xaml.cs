@@ -70,9 +70,12 @@ namespace MonacoEditorTestApp
 
             await Editor.AddCommandAsync(Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KEY_L, async () =>
             {
-                var line = await Editor.GetModel().GetLineContentAsync((await Editor.GetPositionAsync()).LineNumber);
+                var model = Editor.GetModel();
+                var line = await model.GetLineContentAsync((await Editor.GetPositionAsync()).LineNumber);
+                var lines = await model.GetLinesContentAsync();
+                var count = await model.GetLineCountAsync();
 
-                var md = new MessageDialog("Line: " + line);
+                var md = new MessageDialog("Current Line: " + line + "\nAll Lines [" + count + "]:\n" + string.Join("\n", lines));
                 await md.ShowAsync();
             });
 

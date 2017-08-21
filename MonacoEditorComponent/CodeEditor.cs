@@ -23,6 +23,7 @@ namespace Monaco
     {
         private bool _initialized;
         private WebView _view;
+        private ModelHelper _model;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -47,6 +48,9 @@ namespace Monaco
             }
         }
 
+        /// <summary>
+        /// Construct a new IStandAloneCodeEditor.
+        /// </summary>
         public CodeEditor()
         {
             this.DefaultStyleKey = typeof(CodeEditor);    
@@ -66,6 +70,7 @@ namespace Monaco
 
             // Initialize this here so property changed event will fire and register collection changed event.
             this.Decorations = new ObservableVector<IModelDeltaDecoration>();
+            this._model = new ModelHelper(this);
         }
 
         protected override void OnApplyTemplate()

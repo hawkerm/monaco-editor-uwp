@@ -128,8 +128,7 @@ namespace Monaco
 
         public IModel GetModel()
         {
-            // TODO: Cache model helper?
-            return new ModelHelper(this);
+            return this._model;
         }
 
         public IAsyncOperation<Position> GetPositionAsync()

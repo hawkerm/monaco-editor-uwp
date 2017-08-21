@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Windows.Foundation;
 
@@ -29,7 +30,14 @@ namespace Monaco.Editor
 
         public IAsyncOperation<uint> GetAlternativeVersionIdAsync()
         {
-            throw new NotImplementedException();
+            return _editor.SendScriptAsync("JSON.stringify(model.getAlternativeVersionId());").ContinueWith((result) =>
+            {
+                uint value = 0;
+
+                uint.TryParse(result?.Result, out value);
+
+                return value;
+            }).AsAsyncOperation();
         }
 
         public IAsyncOperation<string> GetEOLAsync()
@@ -39,7 +47,16 @@ namespace Monaco.Editor
 
         public IAsyncOperation<Range> GetFullModelRangeAsync()
         {
-            throw new NotImplementedException();
+            return _editor.SendScriptAsync("JSON.stringify(model.getFullModelRange());").ContinueWith((result) =>
+            {
+                var value = result?.Result;
+                if (value != null)
+                {
+                    return JsonConvert.DeserializeObject<Range>(value) as Range;
+                }
+
+                return null;
+            }).AsAsyncOperation();
         }
 
         public IAsyncOperation<string> GetLineContentAsync(uint lineNumber)
@@ -49,32 +66,77 @@ namespace Monaco.Editor
 
         public IAsyncOperation<uint> GetLineCountAsync()
         {
-            throw new NotImplementedException();
+            return _editor.SendScriptAsync("JSON.stringify(model.getLineCount());").ContinueWith((result) =>
+            {
+                uint value = 0;
+
+                uint.TryParse(result?.Result, out value);
+                
+                return value;
+            }).AsAsyncOperation();
         }
 
         public IAsyncOperation<uint> GetLineFirstNonWhitespaceColumnAsync(uint lineNumber)
         {
-            throw new NotImplementedException();
+            return _editor.SendScriptAsync("JSON.stringify(model.getLineFirstNonWhitespaceColumn(" + lineNumber + "));").ContinueWith((result) =>
+            {
+                uint value = 0;
+
+                uint.TryParse(result?.Result, out value);
+
+                return value;
+            }).AsAsyncOperation();
         }
 
         public IAsyncOperation<uint> GetLineLastNonWhitespaceColumnAsync(uint lineNumber)
         {
-            throw new NotImplementedException();
+            return _editor.SendScriptAsync("JSON.stringify(model.getLineLastNonWhitespaceColumn(" + lineNumber + "));").ContinueWith((result) =>
+            {
+                uint value = 0;
+
+                uint.TryParse(result?.Result, out value);
+
+                return value;
+            }).AsAsyncOperation();
         }
 
         public IAsyncOperation<uint> GetLineMaxColumnAsync(uint lineNumber)
         {
-            throw new NotImplementedException();
+            return _editor.SendScriptAsync("JSON.stringify(model.getLineMaxColumn(" + lineNumber + "));").ContinueWith((result) =>
+            {
+                uint value = 0;
+
+                uint.TryParse(result?.Result, out value);
+
+                return value;
+            }).AsAsyncOperation();
         }
 
         public IAsyncOperation<uint> GetLineMinColumnAsync(uint lineNumber)
         {
-            throw new NotImplementedException();
+            return _editor.SendScriptAsync("JSON.stringify(model.getLineMinColumn(" + lineNumber + "));").ContinueWith((result) =>
+            {
+                uint value = 0;
+
+                uint.TryParse(result?.Result, out value);
+
+                return value;
+            }).AsAsyncOperation();
         }
 
         public IAsyncOperation<IEnumerable<string>> GetLinesContentAsync()
         {
-            throw new NotImplementedException();
+            return _editor.SendScriptAsync("JSON.stringify(model.getLinesContent());").ContinueWith((result) =>
+            {
+                var value = result?.Result;
+                if (value != null)
+                {
+                    var array = JsonConvert.DeserializeObject<string[]>(value);
+                    return array?.AsEnumerable();
+                }
+
+                return null;
+            }).AsAsyncOperation();
         }
 
         public IAsyncOperation<string> GetModelIdAsync()
@@ -84,7 +146,14 @@ namespace Monaco.Editor
 
         public IAsyncOperation<uint> GetOffsetAtAsync(IPosition position)
         {
-            throw new NotImplementedException();
+            return _editor.SendScriptAsync("JSON.stringify(model.getOffsetAt(" + JsonConvert.SerializeObject(position) + "));").ContinueWith((result) =>
+            {
+                uint value = 0;
+
+                uint.TryParse(result?.Result, out value);
+
+                return value;
+            }).AsAsyncOperation();
         }
 
         public IAsyncOperation<string> GetOneIndentAsync()
@@ -94,7 +163,16 @@ namespace Monaco.Editor
 
         public IAsyncOperation<Position> GetPositionAtAsync(uint offset)
         {
-            throw new NotImplementedException();
+            return _editor.SendScriptAsync("JSON.stringify(model.getPositionAt(" + offset + "));").ContinueWith((result) =>
+            {
+                var value = result?.Result;
+                if (value != null)
+                {
+                    return JsonConvert.DeserializeObject<Position>(value) as Position;
+                }
+
+                return null;
+            }).AsAsyncOperation();
         }
 
         public IAsyncOperation<string> GetValueAsync()
@@ -122,9 +200,50 @@ namespace Monaco.Editor
             throw new NotImplementedException();
         }
 
-        public IAsyncOperation<uint> GetVersionIdAsync()
+        public IAsyncOperation<uint> GetValueLengthAsync()
+        {
+            return _editor.SendScriptAsync("JSON.stringify(model.getValueLength());").ContinueWith((result) =>
+            {
+                uint value = 0;
+
+                uint.TryParse(result?.Result, out value);
+
+                return value;
+            }).AsAsyncOperation();
+        }
+
+        public IAsyncOperation<uint> GetValueLengthAsync(EndOfLinePreference eol)
         {
             throw new NotImplementedException();
+        }
+
+        public IAsyncOperation<uint> GetValueLengthAsync(EndOfLinePreference eol, bool preserveBOM)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAsyncOperation<uint> GetValueLengthInRangeAsync(IRange range)
+        {
+            return _editor.SendScriptAsync("JSON.stringify(model.getValueLengthInRange(" + JsonConvert.SerializeObject(range) + "));").ContinueWith((result) =>
+            {
+                uint value = 0;
+
+                uint.TryParse(result?.Result, out value);
+
+                return value;
+            }).AsAsyncOperation();
+        }
+
+        public IAsyncOperation<uint> GetVersionIdAsync()
+        {
+            return _editor.SendScriptAsync("JSON.stringify(model.getVersionId());").ContinueWith((result) =>
+            {
+                uint value = 0;
+
+                uint.TryParse(result?.Result, out value);
+
+                return value;
+            }).AsAsyncOperation();
         }
 
         public IAsyncOperation<IWordAtPosition> GetWordAtPositionAsync(IPosition position)
@@ -157,7 +276,16 @@ namespace Monaco.Editor
 
         public IAsyncOperation<Position> ModifyPositionAsync(IPosition position, int number)
         {
-            throw new NotImplementedException();
+            return _editor.SendScriptAsync("JSON.stringify(model.modifyPosition(" + JsonConvert.SerializeObject(position) + ", " + number + "));").ContinueWith((result) =>
+            {
+                var value = result?.Result;
+                if (value != null)
+                {
+                    return JsonConvert.DeserializeObject<Position>(value) as Position;
+                }
+
+                return null;
+            }).AsAsyncOperation();
         }
 
         public IAsyncOperation<string> NormalizeIndentationAsync(string str)
@@ -182,12 +310,30 @@ namespace Monaco.Editor
 
         public IAsyncOperation<Position> ValidatePositionAsync(IPosition position)
         {
-            throw new NotImplementedException();
+            return _editor.SendScriptAsync("JSON.stringify(model.validatePosition(" + JsonConvert.SerializeObject(position) + "));").ContinueWith((result) =>
+            {
+                var value = result?.Result;
+                if (value != null)
+                {
+                    return JsonConvert.DeserializeObject<Position>(value) as Position;
+                }
+
+                return null;
+            }).AsAsyncOperation();
         }
 
         public IAsyncOperation<Range> ValidateRangeAsync(IRange range)
         {
-            throw new NotImplementedException();
+            return _editor.SendScriptAsync("JSON.stringify(model.validateRange(" + JsonConvert.SerializeObject(range) + "));").ContinueWith((result) =>
+            {
+                var value = result?.Result;
+                if (value != null)
+                {
+                    return JsonConvert.DeserializeObject<Range>(value) as Range;
+                }
+
+                return null;
+            }).AsAsyncOperation();
         }
     }
 }
