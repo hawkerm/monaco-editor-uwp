@@ -36,6 +36,8 @@
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Monaco.xml</DocumentationFile>
+    <GenerateLibraryLayout>false</GenerateLibraryLayout>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
@@ -166,64 +168,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="monaco-editor\dev\vs\base\worker\workerMain.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\bat.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\coffee.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\cpp.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\csharp.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\css.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\dockerfile.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\fsharp.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\go.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\handlebars.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\html.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\ini.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\java.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\less.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\lua.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\markdown.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\msdax.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\objective-c.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\php.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\postiats.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\powershell.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\pug.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\python.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\r.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\razor.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\ruby.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\scss.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\solidity.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\sql.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\swift.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\vb.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\xml.js" />
-    <Content Include="monaco-editor\dev\vs\basic-languages\src\yaml.js" />
-    <Content Include="monaco-editor\dev\vs\editor\contrib\suggest\browser\media\String_16x.svg" />
-    <Content Include="monaco-editor\dev\vs\editor\contrib\suggest\browser\media\String_inverse_16x.svg" />
-    <Content Include="monaco-editor\dev\vs\editor\editor.main.css" />
-    <Content Include="monaco-editor\dev\vs\editor\editor.main.js" />
-    <Content Include="monaco-editor\dev\vs\editor\editor.main.nls.de.js" />
-    <Content Include="monaco-editor\dev\vs\editor\editor.main.nls.es.js" />
-    <Content Include="monaco-editor\dev\vs\editor\editor.main.nls.fr.js" />
-    <Content Include="monaco-editor\dev\vs\editor\editor.main.nls.hu.js" />
-    <Content Include="monaco-editor\dev\vs\editor\editor.main.nls.it.js" />
-    <Content Include="monaco-editor\dev\vs\editor\editor.main.nls.ja.js" />
-    <Content Include="monaco-editor\dev\vs\editor\editor.main.nls.js" />
-    <Content Include="monaco-editor\dev\vs\editor\editor.main.nls.ko.js" />
-    <Content Include="monaco-editor\dev\vs\editor\editor.main.nls.ru.js" />
-    <Content Include="monaco-editor\dev\vs\editor\editor.main.nls.tr.js" />
-    <Content Include="monaco-editor\dev\vs\editor\standalone\browser\quickOpen\symbol-sprite.svg" />
-    <Content Include="monaco-editor\dev\vs\language\css\cssMode.js" />
-    <Content Include="monaco-editor\dev\vs\language\css\cssWorker.js" />
-    <Content Include="monaco-editor\dev\vs\language\html\htmlMode.js" />
-    <Content Include="monaco-editor\dev\vs\language\html\htmlWorker.js" />
-    <Content Include="monaco-editor\dev\vs\language\json\jsonMode.js" />
-    <Content Include="monaco-editor\dev\vs\language\json\jsonWorker.js" />
-    <Content Include="monaco-editor\dev\vs\language\typescript\lib\typescriptServices.js" />
-    <Content Include="monaco-editor\dev\vs\language\typescript\src\mode.js" />
-    <Content Include="monaco-editor\dev\vs\language\typescript\src\worker.js" />
-    <Content Include="monaco-editor\dev\vs\loader.js" />
     <Content Include="monaco-editor\min\vs\base\worker\workerMain.js" />
     <Content Include="monaco-editor\min\vs\basic-languages\src\bat.js" />
     <Content Include="monaco-editor\min\vs\basic-languages\src\coffee.js" />
@@ -289,9 +233,6 @@
   <ItemGroup>
     <Compile Include="CodeEditor.Events.cs" />
     <None Include="monaco-editor\CHANGELOG.md" />
-    <None Include="monaco-editor\dev\vs\base\worker\workerMain.js.map" />
-    <None Include="monaco-editor\dev\vs\editor\editor.main.js.map" />
-    <None Include="monaco-editor\dev\vs\loader.js.map" />
     <None Include="monaco-editor\LICENSE" />
     <None Include="monaco-editor\min-maps\vs\base\worker\workerMain.js.map" />
     <None Include="monaco-editor\min-maps\vs\editor\editor.main.js.map" />

@@ -12,6 +12,9 @@ using Windows.Foundation;
 
 namespace Monaco
 {
+    /// <summary>
+    /// Action delegate for <see cref="CodeEditor.AddCommandAsync(int, CommandHandler)"/> and <see cref="CodeEditor.AddCommandAsync(int, CommandHandler, string)"/>.
+    /// </summary>
     public delegate void CommandHandler();
 
     /// <summary>
@@ -19,6 +22,7 @@ namespace Monaco
     /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditor.html
     /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.icommoncodeeditor.html
     /// </summary>
+    #pragma warning disable CS1591
     public partial class CodeEditor
     {
         #region Reveal Methods
@@ -153,8 +157,7 @@ namespace Monaco
         /// <param name="oldDecoractions"></param>
         /// <param name="newDecorations"></param>
         /// <returns></returns>
-        [Obsolete("Recommand using ThreadSafe Property Decorations to manipulate decorations instead of calling this directly.")]
-        public IAsyncOperation<IEnumerable<string>> DeltaDecorationsAsync([ReadOnlyArray] string[] oldDecoractions, [ReadOnlyArray] IModelDeltaDecoration[] newDecorations)
+        private IAsyncOperation<IEnumerable<string>> DeltaDecorationsAsync([ReadOnlyArray] string[] oldDecoractions, [ReadOnlyArray] IModelDeltaDecoration[] newDecorations)
         {
             var newDecorationsAdjust = newDecorations ?? new IModelDeltaDecoration[0];
 
@@ -185,4 +188,5 @@ namespace Monaco
             }).AsAsyncOperation(); // TODO: Do Array Cast Here once making this private/protected.
         }
     }
+    #pragma warning restore CS1591
 }

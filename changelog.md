@@ -1,6 +1,15 @@
+v0.3 - 08/21/2017
+-----------------
+- **Breaking:** Removed access to *DeltaDecorationsAsync*, use *CodeEditor.Decorations* collection instead.  This simplifies usage of the control in the asynchronous environment.
+- Added support for *[Action](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.istandalonecodeeditor.html#addaction)* and *[Command](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.istandalonecodeeditor.html#addcommand)* editor extensions.
+- Added *[IEditorOptions](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditoroptions.html)* support through the *CodeEditor.Options* property, primary-level property auto-update is supported.
+- Added initial single *[IModel](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.imodel.html)* support through *CodeEditor.GetModel()*.
+- Added support to retrieve **SelectedText**.
+- Use minified Monaco library and build for Any CPU.
+
 v0.2 - 07/27/2017
 -----------------
-- Breaking: Renamed 'Editor' to 'CodeEditor' for component.
+- **Breaking:** Renamed 'Editor' to 'CodeEditor' for component.
 - Added basic line highlighting support with *DeltaDecorationsAsync*
 - Added preliminary KeyDown event support.
 - Added Loading/Loaded event distinction.

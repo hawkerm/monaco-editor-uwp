@@ -21,15 +21,14 @@
 
     <div id="container" onkeydown="keyDown(event)"></div>
 
-    <!-- TODO: Remove dev directory and use 'min' here -->
-    <script src="ms-appx-web:///Monaco/monaco-editor/dev/vs/loader.js"></script>
+    <script src="ms-appx-web:///Monaco/monaco-editor/min/vs/loader.js"></script>
     <script>
         var editor;
         var model;
         var contexts = {};
 
         Debug.log("Starting");
-        require.config({ paths: { 'vs': 'ms-appx-web:///Monaco/monaco-editor/dev/vs' }});
+        require.config({ paths: { 'vs': 'ms-appx-web:///Monaco/monaco-editor/min/vs' }});
         require(['vs/editor/editor.main'], function () {
             let opt = getOptions();
             opt["value"] = Parent.getValue("Text");
