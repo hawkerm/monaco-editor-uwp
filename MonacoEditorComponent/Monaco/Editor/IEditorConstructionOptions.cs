@@ -98,6 +98,9 @@ namespace Monaco.Editor
 
         // public CssStyle ExtraEditorClassName?
 
+        /// <summary>
+        /// Gets or Sets the language of the Editor. This property is only read for initialization, changes should go through <see cref="CodeEditor.CodeLanguage"/>.
+        /// </summary>
         [JsonProperty("language")]
         public string Language { get { return GetPropertyValue<string>(); } set { SetPropertyValue(value); } }
 

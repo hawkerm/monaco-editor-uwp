@@ -73,7 +73,17 @@ namespace Monaco
 
         // Using a DependencyProperty as the backing store for HorizontalLayout.  This enables animation, styling, binding, etc...
         private static readonly DependencyProperty CodeLanguagePropertyField =
-            DependencyProperty.Register("CodeLanguage", typeof(string), typeof(CodeEditor), new PropertyMetadata("csharp", (d, e) => {
+            DependencyProperty.Register("CodeLanguage", typeof(string), typeof(CodeEditor), new PropertyMetadata("xml", (d, e) => {
+                var editor = d as CodeEditor;
+
+                if (editor.Options != null)
+                {
+                    // Will trigger its own update of Options, but need this for initialization changes.
+                    editor.Options.Language = e.NewValue.ToString();
+                }
+
+                // TODO: Push this to Options property change check instead...
+                // Changes to Language are ignored in Updated Options.
                 // https://microsoft.github.io/monaco-editor/api/modules/monaco.editor.html#setmodellanguage.
                 (d as CodeEditor)?.InvokeScriptAsync("updateLanguage", e.NewValue.ToString());
             }));
