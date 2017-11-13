@@ -5,8 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Data.Json;
 using Windows.Foundation;
 
@@ -133,6 +131,25 @@ namespace Monaco
         public IModel GetModel()
         {
             return this._model;
+        }
+
+        public IAsyncOperation<IEnumerable<Marker>> GetModelMarkers() // TODO: Filter (string? owner, Uri? resource, int? take)
+        {
+            return this.SendScriptAsync("JSON.stringify(monaco.editor.getModelMarkers());").ContinueWith((result) =>
+            {
+                var value = result?.Result;
+                if (value != null)
+                {
+                    return JsonConvert.DeserializeObject<Marker[]>(value).AsEnumerable();
+                }
+
+                return Array.Empty<Marker>();
+            }).AsAsyncOperation();
+        }
+
+        public IAsyncAction SetModelMarkers(string owner, [ReadOnlyArray] IMarkerData[] markers)
+        {
+            return this.SendScriptAsync("monaco.editor.setModelMarkers(model, JSON.parse('" + JsonConvert.ToString(owner) + "'), JSON.parse('" + JsonConvert.SerializeObject(markers) + "'));").AsAsyncAction();
         }
 
         public IAsyncOperation<Position> GetPositionAsync()

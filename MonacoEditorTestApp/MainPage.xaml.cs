@@ -4,6 +4,7 @@ using Monaco.Helpers;
 using MonacoEditorTestApp.Actions;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -216,6 +217,28 @@ namespace MonacoEditorTestApp
         private void ButtonChangeLanguage_Click(object sender, RoutedEventArgs e)
         {
             Editor.CodeLanguage = (Editor.CodeLanguage == "csharp") ? "xml" : "csharp";
+        }
+
+        private async void ButtonSetMarker_Click(object sender, RoutedEventArgs e)
+        {
+            if ((await Editor.GetModelMarkers()).Count() == 0)
+            {
+                await Editor.SetModelMarkers("Me", new IMarkerData[]
+                {
+                    new MarkerData() { Code = "2344",
+                                       Message = "This is a Warning",
+                                       Severity = Severity.Warning,
+                                       Source = "Origin",
+                                       StartLineNumber = 2,
+                                       StartColumn = 2,
+                                       EndLineNumber = 2,
+                                       EndColumn = 8 }
+                });
+            }
+            else
+            {
+                await Editor.SetModelMarkers("Me", Array.Empty<IMarkerData>());
+            }            
         }
     }
 }

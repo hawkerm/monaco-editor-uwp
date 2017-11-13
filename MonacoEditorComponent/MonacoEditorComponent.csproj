@@ -127,9 +127,13 @@
     <Compile Include="Monaco\Editor\IEditorMinimapOptions.cs" />
     <Compile Include="Monaco\Editor\IEditorOptions.cs" />
     <Compile Include="Monaco\Editor\IEditorScrollbarOptions.cs" />
+    <Compile Include="Monaco\Editor\IMarker.cs" />
+    <Compile Include="Monaco\Editor\IMarkerData.cs" />
     <Compile Include="Monaco\Editor\IModel.cs" />
     <Compile Include="Monaco\Editor\IModelDecorationOptions.cs" />
     <Compile Include="Monaco\Editor\IModelDeltaDecoration.cs" />
+    <Compile Include="Monaco\Editor\Marker.cs" />
+    <Compile Include="Monaco\Editor\MarkerData.cs" />
     <Compile Include="Monaco\Editor\WordAtPosition.cs" />
     <Compile Include="Monaco\Editor\IWordAtPosition.cs" />
     <Compile Include="Monaco\Helpers\CssInlineStyle.cs" />
@@ -145,6 +149,8 @@
     <Compile Include="Monaco\ModelHelper.cs" />
     <Compile Include="Monaco\Position.cs" />
     <Compile Include="Monaco\Range.cs" />
+    <Compile Include="Monaco\Severity.cs" />
+    <Compile Include="Monaco\IUri.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +200,7 @@
     <Content Include="monaco-editor\min\vs\basic-languages\src\r.js" />
     <Content Include="monaco-editor\min\vs\basic-languages\src\razor.js" />
     <Content Include="monaco-editor\min\vs\basic-languages\src\ruby.js" />
+    <Content Include="monaco-editor\min\vs\basic-languages\src\sb.js" />
     <Content Include="monaco-editor\min\vs\basic-languages\src\scss.js" />
     <Content Include="monaco-editor\min\vs\basic-languages\src\solidity.js" />
     <Content Include="monaco-editor\min\vs\basic-languages\src\sql.js" />

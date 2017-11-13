@@ -10,31 +10,35 @@
     DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <monaco:CodeEditor x:Name="Editor"
                            Grid.Row="0"
+                           Grid.Column="1"
                            HasGlyphMargin="True"
                            CodeLanguage="csharp"
                            KeyDown="Editor_KeyDown"
                            Text="{x:Bind CodeContent, Mode=TwoWay}">
         </monaco:CodeEditor>
-        <TextBlock Text="{x:Bind CodeContent, Mode=OneWay}" Grid.Row="1"/>
+        <TextBlock Text="{x:Bind CodeContent, Mode=OneWay}" Grid.Row="1" Grid.Column="1"/>
         <TextBox x:Name="TextEditor"
                  AcceptsReturn="True"
                  ScrollViewer.VerticalScrollBarVisibility="Visible"
                  Grid.Row="2"
+                 Grid.Column="1"
                  Text="{x:Bind CodeContent, Mode=OneTime}"
                  >
         </TextBox>
-        <TextBlock Text="{Binding ElementName=Editor, Path=SelectedText, Mode=OneWay}" Grid.Row="3"/>
-        <StackPanel Orientation="Horizontal"
-                    Grid.Row="4">
+        <TextBlock Text="{Binding ElementName=Editor, Path=SelectedText, Mode=OneWay}" Grid.Row="3" Grid.Column="1"/>
+        <ListView Grid.Row="0" Grid.RowSpan="4">
             <Button Content="Set Text" Click="ButtonSetText_Click" />
             <Button Content="Reveal Position 10, 5 In Center" Click="ButtonRevealPositionInCenter_Click" />
             <Button Content="Highlight Range 3,1-10" Click="ButtonHighlightRange_Click" />
@@ -43,6 +47,7 @@
             <Button Content="Code Folding" Click="ButtonFolding_Click" />
             <Button Content="Minimap" Click="ButtonMinimap_Click" />
             <Button Content="Change Language" Click="ButtonChangeLanguage_Click" />
-        </StackPanel>
+            <Button Content="Set Marker" Click="ButtonSetMarker_Click" />
+        </ListView>
     </Grid>
 </Page>
