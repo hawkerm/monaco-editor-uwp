@@ -34,12 +34,13 @@ namespace MonacoEditorTestApp
 
         public MainPage()
         {
-            this.CodeContent = "public class Program {\n\tpublic static void Main(string[] args) {\n\t\tConsole.WriteLine(\"Hello, World!\");\n\t}\n}";
+            this.CodeContent = "public class Program { // http://www.github.com/ \n\tpublic static void Main(string[] args) {\n\t\tConsole.WriteLine(\"Hello, World!\");\n\t}\n}";
 
             this.InitializeComponent();
 
             Editor.Loading += Editor_Loading;
             Editor.Loaded += Editor_Loaded;
+            Editor.OpenLinkRequested += Editor_OpenLinkRequest;
         }
 
         private async void Editor_Loading(object sender, RoutedEventArgs e)
@@ -95,6 +96,14 @@ namespace MonacoEditorTestApp
         private void Editor_Loaded(object sender, RoutedEventArgs e)
         {
             // Ready for Display
+        }
+
+        private void Editor_OpenLinkRequest(WebView sender, WebViewNewWindowRequestedEventArgs args)
+        {
+            if (this.AllowWeb.IsChecked == false)
+            {
+                args.Handled = true;
+            }
         }
 
         private void ButtonSetText_Click(object sender, RoutedEventArgs e)

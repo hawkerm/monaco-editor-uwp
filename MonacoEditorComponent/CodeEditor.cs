@@ -80,6 +80,7 @@ namespace Monaco
                 _view.NavigationStarting -= WebView_NavigationStarting;
                 _view.DOMContentLoaded -= WebView_DOMContentLoaded;
                 _view.NavigationCompleted -= WebView_NavigationCompleted;
+                _view.NewWindowRequested -= WebView_NewWindowRequested;
                 this._initialized = false;
             }
 
@@ -90,6 +91,7 @@ namespace Monaco
                 _view.NavigationStarting += WebView_NavigationStarting;
                 _view.DOMContentLoaded += WebView_DOMContentLoaded;
                 _view.NavigationCompleted += WebView_NavigationCompleted;
+                _view.NewWindowRequested += WebView_NewWindowRequested;
                 _view.Source = new Uri("ms-appx-web:///Monaco/MonacoEditor.html");
             }
 

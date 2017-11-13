@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -24,6 +25,11 @@ namespace Monaco
         /// When Editor is Loaded, it has been rendered and is ready to be displayed.
         /// </summary>
         public new event RoutedEventHandler Loaded;
+
+        /// <summary>
+        /// Called when a link is Ctrl+Clicked on in the editor, set Handled to true to prevent opening.
+        /// </summary>
+        public event TypedEventHandler<WebView, WebViewNewWindowRequestedEventArgs> OpenLinkRequested;
 
         /// <summary>
         /// Custom Keyboard Handler.
@@ -62,6 +68,11 @@ namespace Monaco
             this._view.AddWebAllowedObject("Parent", _parentAccessor);
             this._view.AddWebAllowedObject("Theme", _themeListener);
             this._view.AddWebAllowedObject("Keyboard", new KeyboardListener(this));
+        }
+
+        private void WebView_NewWindowRequested(WebView sender, WebViewNewWindowRequestedEventArgs args)
+        {
+            OpenLinkRequested?.Invoke(sender, args);
         }
 
         private async void _themeListener_ThemeChanged(ThemeListener sender)

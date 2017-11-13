@@ -48,6 +48,7 @@
             <Button Content="Minimap" Click="ButtonMinimap_Click" />
             <Button Content="Change Language" Click="ButtonChangeLanguage_Click" />
             <Button Content="Set Marker" Click="ButtonSetMarker_Click" />
+            <CheckBox x:Name="AllowWeb" IsChecked="True">Allow Opening Uris</CheckBox>
         </ListView>
     </Grid>
 </Page>
