@@ -155,7 +155,7 @@ namespace Monaco
         }
 
         /// <summary>
-        /// Get or set the Line Decorations.
+        /// Gets or sets text Decorations.
         /// </summary>
         public IObservableVector<IModelDeltaDecoration> Decorations
         {
@@ -164,7 +164,6 @@ namespace Monaco
         }
 
         private AsyncLock _mutexLineDecorations = new AsyncLock();
-        private string[] _decorations = Array.Empty<string>();
 
         // Using a DependencyProperty as the backing store for Options.  This enables animation, styling, binding, etc...
         private static readonly DependencyProperty DecorationsPropertyField =
@@ -180,7 +179,7 @@ namespace Monaco
                         if ((old != null && old.Count > 0) ||
                              e.NewValue == null)
                         {
-                            editor._decorations = (await editor.DeltaDecorationsAsync(editor._decorations, null)).ToArray();
+                            await editor.DeltaDecorationsHelperAsync(null);
                         }
                         var value = e.NewValue as IObservableVector<IModelDeltaDecoration>;
 
@@ -188,7 +187,7 @@ namespace Monaco
                         {
                             if (value.Count > 0)
                             {
-                                editor._decorations = (await editor.DeltaDecorationsAsync(editor._decorations, value.ToArray())).ToArray();
+                                await editor.DeltaDecorationsHelperAsync(value.ToArray());
                             }
 
                             value.VectorChanged += async (s, cce) =>
@@ -199,7 +198,7 @@ namespace Monaco
                                     // Need to recall mutex as this is called from outside of this initial callback setting it up.
                                     using (await editor._mutexLineDecorations.LockAsync())
                                     {
-                                        editor._decorations = (await editor.DeltaDecorationsAsync(editor._decorations, collection.ToArray())).ToArray();
+                                        await editor.DeltaDecorationsHelperAsync(collection.ToArray());
                                     }
                                 }
                             };
@@ -213,6 +212,69 @@ namespace Monaco
             get
             {
                 return DecorationsPropertyField;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the hint Markers.
+        /// Note: This property is a helper for <see cref="SetModelMarkers(string, IMarkerData[])"/>; use this property or the method, not both.
+        /// </summary>
+        public IObservableVector<IMarkerData> Markers
+        {
+            get { return (IObservableVector<IMarkerData>)GetValue(MarkersProperty); }
+            set { SetValue(MarkersProperty, value); }
+        }
+
+        private AsyncLock _mutexMarkers = new AsyncLock();
+
+        // Using a DependencyProperty as the backing store for Options.  This enables animation, styling, binding, etc...
+        private static readonly DependencyProperty MarkersPropertyField =
+            DependencyProperty.Register("Markers", typeof(IMarkerData), typeof(CodeEditor), new PropertyMetadata(null, async (d, e) => {
+                var editor = d as CodeEditor;
+                if (editor != null)
+                {
+                    // We only want to do this one at a time per editor.
+                    using (await editor._mutexMarkers.LockAsync())
+                    {
+                        var old = e.OldValue as IObservableVector<IMarkerData>;
+                        // Clear out the old markers if we're replacing them or setting back to null
+                        if ((old != null && old.Count > 0) ||
+                             e.NewValue == null)
+                        {
+                            // TODO: Can I simplify this in this case?
+                            await editor.SetModelMarkers("CodeEditor", Array.Empty<IMarkerData>());
+                        }
+                        var value = e.NewValue as IObservableVector<IMarkerData>;
+
+                        if (value != null)
+                        {
+                            if (value.Count > 0)
+                            {
+                                await editor.SetModelMarkers("CodeEditor", value.ToArray());
+                            }
+
+                            value.VectorChanged += async (s, cce) =>
+                            {
+                                var collection = s as IObservableVector<IMarkerData>;
+                                if (collection != null)
+                                {
+                                    // Need to recall mutex as this is called from outside of this initial callback setting it up.
+                                    using (await editor._mutexMarkers.LockAsync())
+                                    {
+                                        await editor.SetModelMarkers("CodeEditor", collection.ToArray());
+                                    }
+                                }
+                            };
+                        }
+                    }
+                }
+            }));
+
+        public static DependencyProperty MarkersProperty
+        {
+            get
+            {
+                return MarkersPropertyField;
             }
         }
     }

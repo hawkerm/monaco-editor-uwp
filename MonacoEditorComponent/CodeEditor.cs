@@ -70,6 +70,7 @@ namespace Monaco
 
             // Initialize this here so property changed event will fire and register collection changed event.
             this.Decorations = new ObservableVector<IModelDeltaDecoration>();
+            this.Markers = new ObservableVector<IMarkerData>();
             this._model = new ModelHelper(this);
         }
 

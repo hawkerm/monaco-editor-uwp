@@ -56,8 +56,15 @@ namespace Monaco
         {
             Debug.WriteLine("Navigation Starting");
             _parentAccessor = new ParentAccessor(this);
-            _parentAccessor.RegisterAction("Loaded", () =>
+            _parentAccessor.RegisterAction("Loaded", async () =>
             {
+                if (this.Decorations != null && this.Decorations.Count > 0)
+                {
+                    // Need to retrigger highlights after load if they were set before load.
+                    await this.DeltaDecorationsHelperAsync(this.Decorations.ToArray());
+                }
+
+                // Now we're done loading
                 Loading?.Invoke(this, new RoutedEventArgs());
             });
 

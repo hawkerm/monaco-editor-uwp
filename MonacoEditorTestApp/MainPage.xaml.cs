@@ -41,6 +41,8 @@ namespace MonacoEditorTestApp
             Editor.Loading += Editor_Loading;
             Editor.Loaded += Editor_Loaded;
             Editor.OpenLinkRequested += Editor_OpenLinkRequest;
+
+            this.ButtonHighlightRange_Click(null, null);
         }
 
         private async void Editor_Loading(object sender, RoutedEventArgs e)
@@ -232,21 +234,23 @@ namespace MonacoEditorTestApp
         {
             if ((await Editor.GetModelMarkers()).Count() == 0)
             {
-                await Editor.SetModelMarkers("Me", new IMarkerData[]
-                {
-                    new MarkerData() { Code = "2344",
-                                       Message = "This is a Warning",
-                                       Severity = Severity.Warning,
-                                       Source = "Origin",
-                                       StartLineNumber = 2,
-                                       StartColumn = 2,
-                                       EndLineNumber = 2,
-                                       EndColumn = 8 }
-                });
+                Editor.Markers.Add(
+                    new MarkerData()
+                    {
+                        Code = "2344",
+                        Message = "This is a Warning",
+                        Severity = Severity.Warning,
+                        Source = "Origin",
+                        StartLineNumber = 2,
+                        StartColumn = 2,
+                        EndLineNumber = 2,
+                        EndColumn = 8
+                    });
             }
             else
             {
-                await Editor.SetModelMarkers("Me", Array.Empty<IMarkerData>());
+                Editor.Markers.Clear();
+                //await Editor.SetModelMarkers("Me", Array.Empty<IMarkerData>());
             }            
         }
     }

@@ -26,6 +26,7 @@
         var editor;
         var model;
         var contexts = {};
+        var decorations = [];
 
         Debug.log("Starting");
         require.config({ paths: { 'vs': 'ms-appx-web:///Monaco/monaco-editor/min/vs' }});
@@ -94,6 +95,10 @@
             if (content != model.getValue()) {
                 model.setValue(content);
             }
+        };
+
+        var updateDecorations = function (newHighlights) {
+            decorations = editor.deltaDecorations(decorations, JSON.parse(newHighlights));
         };
 
         var updateStyle = function (innerStyle) {
