@@ -5,6 +5,7 @@ using MonacoEditorTestApp.Actions;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -60,7 +61,7 @@ namespace MonacoEditorTestApp
                 // Turn off Command again.
                 _myCondition.Reset();
 
-                // Refocus on CodeEditor, Note: Issue #7
+                // Refocus on CodeEditor
                 Editor.Focus(FocusState.Programmatic);
             }, _myCondition.Key);
 
@@ -68,8 +69,18 @@ namespace MonacoEditorTestApp
             {
                 var word = await Editor.GetModel().GetWordAtPositionAsync(await Editor.GetPositionAsync());
 
-                var md = new MessageDialog("Word: " + word.Word + "[" + word.StartColumn + ", " + word.EndColumn + "]");
-                await md.ShowAsync();
+                if (word == null)
+                {
+                    var md = new MessageDialog("No Word Found.");
+                    await md.ShowAsync();
+                }
+                else
+                {
+                    var md = new MessageDialog("Word: " + word.Word + "[" + word.StartColumn + ", " + word.EndColumn + "]");
+                    await md.ShowAsync();
+                }
+
+                Editor.Focus(FocusState.Programmatic);
             });
 
             await Editor.AddCommandAsync(Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KEY_L, async () =>
@@ -81,6 +92,8 @@ namespace MonacoEditorTestApp
 
                 var md = new MessageDialog("Current Line: " + line + "\nAll Lines [" + count + "]:\n" + string.Join("\n", lines));
                 await md.ShowAsync();
+
+                Editor.Focus(FocusState.Programmatic);
             });
 
             await Editor.AddCommandAsync(Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KEY_U, async () =>
@@ -90,6 +103,8 @@ namespace MonacoEditorTestApp
 
                 var md = new MessageDialog("Segment " + range.ToString() + ": " + seg);
                 await md.ShowAsync();
+
+                Editor.Focus(FocusState.Programmatic);
             });
 
             await Editor.AddActionAsync(new TestAction());
@@ -198,7 +213,7 @@ namespace MonacoEditorTestApp
                     var md = new MessageDialog("You Hit Ctrl+Enter!");
                     await md.ShowAsync();
 
-                    // Refocus on CodeEditor, Note: Issue #7
+                    // Refocus on CodeEditor
                     Editor.Focus(FocusState.Programmatic);
                 });
                 #pragma warning restore CS4014

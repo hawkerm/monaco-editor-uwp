@@ -44,9 +44,19 @@ namespace Monaco
             this._initialized = true;
         }
 
-        private void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+        private async void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
             this.IsLoaded = true;
+
+            // Make sure inner editor is focused
+            await SendScriptAsync("editor.focus();");
+
+            // If we're supposed to have focus, make sure we try and refocus on our now loaded webview.
+            if (FocusManager.GetFocusedElement() == this)
+            {
+                this._view.Focus(FocusState.Programmatic);
+            }
+
             Loaded?.Invoke(this, new RoutedEventArgs());
         }
 
@@ -95,6 +105,17 @@ namespace Monaco
             this.KeyDown?.Invoke(this, args);
 
             return args.Handled;
+        }
+
+        protected override void OnGotFocus(RoutedEventArgs e)
+        {
+            base.OnGotFocus(e);
+
+            if (this._view != null)
+            {
+                // Forward Focus onto our inner WebView
+                this._view.Focus(FocusState.Programmatic);
+            }
         }
     }
 }

@@ -23,6 +23,8 @@ namespace MonacoEditorTestApp.Actions
         {
             var md = new MessageDialog("You have selected text:\n\n" + editor.SelectedText);
             await md.ShowAsync();
+
+            editor.Focus(Windows.UI.Xaml.FocusState.Programmatic);
         }
     }
 }

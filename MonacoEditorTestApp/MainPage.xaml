@@ -23,6 +23,7 @@
         <monaco:CodeEditor x:Name="Editor"
                            Grid.Row="0"
                            Grid.Column="1"
+                           TabIndex="0"
                            HasGlyphMargin="True"
                            CodeLanguage="csharp"
                            KeyDown="Editor_KeyDown"
@@ -38,7 +39,7 @@
                  >
         </TextBox>
         <TextBlock Text="{Binding ElementName=Editor, Path=SelectedText, Mode=OneWay}" Grid.Row="3" Grid.Column="1"/>
-        <ListView Grid.Row="0" Grid.RowSpan="4">
+        <ListView Grid.Row="0" Grid.RowSpan="4" TabIndex="1">
             <Button Content="Set Text" Click="ButtonSetText_Click" />
             <Button Content="Reveal Position 10, 5 In Center" Click="ButtonRevealPositionInCenter_Click" />
             <Button Content="Highlight Range 3,1-10" Click="ButtonHighlightRange_Click" />
