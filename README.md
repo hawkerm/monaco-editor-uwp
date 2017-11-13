@@ -35,7 +35,7 @@ Build Notes
 -----------
 Built using Visual Studio 2017 for Windows 10 14393 and above.
 
-The **released** complete Monaco v0.9.0 build is used as a reference, this is not included in this repository and can be downloaded from the [Monaco site](https://microsoft.github.io/monaco-editor/).  The contents of its uncompressed 'package' directory should be placed in the *MonacoEditorComponent/monaco-editor* directory.
+The **released** complete Monaco v0.10.1 build is used as a reference, this is not included in this repository and can be downloaded from the [Monaco site](https://microsoft.github.io/monaco-editor/).  The contents of its uncompressed 'package' directory should be placed in the *MonacoEditorComponent/monaco-editor* directory.
 
 License
 -------
