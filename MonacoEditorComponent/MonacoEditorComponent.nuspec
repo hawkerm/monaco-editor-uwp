@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Monaco.Editor</id>
-    <version>0.3-alpha</version>
+    <version>0.4-alpha</version>
     <title>Monaco Editor UWP Component</title>
     <authors>Michael A. Hawker</authors>
     <owners>Michael A. Hawker</owners>
@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/hawkerm/monaco-editor-uwp</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A Windows Runtime Component wrapper around the web-based Monaco Editor</description>
-    <releaseNotes>Removed access to *DeltaDecorationsAsync*, use *CodeEditor.Decorations* collection instead.  Added Actions, Commands, Model, and Options support.</releaseNotes>
+    <releaseNotes>Multiple Bug Fixes.  Added Markers support.</releaseNotes>
     <copyright>Copyright 2017</copyright>
     <tags>uwp monaco editor controls</tags>
     <dependencies>

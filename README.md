@@ -1,10 +1,10 @@
 Monaco Editor UWP
 =================
-A *Windows Runtime Component* wrapper around the web-based [Monaco Editor](https://microsoft.github.io/monaco-editor/).  This allows the Monaco Editor to be more easily consumed directly in XAML for C#/C++ UWP based projects.
+A *Windows Runtime Component* wrapper around the web-based [Monaco Editor](https://microsoft.github.io/monaco-editor/).  This allows the Monaco Editor to be more easily consumed directly in XAML for C# UWP based projects.
 
 This project is not affiliated with the Monaco team and is provided for convenience.  Please direct issues related to the use of this control wrapper to this repository.
 
-This control is still in an early alpha state.  Currently, every minor version change will signal breaking changes.
+This control is still in an early alpha state.  Currently, every minor version change may signal breaking changes.
 
 Supported Features
 ------------------
@@ -13,10 +13,11 @@ The following Monaco Editor features are currently supported by this component b
 - Two-way Text Binding
 - Code Language for Syntax Highlighting
 - Stand Alone Code Editor Options
-- Decorations
+- Markers and Decorations
 - Actions and Commands
 - Basic IModel Support
 - KeyDown Events
+- Responds Appropriately to Programmatic Focus Events
 - Render Aware: Only displays once Loading is complete.
 
 Usage
@@ -25,7 +26,7 @@ Usage
 A NuGet Package is provided:
 
 ```
-Install-Package Monaco.Editor -Version 0.3.0-alpha
+Install-Package Monaco.Editor -Version 0.4.0-alpha
 ```
 
 Look at the TestApp for current usage.

@@ -1,3 +1,11 @@
+v0.4 - 11/13/2017
+-----------------
+- Added support for *[Markers](https://microsoft.github.io/monaco-editor/api/modules/monaco.editor.html#setmodelmarkers)*
+- Added Opening/Intercepting URIs typed in the Editor.
+- Added *InternalException* event for better pre-release error information.
+- Fixes for #5, #7, #8, #10, #12
+- Cleaned-up Sample App Presentation
+
 v0.3 - 08/21/2017
 -----------------
 - **Breaking:** Removed access to *DeltaDecorationsAsync*, use *CodeEditor.Decorations* collection instead.  This simplifies usage of the control in the asynchronous environment.
