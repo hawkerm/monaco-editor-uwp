@@ -105,7 +105,7 @@ namespace Monaco
         {
             await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
             {
-                await this.InvokeScriptAsync("changeTheme", sender.CurrentTheme.ToString(), sender.IsHighContrast.ToString());
+                await this.InvokeScriptAsync("changeTheme", args: new string[] { sender.CurrentTheme.ToString(), sender.IsHighContrast.ToString() });
             });
         }
 

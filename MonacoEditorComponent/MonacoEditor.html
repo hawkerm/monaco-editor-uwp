@@ -65,9 +65,7 @@
             Parent.callAction("Loaded");
         });
 
-        var addAction = function (actionStr) {
-            let action = JSON.parse(actionStr);
-
+        var addAction = function (action) {
             action.run = function (ed) {
                 Parent.callAction("Action" + action.id)
             };
@@ -81,15 +79,14 @@
             }, context);
         };
 
-        var createContext = function (contextStr) {
-            let context = JSON.parse(contextStr);
+        var createContext = function (context) {
             if (context) {
                 contexts[context.key] = editor.createContextKey(context.key, context.defaultValue);
             }
         };
 
         var updateContext = function (key, value) {
-            contexts[key].set(JSON.parse(value));
+            contexts[key].set(value);
         }
 
         var updateContent = function (content) {
@@ -100,7 +97,11 @@
         };
 
         var updateDecorations = function (newHighlights) {
-            decorations = editor.deltaDecorations(decorations, JSON.parse(newHighlights));
+            if (newHighlights) {
+                decorations = editor.deltaDecorations(decorations, newHighlights);
+            } else {
+                decorations = editor.deltaDecorations(decorations, []);
+            }
         };
 
         var updateStyle = function (innerStyle) {
@@ -123,14 +124,7 @@
             return {};
         };
 
-        var updateOptions = function (newOptions) {
-            let opt = null;
-            try {
-                opt = JSON.parse(newOptions);
-            } finally {
-
-            }
-
+        var updateOptions = function (opt) {
             if (opt != null && typeof opt === "object") {
                 editor.updateOptions(opt);
             }

@@ -103,7 +103,7 @@ namespace Monaco
         public IAsyncAction AddActionAsync(IActionDescriptor action)
         {
             _parentAccessor.RegisterAction("Action" + action.Id, new Action(() => { action?.Run(this); }));
-            return this.InvokeScriptAsync("addAction", JsonConvert.SerializeObject(action)).AsAsyncAction();
+            return this.InvokeScriptAsync("addAction", action).AsAsyncAction();
         }
 
         public IAsyncOperation<string> AddCommandAsync(int keybinding, CommandHandler handler)
@@ -115,14 +115,14 @@ namespace Monaco
         {
             var name = "Command" + keybinding;
             _parentAccessor.RegisterAction(name, new Action(() => { handler?.Invoke(); }));
-            return this.InvokeScriptAsync("addCommand", keybinding.ToString(), name, context).AsAsyncOperation();
+            return this.InvokeScriptAsync("addCommand", new object[] { keybinding, name, context }).AsAsyncOperation();
         }
 
         public IAsyncOperation<ContextKey> CreateContextKeyAsync(string key, bool defaultValue)
         {
             var ck = new ContextKey(this, key, defaultValue);
 
-            return this.InvokeScriptAsync("createContext", JsonConvert.SerializeObject(ck)).ContinueWith((noop) =>
+            return this.InvokeScriptAsync("createContext", ck).ContinueWith((noop) =>
             {
                 return ck;
             }).AsAsyncOperation();
@@ -133,7 +133,7 @@ namespace Monaco
             return this._model;
         }
 
-        public IAsyncOperation<IEnumerable<Marker>> GetModelMarkers() // TODO: Filter (string? owner, Uri? resource, int? take)
+        public IAsyncOperation<IEnumerable<Marker>> GetModelMarkersAsync() // TODO: Filter (string? owner, Uri? resource, int? take)
         {
             return this.SendScriptAsync("JSON.stringify(monaco.editor.getModelMarkers());").ContinueWith((result) =>
             {
@@ -147,9 +147,9 @@ namespace Monaco
             }).AsAsyncOperation();
         }
 
-        public IAsyncAction SetModelMarkers(string owner, [ReadOnlyArray] IMarkerData[] markers)
+        public IAsyncAction SetModelMarkersAsync(string owner, [ReadOnlyArray] IMarkerData[] markers)
         {
-            return this.SendScriptAsync("monaco.editor.setModelMarkers(model, JSON.parse('" + JsonConvert.ToString(owner) + "'), JSON.parse('" + JsonConvert.SerializeObject(markers) + "'));").AsAsyncAction();
+            return this.SendScriptAsync("monaco.editor.setModelMarkers(model, " + JsonConvert.ToString(owner) + ", " + JsonConvert.SerializeObject(markers) + ");").AsAsyncAction();
         }
 
         public IAsyncOperation<Position> GetPositionAsync()
@@ -175,13 +175,14 @@ namespace Monaco
         /// <returns></returns>
         private IAsyncAction DeltaDecorationsHelperAsync([ReadOnlyArray] IModelDeltaDecoration[] newDecorations)
         {
-            var newDecorationsAdjust = newDecorations ?? new IModelDeltaDecoration[0];
+            var newDecorationsAdjust = newDecorations ?? Array.Empty<IModelDeltaDecoration>();
 
             // Update Styles
             return InvokeScriptAsync("updateStyle", CssStyleBroker.Instance.GetStyles()).ContinueWith((noop) =>
             {
                 // Send Command to Modify Decorations
-                return InvokeScriptAsync("updateDecorations", Json.ObjectArray(newDecorationsAdjust.Cast<IJsonable>()));
+                // IMPORTANT: Need to cast to object here as we want this to be a single array object passed as a parameter, not a list of parameters to expand.
+                return InvokeScriptAsync("updateDecorations", (object)newDecorationsAdjust);
             }).AsAsyncAction();
         }
     }

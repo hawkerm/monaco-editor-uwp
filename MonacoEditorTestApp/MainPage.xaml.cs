@@ -172,12 +172,12 @@ namespace MonacoEditorTestApp
                     },
                     HoverMessage = new string[]
                     {
-                        "This is *another* test message."
+                        "This is *another* \"test\" message about 'thing'."
                     },
                     GlyphMarginHoverMessage = new string[]
                     {
-                        "This is some crazy Error here.",
-                        "Maybe..."
+                        "This is some crazy \"Error\" here.",
+                        "'Maybe'..."
                     }
                 }));
             this.Editor.Decorations.Add(
@@ -254,13 +254,13 @@ namespace MonacoEditorTestApp
 
         private async void ButtonSetMarker_Click(object sender, RoutedEventArgs e)
         {
-            if ((await Editor.GetModelMarkers()).Count() == 0)
+            if ((await Editor.GetModelMarkersAsync()).Count() == 0)
             {
                 Editor.Markers.Add(
                     new MarkerData()
                     {
                         Code = "2344",
-                        Message = "This is a Warning",
+                        Message = "This is a \"Warning\" about 'that thing'.",
                         Severity = Severity.Warning,
                         Source = "Origin",
                         StartLineNumber = 2,
@@ -271,8 +271,8 @@ namespace MonacoEditorTestApp
             }
             else
             {
-                Editor.Markers.Clear();
-                //await Editor.SetModelMarkers("Me", Array.Empty<IMarkerData>());
+                //Editor.Markers.Clear();
+                await Editor.SetModelMarkersAsync("CodeEditor", Array.Empty<IMarkerData>());
             }            
         }
     }

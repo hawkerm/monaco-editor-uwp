@@ -1,6 +1,10 @@
 ﻿using Monaco.Helpers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Windows.Data.Json;
 using Windows.UI.Xaml.Controls;
@@ -61,6 +65,51 @@ namespace Monaco.Extensions
 
             return returnstring;
         }
+
+        private static JsonSerializerSettings _settings = new JsonSerializerSettings()
+        {
+            NullValueHandling = NullValueHandling.Ignore,
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
+
+        public static async Task<string> InvokeScriptAsync(
+            this WebView _view,
+            string method,
+            [CallerMemberName] string member = null,
+            [CallerFilePath] string file = null,
+            [CallerLineNumber] int line = 0,
+            bool serialize = true,
+            params object[] args) // TODO: Figure out how to actually make 'params' work here, possible?
+        {
+            string[] sanitizedargs;
+
+            if (serialize)
+            {
+                sanitizedargs = args.Select(item =>
+                {
+                    if (item is int || item is double)
+                    {
+                        return item.ToString();
+                    }
+                    else if (item is string)
+                    {
+                        return JsonConvert.ToString(item);
+                    }
+                    else
+                    {
+                        return JsonConvert.SerializeObject(item, _settings);
+                    }
+                }).ToArray();
+            }
+            else
+            {
+                sanitizedargs = args.Select(item => item.ToString()).ToArray();
+            }
+
+            var script = method + "(" + string.Join(",", sanitizedargs) + ");";
+
+            return await RunScriptAsync(_view, script, member, file, line);
+        }
     }
 
     internal sealed class JavaScriptExecutionException : Exception
@@ -74,7 +123,7 @@ namespace Monaco.Extensions
         public int LineNumber { get; private set; }
 
         public JavaScriptExecutionException(string member, string filename, int line, string script, Exception inner)
-            : base("Error Executing JavaScript Code", inner)
+            : base("Error Executing JavaScript Code for " + member + "\nLine " + line + " of " + filename + "\n" + script + "\n", inner)
         {
             this.Member = member;
             this.FileName = filename;

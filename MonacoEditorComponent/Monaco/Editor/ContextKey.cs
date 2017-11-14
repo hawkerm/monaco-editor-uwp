@@ -31,7 +31,7 @@ namespace Monaco.Editor
 
         private async void UpdateValueAsync()
         {
-            await _editor.InvokeScriptAsync("updateContext", Key, JsonConvert.SerializeObject(Value));
+            await _editor.InvokeScriptAsync("updateContext", new object[] { Key, Value });
         }
 
         public bool Get()

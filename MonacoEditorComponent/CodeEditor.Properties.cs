@@ -217,7 +217,7 @@ namespace Monaco
 
         /// <summary>
         /// Gets or sets the hint Markers.
-        /// Note: This property is a helper for <see cref="SetModelMarkers(string, IMarkerData[])"/>; use this property or the method, not both.
+        /// Note: This property is a helper for <see cref="SetModelMarkersAsync(string, IMarkerData[])"/>; use this property or the method, not both.
         /// </summary>
         public IObservableVector<IMarkerData> Markers
         {
@@ -242,7 +242,7 @@ namespace Monaco
                              e.NewValue == null)
                         {
                             // TODO: Can I simplify this in this case?
-                            await editor.SetModelMarkers("CodeEditor", Array.Empty<IMarkerData>());
+                            await editor.SetModelMarkersAsync("CodeEditor", Array.Empty<IMarkerData>());
                         }
                         var value = e.NewValue as IObservableVector<IMarkerData>;
 
@@ -250,7 +250,7 @@ namespace Monaco
                         {
                             if (value.Count > 0)
                             {
-                                await editor.SetModelMarkers("CodeEditor", value.ToArray());
+                                await editor.SetModelMarkersAsync("CodeEditor", value.ToArray());
                             }
 
                             value.VectorChanged += async (s, cce) =>
@@ -261,7 +261,7 @@ namespace Monaco
                                     // Need to recall mutex as this is called from outside of this initial callback setting it up.
                                     using (await editor._mutexMarkers.LockAsync())
                                     {
-                                        await editor.SetModelMarkers("CodeEditor", collection.ToArray());
+                                        await editor.SetModelMarkersAsync("CodeEditor", collection.ToArray());
                                     }
                                 }
                             };

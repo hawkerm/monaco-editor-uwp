@@ -67,7 +67,7 @@ namespace Monaco
                 this.Options.PropertyChanged += async (s, p) =>
                 {
                     // TODO: Check for Language property and call other method instead?
-                    await this.InvokeScriptAsync("updateOptions", new string[] { (s as IEditorConstructionOptions)?.ToJson() });                    
+                    await this.InvokeScriptAsync("updateOptions", s);
                 };
             }
 
@@ -111,11 +111,11 @@ namespace Monaco
             {
                 try
                 {
-                    return await this._view.RunScriptAsync(script);
+                    return await this._view.RunScriptAsync(script, member, file, line);
                 }
                 catch (Exception e)
                 {
-                    InternalException?.Invoke(this, new JavaScriptExecutionException(member, file, line, script, e));
+                    InternalException?.Invoke(this, e);
                 }
             }
             else
@@ -128,35 +128,34 @@ namespace Monaco
             return string.Empty;
         }
 
-        internal async Task<string> InvokeScriptAsync(string method, params string[] args)
+        internal async Task<string> InvokeScriptAsync(
+            string method,
+            object arg,
+            [CallerMemberName] string member = null,
+            [CallerFilePath] string file = null,
+            [CallerLineNumber] int line = 0,
+            bool serialize = true)
+        {
+            return await this.InvokeScriptAsync(method, new object[] { arg }, member, file, line, serialize);
+        }
+
+        internal async Task<string> InvokeScriptAsync(
+            string method,
+            object[] args,
+            [CallerMemberName] string member = null,
+            [CallerFilePath] string file = null,
+            [CallerLineNumber] int line = 0,
+            bool serialize = true)
         {
             if (_initialized)
             {
-                if (Dispatcher.HasThreadAccess)
+                try
                 {
-                    try
-                    {
-                        return await this._view.InvokeScriptAsync(method, args);
-                    }
-                    catch (Exception e)
-                    {
-                        InternalException?.Invoke(this, e);
-                    }
+                    return await this._view.InvokeScriptAsync(method, member, file, line, serialize, args);
                 }
-                else
+                catch (Exception e)
                 {
-                    return await Dispatcher.RunTaskAsync(async () =>
-                    {
-                        try
-                        {
-                            return await this._view.InvokeScriptAsync(method, args);
-                        }
-                        catch (Exception e)
-                        {
-                            InternalException?.Invoke(this, e);
-                            return string.Empty;
-                        }
-                    });
+                    InternalException?.Invoke(this, e);
                 }
             }
             else
