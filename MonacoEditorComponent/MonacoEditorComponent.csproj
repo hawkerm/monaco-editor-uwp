@@ -114,6 +114,7 @@
     <Compile Include="CodeEditor.cs" />
     <Compile Include="CodeEditor.Methods.cs" />
     <Compile Include="CodeEditor.Properties.cs" />
+    <Compile Include="Extensions\WebViewExtensions.cs" />
     <Compile Include="Helpers\DebugLogger.cs" />
     <Compile Include="Helpers\DispatcherTaskExtensions.cs" />
     <Compile Include="Helpers\KeyboardListener.cs" />

@@ -1,9 +1,11 @@
 ﻿using Collections.Generic;
 using Monaco.Editor;
+using Monaco.Extensions;
 using Monaco.Helpers;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Windows.Foundation;
@@ -64,7 +66,8 @@ namespace Monaco
                 // Register for changes
                 this.Options.PropertyChanged += async (s, p) =>
                 {
-                    await this.InvokeScriptAsync("updateOptions", new string[] { (s as IEditorConstructionOptions)?.ToJson() });
+                    // TODO: Check for Language property and call other method instead?
+                    await this.InvokeScriptAsync("updateOptions", new string[] { (s as IEditorConstructionOptions)?.ToJson() });                    
                 };
             }
 
@@ -99,20 +102,27 @@ namespace Monaco
             base.OnApplyTemplate();
         }
 
-        internal async Task<string> SendScriptAsync(string script)
+        internal async Task<string> SendScriptAsync(string script, 
+            [CallerMemberName] string member = null,
+            [CallerFilePath] string file = null,
+            [CallerLineNumber] int line = 0)
         {
             if (_initialized)
             {
-                if (Dispatcher.HasThreadAccess)
+                try
                 {
-                    return await this._view.InvokeScriptAsync("eval", new string[] { script });
+                    return await this._view.RunScriptAsync(script);
                 }
-                else
+                catch (Exception e)
                 {
-                    return await Dispatcher.RunTaskAsync(async () => {
-                        return await _view.InvokeScriptAsync("eval", new string[] { script });
-                    });
-                }                
+                    InternalException?.Invoke(this, new JavaScriptExecutionException(member, file, line, script, e));
+                }
+            }
+            else
+            {
+                #if DEBUG
+                Debug.WriteLine("WARNING: Tried to call '" + script + "' before initialized.");
+                #endif
             }
 
             return string.Empty;
@@ -124,15 +134,36 @@ namespace Monaco
             {
                 if (Dispatcher.HasThreadAccess)
                 {
-                    return await this._view.InvokeScriptAsync(method, args);
+                    try
+                    {
+                        return await this._view.InvokeScriptAsync(method, args);
+                    }
+                    catch (Exception e)
+                    {
+                        InternalException?.Invoke(this, e);
+                    }
                 }
                 else
                 {
                     return await Dispatcher.RunTaskAsync(async () =>
                     {
-                        return await this._view.InvokeScriptAsync(method, args);
+                        try
+                        {
+                            return await this._view.InvokeScriptAsync(method, args);
+                        }
+                        catch (Exception e)
+                        {
+                            InternalException?.Invoke(this, e);
+                            return string.Empty;
+                        }
                     });
                 }
+            }
+            else
+            {
+                #if DEBUG
+                Debug.WriteLine("WARNING: Tried to call " + method + " before initialized.");
+                #endif
             }
 
             return string.Empty;

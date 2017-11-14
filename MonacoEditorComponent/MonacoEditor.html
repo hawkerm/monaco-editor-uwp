@@ -28,13 +28,15 @@
         var contexts = {};
         var decorations = [];
 
-        Debug.log("Starting");
+        Debug.log("Starting Monaco Load");
         require.config({ paths: { 'vs': 'ms-appx-web:///Monaco/monaco-editor/min/vs' }});
         require(['vs/editor/editor.main'], function () {
+            Debug.log("Grabbing Monaco Options");
+
             let opt = getOptions();
             opt["value"] = Parent.getValue("Text");
 
-		    editor = monaco.editor.create(document.getElementById('container'), opt);
+            editor = monaco.editor.create(document.getElementById('container'), opt);
             model = editor.getModel();
 
             // Listen for Content Changes
@@ -54,7 +56,7 @@
             window.addEventListener("resize", () => {
                 editor.layout();
             });
-
+            
             // Disable WebView Scrollbar so Monaco Scrollbar can do heavy lifting
             document.body.style.overflow = 'hidden';
 

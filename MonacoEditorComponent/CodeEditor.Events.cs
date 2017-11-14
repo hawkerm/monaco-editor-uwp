@@ -32,6 +32,11 @@ namespace Monaco
         public event TypedEventHandler<WebView, WebViewNewWindowRequestedEventArgs> OpenLinkRequested;
 
         /// <summary>
+        /// Called when an internal exception is encountered while executing a command. (for testing/reporting issues)
+        /// </summary>
+        public event TypedEventHandler<CodeEditor, Exception> InternalException;
+
+        /// <summary>
         /// Custom Keyboard Handler.
         /// </summary>
         public new event WebKeyEventHandler KeyDown;
@@ -40,7 +45,9 @@ namespace Monaco
 
         private void WebView_DOMContentLoaded(WebView sender, WebViewDOMContentLoadedEventArgs args)
         {
+            #if DEBUG
             Debug.WriteLine("DOM Content Loaded");
+            #endif
             this._initialized = true;
         }
 
@@ -64,7 +71,9 @@ namespace Monaco
 
         private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
         {
+            #if DEBUG
             Debug.WriteLine("Navigation Starting");
+            #endif
             _parentAccessor = new ParentAccessor(this);
             _parentAccessor.RegisterAction("Loaded", async () =>
             {

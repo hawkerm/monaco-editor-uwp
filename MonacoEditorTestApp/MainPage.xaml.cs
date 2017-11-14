@@ -43,7 +43,14 @@ namespace MonacoEditorTestApp
             Editor.Loaded += Editor_Loaded;
             Editor.OpenLinkRequested += Editor_OpenLinkRequest;
 
+            Editor.InternalException += Editor_InternalException;
+
             this.ButtonHighlightRange_Click(null, null);
+        }
+
+        private void Editor_InternalException(CodeEditor sender, Exception args)
+        {
+            // This shouldn't happen, if it does, then it's a bug.
         }
 
         private async void Editor_Loading(object sender, RoutedEventArgs e)

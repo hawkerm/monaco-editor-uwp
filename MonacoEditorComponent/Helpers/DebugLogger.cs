@@ -8,7 +8,9 @@ namespace Monaco.Helpers
     {
         public void Log(string message)
         {
+            #if DEBUG
             Debug.WriteLine(message);
+            #endif
         }
     }
 }
