@@ -35,21 +35,29 @@
                  ScrollViewer.VerticalScrollBarVisibility="Visible"
                  Grid.Row="2"
                  Grid.Column="1"
+                 TabIndex="1"
                  Text="{x:Bind CodeContent, Mode=OneTime}"
                  >
         </TextBox>
         <TextBlock Text="{Binding ElementName=Editor, Path=SelectedText, Mode=OneWay}" Grid.Row="3" Grid.Column="1"/>
-        <ListView Grid.Row="0" Grid.RowSpan="4" TabIndex="1">
-            <Button Content="Set Text" Click="ButtonSetText_Click" />
-            <Button Content="Reveal Position 10, 5 In Center" Click="ButtonRevealPositionInCenter_Click" />
-            <Button Content="Highlight Range 3,1-10" Click="ButtonHighlightRange_Click" />
-            <Button Content="Highlight Line 2 &amp; 4" Click="ButtonHighlightLine_Click" />
-            <Button Content="Clear Highlights" Click="ButtonClearHighlights_Click" />
-            <Button Content="Code Folding" Click="ButtonFolding_Click" />
-            <Button Content="Minimap" Click="ButtonMinimap_Click" />
-            <Button Content="Change Language" Click="ButtonChangeLanguage_Click" />
-            <Button Content="Set Marker" Click="ButtonSetMarker_Click" />
-            <CheckBox x:Name="AllowWeb" IsChecked="True">Allow Opening Uris</CheckBox>
-        </ListView>
+        <ScrollViewer Grid.Row="0" Grid.RowSpan="4" IsTabStop="False">
+            <ItemsControl IsTabStop="False">
+                <Button Content="Set Text" Click="ButtonSetText_Click" TabIndex="2"/>
+                <Button Content="Reveal Position 10, 5 In Center" Click="ButtonRevealPositionInCenter_Click" />
+                <Button Content="Highlight Range 3,1-10" Click="ButtonHighlightRange_Click" />
+                <Button Content="Highlight Line 2 &amp; 4" Click="ButtonHighlightLine_Click" />
+                <Button Content="Clear Highlights" Click="ButtonClearHighlights_Click" />
+                <Button Content="Code Folding" Click="ButtonFolding_Click" />
+                <Button Content="Minimap" Click="ButtonMinimap_Click" />
+                <Button Content="Change Language" Click="ButtonChangeLanguage_Click" />
+                <Button Content="Set Marker" Click="ButtonSetMarker_Click" />
+                <CheckBox x:Name="AllowWeb" IsChecked="True">Allow Opening Uris</CheckBox>
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="FrameworkElement">
+                        <Setter Property="Margin" Value="8,16,0,0"/>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </Page>

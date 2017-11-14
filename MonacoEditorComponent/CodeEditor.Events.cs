@@ -111,7 +111,7 @@ namespace Monaco
         {
             base.OnGotFocus(e);
 
-            if (this._view != null)
+            if (this._view != null && FocusManager.GetFocusedElement() == this)
             {
                 // Forward Focus onto our inner WebView
                 this._view.Focus(FocusState.Programmatic);
