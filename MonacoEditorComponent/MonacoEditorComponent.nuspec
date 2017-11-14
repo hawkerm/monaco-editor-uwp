@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Monaco.Editor</id>
-    <version>0.4-alpha</version>
+    <version>0.5-alpha</version>
     <title>Monaco Editor UWP Component</title>
     <authors>Michael A. Hawker</authors>
     <owners>Michael A. Hawker</owners>

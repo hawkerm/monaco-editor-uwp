@@ -26,7 +26,7 @@ Usage
 A NuGet Package is provided:
 
 ```
-Install-Package Monaco.Editor -Version 0.4.0-alpha
+Install-Package Monaco.Editor -Version 0.5.0-alpha
 ```
 
 Look at the TestApp for current usage.

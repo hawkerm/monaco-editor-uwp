@@ -1,3 +1,9 @@
+v0.5 - 11/14/2017
+-----------------
+- **Breaking:** Appended 'Async' to Get/SetModelMarkers methods.
+- Error Handling with *InternalException* event for all calls.
+- Fixes #16
+
 v0.4 - 11/13/2017
 -----------------
 - Added support for *[Markers](https://microsoft.github.io/monaco-editor/api/modules/monaco.editor.html#setmodelmarkers)*

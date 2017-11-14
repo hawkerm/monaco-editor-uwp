@@ -1,11 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.12
+VisualStudioVersion = 15.0.27004.2008
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonacoEditorComponent", "MonacoEditorComponent\MonacoEditorComponent.csproj", "{DD49485C-2D9B-4824-B64E-52193B43E4CB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonacoEditorTestApp", "MonacoEditorTestApp\MonacoEditorTestApp.csproj", "{854C0817-09CA-4052-8C6F-0717C2721063}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C810EDD0-CB55-4B22-AA18-A6C8B3C29FBC}"
+	ProjectSection(SolutionItems) = preProject
+		changelog.md = changelog.md
+		MonacoEditorComponent\MonacoEditorComponent.nuspec = MonacoEditorComponent\MonacoEditorComponent.nuspec
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,5 +65,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {90987E94-2049-4E20-B338-022AD41FAC9C}
 	EndGlobalSection
 EndGlobal
