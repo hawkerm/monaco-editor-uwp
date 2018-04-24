@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -75,6 +76,7 @@ namespace Monaco
             Debug.WriteLine("Navigation Starting");
             #endif
             _parentAccessor = new ParentAccessor(this);
+            _parentAccessor.AddAssemblyForTypeLookup(typeof(Range).GetTypeInfo().Assembly);
             _parentAccessor.RegisterAction("Loaded", async () =>
             {
                 if (this.Decorations != null && this.Decorations.Count > 0)
@@ -98,6 +100,7 @@ namespace Monaco
 
         private void WebView_NewWindowRequested(WebView sender, WebViewNewWindowRequestedEventArgs args)
         {
+            // TODO: Should probably create own event args here as we don't want to expose the referrer to our internal page?
             OpenLinkRequested?.Invoke(sender, args);
         }
 

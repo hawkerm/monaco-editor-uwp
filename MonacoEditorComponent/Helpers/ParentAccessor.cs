@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Windows.Foundation.Metadata;
@@ -7,19 +8,22 @@ namespace Monaco.Helpers
 {
     /// <summary>
     /// Class to aid in accessing WinRT values from JavaScript.
+    /// Not Thread Safe.
     /// </summary>
     [AllowForWeb]
     public sealed class ParentAccessor
     {
-        private object parent;
+        private IParentAccessorAcceptor parent;
         private Type typeinfo;
         private Dictionary<string, Action> actions;
+
+        private List<Assembly> Assemblies { get; set; } = new List<Assembly>();
 
         /// <summary>
         /// Constructs a new reflective parent Accessor for the provided object.
         /// </summary>
         /// <param name="parent">Object to provide Property Access.</param>
-        public ParentAccessor(object parent)
+        public ParentAccessor(IParentAccessorAcceptor parent)
         { 
             this.parent = parent;
             this.typeinfo = parent.GetType();
@@ -34,6 +38,15 @@ namespace Monaco.Helpers
         internal void RegisterAction(string name, Action action)
         {
             actions[name] = action;
+        }
+
+        /// <summary>
+        /// Adds an Assembly to use for looking up types by name for <see cref="SetValue(string, string, string)"/>.
+        /// </summary>
+        /// <param name="assembly">Assembly to add.</param>
+        internal void AddAssemblyForTypeLookup(Assembly assembly)
+        {
+            this.Assemblies.Add(assembly);
         }
 
         /// <summary>
@@ -67,6 +80,7 @@ namespace Monaco.Helpers
         {
             var propinfo = typeinfo.GetProperty(name);
             var obj = propinfo?.GetValue(this.parent);
+            // TODO: use json.net
             if (obj is IJsonable)
             {
                 return (obj as IJsonable).ToJson();
@@ -105,7 +119,64 @@ namespace Monaco.Helpers
         public void SetValue(string name, object value)
         {
             var propinfo = typeinfo.GetProperty(name); // TODO: Cache these?
+            parent.IsSettingValue = true;
             propinfo?.SetValue(this.parent, value);
+            parent.IsSettingValue = false;
         }
+
+        /// <summary>
+        /// Sets the value for the specified Property after deserializing the value as the given type name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <param name="type"></param>
+        public void SetValue(string name, string value, string type)
+        {
+            var propinfo = typeinfo.GetProperty(name);
+            var typeobj = LookForTypeByName(type);
+
+            var obj = JsonConvert.DeserializeObject(value, typeobj);
+
+            parent.IsSettingValue = true;
+            propinfo?.SetValue(this.parent, obj);
+            parent.IsSettingValue = false;
+        }
+
+        private Type LookForTypeByName(string name)
+        {
+            // First search locally
+            var result = Type.GetType(name);
+
+            if (result != null)
+            {
+                return result;
+            }
+
+            // Search in Other Assemblies
+            foreach (var assembly in Assemblies)
+            {
+                foreach (var typeInfo in assembly.ExportedTypes)
+                {
+                    if (typeInfo.Name == name)
+                    {
+                        return typeInfo;
+                    }
+                }
+            }
+
+            return null;
+        }
+    }
+
+    //// TODO: Find better approach than this. Issue #21.
+    /// <summary>
+    /// Interface used on objects to be accessed.
+    /// </summary>
+    public interface IParentAccessorAcceptor
+    {
+        /// <summary>
+        /// Property to tell object the value is being set by ParentAccessor.
+        /// </summary>
+        bool IsSettingValue { get; set; }
     }
 }

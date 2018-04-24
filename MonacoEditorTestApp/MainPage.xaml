@@ -19,6 +19,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <monaco:CodeEditor x:Name="Editor"
                            Grid.Row="0"
@@ -39,8 +40,10 @@
                  Text="{x:Bind CodeContent, Mode=OneTime}"
                  >
         </TextBox>
-        <TextBlock Text="{Binding ElementName=Editor, Path=SelectedText, Mode=OneWay}" Grid.Row="3" Grid.Column="1"/>
-        <ScrollViewer Grid.Row="0" Grid.RowSpan="4" IsTabStop="False">
+        <TextBox Text="{Binding ElementName=Editor, Path=SelectedText, Mode=TwoWay}" Grid.Row="3" Grid.Column="1"
+                 AcceptsReturn="True"/>
+        <TextBlock Text="{Binding ElementName=Editor, Path=SelectedRange}" Grid.Row="4" Grid.Column="1"/>
+        <ScrollViewer Grid.Row="0" Grid.RowSpan="5" IsTabStop="False">
             <ItemsControl IsTabStop="False">
                 <Button Content="Set Text" Click="ButtonSetText_Click" TabIndex="2"/>
                 <Button Content="Reveal Position 10, 5 In Center" Click="ButtonRevealPositionInCenter_Click" />

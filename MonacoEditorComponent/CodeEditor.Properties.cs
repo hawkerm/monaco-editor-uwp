@@ -1,4 +1,5 @@
 ﻿using Monaco.Editor;
+using Monaco.Helpers;
 using Nito.AsyncEx;
 using System;
 using System.Collections.Generic;
@@ -11,8 +12,10 @@ using Windows.UI.Xaml;
 
 namespace Monaco
 {
-    partial class CodeEditor
+    partial class CodeEditor : IParentAccessorAcceptor
     {
+        public bool IsSettingValue { get; set; }
+
         /// <summary>
         /// Get or Set the CodeEditor Text.
         /// </summary>
@@ -24,11 +27,11 @@ namespace Monaco
 
         // Using a DependencyProperty as the backing store for HorizontalLayout.  This enables animation, styling, binding, etc...
         private static readonly DependencyProperty TextPropertyField =
-            DependencyProperty.Register("Text", typeof(string), typeof(CodeEditor), new PropertyMetadata("", (d, e) => {
-                //(d as Canvas)?.InvokeScriptAsync("updateToolbox", new string[] { e.NewValue.ToString() });
-                //(d as CodeEditor).CodeChanged?.Invoke(d, e);
-
-                (d as CodeEditor)?.InvokeScriptAsync("updateContent", e.NewValue.ToString());
+            DependencyProperty.Register("Text", typeof(string), typeof(CodeEditor), new PropertyMetadata(string.Empty, (d, e) => {
+                if (!(d as CodeEditor).IsSettingValue)
+                {
+                    (d as CodeEditor)?.InvokeScriptAsync("updateContent", e.NewValue.ToString());
+                }
             }));
 
         public static DependencyProperty TextProperty
@@ -45,18 +48,41 @@ namespace Monaco
         public string SelectedText
         {
             get { return (string)GetValue(SelectedTextProperty); }
-            private set { SetValue(SelectedTextProperty, value); }
+            set { SetValue(SelectedTextProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for HorizontalLayout.  This enables animation, styling, binding, etc...
         private static readonly DependencyProperty SelectedTextPropertyField =
-            DependencyProperty.Register("SelectedText", typeof(string), typeof(CodeEditor), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register(nameof(SelectedText), typeof(string), typeof(CodeEditor), new PropertyMetadata(string.Empty, (d, e) => {
+                if (!(d as CodeEditor).IsSettingValue)
+                {
+                    (d as CodeEditor)?.InvokeScriptAsync("updateSelectedContent", e.NewValue.ToString());
+                }
+            }));
 
         public static DependencyProperty SelectedTextProperty
         {
             get
             {
                 return SelectedTextPropertyField;
+            }
+        }
+
+        public Selection SelectedRange
+        {
+            get { return (Selection)GetValue(SelectedRangeProperty); }
+            set { SetValue(SelectedRangeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for SelectedRange.  This enables animation, styling, binding, etc...
+        private static readonly DependencyProperty SelectedRangePropertyField =
+            DependencyProperty.Register(nameof(SelectedRange), typeof(Selection), typeof(CodeEditor), new PropertyMetadata(null));
+
+        public static DependencyProperty SelectedRangeProperty
+        {
+            get
+            {
+                return SelectedRangePropertyField;
             }
         }
 
