@@ -69,6 +69,7 @@ namespace Monaco
         }
 
         private ParentAccessor _parentAccessor;
+        private KeyboardListener _keyboardListener;
 
         private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
         {
@@ -77,25 +78,29 @@ namespace Monaco
             #endif
             _parentAccessor = new ParentAccessor(this);
             _parentAccessor.AddAssemblyForTypeLookup(typeof(Range).GetTypeInfo().Assembly);
-            _parentAccessor.RegisterAction("Loaded", async () =>
-            {
-                if (this.Decorations != null && this.Decorations.Count > 0)
-                {
-                    // Need to retrigger highlights after load if they were set before load.
-                    await this.DeltaDecorationsHelperAsync(this.Decorations.ToArray());
-                }
-
-                // Now we're done loading
-                Loading?.Invoke(this, new RoutedEventArgs());
-            });
+            _parentAccessor.RegisterAction("Loaded", CodeEditorLoaded);
 
             _themeListener = new ThemeListener();
             _themeListener.ThemeChanged += _themeListener_ThemeChanged;
 
+            _keyboardListener = new KeyboardListener(this);
+
             this._view.AddWebAllowedObject("Debug", new DebugLogger());
             this._view.AddWebAllowedObject("Parent", _parentAccessor);
             this._view.AddWebAllowedObject("Theme", _themeListener);
-            this._view.AddWebAllowedObject("Keyboard", new KeyboardListener(this));
+            this._view.AddWebAllowedObject("Keyboard", _keyboardListener);
+        }
+
+        private async void CodeEditorLoaded()
+        {
+            if (Decorations != null && Decorations.Count > 0)
+            {
+                // Need to retrigger highlights after load if they were set before load.
+                await DeltaDecorationsHelperAsync(Decorations.ToArray());
+            }
+
+            // Now we're done loading
+            Loading?.Invoke(this, new RoutedEventArgs());
         }
 
         private void WebView_NewWindowRequested(WebView sender, WebViewNewWindowRequestedEventArgs args)

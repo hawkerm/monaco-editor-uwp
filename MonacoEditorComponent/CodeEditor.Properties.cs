@@ -135,17 +135,17 @@ namespace Monaco
         private static readonly DependencyProperty OptionsPropertyField =
             DependencyProperty.Register("Options", typeof(IEditorConstructionOptions), typeof(CodeEditor), new PropertyMetadata(new IEditorConstructionOptions(), (d, e) => {
                 var value = e.NewValue as IEditorConstructionOptions;
-                var editor = d as CodeEditor;
-                editor?.InvokeScriptAsync("updateOptions", value.ToJson());
-
-                // Register for sub-property changes on new object
-                // TODO: Need to do this for initial object :(
                 if (value != null)
-                {
-                    value.PropertyChanged += async (s, p) =>
+                { 
+                    var editor = d as CodeEditor;
+                    if (editor != null)
                     {
-                        await editor?.InvokeScriptAsync("updateOptions", (s as IEditorConstructionOptions)?.ToJson());
-                    };
+                        editor.InvokeScriptAsync("updateOptions", value.ToJson());
+
+                        // Register for sub-property changes on new object
+                        value.PropertyChanged -= editor.Options_PropertyChanged;
+                        value.PropertyChanged += editor.Options_PropertyChanged;
+                    }
                 }
             }));
 
@@ -216,22 +216,24 @@ namespace Monaco
                                 await editor.DeltaDecorationsHelperAsync(value.ToArray());
                             }
 
-                            value.VectorChanged += async (s, cce) =>
-                            {
-                                var collection = s as IObservableVector<IModelDeltaDecoration>;
-                                if (collection != null)
-                                {
-                                    // Need to recall mutex as this is called from outside of this initial callback setting it up.
-                                    using (await editor._mutexLineDecorations.LockAsync())
-                                    {
-                                        await editor.DeltaDecorationsHelperAsync(collection.ToArray());
-                                    }
-                                }
-                            };
+                            value.VectorChanged -= editor.Decorations_VectorChanged;
+                            value.VectorChanged += editor.Decorations_VectorChanged;
                         }
                     }
                 }
             }));
+
+        private async void Decorations_VectorChanged(IObservableVector<IModelDeltaDecoration> sender, IVectorChangedEventArgs @event)
+        {
+            if (sender != null)
+            {
+                // Need to recall mutex as this is called from outside of this initial callback setting it up.
+                using (await _mutexLineDecorations.LockAsync())
+                {
+                    await DeltaDecorationsHelperAsync(sender.ToArray());
+                }
+            }
+        }
 
         public static DependencyProperty DecorationsProperty
         {
@@ -279,22 +281,24 @@ namespace Monaco
                                 await editor.SetModelMarkersAsync("CodeEditor", value.ToArray());
                             }
 
-                            value.VectorChanged += async (s, cce) =>
-                            {
-                                var collection = s as IObservableVector<IMarkerData>;
-                                if (collection != null)
-                                {
-                                    // Need to recall mutex as this is called from outside of this initial callback setting it up.
-                                    using (await editor._mutexMarkers.LockAsync())
-                                    {
-                                        await editor.SetModelMarkersAsync("CodeEditor", collection.ToArray());
-                                    }
-                                }
-                            };
+                            value.VectorChanged -= editor.Markers_VectorChanged;
+                            value.VectorChanged += editor.Markers_VectorChanged;
                         }
                     }
                 }
             }));
+
+        private async void Markers_VectorChanged(IObservableVector<IMarkerData> sender, IVectorChangedEventArgs @event)
+        {
+            if (sender != null)
+            {
+                // Need to recall mutex as this is called from outside of this initial callback setting it up.
+                using (await _mutexMarkers.LockAsync())
+                {
+                    await SetModelMarkersAsync("CodeEditor", sender.ToArray());
+                }
+            }
+        }
 
         public static DependencyProperty MarkersProperty
         {

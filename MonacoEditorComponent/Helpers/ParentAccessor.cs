@@ -15,7 +15,7 @@ namespace Monaco.Helpers
     {
         private WeakReference<IParentAccessorAcceptor> parent;
         private Type typeinfo;
-        private Dictionary<string, Action> actions;
+        private Dictionary<string, WeakReference<Action>> actions;
 
         private List<Assembly> Assemblies { get; set; } = new List<Assembly>();
 
@@ -27,7 +27,7 @@ namespace Monaco.Helpers
         { 
             this.parent = new WeakReference<IParentAccessorAcceptor>(parent);
             this.typeinfo = parent.GetType();
-            this.actions = new Dictionary<string, Action>();
+            this.actions = new Dictionary<string, WeakReference<Action>>();
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Monaco.Helpers
         /// <param name="action">Action to perform.</param>
         internal void RegisterAction(string name, Action action)
         {
-            actions[name] = action;
+            actions[name] = new WeakReference<Action>(action);
         }
 
         /// <summary>
@@ -56,9 +56,9 @@ namespace Monaco.Helpers
         /// <returns>True if method was found in registration.</returns>
         public bool CallAction(string name)
         {
-            if (actions.ContainsKey(name))
+            if (actions.ContainsKey(name) && actions[name].TryGetTarget(out Action action))
             {
-                actions[name].Invoke();
+                action.Invoke();
                 return true;
             }
 

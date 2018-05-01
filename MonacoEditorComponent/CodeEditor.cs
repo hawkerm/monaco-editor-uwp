@@ -64,17 +64,46 @@ namespace Monaco
                 this.Options.Language = this.CodeLanguage;
 
                 // Register for changes
-                this.Options.PropertyChanged += async (s, p) =>
-                {
-                    // TODO: Check for Language property and call other method instead?
-                    await InvokeScriptAsync("updateOptions", s);
-                };
+                this.Options.PropertyChanged += Options_PropertyChanged;
             }
 
             // Initialize this here so property changed event will fire and register collection changed event.
             this.Decorations = new ObservableVector<IModelDeltaDecoration>();
             this.Markers = new ObservableVector<IMarkerData>();
             this._model = new ModelHelper(this);
+
+            Unloaded += CodeEditor_Unloaded;
+        }
+
+        private async void Options_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            // TODO: Check for Language property and call other method instead?
+            await InvokeScriptAsync("updateOptions", sender);
+        }
+
+        private void CodeEditor_Unloaded(object sender, RoutedEventArgs e)
+        {
+            Unloaded -= CodeEditor_Unloaded;
+
+            if (_view != null)
+            {
+                _view.NavigationStarting -= WebView_NavigationStarting;
+                _view.DOMContentLoaded -= WebView_DOMContentLoaded;
+                _view.NavigationCompleted -= WebView_NavigationCompleted;
+                _view.NewWindowRequested -= WebView_NewWindowRequested;
+                _initialized = false;
+            }
+
+            Decorations.VectorChanged -= Decorations_VectorChanged;
+            Markers.VectorChanged -= Markers_VectorChanged;
+
+            _parentAccessor = null;
+            Options.PropertyChanged -= Options_PropertyChanged;
+            Options = null;
+            _themeListener.ThemeChanged -= _themeListener_ThemeChanged;
+            _themeListener = null;
+            _keyboardListener = null;
+            _model = null;
         }
 
         protected override void OnApplyTemplate()

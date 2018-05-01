@@ -42,6 +42,14 @@ namespace Monaco.Helpers
             Window.Current.CoreWindow.Activated += CoreWindow_Activated; 
         }
 
+        ~ThemeListener()
+        {
+            _accessible.HighContrastChanged -= _accessible_HighContrastChanged;
+            _settings.ColorValuesChanged -= _settings_ColorValuesChanged;
+
+            Window.Current.CoreWindow.Activated -= CoreWindow_Activated;
+        }
+
         private void _accessible_HighContrastChanged(AccessibilitySettings sender, object args)
         {
             #if DEBUG
