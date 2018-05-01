@@ -15,30 +15,23 @@ namespace Monaco
     /// </summary>
     public sealed class LanguagesHelper
     {
-        private CodeEditor editor;
+        private WeakReference<CodeEditor> _editor;
 
         public LanguagesHelper(CodeEditor editor)
         {
             // We need the editor component in order to execute JavaScript within 
             // the WebView environment to retrieve data (even though this Monaco class is static).
-            this.editor = editor;
+            _editor = new WeakReference<CodeEditor>(editor);
         }
 
         public IAsyncOperation<IList<ILanguageExtensionPoint>> GetLanguagesAsync()
         {
-            var json = editor.SendScriptAsync("JSON.stringify(monaco.languages.getLanguages())");
-
-            return json.ContinueWith((result) =>
+            if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                var jsonlanguages = JsonArray.Parse(result.Result);
-                IList<ILanguageExtensionPoint> languages = new List<ILanguageExtensionPoint>(jsonlanguages.Count);
-                for (int i = 0; i < jsonlanguages.Count; i++)
-                {
-                    languages.Add(ILanguageExtensionPoint.Create(jsonlanguages[i]));
-                }
+                return editor.SendScriptAsync<IList<ILanguageExtensionPoint>>("monaco.languages.getLanguages()").AsAsyncOperation();
+            }
 
-                return languages;
-            }).AsAsyncOperation();
+            return null;
         }
     }
 }

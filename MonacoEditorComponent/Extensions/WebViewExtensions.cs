@@ -13,22 +13,41 @@ namespace Monaco.Extensions
 {
     internal static class WebViewExtensions
     {
-        public static async Task<string> RunScriptAsync(
+        public static async Task RunScriptAsync(
+            this WebView _view,
+            string script,
+            [CallerMemberName] string member = null,
+            [CallerFilePath] string file = null,
+            [CallerLineNumber] int line = 0)
+        {
+            await _view.RunScriptAsync<object>(script, member, file, line);
+        }
+
+        public static async Task<T> RunScriptAsync<T>(
             this WebView _view, 
             string script, 
             [CallerMemberName] string member = null,
             [CallerFilePath] string file = null,
             [CallerLineNumber] int line = 0)
         {
-            var fullscript = "try {\n" +
-                                script +
-                             "\n} catch (err) { JSON.stringify({ wv_internal_error: true, message: err.message, description: err.description, number: err.number, stack: err.stack }); }";
+            var start = "try {\n";
+            if (typeof(T) != typeof(object))
+            {
+                script = script.Trim(';');
+                start += "JSON.stringify(" + script + ");";
+            }
+            else
+            {
+                start += script;
+            }
+            var fullscript = start + 
+                "\n} catch (err) { JSON.stringify({ wv_internal_error: true, message: err.message, description: err.description, number: err.number, stack: err.stack }); }";
 
             if (_view.Dispatcher.HasThreadAccess)
             {
                 try
                 {
-                    return await RunScriptHelperAsync(_view, fullscript);
+                    return await RunScriptHelperAsync<T>(_view, fullscript);
                 }
                 catch (Exception e)
                 {
@@ -41,7 +60,7 @@ namespace Monaco.Extensions
                 {
                     try
                     {
-                        return await RunScriptHelperAsync(_view, fullscript);
+                        return await RunScriptHelperAsync<T>(_view, fullscript);
                     }
                     catch (Exception e)
                     {
@@ -51,7 +70,7 @@ namespace Monaco.Extensions
             }
         }
 
-        private static async Task<string> RunScriptHelperAsync(WebView _view, string script)
+        private static async Task<T> RunScriptHelperAsync<T>(WebView _view, string script)
         {            
             var returnstring = await _view.InvokeScriptAsync("eval", new string[] { script });
 
@@ -63,7 +82,12 @@ namespace Monaco.Extensions
                 }
             }
 
-            return returnstring;
+            if (returnstring != null)
+            {
+                return JsonConvert.DeserializeObject<T>(returnstring);
+            }
+
+            return default(T);
         }
 
         private static JsonSerializerSettings _settings = new JsonSerializerSettings()
@@ -72,14 +96,50 @@ namespace Monaco.Extensions
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
-        public static async Task<string> InvokeScriptAsync(
+        public static async Task InvokeScriptAsync(
             this WebView _view,
             string method,
+            object arg,
+            bool serialize = true,
             [CallerMemberName] string member = null,
             [CallerFilePath] string file = null,
-            [CallerLineNumber] int line = 0,
+            [CallerLineNumber] int line = 0)
+        {
+            await _view.InvokeScriptAsync<object>(method, arg, serialize, member, file, line);
+        }
+
+        public static async Task InvokeScriptAsync(
+            this WebView _view,
+            string method,
+            object[] args,
             bool serialize = true,
-            params object[] args) // TODO: Figure out how to actually make 'params' work here, possible?
+            [CallerMemberName] string member = null,
+            [CallerFilePath] string file = null,
+            [CallerLineNumber] int line = 0)
+        {
+            await _view.InvokeScriptAsync<object>(method, args, serialize, member, file, line);
+        }
+
+        public static async Task<T> InvokeScriptAsync<T>(
+            this WebView _view,
+            string method,
+            object arg,
+            bool serialize = true,
+            [CallerMemberName] string member = null,
+            [CallerFilePath] string file = null,
+            [CallerLineNumber] int line = 0)
+        {
+            return await _view.InvokeScriptAsync<T>(method, new object[] { arg }, serialize, member, file, line);
+        }
+
+        public static async Task<T> InvokeScriptAsync<T>(
+            this WebView _view,
+            string method,
+            object[] args,
+            bool serialize = true,
+            [CallerMemberName] string member = null,
+            [CallerFilePath] string file = null,
+            [CallerLineNumber] int line = 0)
         {
             string[] sanitizedargs;
 
@@ -97,6 +157,7 @@ namespace Monaco.Extensions
                     }
                     else
                     {
+                        // TODO: Need JSON.parse?
                         return JsonConvert.SerializeObject(item, _settings);
                     }
                 }).ToArray();
@@ -108,7 +169,7 @@ namespace Monaco.Extensions
 
             var script = method + "(" + string.Join(",", sanitizedargs) + ");";
 
-            return await RunScriptAsync(_view, script, member, file, line);
+            return await RunScriptAsync<T>(_view, script, member, file, line);
         }
     }
 

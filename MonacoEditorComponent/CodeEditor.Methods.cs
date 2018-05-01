@@ -26,32 +26,32 @@ namespace Monaco
         #region Reveal Methods
         public IAsyncAction RevealLineAsync(uint lineNumber)
         {
-            return this.SendScriptAsync("editor.revealLine(" + lineNumber + ")").AsAsyncAction();
+            return SendScriptAsync("editor.revealLine(" + lineNumber + ")").AsAsyncAction();
         }
 
         public IAsyncAction RevealLineInCenterAsync(uint lineNumber)
         {
-            return this.SendScriptAsync("editor.revealLineInCenter(" + lineNumber + ")").AsAsyncAction();
+            return SendScriptAsync("editor.revealLineInCenter(" + lineNumber + ")").AsAsyncAction();
         }
 
         public IAsyncAction RevealLineInCenterIfOutsideViewportAsync(uint lineNumber)
         {
-            return this.SendScriptAsync("editor.revealLineInCenterIfOutsideViewport(" + lineNumber + ")").AsAsyncAction();
+            return SendScriptAsync("editor.revealLineInCenterIfOutsideViewport(" + lineNumber + ")").AsAsyncAction();
         }
 
         public IAsyncAction RevealLinesAsync(uint startLineNumber, uint endLineNumber)
         {
-            return this.SendScriptAsync("editor.revealLines(" + startLineNumber + ", " + endLineNumber + ")").AsAsyncAction();
+            return SendScriptAsync("editor.revealLines(" + startLineNumber + ", " + endLineNumber + ")").AsAsyncAction();
         }
 
         public IAsyncAction RevealLinesInCenterAsync(uint startLineNumber, uint endLineNumber)
         {
-            return this.SendScriptAsync("editor.revealLinesInCenter(" + startLineNumber + ", " + endLineNumber + ")").AsAsyncAction();
+            return SendScriptAsync("editor.revealLinesInCenter(" + startLineNumber + ", " + endLineNumber + ")").AsAsyncAction();
         }
 
         public IAsyncAction RevealLinesInCenterIfOutsideViewportAsync(uint startLineNumber, uint endLineNumber)
         {
-            return this.SendScriptAsync("editor.revealLinesInCenterIfOutsideViewport(" + startLineNumber + ", " + endLineNumber + ")").AsAsyncAction();
+            return SendScriptAsync("editor.revealLinesInCenterIfOutsideViewport(" + startLineNumber + ", " + endLineNumber + ")").AsAsyncAction();
         }
 
         public IAsyncAction RevealPositionAsync(IPosition position)
@@ -66,63 +66,63 @@ namespace Monaco
 
         public IAsyncAction RevealPositionAsync(IPosition position, bool revealVerticalInCenter, bool revealHorizontal)
         {
-            return this.SendScriptAsync("editor.revealPosition(JSON.parse('" + position.ToJson() + "'), " + JsonConvert.ToString(revealVerticalInCenter) + ", " + JsonConvert.ToString(revealHorizontal) + ")").AsAsyncAction();
+            return SendScriptAsync("editor.revealPosition(JSON.parse('" + position.ToJson() + "'), " + JsonConvert.ToString(revealVerticalInCenter) + ", " + JsonConvert.ToString(revealHorizontal) + ")").AsAsyncAction();
         }
 
         public IAsyncAction RevealPositionInCenterAsync(IPosition position)
         {
-            return this.SendScriptAsync("editor.revealPositionInCenter(JSON.parse('" + position.ToJson() + "'))").AsAsyncAction();
+            return SendScriptAsync("editor.revealPositionInCenter(JSON.parse('" + position.ToJson() + "'))").AsAsyncAction();
         }
 
         public IAsyncAction RevealPositionInCenterIfOutsideViewportAsync(IPosition position)
         {
-            return this.SendScriptAsync("editor.revealPositionInCenterIfOutsideViewport(JSON.parse('" + position.ToJson() + "'))").AsAsyncAction();
+            return SendScriptAsync("editor.revealPositionInCenterIfOutsideViewport(JSON.parse('" + position.ToJson() + "'))").AsAsyncAction();
         }
 
         public IAsyncAction RevealRangeAsync(IRange range)
         {
-            return this.SendScriptAsync("editor.revealRange(JSON.parse('" + range.ToJson() + "'))").AsAsyncAction();
+            return SendScriptAsync("editor.revealRange(JSON.parse('" + range.ToJson() + "'))").AsAsyncAction();
         }
 
         public IAsyncAction RevealRangeAtTopAsync(IRange range)
         {
-            return this.SendScriptAsync("editor.revealRangeAtTop(JSON.parse('" + range.ToJson() + "'))").AsAsyncAction();
+            return SendScriptAsync("editor.revealRangeAtTop(JSON.parse('" + range.ToJson() + "'))").AsAsyncAction();
         }
 
         public IAsyncAction RevealRangeInCenterAsync(IRange range)
         {
-            return this.SendScriptAsync("editor.revealRangeInCenter(JSON.parse('" + range.ToJson() + "'))").AsAsyncAction();
+            return SendScriptAsync("editor.revealRangeInCenter(JSON.parse('" + range.ToJson() + "'))").AsAsyncAction();
         }
 
         public IAsyncAction RevealRangeInCenterIfOutsideViewportAsync(IRange range)
         {
-            return this.SendScriptAsync("editor.revealRangeInCenterIfOutsideViewport(JSON.parse('" + range.ToJson() + "'))").AsAsyncAction();
+            return SendScriptAsync("editor.revealRangeInCenterIfOutsideViewport(JSON.parse('" + range.ToJson() + "'))").AsAsyncAction();
         }
         #endregion
 
         public IAsyncAction AddActionAsync(IActionDescriptor action)
         {
             _parentAccessor.RegisterAction("Action" + action.Id, new Action(() => { action?.Run(this); }));
-            return this.InvokeScriptAsync("addAction", action).AsAsyncAction();
+            return InvokeScriptAsync("addAction", action).AsAsyncAction();
         }
 
         public IAsyncOperation<string> AddCommandAsync(int keybinding, CommandHandler handler)
         {
-            return this.AddCommandAsync(keybinding, handler, string.Empty);
+            return AddCommandAsync(keybinding, handler, string.Empty);
         }
 
         public IAsyncOperation<string> AddCommandAsync(int keybinding, CommandHandler handler, string context)
         {
             var name = "Command" + keybinding;
             _parentAccessor.RegisterAction(name, new Action(() => { handler?.Invoke(); }));
-            return this.InvokeScriptAsync("addCommand", new object[] { keybinding, name, context }).AsAsyncOperation();
+            return InvokeScriptAsync<string>("addCommand", new object[] { keybinding, name, context }).AsAsyncOperation();
         }
 
         public IAsyncOperation<ContextKey> CreateContextKeyAsync(string key, bool defaultValue)
         {
             var ck = new ContextKey(this, key, defaultValue);
 
-            return this.InvokeScriptAsync("createContext", ck).ContinueWith((noop) =>
+            return InvokeScriptAsync("createContext", ck).ContinueWith((noop) =>
             {
                 return ck;
             }).AsAsyncOperation();
@@ -130,40 +130,22 @@ namespace Monaco
 
         public IModel GetModel()
         {
-            return this._model;
+            return _model;
         }
 
         public IAsyncOperation<IEnumerable<Marker>> GetModelMarkersAsync() // TODO: Filter (string? owner, Uri? resource, int? take)
         {
-            return this.SendScriptAsync("JSON.stringify(monaco.editor.getModelMarkers());").ContinueWith((result) =>
-            {
-                var value = result?.Result;
-                if (value != null)
-                {
-                    return JsonConvert.DeserializeObject<Marker[]>(value).AsEnumerable();
-                }
-
-                return Array.Empty<Marker>();
-            }).AsAsyncOperation();
+            return SendScriptAsync<IEnumerable<Marker>>("monaco.editor.getModelMarkers();").AsAsyncOperation();
         }
 
         public IAsyncAction SetModelMarkersAsync(string owner, [ReadOnlyArray] IMarkerData[] markers)
         {
-            return this.SendScriptAsync("monaco.editor.setModelMarkers(model, " + JsonConvert.ToString(owner) + ", " + JsonConvert.SerializeObject(markers) + ");").AsAsyncAction();
+            return SendScriptAsync("monaco.editor.setModelMarkers(model, " + JsonConvert.ToString(owner) + ", " + JsonConvert.SerializeObject(markers) + ");").AsAsyncAction();
         }
 
         public IAsyncOperation<Position> GetPositionAsync()
         {
-            return this.SendScriptAsync("JSON.stringify(editor.getPosition());").ContinueWith((result) =>
-            {
-                var value = result?.Result;
-                if (value != null)
-                {
-                    return JsonConvert.DeserializeObject<Position>(value);
-                }
-
-                return null;
-            }).AsAsyncOperation();
+            return SendScriptAsync<Position>("editor.getPosition();").AsAsyncOperation();
         }
 
         /// <summary>

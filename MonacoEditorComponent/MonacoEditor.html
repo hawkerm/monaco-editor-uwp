@@ -43,12 +43,16 @@
             // Listen for Content Changes
             model.onDidChangeContent((event) => {
                 Parent.setValue("Text", model.getValue());
+                //console.log("buffers: " + JSON.stringify(model._buffer._pieceTree._buffers));
+                //console.log("commandMgr: " + JSON.stringify(model._commandManager));
+                //console.log("viewState:" + JSON.stringify(editor.saveViewState()));
             });
 
             // Listen for Selection Changes
             editor.onDidChangeCursorSelection((event) => {
                 if (!modifingSelection) {
-                    Parent.setValue("SelectedText", model.getValueInRange(event.selection));
+                    console.log(event.source);
+                    Parent.setValue("SelectedText", model.getValueInRange(event.selection)); 
                     Parent.setValue("SelectedRange", JSON.stringify(event.selection), "Selection");
                 }
             })

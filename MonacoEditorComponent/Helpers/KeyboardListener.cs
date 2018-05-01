@@ -28,11 +28,11 @@ namespace Monaco.Helpers
     [AllowForWeb]
     public sealed class KeyboardListener
     {
-        private CodeEditor parent;
+        private WeakReference<CodeEditor> parent;
 
         public KeyboardListener(CodeEditor parent) // TODO: Make Interface for event usage
         {
-            this.parent = parent;
+            this.parent = new WeakReference<CodeEditor>(parent);
         }
 
         /// <summary>
@@ -46,14 +46,19 @@ namespace Monaco.Helpers
         /// <returns></returns>
         public bool KeyDown(int keycode, bool ctrl, bool shift, bool alt, bool meta)
         {
-            return this.parent.TriggerKeyDown(new WebKeyEventArgs()
+            if (parent.TryGetTarget(out CodeEditor editor))
             {
-                KeyCode = keycode, // TODO: Convert to a virtual key or something?
-                CtrlKey = ctrl,
-                ShiftKey = shift,
-                AltKey = alt,
-                MetaKey = meta
-            });
+                return editor.TriggerKeyDown(new WebKeyEventArgs()
+                {
+                    KeyCode = keycode, // TODO: Convert to a virtual key or something?
+                    CtrlKey = ctrl,
+                    ShiftKey = shift,
+                    AltKey = alt,
+                    MetaKey = meta
+                });
+            }
+
+            return false;
         }
     }
 }

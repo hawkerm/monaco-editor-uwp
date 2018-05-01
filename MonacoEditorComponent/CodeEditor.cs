@@ -67,7 +67,7 @@ namespace Monaco
                 this.Options.PropertyChanged += async (s, p) =>
                 {
                     // TODO: Check for Language property and call other method instead?
-                    await this.InvokeScriptAsync("updateOptions", s);
+                    await InvokeScriptAsync("updateOptions", s);
                 };
             }
 
@@ -102,7 +102,15 @@ namespace Monaco
             base.OnApplyTemplate();
         }
 
-        internal async Task<string> SendScriptAsync(string script, 
+        internal async Task SendScriptAsync(string script,
+            [CallerMemberName] string member = null,
+            [CallerFilePath] string file = null,
+            [CallerLineNumber] int line = 0)
+        {
+            await SendScriptAsync<object>(script, member, file, line);
+        }
+
+        internal async Task<T> SendScriptAsync<T>(string script, 
             [CallerMemberName] string member = null,
             [CallerFilePath] string file = null,
             [CallerLineNumber] int line = 0)
@@ -111,7 +119,7 @@ namespace Monaco
             {
                 try
                 {
-                    return await this._view.RunScriptAsync(script, member, file, line);
+                    return await this._view.RunScriptAsync<T>(script, member, file, line);
                 }
                 catch (Exception e)
                 {
@@ -125,33 +133,55 @@ namespace Monaco
                 #endif
             }
 
-            return string.Empty;
+            return default(T);
         }
 
-        internal async Task<string> InvokeScriptAsync(
+        internal async Task InvokeScriptAsync(
             string method,
             object arg,
+            bool serialize = true,
             [CallerMemberName] string member = null,
             [CallerFilePath] string file = null,
-            [CallerLineNumber] int line = 0,
-            bool serialize = true)
+            [CallerLineNumber] int line = 0)
         {
-            return await this.InvokeScriptAsync(method, new object[] { arg }, member, file, line, serialize);
+            await this.InvokeScriptAsync<object>(method, new object[] { arg }, serialize, member, file, line);
         }
 
-        internal async Task<string> InvokeScriptAsync(
+        internal async Task InvokeScriptAsync(
             string method,
             object[] args,
+            bool serialize = true,
             [CallerMemberName] string member = null,
             [CallerFilePath] string file = null,
-            [CallerLineNumber] int line = 0,
-            bool serialize = true)
+            [CallerLineNumber] int line = 0)
+        {
+            await this.InvokeScriptAsync<object>(method, args, serialize, member, file, line);
+        }
+
+        internal async Task<T> InvokeScriptAsync<T>(
+            string method,
+            object arg,
+            bool serialize = true,
+            [CallerMemberName] string member = null,
+            [CallerFilePath] string file = null,
+            [CallerLineNumber] int line = 0)
+        {
+            return await this.InvokeScriptAsync<T>(method, new object[] { arg }, serialize, member, file, line);
+        }
+
+        internal async Task<T> InvokeScriptAsync<T>(
+            string method,
+            object[] args,
+            bool serialize = true,
+            [CallerMemberName] string member = null,
+            [CallerFilePath] string file = null,
+            [CallerLineNumber] int line = 0)
         {
             if (_initialized)
             {
                 try
                 {
-                    return await this._view.InvokeScriptAsync(method, member, file, line, serialize, args);
+                    return await this._view.InvokeScriptAsync<T>(method, args, serialize, member, file, line);
                 }
                 catch (Exception e)
                 {
@@ -165,7 +195,7 @@ namespace Monaco
                 #endif
             }
 
-            return string.Empty;
+            return default(T);
         }
 
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")

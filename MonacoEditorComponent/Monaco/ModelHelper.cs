@@ -13,11 +13,11 @@ namespace Monaco.Editor
     #pragma warning disable CS1591
     public sealed class ModelHelper : IModel
     {
-        private CodeEditor _editor;
+        private WeakReference<CodeEditor> _editor;
 
         public ModelHelper(CodeEditor editor)
         {
-            this._editor = editor;
+            this._editor = new WeakReference<CodeEditor>(editor);
         }
 
         public string Id => throw new NotImplementedException();
@@ -26,159 +26,162 @@ namespace Monaco.Editor
 
         public IAsyncAction DetectIndentationAsync(bool defaultInsertSpaces, bool defaultTabSize)
         {
-            return _editor.SendScriptAsync("model.detectIndentationAsync(" + JsonConvert.ToString(defaultInsertSpaces) +  ", " + JsonConvert.ToString(defaultTabSize) + ");").AsAsyncAction();
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                return editor.InvokeScriptAsync("model.detectIndentationAsync", new object[] { defaultInsertSpaces, defaultTabSize }).AsAsyncAction();
+            }
+
+            return null;
         }
 
         public IAsyncOperation<uint> GetAlternativeVersionIdAsync()
         {
-            return _editor.SendScriptAsync("JSON.stringify(model.getAlternativeVersionId());").ContinueWith((result) =>
+            if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                uint value = 0;
+                return editor.SendScriptAsync<uint>("model.getAlternativeVersionId();").AsAsyncOperation();
+            }
 
-                uint.TryParse(result?.Result, out value);
-
-                return value;
-            }).AsAsyncOperation();
+            return null;
         }
 
         public IAsyncOperation<string> GetEOLAsync()
         {
-            return _editor.SendScriptAsync("model.getEOL();").AsAsyncOperation();
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                return editor.SendScriptAsync<string>("model.getEOL();").AsAsyncOperation();
+            }
+
+            return null;
         }
 
         public IAsyncOperation<Range> GetFullModelRangeAsync()
         {
-            return _editor.SendScriptAsync("JSON.stringify(model.getFullModelRange());").ContinueWith((result) =>
+            if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                var value = result?.Result;
-                if (value != null)
-                {
-                    return JsonConvert.DeserializeObject<Range>(value) as Range;
-                }
+                return editor.SendScriptAsync<Range>("model.getFullModelRange();").AsAsyncOperation();
+            }
 
-                return null;
-            }).AsAsyncOperation();
+            return null;
         }
 
         public IAsyncOperation<string> GetLineContentAsync(uint lineNumber)
         {
-            return _editor.SendScriptAsync("model.getLineContent(" + lineNumber + ");").AsAsyncOperation();
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                return editor.SendScriptAsync<string>("model.getLineContent(" + lineNumber + ");").AsAsyncOperation();
+            }
+
+            return null;
         }
 
         public IAsyncOperation<uint> GetLineCountAsync()
         {
-            return _editor.SendScriptAsync("JSON.stringify(model.getLineCount());").ContinueWith((result) =>
+            if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                uint value = 0;
+                return editor.SendScriptAsync<uint>("model.getLineCount();").AsAsyncOperation();
+            }
 
-                uint.TryParse(result?.Result, out value);
-                
-                return value;
-            }).AsAsyncOperation();
+            return null;
         }
 
         public IAsyncOperation<uint> GetLineFirstNonWhitespaceColumnAsync(uint lineNumber)
         {
-            return _editor.SendScriptAsync("JSON.stringify(model.getLineFirstNonWhitespaceColumn(" + lineNumber + "));").ContinueWith((result) =>
+            if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                uint value = 0;
+                return editor.SendScriptAsync<uint>("model.getLineFirstNonWhitespaceColumn(" + lineNumber + ");").AsAsyncOperation();
+            }
 
-                uint.TryParse(result?.Result, out value);
-
-                return value;
-            }).AsAsyncOperation();
+            return null;
         }
 
         public IAsyncOperation<uint> GetLineLastNonWhitespaceColumnAsync(uint lineNumber)
         {
-            return _editor.SendScriptAsync("JSON.stringify(model.getLineLastNonWhitespaceColumn(" + lineNumber + "));").ContinueWith((result) =>
+            if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                uint value = 0;
+                return editor.SendScriptAsync<uint>("model.getLineLastNonWhitespaceColumn(" + lineNumber + ");").AsAsyncOperation();
+            }
 
-                uint.TryParse(result?.Result, out value);
-
-                return value;
-            }).AsAsyncOperation();
+            return null;
         }
 
         public IAsyncOperation<uint> GetLineMaxColumnAsync(uint lineNumber)
         {
-            return _editor.SendScriptAsync("JSON.stringify(model.getLineMaxColumn(" + lineNumber + "));").ContinueWith((result) =>
+            if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                uint value = 0;
+                return editor.SendScriptAsync<uint>("model.getLineMaxColumn(" + lineNumber + ");").AsAsyncOperation();
+            }
 
-                uint.TryParse(result?.Result, out value);
-
-                return value;
-            }).AsAsyncOperation();
+            return null;
         }
 
         public IAsyncOperation<uint> GetLineMinColumnAsync(uint lineNumber)
         {
-            return _editor.SendScriptAsync("JSON.stringify(model.getLineMinColumn(" + lineNumber + "));").ContinueWith((result) =>
+            if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                uint value = 0;
+                return editor.SendScriptAsync<uint>("model.getLineMinColumn(" + lineNumber + ");").AsAsyncOperation();
+            }
 
-                uint.TryParse(result?.Result, out value);
-
-                return value;
-            }).AsAsyncOperation();
+            return null;
         }
 
         public IAsyncOperation<IEnumerable<string>> GetLinesContentAsync()
         {
-            return _editor.SendScriptAsync("JSON.stringify(model.getLinesContent());").ContinueWith((result) =>
+            if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                var value = result?.Result;
-                if (value != null)
-                {
-                    var array = JsonConvert.DeserializeObject<string[]>(value);
-                    return array?.AsEnumerable();
-                }
+                return editor.SendScriptAsync<IEnumerable<string>>("model.getLinesContent();").AsAsyncOperation();
+            }
 
-                return null;
-            }).AsAsyncOperation();
+            return null;
         }
 
         public IAsyncOperation<string> GetModelIdAsync()
         {
-            return _editor.SendScriptAsync("model.getModelId();").AsAsyncOperation();
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                return editor.SendScriptAsync<string>("model.getModelId();").AsAsyncOperation();
+            }
+
+            return null;
         }
 
         public IAsyncOperation<uint> GetOffsetAtAsync(IPosition position)
         {
-            return _editor.SendScriptAsync("JSON.stringify(model.getOffsetAt(" + JsonConvert.SerializeObject(position) + "));").ContinueWith((result) =>
+            if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                uint value = 0;
+                return editor.SendScriptAsync<uint>("model.getOffsetAt(" + JsonConvert.SerializeObject(position) + ");").AsAsyncOperation();
+            }
 
-                uint.TryParse(result?.Result, out value);
-
-                return value;
-            }).AsAsyncOperation();
+            return null;
         }
 
         public IAsyncOperation<string> GetOneIndentAsync()
         {
-            return _editor.SendScriptAsync("model.getOneIndent();").AsAsyncOperation();
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                return editor.SendScriptAsync<string>("model.getOneIndent();").AsAsyncOperation();
+            }
+
+            return null;
         }
 
         public IAsyncOperation<Position> GetPositionAtAsync(uint offset)
         {
-            return _editor.SendScriptAsync("JSON.stringify(model.getPositionAt(" + offset + "));").ContinueWith((result) =>
+            if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                var value = result?.Result;
-                if (value != null)
-                {
-                    return JsonConvert.DeserializeObject<Position>(value) as Position;
-                }
+                return editor.SendScriptAsync<Position>("model.getPositionAt(" + offset + ");").AsAsyncOperation();
+            }
 
-                return null;
-            }).AsAsyncOperation();
+            return null;
         }
 
         public IAsyncOperation<string> GetValueAsync()
         {
-            return _editor.SendScriptAsync("model.getValue();").AsAsyncOperation();
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                return editor.SendScriptAsync<string>("model.getValue();").AsAsyncOperation();
+            }
+
+            return null;
         }
 
         public IAsyncOperation<string> GetValueAsync(EndOfLinePreference eol)
@@ -193,7 +196,12 @@ namespace Monaco.Editor
 
         public IAsyncOperation<string> GetValueInRangeAsync(IRange range)
         {
-            return _editor.SendScriptAsync("model.getValueInRange(" + JsonConvert.SerializeObject(range) + ");").AsAsyncOperation();
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                return editor.SendScriptAsync<string>("model.getValueInRange(" + JsonConvert.SerializeObject(range) + ");").AsAsyncOperation();
+            }
+
+            return null;
         }
 
         public IAsyncOperation<string> GetValueInRangeAsync(IRange range, EndOfLinePreference eol)
@@ -203,14 +211,12 @@ namespace Monaco.Editor
 
         public IAsyncOperation<uint> GetValueLengthAsync()
         {
-            return _editor.SendScriptAsync("JSON.stringify(model.getValueLength());").ContinueWith((result) =>
+            if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                uint value = 0;
+                return editor.SendScriptAsync<uint>("model.getValueLength();").AsAsyncOperation();
+            }
 
-                uint.TryParse(result?.Result, out value);
-
-                return value;
-            }).AsAsyncOperation();
+            return null;
         }
 
         public IAsyncOperation<uint> GetValueLengthAsync(EndOfLinePreference eol)
@@ -225,78 +231,72 @@ namespace Monaco.Editor
 
         public IAsyncOperation<uint> GetValueLengthInRangeAsync(IRange range)
         {
-            return _editor.SendScriptAsync("JSON.stringify(model.getValueLengthInRange(" + JsonConvert.SerializeObject(range) + "));").ContinueWith((result) =>
+            if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                uint value = 0;
+                return editor.SendScriptAsync<uint>("model.getValueLengthInRange(" + JsonConvert.SerializeObject(range) + ");").AsAsyncOperation();
+            }
 
-                uint.TryParse(result?.Result, out value);
-
-                return value;
-            }).AsAsyncOperation();
+            return null;
         }
 
         public IAsyncOperation<uint> GetVersionIdAsync()
         {
-            return _editor.SendScriptAsync("JSON.stringify(model.getVersionId());").ContinueWith((result) =>
+            if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                uint value = 0;
+                return editor.SendScriptAsync<uint>("model.getVersionId();").AsAsyncOperation();
+            }
 
-                uint.TryParse(result?.Result, out value);
-
-                return value;
-            }).AsAsyncOperation();
+            return null;
         }
 
         public IAsyncOperation<IWordAtPosition> GetWordAtPositionAsync(IPosition position)
         {
-            return _editor.SendScriptAsync("JSON.stringify(model.getWordAtPosition(" + JsonConvert.SerializeObject(position) + "));").ContinueWith((result) =>
+            if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                var value = result?.Result;
-                if (value != null)
-                {
-                    return JsonConvert.DeserializeObject<WordAtPosition>(value) as IWordAtPosition;
-                }
+                return editor.SendScriptAsync<IWordAtPosition>("model.getWordAtPosition(" + JsonConvert.SerializeObject(position) + ");").AsAsyncOperation();
+            }
 
-                return null;
-            }).AsAsyncOperation();
+            return null;
         }
 
         public IAsyncOperation<IWordAtPosition> GetWordUntilPositionAsync(IPosition position)
         {
-            return _editor.SendScriptAsync("JSON.stringify(model.getWordUntilPosition(" + JsonConvert.SerializeObject(position) + "));").ContinueWith((result) =>
+            if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                var value = result?.Result;
-                if (value != null)
-                {
-                    return JsonConvert.DeserializeObject<WordAtPosition>(value) as IWordAtPosition;
-                }
+                return editor.SendScriptAsync<IWordAtPosition>("model.getWordUntilPosition(" + JsonConvert.SerializeObject(position) + ");").AsAsyncOperation();
+            }
 
-                return null;
-            }).AsAsyncOperation();
+            return null;
         }
 
         public IAsyncOperation<Position> ModifyPositionAsync(IPosition position, int number)
         {
-            return _editor.SendScriptAsync("JSON.stringify(model.modifyPosition(" + JsonConvert.SerializeObject(position) + ", " + number + "));").ContinueWith((result) =>
+            if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                var value = result?.Result;
-                if (value != null)
-                {
-                    return JsonConvert.DeserializeObject<Position>(value) as Position;
-                }
+                return editor.SendScriptAsync<Position>("model.modifyPosition(" + JsonConvert.SerializeObject(position) + ", " + number + ");").AsAsyncOperation();
+            }
 
-                return null;
-            }).AsAsyncOperation();
+            return null;
         }
 
         public IAsyncOperation<string> NormalizeIndentationAsync(string str)
         {
-            return _editor.SendScriptAsync("model.normalizeIndentations(JSON.parse(" + JsonConvert.ToString(str) + "));").AsAsyncOperation();
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                return editor.SendScriptAsync<string>("model.normalizeIndentations(JSON.parse(" + JsonConvert.ToString(str) + "));").AsAsyncOperation();
+            }
+
+            return null;
         }
 
         public IAsyncAction PushStackElementAsync()
         {
-            return _editor.SendScriptAsync("model.pushStackElement();").AsAsyncAction();
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                return editor.SendScriptAsync("model.pushStackElement();").AsAsyncAction();
+            }
+
+            return null;
         }
 
         public IAsyncAction SetEOLAsync(EndOfLineSequence eol)
@@ -306,35 +306,32 @@ namespace Monaco.Editor
 
         public IAsyncAction SetValue(string newValue)
         {
-            return _editor.SendScriptAsync("model.setValue(JSON.parse(" + JsonConvert.ToString(newValue) + "));").AsAsyncAction();
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                return editor.SendScriptAsync("model.setValue(JSON.parse(" + JsonConvert.ToString(newValue) + "));").AsAsyncAction();
+            }
+
+            return null;
         }
 
         public IAsyncOperation<Position> ValidatePositionAsync(IPosition position)
         {
-            return _editor.SendScriptAsync("JSON.stringify(model.validatePosition(" + JsonConvert.SerializeObject(position) + "));").ContinueWith((result) =>
+            if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                var value = result?.Result;
-                if (value != null)
-                {
-                    return JsonConvert.DeserializeObject<Position>(value) as Position;
-                }
+                return editor.SendScriptAsync<Position>("model.validatePosition(" + JsonConvert.SerializeObject(position) + ");").AsAsyncOperation();
+            }
 
-                return null;
-            }).AsAsyncOperation();
+            return null;
         }
 
         public IAsyncOperation<Range> ValidateRangeAsync(IRange range)
         {
-            return _editor.SendScriptAsync("JSON.stringify(model.validateRange(" + JsonConvert.SerializeObject(range) + "));").ContinueWith((result) =>
+            if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                var value = result?.Result;
-                if (value != null)
-                {
-                    return JsonConvert.DeserializeObject<Range>(value) as Range;
-                }
+                return editor.SendScriptAsync<Range>("model.validateRange(" + JsonConvert.SerializeObject(range) + ");").AsAsyncOperation();
+            }
 
-                return null;
-            }).AsAsyncOperation();
+            return null;
         }
     }
     #pragma warning restore CS1591

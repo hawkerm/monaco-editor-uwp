@@ -13,7 +13,7 @@ namespace Monaco.Helpers
     [AllowForWeb]
     public sealed class ParentAccessor
     {
-        private IParentAccessorAcceptor parent;
+        private WeakReference<IParentAccessorAcceptor> parent;
         private Type typeinfo;
         private Dictionary<string, Action> actions;
 
@@ -25,7 +25,7 @@ namespace Monaco.Helpers
         /// <param name="parent">Object to provide Property Access.</param>
         public ParentAccessor(IParentAccessorAcceptor parent)
         { 
-            this.parent = parent;
+            this.parent = new WeakReference<IParentAccessorAcceptor>(parent);
             this.typeinfo = parent.GetType();
             this.actions = new Dictionary<string, Action>();
         }
@@ -72,18 +72,26 @@ namespace Monaco.Helpers
         /// <returns>Property Value or null.</returns>
         public object GetValue(string name)
         {
-            var propinfo = typeinfo.GetProperty(name);
-            return propinfo?.GetValue(this.parent);
+            if (parent.TryGetTarget(out IParentAccessorAcceptor tobj))
+            {
+                var propinfo = typeinfo.GetProperty(name);
+                return propinfo?.GetValue(tobj);
+            }
+
+            return null;
         }
 
         public string GetJsonValue(string name)
         {
-            var propinfo = typeinfo.GetProperty(name);
-            var obj = propinfo?.GetValue(this.parent);
-            // TODO: use json.net
-            if (obj is IJsonable)
+            if (parent.TryGetTarget(out IParentAccessorAcceptor tobj))
             {
-                return (obj as IJsonable).ToJson();
+                var propinfo = typeinfo.GetProperty(name);
+                var obj = propinfo?.GetValue(tobj);
+                // TODO: use json.net
+                if (obj is IJsonable)
+                {
+                    return (obj as IJsonable).ToJson();
+                }
             }
 
             return "{}";
@@ -99,13 +107,16 @@ namespace Monaco.Helpers
         /// <returns>Value of Child Property or null.</returns>
         public object GetChildValue(string name, string child)
         {
-            // TODO: Support params for multi-level digging?
-            var propinfo = typeinfo.GetProperty(name);
-            var prop = propinfo?.GetValue(this.parent);
-            if (prop != null)
+            if (parent.TryGetTarget(out IParentAccessorAcceptor tobj))
             {
-                var childinfo = prop.GetType().GetProperty(child);
-                return childinfo?.GetValue(prop);
+                // TODO: Support params for multi-level digging?
+                var propinfo = typeinfo.GetProperty(name);
+                var prop = propinfo?.GetValue(tobj);
+                if (prop != null)
+                {
+                    var childinfo = prop.GetType().GetProperty(child);
+                    return childinfo?.GetValue(prop);
+                }
             }
 
             return null;
@@ -118,10 +129,13 @@ namespace Monaco.Helpers
         /// <param name="value">Value to set.</param>
         public void SetValue(string name, object value)
         {
-            var propinfo = typeinfo.GetProperty(name); // TODO: Cache these?
-            parent.IsSettingValue = true;
-            propinfo?.SetValue(this.parent, value);
-            parent.IsSettingValue = false;
+            if (parent.TryGetTarget(out IParentAccessorAcceptor tobj))
+            {
+                var propinfo = typeinfo.GetProperty(name); // TODO: Cache these?
+                tobj.IsSettingValue = true;
+                propinfo?.SetValue(tobj, value);
+                tobj.IsSettingValue = false;
+            }
         }
 
         /// <summary>
@@ -132,14 +146,17 @@ namespace Monaco.Helpers
         /// <param name="type"></param>
         public void SetValue(string name, string value, string type)
         {
-            var propinfo = typeinfo.GetProperty(name);
-            var typeobj = LookForTypeByName(type);
+            if (parent.TryGetTarget(out IParentAccessorAcceptor tobj))
+            {
+                var propinfo = typeinfo.GetProperty(name);
+                var typeobj = LookForTypeByName(type);
 
-            var obj = JsonConvert.DeserializeObject(value, typeobj);
+                var obj = JsonConvert.DeserializeObject(value, typeobj);
 
-            parent.IsSettingValue = true;
-            propinfo?.SetValue(this.parent, obj);
-            parent.IsSettingValue = false;
+                tobj.IsSettingValue = true;
+                propinfo?.SetValue(tobj, obj);
+                tobj.IsSettingValue = false;
+            }
         }
 
         private Type LookForTypeByName(string name)

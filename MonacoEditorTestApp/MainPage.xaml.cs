@@ -275,5 +275,40 @@ namespace MonacoEditorTestApp
                 await Editor.SetModelMarkersAsync("CodeEditor", Array.Empty<IMarkerData>());
             }            
         }
+
+        private void RemoveButton_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+
+            if (btn.Content.ToString() == "Remove")
+            {
+                Editor.KeyDown -= Editor_KeyDown;
+
+                RootGrid.Children.Remove(Editor);
+                Editor = null;
+
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+
+                btn.Content = "Add";
+            }
+            else
+            {
+                Editor = new CodeEditor()
+                {
+                    TabIndex = 0,
+                    HasGlyphMargin = true,
+                    CodeLanguage = "csharp"
+                };
+
+                Editor.KeyDown += Editor_KeyDown;
+
+                Grid.SetColumn(Editor, 1);
+
+                RootGrid.Children.Add(Editor);
+
+                btn.Content = "Remove";
+            }           
+        }
     }
 }

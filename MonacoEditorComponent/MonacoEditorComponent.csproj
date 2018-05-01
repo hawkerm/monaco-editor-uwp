@@ -117,6 +117,7 @@
     <Compile Include="Extensions\WebViewExtensions.cs" />
     <Compile Include="Helpers\DebugLogger.cs" />
     <Compile Include="Helpers\DispatcherTaskExtensions.cs" />
+    <Compile Include="Helpers\InterfaceToClassConverter.cs" />
     <Compile Include="Helpers\KeyboardListener.cs" />
     <Compile Include="Helpers\ParentAccessor.cs" />
     <Compile Include="Helpers\ThemeListener.cs" />

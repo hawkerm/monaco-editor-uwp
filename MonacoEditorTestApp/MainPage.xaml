@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="RootGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="5*"/>
@@ -54,6 +54,7 @@
                 <Button Content="Minimap" Click="ButtonMinimap_Click" />
                 <Button Content="Change Language" Click="ButtonChangeLanguage_Click" />
                 <Button Content="Set Marker" Click="ButtonSetMarker_Click" />
+                <Button x:Name="RemoveButton" Content="Remove" Click="RemoveButton_Click"/>
                 <CheckBox x:Name="AllowWeb" IsChecked="True">Allow Opening Uris</CheckBox>
                 <ItemsControl.ItemContainerStyle>
                     <Style TargetType="FrameworkElement">
