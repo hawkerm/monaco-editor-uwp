@@ -45,6 +45,11 @@
         <TextBlock Text="{Binding ElementName=Editor, Path=SelectedRange}" Grid.Row="4" Grid.Column="1"/>
         <ScrollViewer Grid.Row="0" Grid.RowSpan="5" IsTabStop="False">
             <ItemsControl IsTabStop="False">
+                <ComboBox Header="Theme" SelectionChanged="ComboBoxTheme_SelectionChanged" SelectedIndex="0">
+                    <x:String>System</x:String>
+                    <x:String>Light</x:String>
+                    <x:String>Dark</x:String>
+                </ComboBox>
                 <Button Content="Set Text" Click="ButtonSetText_Click" TabIndex="2"/>
                 <Button Content="Reveal Position 10, 5 In Center" Click="ButtonRevealPositionInCenter_Click" />
                 <Button Content="Highlight Range 3,1-10" Click="ButtonHighlightRange_Click" />

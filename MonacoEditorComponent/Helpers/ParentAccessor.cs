@@ -87,11 +87,11 @@ namespace Monaco.Helpers
             {
                 var propinfo = typeinfo.GetProperty(name);
                 var obj = propinfo?.GetValue(tobj);
-                // TODO: use json.net
-                if (obj is IJsonable)
+
+                return JsonConvert.SerializeObject(obj, new JsonSerializerSettings()
                 {
-                    return (obj as IJsonable).ToJson();
-                }
+                    NullValueHandling = NullValueHandling.Ignore
+                });
             }
 
             return "{}";

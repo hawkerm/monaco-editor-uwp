@@ -58,7 +58,16 @@
             })
 
             // Set theme
-            changeTheme(Theme.currentThemeName.toString(), Theme.isHighContrast.toString());
+            let theme = Parent.getJsonValue("RequestedTheme");
+            theme = {
+                "0": "Default",
+                "1": "Light",
+                "2": "Dark"
+            }[theme];
+            if (theme == "Default") {
+                theme = Theme.currentThemeName.toString();
+            }
+            changeTheme(theme, Theme.isHighContrast.toString());
 
             // Update Monaco Size when we receive a window resize event
             window.addEventListener("resize", () => {

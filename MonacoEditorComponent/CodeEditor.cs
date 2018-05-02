@@ -55,22 +55,22 @@ namespace Monaco
         /// </summary>
         public CodeEditor()
         {
-            this.DefaultStyleKey = typeof(CodeEditor);    
+            DefaultStyleKey = typeof(CodeEditor);    
             
-            if (this.Options != null)
+            if (Options != null)
             {
                 // Set Pass-Thru Properties
-                this.Options.GlyphMargin = this.HasGlyphMargin;
-                this.Options.Language = this.CodeLanguage;
+                Options.GlyphMargin = HasGlyphMargin;
+                Options.Language = CodeLanguage;
 
                 // Register for changes
-                this.Options.PropertyChanged += Options_PropertyChanged;
+                Options.PropertyChanged += Options_PropertyChanged;
             }
 
             // Initialize this here so property changed event will fire and register collection changed event.
-            this.Decorations = new ObservableVector<IModelDeltaDecoration>();
-            this.Markers = new ObservableVector<IMarkerData>();
-            this._model = new ModelHelper(this);
+            Decorations = new ObservableVector<IModelDeltaDecoration>();
+            Markers = new ObservableVector<IMarkerData>();
+            _model = new ModelHelper(this);
 
             Unloaded += CodeEditor_Unloaded;
         }
@@ -102,6 +102,7 @@ namespace Monaco
             Options = null;
             _themeListener.ThemeChanged -= _themeListener_ThemeChanged;
             _themeListener = null;
+            UnregisterPropertyChangedCallback(RequestedThemeProperty, _themeToken);
             _keyboardListener = null;
             _model = null;
         }

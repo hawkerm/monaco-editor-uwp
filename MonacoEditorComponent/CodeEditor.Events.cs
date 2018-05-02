@@ -70,6 +70,7 @@ namespace Monaco
 
         private ParentAccessor _parentAccessor;
         private KeyboardListener _keyboardListener;
+        private long _themeToken;
 
         private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
         {
@@ -82,6 +83,7 @@ namespace Monaco
 
             _themeListener = new ThemeListener();
             _themeListener.ThemeChanged += _themeListener_ThemeChanged;
+            _themeToken = RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedTheme_PropertyChanged);
 
             _keyboardListener = new KeyboardListener(this);
 
@@ -89,7 +91,7 @@ namespace Monaco
             this._view.AddWebAllowedObject("Parent", _parentAccessor);
             this._view.AddWebAllowedObject("Theme", _themeListener);
             this._view.AddWebAllowedObject("Keyboard", _keyboardListener);
-        }
+        }        
 
         private async void CodeEditorLoaded()
         {
@@ -109,12 +111,36 @@ namespace Monaco
             OpenLinkRequested?.Invoke(sender, args);
         }
 
-        private async void _themeListener_ThemeChanged(ThemeListener sender)
+        private async void RequestedTheme_PropertyChanged(DependencyObject obj, DependencyProperty property)
         {
+            var editor = obj as CodeEditor;
+            var theme = editor.RequestedTheme;
+            var tstr = string.Empty;
+
+            if (theme == ElementTheme.Default)
+            {
+                tstr = _themeListener.CurrentThemeName;
+            }
+            else
+            {
+                tstr = theme.ToString();
+            }
+
             await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
             {
-                await this.InvokeScriptAsync("changeTheme", args: new string[] { sender.CurrentTheme.ToString(), sender.IsHighContrast.ToString() });
+                await this.InvokeScriptAsync("changeTheme", new string[] { tstr, _themeListener.IsHighContrast.ToString() });
             });
+        }
+
+        private async void _themeListener_ThemeChanged(ThemeListener sender)
+        {
+            if (RequestedTheme == ElementTheme.Default)
+            {
+                await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                {
+                    await this.InvokeScriptAsync("changeTheme", args: new string[] { sender.CurrentTheme.ToString(), sender.IsHighContrast.ToString() });
+                });
+            }
         }
 
         internal bool TriggerKeyDown(WebKeyEventArgs args)

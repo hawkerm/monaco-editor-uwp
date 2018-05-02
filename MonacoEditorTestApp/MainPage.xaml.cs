@@ -310,5 +310,24 @@ namespace MonacoEditorTestApp
                 btn.Content = "Remove";
             }           
         }
+
+        private void ComboBoxTheme_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch(e.AddedItems.FirstOrDefault().ToString())
+            {
+                case "System":
+                    RequestedTheme = ElementTheme.Default;
+                    break;
+                case "Light":
+                    RequestedTheme = ElementTheme.Light;
+                    break;
+                case "Dark":
+                    RequestedTheme = ElementTheme.Dark;
+                    break;
+            }
+
+            // Tell Editor about Update.
+            Editor.RequestedTheme = RequestedTheme;
+        }
     }
 }
