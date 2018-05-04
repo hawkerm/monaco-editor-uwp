@@ -29,7 +29,7 @@
     <file src="Themes\Generic.xaml" target="lib\uap10.0\Themes"/>
     <!-- Dependencies -->
     <file src="MonacoEditor.html" target="lib\uap10.0\Monaco"/>
-    <file src="monaco-editor\*.*" target="lib\uap10.0\Monaco\monaco-editor"/>
+    <file src="monaco-editor\*" target="lib\uap10.0\Monaco\monaco-editor"/>
     <file src="monaco-editor\min\**\*.*" target="lib\uap10.0\Monaco\monaco-editor\min"/>
     <!-- Docs -->
     <file src="..\README.md" target="content"/>
