@@ -1,3 +1,10 @@
+v0.6 - 05/04/2018
+-----------------
+- Updated Monaco Reference to v0.12.0
+- Added Two-way Binding for `SelectedText` and `SelectedRange` property.
+- Fixed Theme Listening to Respect `RequestedTheme` (will not listen to parent changes, but if set will update.) #9
+- Cleaned-up Memory Usage from control disposal. #18
+
 v0.5 - 11/14/2017
 -----------------
 - **Breaking:** Appended 'Async' to Get/SetModelMarkers methods.
