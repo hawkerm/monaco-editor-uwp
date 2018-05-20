@@ -108,6 +108,7 @@
     <None Include="MonacoEditorTestApp_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content.txt" />
     <Content Include="Icons\error.png" />
     <Content Include="Icons\warning.png" />
     <Content Include="Properties\Default.rd.xml" />

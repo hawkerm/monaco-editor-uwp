@@ -6,6 +6,8 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
+using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -35,17 +37,13 @@ namespace MonacoEditorTestApp
 
         public MainPage()
         {
-            this.CodeContent = "public class Program { // http://www.github.com/ \n\tpublic static void Main(string[] args) {\n\t\tConsole.WriteLine(\"Hello, World!\");\n\t}\n}";
-
-            this.InitializeComponent();
+            InitializeComponent();
 
             Editor.Loading += Editor_Loading;
             Editor.Loaded += Editor_Loaded;
             Editor.OpenLinkRequested += Editor_OpenLinkRequest;
 
             Editor.InternalException += Editor_InternalException;
-
-            this.ButtonHighlightRange_Click(null, null);
         }
 
         private void Editor_InternalException(CodeEditor sender, Exception args)
@@ -55,6 +53,10 @@ namespace MonacoEditorTestApp
 
         private async void Editor_Loading(object sender, RoutedEventArgs e)
         {
+            CodeContent = await FileIO.ReadTextAsync(await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Content.txt")));
+
+            ButtonHighlightRange_Click(null, null);
+
             // Ready for Code
             var languages = await new Monaco.LanguagesHelper(Editor).GetLanguagesAsync();
             //Debugger.Break();

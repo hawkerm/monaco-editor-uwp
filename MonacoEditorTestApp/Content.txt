@@ -1,0 +1,15 @@
+﻿public class Program { // http://www.github.com/
+	public static void Main(string[] args) {
+		Console.WriteLine(\"Hello, World!\");
+	}
+
+	/*
+	 * Things to Try:
+	 * - Hit F1 and Search for 'TestAction'
+	 * - Press Ctrl+Enter
+	 * - After using Ctrl+Enter, hit F5
+	 * - Hit Ctrl+L
+	 * - Hit Ctrl+U
+	 * - Hit Ctrl+W
+	 */
+}
