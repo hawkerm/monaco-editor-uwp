@@ -11,11 +11,11 @@ namespace Monaco.Helpers
     /// Not Thread Safe.
     /// </summary>
     [AllowForWeb]
-    public sealed class ParentAccessor
+    public sealed class ParentAccessor : IDisposable
     {
         private WeakReference<IParentAccessorAcceptor> parent;
         private Type typeinfo;
-        private Dictionary<string, WeakReference<Action>> actions;
+        private Dictionary<string, Action> actions;
 
         private List<Assembly> Assemblies { get; set; } = new List<Assembly>();
 
@@ -26,8 +26,8 @@ namespace Monaco.Helpers
         public ParentAccessor(IParentAccessorAcceptor parent)
         { 
             this.parent = new WeakReference<IParentAccessorAcceptor>(parent);
-            this.typeinfo = parent.GetType();
-            this.actions = new Dictionary<string, WeakReference<Action>>();
+            typeinfo = parent.GetType();
+            actions = new Dictionary<string, Action>();
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Monaco.Helpers
         /// <param name="action">Action to perform.</param>
         internal void RegisterAction(string name, Action action)
         {
-            actions[name] = new WeakReference<Action>(action);
+            actions[name] = action;
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Monaco.Helpers
         /// <param name="assembly">Assembly to add.</param>
         internal void AddAssemblyForTypeLookup(Assembly assembly)
         {
-            this.Assemblies.Add(assembly);
+            Assemblies.Add(assembly);
         }
 
         /// <summary>
@@ -56,9 +56,9 @@ namespace Monaco.Helpers
         /// <returns>True if method was found in registration.</returns>
         public bool CallAction(string name)
         {
-            if (actions.ContainsKey(name) && actions[name].TryGetTarget(out Action action))
+            if (actions.ContainsKey(name))
             {
-                action.Invoke();
+                actions[name]?.Invoke();
                 return true;
             }
 
@@ -182,6 +182,16 @@ namespace Monaco.Helpers
             }
 
             return null;
+        }
+
+        public void Dispose()
+        {
+            if (actions != null)
+            {
+                actions.Clear();
+            }
+
+            actions = null;
         }
     }
 

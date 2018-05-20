@@ -9,8 +9,9 @@ namespace Monaco.Editor
     /// <summary>
     /// Helper to access IModel interface methods off of CodeEditor object.
     /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.imodel.html
+    /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.itextmodel.html
     /// </summary>
-    #pragma warning disable CS1591
+#pragma warning disable CS1591
     public sealed class ModelHelper : IModel
     {
         private WeakReference<CodeEditor> _editor;
@@ -99,6 +100,16 @@ namespace Monaco.Editor
             if (_editor.TryGetTarget(out CodeEditor editor))
             {
                 return editor.SendScriptAsync<uint>("model.getLineLastNonWhitespaceColumn(" + lineNumber + ");").AsAsyncOperation();
+            }
+
+            return null;
+        }
+
+        public IAsyncOperation<uint> GetLineLengthAsync(uint lineNumber)
+        {
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                return editor.SendScriptAsync<uint>("model.getLineLength(" + lineNumber + ");").AsAsyncOperation();
             }
 
             return null;

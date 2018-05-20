@@ -66,7 +66,7 @@ namespace MonacoEditorTestApp
                 await md.ShowAsync();
 
                 // Turn off Command again.
-                _myCondition.Reset();
+                _myCondition?.Reset();
 
                 // Refocus on CodeEditor
                 Editor.Focus(FocusState.Programmatic);
@@ -153,11 +153,11 @@ namespace MonacoEditorTestApp
                     {
                         "This is a test message.",
                         "*YES*, **it is**."
-                    }
+                    }.ToMarkdownString()
                 }));
         }
 
-        private void ButtonHighlightLine_Click(object sender, RoutedEventArgs e)
+        private async void ButtonHighlightLine_Click(object sender, RoutedEventArgs e)
         {
             this.Editor.Decorations.Add(
                 new IModelDeltaDecoration(new Range(4, 1, 4, 1), new IModelDecorationOptions() {
@@ -173,25 +173,29 @@ namespace MonacoEditorTestApp
                     HoverMessage = new string[]
                     {
                         "This is *another* \"test\" message about 'thing'."
-                    },
+                    }.ToMarkdownString(),
                     GlyphMarginHoverMessage = new string[]
                     {
                         "This is some crazy \"Error\" here.",
                         "'Maybe'..."
-                    }
+                    }.ToMarkdownString()
                 }));
             this.Editor.Decorations.Add(
-                new IModelDeltaDecoration(new Range(2, 1, 2, 1), new IModelDecorationOptions()
+                new IModelDeltaDecoration(new Range(2, 1, 2, await Editor.GetModel().GetLineLengthAsync(2)), new IModelDecorationOptions()
                 {
                     IsWholeLine = true,
                     InlineClassName = new CssInlineStyle()
                     {
                         TextDecoration = TextDecoration.LineThrough
                     },
+                    GlyphMarginClassName = new CssGlyphStyle()
+                    {
+                        GlyphImage = new Uri("ms-appx-web:///Icons/warning.png")
+                    },
                     HoverMessage = new string[]
                     {
                         "Deprecated"
-                    }
+                    }.ToMarkdownString()
                 }));
         }
 
@@ -229,7 +233,7 @@ namespace MonacoEditorTestApp
                 e.Handled = true;
 
                 // We'll show that we can enable the F5 Command once we've performed Ctrl+Enter at least once.
-                _myCondition.Set(true);
+                _myCondition?.Set(true);
             }
         }
 
@@ -282,6 +286,7 @@ namespace MonacoEditorTestApp
 
             if (btn.Content.ToString() == "Remove")
             {
+                _myCondition = null;
                 Editor.KeyDown -= Editor_KeyDown;
 
                 RootGrid.Children.Remove(Editor);

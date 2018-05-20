@@ -97,6 +97,7 @@ namespace Monaco
             Decorations.VectorChanged -= Decorations_VectorChanged;
             Markers.VectorChanged -= Markers_VectorChanged;
 
+            _parentAccessor?.Dispose();
             _parentAccessor = null;
             Options.PropertyChanged -= Options_PropertyChanged;
             Options = null;

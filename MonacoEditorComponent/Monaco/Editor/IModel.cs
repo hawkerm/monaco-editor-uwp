@@ -55,6 +55,7 @@ namespace Monaco.Editor
         //GetLineDecorationsAsync
         IAsyncOperation<uint> GetLineFirstNonWhitespaceColumnAsync(uint lineNumber);
         IAsyncOperation<uint> GetLineLastNonWhitespaceColumnAsync(uint lineNumber);
+        IAsyncOperation<uint> GetLineLengthAsync(uint lineNumber);
         IAsyncOperation<uint> GetLineMaxColumnAsync(uint lineNumber);
         IAsyncOperation<uint> GetLineMinColumnAsync(uint lineNumber);
         IAsyncOperation<IEnumerable<string>> GetLinesContentAsync();
