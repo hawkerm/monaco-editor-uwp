@@ -136,6 +136,7 @@
     <Compile Include="Monaco\Editor\IModelDeltaDecoration.cs" />
     <Compile Include="Monaco\Editor\Marker.cs" />
     <Compile Include="Monaco\Editor\MarkerData.cs" />
+    <Compile Include="Monaco\Editor\TrackedRangeStickiness.cs" />
     <Compile Include="Monaco\Editor\WordAtPosition.cs" />
     <Compile Include="Monaco\Editor\IWordAtPosition.cs" />
     <Compile Include="Monaco\Helpers\CssInlineStyle.cs" />

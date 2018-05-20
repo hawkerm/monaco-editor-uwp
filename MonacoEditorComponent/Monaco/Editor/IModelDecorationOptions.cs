@@ -34,7 +34,16 @@ namespace Monaco.Editor
 
         [JsonConverter(typeof(CssStyleConverter))]
         [JsonProperty("inlineClassName")]
-        public CssInlineStyle InlineClassName { get; set; }      
+        public CssInlineStyle InlineClassName { get; set; }
+
+        [JsonProperty("inlineClassNameAffectsLetterSpacing")]
+        public bool InlineClassNameAffectsLetterSpacing { get; set; }
+
+        [JsonProperty("stickiness")]
+        public TrackedRangeStickiness Stickiness { get; set; }
+
+        [JsonProperty("zIndex")]
+        public int ZIndex { get; set; }
     }
     #pragma warning restore CS1591
 

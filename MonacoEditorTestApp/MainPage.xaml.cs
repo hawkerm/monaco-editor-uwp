@@ -153,13 +153,14 @@ namespace MonacoEditorTestApp
                     {
                         "This is a test message.",
                         "*YES*, **it is**."
-                    }.ToMarkdownString()
+                    }.ToMarkdownString(),
+                    Stickiness = TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges
                 }));
         }
 
         private async void ButtonHighlightLine_Click(object sender, RoutedEventArgs e)
         {
-            this.Editor.Decorations.Add(
+            Editor.Decorations.Add(
                 new IModelDeltaDecoration(new Range(4, 1, 4, 1), new IModelDecorationOptions() {
                     IsWholeLine = true,
                     ClassName = new CssLineStyle()
@@ -180,7 +181,7 @@ namespace MonacoEditorTestApp
                         "'Maybe'..."
                     }.ToMarkdownString()
                 }));
-            this.Editor.Decorations.Add(
+            Editor.Decorations.Add(
                 new IModelDeltaDecoration(new Range(2, 1, 2, await Editor.GetModel().GetLineLengthAsync(2)), new IModelDecorationOptions()
                 {
                     IsWholeLine = true,
@@ -271,6 +272,19 @@ namespace MonacoEditorTestApp
                         StartColumn = 2,
                         EndLineNumber = 2,
                         EndColumn = 8
+                    });
+
+                Editor.Markers.Add(
+                    new MarkerData()
+                    {
+                        Code = "2345",
+                        Message = "This is an \"Error\" about 'that thing'.",
+                        Severity = Severity.Error,
+                        Source = "Origin",
+                        StartLineNumber = 3,
+                        StartColumn = 5,
+                        EndLineNumber = 3,
+                        EndColumn = 15
                     });
             }
             else
