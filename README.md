@@ -15,6 +15,7 @@ The following Monaco Editor features are currently supported by this component b
 - Stand Alone Code Editor Options
 - Markers and Decorations
 - Actions and Commands
+- Basic Language Support (Hover, CompletionItem)
 - Basic IModel Support
 - KeyDown Events
 - Responds Appropriately to Programmatic Focus Events
@@ -26,7 +27,7 @@ Usage
 A NuGet Package is provided:
 
 ```
-Install-Package Monaco.Editor -Version 0.6.1-alpha
+Install-Package Monaco.Editor -Version 0.7.0-alpha
 ```
 
 Look at the TestApp for current usage.

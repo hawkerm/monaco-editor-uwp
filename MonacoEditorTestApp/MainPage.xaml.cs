@@ -3,6 +3,7 @@ using Monaco.Editor;
 using Monaco.Helpers;
 using Monaco.Languages;
 using MonacoEditorTestApp.Actions;
+using MonacoEditorTestApp.Helpers;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -85,6 +86,8 @@ namespace MonacoEditorTestApp
                     return null;
                 });
             });
+
+            await languages.RegisterCompletionItemProviderAsync("csharp", new LanguageProvider());
 
             _myCondition = await Editor.CreateContextKeyAsync("MyCondition", false);
 

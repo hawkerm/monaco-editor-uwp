@@ -12,5 +12,8 @@
 	 * - Hit Ctrl+L
 	 * - Hit Ctrl+U
 	 * - Hit Ctrl+W
+	 * - Type the letter 'c'
+	 * - Type the word 'boo'
+	 * - Type 'foreach' to see Snippet.
 	 */
 }

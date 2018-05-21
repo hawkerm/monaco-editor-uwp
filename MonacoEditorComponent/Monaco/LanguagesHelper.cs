@@ -45,13 +45,40 @@ namespace Monaco
             return null;
         }
 
+        public IAsyncAction RegisterCompletionItemProviderAsync(string languageId, CompletionItemProvider provider)
+        {
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                // Wrapper around CompletionItem Provider to Monaco editor.
+                // TODO: Add Incremented Id so that we can register multiple providers per language?
+                editor._parentAccessor.RegisterEvent("CompletionItemProvider" + languageId, async (args) =>
+                {
+                    if (args != null && args.Length >= 2)
+                    {
+                        var items = await provider.ProvideCompletionItemsAsync(editor.GetModel(), JsonConvert.DeserializeObject<Position>(args[0]), JsonConvert.DeserializeObject<CompletionContext>(args[1]));
+
+                        if (items != null)
+                        {
+                            return JsonConvert.SerializeObject(items);
+                        }
+                    }
+
+                    return null;
+                });
+
+                return editor.InvokeScriptAsync("registerCompletionItemProvider", new object[] { languageId, provider.TriggerCharacters }).AsAsyncAction();
+            }
+
+            return null;
+        }
+
         public IAsyncAction RegisterHoverProviderAsync(string languageId, HoverProvider provider)
         {
             if (_editor.TryGetTarget(out CodeEditor editor))
             {
                 // Wrapper around Hover Provider to Monaco editor.
                 // TODO: Add Incremented Id so that we can register multiple providers per language?
-                editor._parentAccessor.RegisterEvent("Provider" + languageId, async (args) =>
+                editor._parentAccessor.RegisterEvent("HoverProvider" + languageId, async (args) =>
                 {
                     if (args != null && args.Length >= 1)
                     {
