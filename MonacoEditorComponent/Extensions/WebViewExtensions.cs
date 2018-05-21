@@ -82,7 +82,7 @@ namespace Monaco.Extensions
                 }
             }
 
-            if (returnstring != null)
+            if (returnstring != null && returnstring != "null")
             {
                 return JsonConvert.DeserializeObject<T>(returnstring);
             }

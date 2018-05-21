@@ -5,6 +5,7 @@
 
 	/*
 	 * Things to Try:
+	 * - Hover over the word 'Hit'
 	 * - Hit F1 and Search for 'TestAction'
 	 * - Press Ctrl+Enter
 	 * - After using Ctrl+Enter, hit F5

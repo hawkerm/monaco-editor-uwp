@@ -82,6 +82,19 @@
             Parent.callAction("Loaded");
         });
 
+        // TODO: Split these helper functions out into separate .js/.ts files.
+        var registerHoverProvider = function (languageId) {
+            return monaco.languages.registerHoverProvider(languageId, {
+                provideHover: function (model, position) {
+                    return Parent.callEvent("Provider" + languageId, [JSON.stringify(position)]).then(result => {
+                        if (result) {
+                            return JSON.parse(result);
+                        }
+                    });
+                }
+            });
+        }
+
         var addAction = function (action) {
             action.run = function (ed) {
                 Parent.callAction("Action" + action.id)

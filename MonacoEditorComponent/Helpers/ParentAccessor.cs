@@ -2,6 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.Foundation.Metadata;
 
 namespace Monaco.Helpers
@@ -16,6 +19,7 @@ namespace Monaco.Helpers
         private WeakReference<IParentAccessorAcceptor> parent;
         private Type typeinfo;
         private Dictionary<string, Action> actions;
+        private Dictionary<string, Func<string[], Task<string>>> events;
 
         private List<Assembly> Assemblies { get; set; } = new List<Assembly>();
 
@@ -28,6 +32,7 @@ namespace Monaco.Helpers
             this.parent = new WeakReference<IParentAccessorAcceptor>(parent);
             typeinfo = parent.GetType();
             actions = new Dictionary<string, Action>();
+            events = new Dictionary<string, Func<string[], Task<string>>>();
         }
 
         /// <summary>
@@ -38,6 +43,32 @@ namespace Monaco.Helpers
         internal void RegisterAction(string name, Action action)
         {
             actions[name] = action;
+        }
+
+        /// <summary>
+        /// Registers an event from the .NET side which can be called with the given jsonified string arguments within the JavaScript code.
+        /// </summary>
+        /// <param name="name">String Key.</param>
+        /// <param name="function">Event to call.</param>
+        internal void RegisterEvent(string name, Func<string[], Task<string>> function)
+        {
+            events[name] = function;
+        }
+
+        /// <summary>
+        /// Calls an Event registered before wit hthe <see cref="RegisterEvent(string, Func{string[], string})"/>.
+        /// </summary>
+        /// <param name="name">Name of event to call.</param>
+        /// <param name="parameters">JSON string Parameters.</param>
+        /// <returns></returns>
+        public IAsyncOperation<string> CallEvent(string name, [ReadOnlyArray] string[] parameters)
+        {
+            if (events.ContainsKey(name))
+            {
+                return events[name]?.Invoke(parameters).AsAsyncOperation();
+            }
+
+            return (new Task<string>(() => { return null; })).AsAsyncOperation();
         }
 
         /// <summary>
@@ -192,6 +223,13 @@ namespace Monaco.Helpers
             }
 
             actions = null;
+
+            if (events != null)
+            {
+                events.Clear();
+            }
+
+            events = null;
         }
     }
 

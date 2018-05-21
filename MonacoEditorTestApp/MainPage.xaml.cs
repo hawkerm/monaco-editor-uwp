@@ -1,10 +1,13 @@
 ﻿using Monaco;
 using Monaco.Editor;
 using Monaco.Helpers;
+using Monaco.Languages;
 using MonacoEditorTestApp.Actions;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.Storage;
@@ -58,8 +61,30 @@ namespace MonacoEditorTestApp
             ButtonHighlightRange_Click(null, null);
 
             // Ready for Code
-            var languages = await new Monaco.LanguagesHelper(Editor).GetLanguagesAsync();
+            var languages = new Monaco.LanguagesHelper(Editor);
+
+            var available_languages = await languages.GetLanguagesAsync();
             //Debugger.Break();
+
+            await languages.RegisterHoverProviderAsync("csharp", (model, position) =>
+            {
+                // TODO: See if this can be internalized? Need to figure out the best pattern here to expose async method through WinRT, as can't use Task for 'async' language compatibility in WinRT Component...
+                return AsyncInfo.Run(async delegate(CancellationToken cancelationToken)
+                {
+                    var word = await model.GetWordAtPositionAsync(position);
+                    if (word != null && word.Word.IndexOf("Hit", 0, StringComparison.CurrentCultureIgnoreCase) != -1)
+                    {
+                        return new Hover(new string[]
+                        {
+                        "*Hit* - press the keys following together.",
+                        "Some **more** text is here.",
+                        "And a [link](https://www.github.com/)."
+                        }, new Range(position.LineNumber, position.Column, position.LineNumber, position.Column + 5));
+                    }
+
+                    return null;
+                });
+            });
 
             _myCondition = await Editor.CreateContextKeyAsync("MyCondition", false);
 

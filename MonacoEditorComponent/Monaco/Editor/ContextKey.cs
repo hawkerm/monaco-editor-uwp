@@ -21,7 +21,7 @@ namespace Monaco.Editor
         [JsonProperty("value")]
         public bool Value { get; private set; }
 
-        public ContextKey(CodeEditor editor, string key, bool defaultValue)
+        internal ContextKey(CodeEditor editor, string key, bool defaultValue)
         {
             _editor = new WeakReference<CodeEditor>(editor);
 

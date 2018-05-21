@@ -148,6 +148,8 @@
     <Compile Include="Monaco\IRange.cs" />
     <Compile Include="Monaco\KeyCode.cs" />
     <Compile Include="Monaco\KeyMod.cs" />
+    <Compile Include="Monaco\Languages\Hover.cs" />
+    <Compile Include="Monaco\Languages\HoverProvider.cs" />
     <Compile Include="Monaco\Languages\ILanguageExtensionPoint.cs" />
     <Compile Include="Monaco\LanguagesHelper.cs" />
     <Compile Include="Monaco\ModelHelper.cs" />

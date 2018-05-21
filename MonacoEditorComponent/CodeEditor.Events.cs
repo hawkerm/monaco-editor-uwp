@@ -68,7 +68,7 @@ namespace Monaco
             Loaded?.Invoke(this, new RoutedEventArgs());
         }
 
-        private ParentAccessor _parentAccessor;
+        internal ParentAccessor _parentAccessor;
         private KeyboardListener _keyboardListener;
         private long _themeToken;
 

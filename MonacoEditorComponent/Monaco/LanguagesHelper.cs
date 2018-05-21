@@ -1,4 +1,5 @@
 ﻿using Monaco.Languages;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,43 @@ namespace Monaco
             if (_editor.TryGetTarget(out CodeEditor editor))
             {
                 return editor.SendScriptAsync<IList<ILanguageExtensionPoint>>("monaco.languages.getLanguages()").AsAsyncOperation();
+            }
+
+            return null;
+        }
+
+        public IAsyncAction RegisterAsync(ILanguageExtensionPoint language)
+        {
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                return editor.InvokeScriptAsync("monaco.languages.register", language).AsAsyncAction();
+            }
+
+            return null;
+        }
+
+        public IAsyncAction RegisterHoverProviderAsync(string languageId, HoverProvider provider)
+        {
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                // Wrapper around Hover Provider to Monaco editor.
+                // TODO: Add Incremented Id so that we can register multiple providers per language?
+                editor._parentAccessor.RegisterEvent("Provider" + languageId, async (args) =>
+                {
+                    if (args != null && args.Length >= 1)
+                    {
+                        var hover = await provider.Invoke(editor.GetModel(), JsonConvert.DeserializeObject<Position>(args[0]));
+
+                        if (hover != null)
+                        {
+                            return JsonConvert.SerializeObject(hover);
+                        }
+                    }
+
+                    return null;
+                });
+
+                return editor.InvokeScriptAsync("registerHoverProvider", languageId).AsAsyncAction();
             }
 
             return null;
