@@ -57,9 +57,12 @@ namespace MonacoEditorTestApp
 
         private async void Editor_Loading(object sender, RoutedEventArgs e)
         {
-            CodeContent = await FileIO.ReadTextAsync(await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Content.txt")));
+            if (string.IsNullOrWhiteSpace(CodeContent))
+            {
+                CodeContent = await FileIO.ReadTextAsync(await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Content.txt")));
 
-            ButtonHighlightRange_Click(null, null);
+                ButtonHighlightRange_Click(null, null);
+            }
 
             // Ready for Code
             var languages = new Monaco.LanguagesHelper(Editor);
@@ -324,6 +327,49 @@ namespace MonacoEditorTestApp
             }            
         }
 
+        //// Example to show toggling visibility and impact on control.
+        private void HideButton_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+
+            if (btn.Content.ToString() == "Hide")
+            {
+                Editor.Visibility = Visibility.Collapsed;
+
+                btn.Content = "Show";
+            }
+            else
+            {
+                Editor.Visibility = Visibility.Visible;
+
+                btn.Content = "Hide";
+            }
+        }
+
+        // TODO: this scenario needs more work.
+        //// Example to show keeping a reference to the editor but removing from Visual Tree.
+        private void DetachButton_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+
+            if (btn.Content.ToString() == "Detach")
+            {
+                RootGrid.Children.Remove(Editor);
+
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+
+                btn.Content = "Attach";
+            }
+            else
+            {
+                RootGrid.Children.Add(Editor);
+
+                btn.Content = "Detach";
+            }
+        }
+
+        //// Example to show memory usage when deconstructing and reconstructing editor.
         private void RemoveButton_Click(object sender, RoutedEventArgs e)
         {
             var btn = sender as Button;
@@ -332,6 +378,11 @@ namespace MonacoEditorTestApp
             {
                 _myCondition = null;
                 Editor.KeyDown -= Editor_KeyDown;
+
+                Editor.Loaded -= Editor_Loaded;
+                Editor.Loading -= Editor_Loading;
+                Editor.OpenLinkRequested -= Editor_OpenLinkRequest;
+                Editor.InternalException -= Editor_InternalException;
 
                 RootGrid.Children.Remove(Editor);
                 Editor = null;
@@ -352,9 +403,16 @@ namespace MonacoEditorTestApp
 
                 Editor.KeyDown += Editor_KeyDown;
 
+                Editor.Loading += Editor_Loading;
+                Editor.Loaded += Editor_Loaded;
+                Editor.OpenLinkRequested += Editor_OpenLinkRequest;
+                Editor.InternalException += Editor_InternalException;
+
                 Grid.SetColumn(Editor, 1);
 
                 RootGrid.Children.Add(Editor);
+
+                // TODO: My Condition?
 
                 btn.Content = "Remove";
             }           

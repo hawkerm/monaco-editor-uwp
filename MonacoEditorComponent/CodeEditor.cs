@@ -6,6 +6,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Windows.Foundation;
@@ -72,6 +73,7 @@ namespace Monaco
             Markers = new ObservableVector<IMarkerData>();
             _model = new ModelHelper(this);
 
+            base.Loaded += CodeEditor_Loaded;
             Unloaded += CodeEditor_Unloaded;
         }
 
@@ -79,6 +81,44 @@ namespace Monaco
         {
             // TODO: Check for Language property and call other method instead?
             await InvokeScriptAsync("updateOptions", sender);
+        }
+
+        private void CodeEditor_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Do this the 2nd time around.
+            if (_model == null && _view != null)
+            {
+                _model = new ModelHelper(this);
+
+                _parentAccessor = new ParentAccessor(this);
+                _parentAccessor.AddAssemblyForTypeLookup(typeof(Range).GetTypeInfo().Assembly);
+                _parentAccessor.RegisterAction("Loaded", CodeEditorLoaded);
+
+                _themeListener = new ThemeListener();
+                _themeListener.ThemeChanged += _themeListener_ThemeChanged;
+                _themeToken = RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedTheme_PropertyChanged);
+
+                _keyboardListener = new KeyboardListener(this);
+
+                _view.AddWebAllowedObject("Parent", _parentAccessor);
+                _view.AddWebAllowedObject("Theme", _themeListener);
+                _view.AddWebAllowedObject("Keyboard", _keyboardListener);
+
+                Options.PropertyChanged += Options_PropertyChanged;
+
+                Decorations.VectorChanged += Decorations_VectorChanged;
+                Markers.VectorChanged += Markers_VectorChanged;
+
+                _view.NewWindowRequested += WebView_NewWindowRequested;
+
+                _initialized = true;
+
+                Loading?.Invoke(this, new RoutedEventArgs());
+
+                Unloaded += CodeEditor_Unloaded;
+
+                Loaded?.Invoke(this, new RoutedEventArgs());
+            }
         }
 
         private void CodeEditor_Unloaded(object sender, RoutedEventArgs e)
@@ -100,7 +140,6 @@ namespace Monaco
             _parentAccessor?.Dispose();
             _parentAccessor = null;
             Options.PropertyChanged -= Options_PropertyChanged;
-            Options = null;
             _themeListener.ThemeChanged -= _themeListener_ThemeChanged;
             _themeListener = null;
             UnregisterPropertyChangedCallback(RequestedThemeProperty, _themeToken);
@@ -116,7 +155,7 @@ namespace Monaco
                 _view.DOMContentLoaded -= WebView_DOMContentLoaded;
                 _view.NavigationCompleted -= WebView_NavigationCompleted;
                 _view.NewWindowRequested -= WebView_NewWindowRequested;
-                this._initialized = false;
+                _initialized = false;
             }
 
             _view = (WebView)GetTemplateChild("View");
