@@ -1,3 +1,13 @@
+v0.7 - 07/22/2018 
+----------------- 
+- **Breaking:** `IModelDecorationOptions` now uses `IMarkdownString` for both `HoverMessage` and `GlyphMarginHoverMessage` to reflect change in Monaco API.  A convenience `string` and `string[]` extension `ToMarkdownString` has been provided.  Fixes #22. 
+- Updated Monaco Reference to v0.13.0 
+- Added initial Language Provider APIs 
+  - CompletionItem (IntelliSense, Snippets, etc...) 
+  - Hover
+- Added `install-dependencies.ps1` script to pull down required Monaco reference. 
+- Test app loads content from file now and provides info on things to try. 
+ 
 v0.6 - 05/04/2018
 -----------------
 - Updated Monaco Reference to v0.12.0
