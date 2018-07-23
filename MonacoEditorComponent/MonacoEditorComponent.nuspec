@@ -26,7 +26,10 @@
     <file src="bin\Release\Monaco.xml" target="lib\uap10.0"/>
     <file src="bin\Release\MonacoEditorComponent.xr.xml" target="lib\uap10.0\Monaco"/>
     <!-- XAML controls -->
-    <file src="Themes\Generic.xaml" target="lib\uap10.0\Themes"/>
+    <!--<file src="Themes\Generic.xaml" target="lib\uap10.0\Themes"/>
+    <file src="bin\Release\Themes\Generic.xbf" target="lib\uap10.0\Themes"/>-->
+    <file src="Themes\Generic.xaml" target="lib\uap10.0\Monaco\Themes"/>
+    <file src="bin\Release\Themes\Generic.xbf" target="lib\uap10.0\Monaco\Themes"/>
     <!-- Dependencies -->
     <file src="MonacoEditor.html" target="lib\uap10.0\Monaco"/>
     <file src="monaco-editor\*" target="lib\uap10.0\Monaco\monaco-editor"/>
