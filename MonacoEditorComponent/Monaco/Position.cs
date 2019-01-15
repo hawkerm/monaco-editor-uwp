@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,11 @@ namespace Monaco
     #pragma warning disable CS1591
     public sealed class Position: IPosition
     {
+        // TODO: Investigate why with .NET Native the interface attributes aren't carried forward?
+        [JsonProperty("column")]
         public uint Column { get; private set; }
+
+        [JsonProperty("lineNumber")]
         public uint LineNumber { get; private set; }
 
         public Position(uint lineNumber, uint column)

@@ -76,8 +76,8 @@ namespace Monaco.Editor
         IAsyncOperation<uint> GetValueLengthAsync(EndOfLinePreference eol, bool preserveBOM);
         IAsyncOperation<uint> GetValueLengthInRangeAsync(IRange range);
         IAsyncOperation<uint> GetVersionIdAsync();
-        IAsyncOperation<IWordAtPosition> GetWordAtPositionAsync(IPosition position);
-        IAsyncOperation<IWordAtPosition> GetWordUntilPositionAsync(IPosition position);
+        IAsyncOperation<WordAtPosition> GetWordAtPositionAsync(IPosition position);
+        IAsyncOperation<WordAtPosition> GetWordUntilPositionAsync(IPosition position);
         IAsyncOperation<Position> ModifyPositionAsync(IPosition position, int number);
         IAsyncOperation<string> NormalizeIndentationAsync(string str);
         //PushEditOperationsAsync

@@ -1,4 +1,5 @@
 ﻿using Monaco.Helpers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +15,13 @@ namespace Monaco
     #pragma warning disable CS1591
     public sealed class Range : IRange
     {
+        [JsonProperty("endColumn")]
         public uint EndColumn { get; private set; }
+        [JsonProperty("endLineNumber")]
         public uint EndLineNumber { get; private set; }
+        [JsonProperty("startColumn")]
         public uint StartColumn { get; private set; }
+        [JsonProperty("startLineNumber")]
         public uint StartLineNumber { get; private set; }
 
         public Range(uint startLineNumber, uint startColumn, uint endLineNumber, uint endColumn)

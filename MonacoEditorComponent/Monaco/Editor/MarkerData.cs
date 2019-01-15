@@ -12,20 +12,28 @@ namespace Monaco.Editor
     /// </summary>
     public sealed class MarkerData : IMarkerData
     {
+        [JsonProperty("code")]
         public string Code { get; set; }
 
+        [JsonProperty("message")]
         public string Message { get; set; }
 
+        [JsonProperty("severity")]
         public Severity Severity { get; set; }
 
+        [JsonProperty("source")]
         public string Source { get; set; }
 
+        [JsonProperty("startLineNumber")]
         public uint StartLineNumber { get; set; }
 
+        [JsonProperty("startColumn")]
         public uint StartColumn { get; set; }
 
+        [JsonProperty("endLineNumber")]
         public uint EndLineNumber { get; set; }
 
+        [JsonProperty("endColumn")]
         public uint EndColumn { get; set; }
 
         public string ToJson()

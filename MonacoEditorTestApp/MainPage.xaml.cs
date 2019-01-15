@@ -77,7 +77,7 @@ namespace MonacoEditorTestApp
                 return AsyncInfo.Run(async delegate(CancellationToken cancelationToken)
                 {
                     var word = await model.GetWordAtPositionAsync(position);
-                    if (word != null && word.Word.IndexOf("Hit", 0, StringComparison.CurrentCultureIgnoreCase) != -1)
+                    if (word != null && word.Word != null && word.Word.IndexOf("Hit", 0, StringComparison.CurrentCultureIgnoreCase) != -1)
                     {
                         return new Hover(new string[]
                         {
@@ -105,6 +105,16 @@ namespace MonacoEditorTestApp
                 // Refocus on CodeEditor
                 Editor.Focus(FocusState.Programmatic);
             }, _myCondition.Key);
+
+            await Editor.AddCommandAsync(Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KEY_R, async () =>
+            {
+                var range = await Editor.GetModel().GetFullModelRangeAsync();
+
+                var md = new MessageDialog("Document Range: " + range.ToString());
+                await md.ShowAsync();
+
+                Editor.Focus(FocusState.Programmatic);
+            });
 
             await Editor.AddCommandAsync(Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KEY_W, async () =>
             {

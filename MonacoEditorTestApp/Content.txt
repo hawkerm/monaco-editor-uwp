@@ -8,8 +8,9 @@
 	 * - Hover over the word 'Hit'
 	 * - Hit F1 and Search for 'TestAction'
 	 * - Press Ctrl+Enter
-	 * - After using Ctrl+Enter, hit F5
+	 * - After using Ctrl+Enter, hit F5	 
 	 * - Hit Ctrl+L
+	 * - Hit Ctrl+R
 	 * - Hit Ctrl+U
 	 * - Hit Ctrl+W
 	 * - Type the letter 'c'

@@ -260,21 +260,22 @@ namespace Monaco.Editor
             return null;
         }
 
-        public IAsyncOperation<IWordAtPosition> GetWordAtPositionAsync(IPosition position)
+        // TODO: Need to investigate why with .NET Native the InterfaceToClassConverter isn't working anymore?
+        public IAsyncOperation<WordAtPosition> GetWordAtPositionAsync(IPosition position)
         {
             if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                return editor.SendScriptAsync<IWordAtPosition>("model.getWordAtPosition(" + JsonConvert.SerializeObject(position) + ");").AsAsyncOperation();
+                return editor.SendScriptAsync<WordAtPosition>("model.getWordAtPosition(" + JsonConvert.SerializeObject(position) + ");").AsAsyncOperation();
             }
 
             return null;
         }
 
-        public IAsyncOperation<IWordAtPosition> GetWordUntilPositionAsync(IPosition position)
+        public IAsyncOperation<WordAtPosition> GetWordUntilPositionAsync(IPosition position)
         {
             if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                return editor.SendScriptAsync<IWordAtPosition>("model.getWordUntilPosition(" + JsonConvert.SerializeObject(position) + ");").AsAsyncOperation();
+                return editor.SendScriptAsync<WordAtPosition>("model.getWordUntilPosition(" + JsonConvert.SerializeObject(position) + ");").AsAsyncOperation();
             }
 
             return null;

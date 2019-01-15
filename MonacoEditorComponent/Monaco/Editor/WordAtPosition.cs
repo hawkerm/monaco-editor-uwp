@@ -10,16 +10,19 @@ namespace Monaco.Editor
         /// <summary>
         /// Column where the word ends.
         /// </summary>
+        [JsonProperty("endColumn")]
         public uint EndColumn { get; private set; }
 
         /// <summary>
         /// Column where the word starts.
         /// </summary>
+        [JsonProperty("startColumn")]
         public uint StartColumn { get; private set; }
 
         /// <summary>
         /// The word.
         /// </summary>
+        [JsonProperty("word")]
         public string Word { get; private set; }
     }
 }

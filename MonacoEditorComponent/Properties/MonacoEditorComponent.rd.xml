@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Directives xmlns="http://schemas.microsoft.com/netfx/2013/01/metadata">
+  <Library Name="MonacoEditorComponent">
+    <!-- Add your library directives here -->
+    <Namespace Name="Monaco.Editor" Serialize="All" Dynamic="All"/>
+    <Namespace Name="Monaco.Helpers" Serialize="All" Dynamic="All"/>
+    <Namespace Name="Monaco.Languages" Serialize="All" Dynamic="All"/>
+    <Namespace Name="Monaco" Serialize="All" Dynamic="All"/>
+    
+    <Type Name="Monaco.Helpers.InterfaceToClassConverter{TInterface, TClass}">
+      <GenericParameter Name="TInterface" Dynamic="All" />
+      <GenericParameter Name="TClass" Dynamic="All" />
+    </Type>
+    
+    <Type Name="Newtonsoft.Json.JsonConvert">
+      <Method Name="SerializeObject">
+        <Parameter Name="value" Serialize="Required All" />
+      </Method>
+    </Type>
+  </Library>
+</Directives>
