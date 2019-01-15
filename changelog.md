@@ -1,3 +1,12 @@
+v0.8 - 01/15/2019
+-----------------
+- Updated min target to 16299.
+- Add more inline decoration style properties.
+- Add SetPositionAsync. Fixes #24.
+- Update NuGet dependencies
+- Work for .NET Native
+- Changed returns from IWordAtPosition to WordAtPosition for now for .NET Native.
+
 v0.7 - 07/22/2018 
 ----------------- 
 - **Breaking:** `IModelDecorationOptions` now uses `IMarkdownString` for both `HoverMessage` and `GlyphMarginHoverMessage` to reflect change in Monaco API.  A convenience `string` and `string[]` extension `ToMarkdownString` has been provided.  Fixes #22. 
