@@ -170,13 +170,13 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>5.2.3</Version>
+      <Version>6.1.9</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
-      <Version>10.0.3</Version>
+      <Version>12.0.1</Version>
     </PackageReference>
     <PackageReference Include="Nito.AsyncEx">
-      <Version>5.0.0-pre-02</Version>
+      <Version>5.0.0-pre-05</Version>
     </PackageReference>
     <PackageReference Include="ObservableVector">
       <Version>2.1.0</Version>
