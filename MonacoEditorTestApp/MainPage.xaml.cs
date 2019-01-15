@@ -1,4 +1,4 @@
-using Monaco;
+﻿using Monaco;
 using Monaco.Editor;
 using Monaco.Helpers;
 using Monaco.Languages;
@@ -454,6 +454,11 @@ namespace MonacoEditorTestApp
             await Editor.SetPositionAsync(pos);
 
             Editor.Focus(FocusState.Programmatic);
+        }
+
+        private void ButtonSetSelectedText_Click(object sender, RoutedEventArgs e)
+        {
+            Editor.SelectedText = "This is some Selected Text!";
         }
     }
 }

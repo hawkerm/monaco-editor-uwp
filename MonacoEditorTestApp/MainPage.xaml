@@ -51,6 +51,7 @@
                     <x:String>Dark</x:String>
                 </ComboBox>
                 <Button Content="Set Text" Click="ButtonSetText_Click" TabIndex="2"/>
+                <Button Content="Set Selected Text" Click="ButtonSetSelectedText_Click"/>
                 <Button Content="Reveal Position 10, 5 In Center" Click="ButtonRevealPositionInCenter_Click" />
                 <Button Content="Highlight Range 3,1-10" Click="ButtonHighlightRange_Click" />
                 <Button Content="Highlight Line 2 &amp; 4" Click="ButtonHighlightLine_Click" />
