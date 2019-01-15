@@ -1,4 +1,4 @@
-﻿using Monaco;
+using Monaco;
 using Monaco.Editor;
 using Monaco.Helpers;
 using Monaco.Languages;
@@ -87,7 +87,7 @@ namespace MonacoEditorTestApp
                         }, new Range(position.LineNumber, position.Column, position.LineNumber, position.Column + 5));
                     }
 
-                    return null;
+                    return default(Hover);
                 });
             });
 

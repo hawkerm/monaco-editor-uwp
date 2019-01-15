@@ -90,7 +90,7 @@ namespace Monaco
                         }
                     }
 
-                    return null;
+                    return string.Empty;
                 });
 
                 return editor.InvokeScriptAsync("registerHoverProvider", languageId).AsAsyncAction();
