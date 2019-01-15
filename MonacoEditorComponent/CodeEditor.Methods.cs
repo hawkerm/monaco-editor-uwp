@@ -149,6 +149,11 @@ namespace Monaco
             return SendScriptAsync<Position>("editor.getPosition();").AsAsyncOperation();
         }
 
+        public IAsyncAction SetPositionAsync(IPosition position)
+        {
+            return SendScriptAsync("editor.setPosition(" + JsonConvert.SerializeObject(position) + ");").AsAsyncAction();
+        }
+
         /// <summary>
         /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.icommoncodeeditor.html#deltadecorations
         /// 

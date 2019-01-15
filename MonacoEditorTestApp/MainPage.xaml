@@ -59,6 +59,7 @@
                 <Button Content="Minimap" Click="ButtonMinimap_Click" />
                 <Button Content="Change Language" Click="ButtonChangeLanguage_Click" />
                 <Button Content="Set Marker" Click="ButtonSetMarker_Click" />
+                <Button Content="Load &amp; Set Pos" Click="LoadAndSet_Click" />
                 <Line X1="0" X2="100" Y1="0" Y2="0" StrokeThickness="1" Stroke="{ThemeResource AppBarSeparatorForegroundThemeBrush}"/>
                 <Button x:Name="HideButton" Content="Hide" Click="HideButton_Click"/>
                 <Button x:Name="DetachButton" Content="Detach" Click="DetachButton_Click"/>

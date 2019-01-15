@@ -443,5 +443,17 @@ namespace MonacoEditorTestApp
             // Tell Editor about Update.
             Editor.RequestedTheme = RequestedTheme;
         }
+
+        private async void LoadAndSet_Click(object sender, RoutedEventArgs e)
+        {
+            // remember current pos
+            var pos = await Editor.GetPositionAsync();
+
+            Editor.Text = "Testing some new content here.\n\tIf you placed your cursor near the start of the text before you hit the button.\nIt should still be in the same spot.";
+
+            await Editor.SetPositionAsync(pos);
+
+            Editor.Focus(FocusState.Programmatic);
+        }
     }
 }
