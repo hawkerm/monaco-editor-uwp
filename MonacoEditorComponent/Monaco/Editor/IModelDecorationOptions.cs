@@ -36,6 +36,8 @@ namespace Monaco.Editor
         [JsonProperty("inlineClassName")]
         public CssInlineStyle InlineClassName { get; set; }
 
+        // TODO: Provide LinesDecorationsClassName
+
         [JsonProperty("inlineClassNameAffectsLetterSpacing")]
         public bool InlineClassNameAffectsLetterSpacing { get; set; }
 

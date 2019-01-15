@@ -14,6 +14,7 @@ using Windows.ApplicationModel;
 using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Popups;
+using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -180,7 +181,13 @@ namespace MonacoEditorTestApp
                 {
                     ClassName = new CssLineStyle() // TODO: Save these styles so we don't keep regenerating them and adding new ones.
                     {
-                        BackgroundColor = new SolidColorBrush(Colors.Red)
+                        BackgroundColor = new SolidColorBrush(Colors.DarkRed),
+                    },
+                    InlineClassName = new CssInlineStyle()
+                    {
+                        ForegroundColor = new SolidColorBrush(Colors.White),
+                        FontWeight = FontWeights.Bold,
+                        FontStyle = Windows.UI.Text.FontStyle.Italic
                     },
                     HoverMessage = new string[]
                     {
