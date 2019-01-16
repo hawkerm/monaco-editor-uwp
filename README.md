@@ -27,7 +27,7 @@ Usage
 A NuGet Package is provided:
 
 ```
-Install-Package Monaco.Editor -Version 0.8.0-alpha
+Install-Package Monaco.Editor -Version 0.8.1-alpha
 ```
 
 Look at the TestApp for current usage.
@@ -35,7 +35,7 @@ See [changelog](changelog.md) for more info.
 
 Build Notes
 -----------
-Built using Visual Studio 2017 for Windows 10 16299 and above.
+Built using Visual Studio 2017 for Windows 10 14393 and above.
 
 The **released** complete Monaco v0.13.0 build is used as a reference, this is not included in this repository and can be downloaded from the [Monaco site](https://microsoft.github.io/monaco-editor/).  The contents of its uncompressed 'package' directory should be placed in the *MonacoEditorComponent/monaco-editor* directory.  The `install-dependencies.ps1` PowerShell script can install this for you automatically.
 

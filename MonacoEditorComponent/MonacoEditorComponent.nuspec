@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Monaco.Editor</id>
-    <version>0.8-alpha</version>
+    <version>0.8.1-alpha</version>
     <title>Monaco Editor UWP Component</title>
     <authors>Michael A. Hawker</authors>
     <owners>Michael A. Hawker</owners>
@@ -10,11 +10,11 @@
     <projectUrl>https://github.com/hawkerm/monaco-editor-uwp</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A Windows Runtime Component wrapper around the web-based Monaco Editor</description>
-    <releaseNotes>Minor fixes, NuGet dependency updates, and better .NET Native support.</releaseNotes>
+    <releaseNotes>Minor fixes, better .NET Native support.</releaseNotes>
     <copyright>Copyright 2019</copyright>
     <tags>uwp monaco editor controls</tags>
     <dependencies>
-      <dependency id="Newtonsoft.Json" version="12.0.1"/>
+      <dependency id="Newtonsoft.Json" version="10.0.3"/>
       <dependency id="Nito.AsyncEx" version="5.0.0-pre-05"/>
       <dependency id="ObservableVector" version="2.1.0"/>
     </dependencies>

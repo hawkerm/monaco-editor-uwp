@@ -1,3 +1,8 @@
+v0.8.1 - 01/15/2019
+-------------------
+- Revert min target back to 14393
+- Change Dependencies back
+
 v0.8 - 01/15/2019
 -----------------
 - Updated min target to 16299.
