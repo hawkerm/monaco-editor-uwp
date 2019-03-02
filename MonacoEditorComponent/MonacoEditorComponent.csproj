@@ -187,6 +187,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <TypeScriptCompile Include="ts-helpermethods\Monaco.Helpers.KeyboardListener.ts">
+      <SubType>Designer</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ts-helpermethods\Monaco.Helpers.ParentAccessor.ts">
       <SubType>Designer</SubType>
     </TypeScriptCompile>

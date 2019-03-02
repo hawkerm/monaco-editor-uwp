@@ -1,5 +1,6 @@
 ﻿///<reference path="../monaco-editor/monaco.d.ts" />
 declare var Parent: ParentAccessor;
+declare var Keyboard: KeyboardListener;
 
 declare var editor: monaco.editor.IStandaloneCodeEditor;
 declare var model: monaco.editor.ITextModel;
@@ -47,5 +48,76 @@ var updateContent = function (content) {
     // Need to ignore updates from us notifying of a change
     if (content != model.getValue()) {
         model.setValue(content);
+    }
+};
+
+
+
+
+
+
+
+var updateDecorations = function (newHighlights) {
+    if (newHighlights) {
+        decorations = editor.deltaDecorations(decorations, newHighlights);
+    } else {
+        decorations = editor.deltaDecorations(decorations, []);
+    }
+};
+
+var updateStyle = function (innerStyle) {
+    var style = document.getElementById("dynamic");
+    style.innerHTML = innerStyle;
+};
+
+var getOptions = function (): monaco.editor.IEditorOptions {
+    let opt = null;
+    try {
+        opt = JSON.parse(Parent.getJsonValue("Options"));
+    } finally {
+
+    }
+
+    if (opt != null && typeof opt === "object") {
+        return opt;
+    }
+
+    return {};
+};
+
+var updateOptions = function (opt: monaco.editor.IEditorOptions) {
+    if (opt != null && typeof opt === "object") {
+        editor.updateOptions(opt);
+    }
+};
+
+var updateLanguage = function (language) {
+    monaco.editor.setModelLanguage(model, language);
+};
+
+var changeTheme = function (theme: string, highcontrast) {
+    var newTheme = 'vs';
+    if (highcontrast == "True" || highcontrast == "true") {
+        newTheme = 'hc-black';
+    } else if (theme == "Dark") {
+        newTheme = 'vs-dark';
+    }
+
+    monaco.editor.setTheme(newTheme);
+};
+
+
+
+var keyDown = function (event) {
+    //Debug.log("Key Down:" + event.keyCode + " " + event.ctrlKey);
+    var result = Keyboard.keyDown(event.keyCode, event.ctrlKey, event.shiftKey, event.altKey, event.metaKey);
+    if (result) {
+        // TODO: Figure out which of these things actually works...
+        event.keyCode = 0;
+        event.cancelBubble = true;
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        return false;
     }
 };
