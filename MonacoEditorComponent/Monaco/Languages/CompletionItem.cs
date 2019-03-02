@@ -39,7 +39,7 @@ namespace Monaco.Languages
         public string Label { get; set; }
 
         [JsonProperty("range", NullValueHandling = NullValueHandling.Ignore)]
-        public IRange Range { get; set; }
+        public Range Range { get; set; }
 
         [JsonProperty("sortText", NullValueHandling = NullValueHandling.Ignore)]
         public string SortText { get; set; }

@@ -61,7 +61,10 @@ namespace MonacoEditorTestApp.Helpers
 
         public IAsyncOperation<CompletionItem> ResolveCompletionItemAsync(CompletionItem item)
         {
-            throw new NotImplementedException();
+            return AsyncInfo.Run(async delegate (CancellationToken cancelationToken)
+            {
+                return item; // throw new NotImplementedException();
+            });
         }
     }
 }
