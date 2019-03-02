@@ -66,6 +66,23 @@ namespace Monaco
                     return null;
                 });
 
+                editor._parentAccessor.RegisterEvent("CompletionItemRequested" + languageId, async (args) =>
+                {
+                    if (args != null && args.Length >= 2)
+                    {
+                        var position = JsonConvert.DeserializeObject<Position>(args[0]);
+                        var requestedItem = JsonConvert.DeserializeObject<CompletionItem>(args[1]);
+                        var completionItem = await provider.ResolveCompletionItemAsync(requestedItem);
+
+                        if (completionItem != null)
+                        {
+                            return JsonConvert.SerializeObject(completionItem);
+                        }
+                    }
+
+                    return null;
+                });
+
                 return editor.InvokeScriptAsync("registerCompletionItemProvider", new object[] { languageId, provider.TriggerCharacters }).AsAsyncAction();
             }
 
