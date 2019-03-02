@@ -187,12 +187,24 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <TypeScriptCompile Include="ts-helpermethods\Monaco.Helpers.ParentAccessor.ts">
+      <SubType>Designer</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ts-helpermethods\otherScriptsToBeOrganized.ts">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ts-helpermethods\registerCompletionItemProvider.ts">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="MonacoEditor.html" />
     <Content Include="monaco-editor\*.*" />
     <Content Include="monaco-editor\min\**\*.*" />
     <Compile Include="Monaco\Helpers\CssGlyphStyle.cs" />
+    <Content Include="ts-helpermethods\*.js" />
     <EmbeddedResource Include="Properties\MonacoEditorComponent.rd.xml" />
   </ItemGroup>
   <ItemGroup>

@@ -22,6 +22,9 @@
     <div id="container" onkeydown="keyDown(event)"></div>
 
     <script src="ms-appx-web:///Monaco/monaco-editor/min/vs/loader.js"></script>
+    <script src="ms-appx-web:///Monaco/ts-helpermethods/registerCompletionItemProvider.js"></script>
+    <script src="ms-appx-web:///Monaco/ts-helpermethods/otherScriptsToBeOrganized.js"></script>
+
     <script>
         var editor;
         var model;
@@ -30,7 +33,7 @@
         var modifingSelection = false; // Supress updates to selection when making edits.
 
         Debug.log("Starting Monaco Load");
-        require.config({ paths: { 'vs': 'ms-appx-web:///Monaco/monaco-editor/min/vs' }});
+        require.config({ paths: { 'vs': 'ms-appx-web:///Monaco/monaco-editor/min/vs' } });
         require(['vs/editor/editor.main'], function () {
             Debug.log("Grabbing Monaco Options");
 
@@ -52,7 +55,7 @@
             editor.onDidChangeCursorSelection((event) => {
                 if (!modifingSelection) {
                     console.log(event.source);
-                    Parent.setValue("SelectedText", model.getValueInRange(event.selection)); 
+                    Parent.setValue("SelectedText", model.getValueInRange(event.selection));
                     Parent.setValue("SelectedRange", JSON.stringify(event.selection), "Selection");
                 }
             })
@@ -73,7 +76,7 @@
             window.addEventListener("resize", () => {
                 editor.layout();
             });
-            
+
             // Disable WebView Scrollbar so Monaco Scrollbar can do heavy lifting
             document.body.style.overflow = 'hidden';
 
@@ -81,64 +84,6 @@
             Debug.log("Loaded Monaco");
             Parent.callAction("Loaded");
         });
-
-        // TODO: Split these helper functions out into separate .js/.ts files.
-        var registerCompletionItemProvider = function (languageId, characters) {
-            return monaco.languages.registerCompletionItemProvider(languageId, {
-                triggerCharacters: characters,
-                provideCompletionItems: function (model, position, token, context) {
-                    return Parent.callEvent("CompletionItemProvider" + languageId, [JSON.stringify(position), JSON.stringify(context)]).then(result => {
-                        if (result) {
-                            return JSON.parse(result);
-                        }
-                    });
-                }
-                //// TODO: support resolve method as well.
-            });
-        }
-
-        var registerHoverProvider = function (languageId) {
-            return monaco.languages.registerHoverProvider(languageId, {
-                provideHover: function (model, position) {
-                    return Parent.callEvent("HoverProvider" + languageId, [JSON.stringify(position)]).then(result => {
-                        if (result) {
-                            return JSON.parse(result);
-                        }
-                    });
-                }
-            });
-        }
-
-        var addAction = function (action) {
-            action.run = function (ed) {
-                Parent.callAction("Action" + action.id)
-            };
-
-            editor.addAction(action);
-        };
-
-        var addCommand = function (keybindingStr, handlerName, context) {
-            return editor.addCommand(parseInt(keybindingStr), () => {
-                Parent.callAction(handlerName);
-            }, context);
-        };
-
-        var createContext = function (context) {
-            if (context) {
-                contexts[context.key] = editor.createContextKey(context.key, context.defaultValue);
-            }
-        };
-
-        var updateContext = function (key, value) {
-            contexts[key].set(value);
-        }
-
-        var updateContent = function (content) {
-            // Need to ignore updates from us notifying of a change
-            if (content != model.getValue()) {
-                model.setValue(content);
-            }
-        };
 
         var updateSelectedContent = function (content) {
             let selection = editor.getSelection();
