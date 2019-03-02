@@ -193,6 +193,10 @@
     <TypeScriptCompile Include="ts-helpermethods\Monaco.Helpers.ParentAccessor.ts">
       <SubType>Designer</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="ts-helpermethods\updateSelectedContent.ts">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ts-helpermethods\otherScriptsToBeOrganized.ts">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

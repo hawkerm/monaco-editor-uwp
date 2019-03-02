@@ -24,6 +24,7 @@
     <script src="ms-appx-web:///Monaco/monaco-editor/min/vs/loader.js"></script>
     <script src="ms-appx-web:///Monaco/ts-helpermethods/registerCompletionItemProvider.js"></script>
     <script src="ms-appx-web:///Monaco/ts-helpermethods/otherScriptsToBeOrganized.js"></script>
+    <script src="ms-appx-web:///Monaco/ts-helpermethods/updateSelectedContent.js"></script>
 
     <script>
         var editor;
@@ -84,41 +85,6 @@
             Debug.log("Loaded Monaco");
             Parent.callAction("Loaded");
         });
-
-        var updateSelectedContent = function (content) {
-            let selection = editor.getSelection();
-
-            // Need to ignore updates from us notifying of a change
-            if (content != model.getValueInRange(selection)) {
-                modifingSelection = true;
-                let range = new monaco.Range(selection.startLineNumber, selection.startColumn, selection.endLineNumber, selection.endColumn);
-                let op = { identifier: { major: 1, minor: 1 }, range, text: content, forceMoveMarkers: true };
-
-                // Make change to selection
-                model.pushEditOperations([], [op]);
-
-                // Update selection to new text.
-                selection.endLineNumber = selection.startLineNumber + content.split('\r').length - 1;  // TODO: Not sure if line end is situational/platform specific... investigate more.
-                if (selection.startLineNumber === selection.endLineNumber) {
-                    selection.endColumn = selection.startColumn + content.length;
-                } else {
-                    selection.endColumn = content.length - content.lastIndexOf('\r');
-                }
-
-                // Update other selection bound for direction.
-                if (selection.getDirection() == monaco.SelectionDirection.LTR) {
-                    selection.positionColumn = selection.endColumn;
-                    selection.positionLineNumber = selection.endLineNumber;
-                } else {
-                    selection.selectionStartColumn = selection.endColumn;
-                    selection.selectionStartLineNumber = selection.endLineNumber;
-                }
-
-                modifingSelection = false;
-                editor.setSelection(selection);
-            }
-        };
-
     </script>
 </body>
 </html>
