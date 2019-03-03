@@ -10,6 +10,10 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+# TypeScript ignores
+*.js
+*.js.map
+
 # Monaco Dependency (Download from https://microsoft.github.io/monaco-editor/)
 MonacoEditorComponent/monaco-editor
 
