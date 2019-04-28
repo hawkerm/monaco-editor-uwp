@@ -140,7 +140,10 @@ namespace Monaco
             _parentAccessor?.Dispose();
             _parentAccessor = null;
             Options.PropertyChanged -= Options_PropertyChanged;
-            _themeListener.ThemeChanged -= _themeListener_ThemeChanged;
+
+            if(_themeListener != null)
+                _themeListener.ThemeChanged -= _themeListener_ThemeChanged;
+
             _themeListener = null;
             UnregisterPropertyChangedCallback(RequestedThemeProperty, _themeToken);
             _keyboardListener = null;
