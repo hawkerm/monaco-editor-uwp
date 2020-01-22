@@ -79,7 +79,7 @@ namespace Monaco
             _parentAccessor.RegisterAction("Loaded", CodeEditorLoaded);
 
             _themeListener = new ThemeListener();
-            _themeListener.ThemeChanged += _themeListener_ThemeChanged;
+            _themeListener.ThemeChanged += ThemeListener_ThemeChanged;
             _themeToken = RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedTheme_PropertyChanged);
 
             _keyboardListener = new KeyboardListener(this);
@@ -129,7 +129,7 @@ namespace Monaco
             });
         }
 
-        private async void _themeListener_ThemeChanged(ThemeListener sender)
+        private async void ThemeListener_ThemeChanged(ThemeListener sender)
         {
             if (RequestedTheme == ElementTheme.Default)
             {

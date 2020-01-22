@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Monaco;
 
 namespace Monaco.Editor
 {
@@ -34,7 +35,7 @@ namespace Monaco.Editor
         string KeybindingContext { get; }
 
         /// <summary>
-        /// <see cref="Monaco.KeyMod"/>, <see cref="Monaco.KeyCode"/>, and <see cref="Monaco.KeyMod.Chord(int, int)"/>
+        /// <see cref="KeyMod"/>, <see cref="KeyCode"/>, and <see cref="KeyMod.Chord(int, int)"/>
         /// </summary>
         [JsonProperty("keybindings")]
         int[] Keybindings { get; }

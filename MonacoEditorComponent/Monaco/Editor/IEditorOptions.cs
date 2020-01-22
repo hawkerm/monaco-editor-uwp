@@ -649,7 +649,7 @@ namespace Monaco.Editor
 
         /// <summary>
         /// A string containing the word separators used when doing word navigation.
-        /// Defaults to `~!@#$%^&*()-=+[{]}\\|;:\'",.<>/?
+        /// Defaults to `~!@#$%^&amp;*()-=+[{]}\|;:'",.&lt;&gt;/?
         /// *
         /// </summary>
         [JsonProperty("wordSeparators", NullValueHandling = NullValueHandling.Ignore)]
@@ -668,7 +668,7 @@ namespace Monaco.Editor
 
         /// <summary>
         /// Configure word wrapping characters. A break will be introduced after these characters.
-        /// Defaults to ' \t})]?|&,;'.
+        /// Defaults to ' \t})]?|&amp;,;'.
         /// </summary>
         [JsonProperty("wordWrapBreakAfterCharacters", NullValueHandling = NullValueHandling.Ignore)]
         string WordWrapBreakAfterCharacters { get; set; }

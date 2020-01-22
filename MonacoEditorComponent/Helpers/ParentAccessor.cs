@@ -56,7 +56,7 @@ namespace Monaco.Helpers
         }
 
         /// <summary>
-        /// Calls an Event registered before wit hthe <see cref="RegisterEvent(string, Func{string[], string})"/>.
+        /// Calls an Event registered before with the <see cref="RegisterEvent(string, Func{string[], Task{string}})"/>.
         /// </summary>
         /// <param name="name">Name of event to call.</param>
         /// <param name="parameters">JSON string Parameters.</param>

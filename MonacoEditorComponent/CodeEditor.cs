@@ -44,8 +44,8 @@ namespace Monaco
         /// </summary>
         public CodeEditor()
         {
-            DefaultStyleKey = typeof(CodeEditor);    
-            
+            DefaultStyleKey = typeof(CodeEditor);
+
             if (Options != null)
             {
                 // Set Pass-Thru Properties
@@ -83,7 +83,7 @@ namespace Monaco
                 _parentAccessor.RegisterAction("Loaded", CodeEditorLoaded);
 
                 _themeListener = new ThemeListener();
-                _themeListener.ThemeChanged += _themeListener_ThemeChanged;
+                _themeListener.ThemeChanged += ThemeListener_ThemeChanged;
                 _themeToken = RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedTheme_PropertyChanged);
 
                 _keyboardListener = new KeyboardListener(this);
@@ -129,8 +129,8 @@ namespace Monaco
             _parentAccessor = null;
             Options.PropertyChanged -= Options_PropertyChanged;
 
-            if(_themeListener != null)
-                _themeListener.ThemeChanged -= _themeListener_ThemeChanged;
+            if (_themeListener != null)
+                _themeListener.ThemeChanged -= ThemeListener_ThemeChanged;
 
             _themeListener = null;
             UnregisterPropertyChangedCallback(RequestedThemeProperty, _themeToken);
@@ -171,7 +171,7 @@ namespace Monaco
             await SendScriptAsync<object>(script, member, file, line);
         }
 
-        internal async Task<T> SendScriptAsync<T>(string script, 
+        internal async Task<T> SendScriptAsync<T>(string script,
             [CallerMemberName] string member = null,
             [CallerFilePath] string file = null,
             [CallerLineNumber] int line = 0)
@@ -189,9 +189,9 @@ namespace Monaco
             }
             else
             {
-                #if DEBUG
+#if DEBUG
                 Debug.WriteLine("WARNING: Tried to call '" + script + "' before initialized.");
-                #endif
+#endif
             }
 
             return default;
@@ -251,9 +251,9 @@ namespace Monaco
             }
             else
             {
-                #if DEBUG
+#if DEBUG
                 Debug.WriteLine("WARNING: Tried to call " + method + " before initialized.");
-                #endif
+#endif
             }
 
             return default;
