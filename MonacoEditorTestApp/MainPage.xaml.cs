@@ -296,7 +296,7 @@ namespace MonacoEditorTestApp
         private void ButtonMinimap_Click(object sender, RoutedEventArgs e)
         {
             // TODO: Need to propagate the INotifyPropertyChanged from the Sub-Option Objects
-            Editor.Options.Minimap = new IEditorMinimapOptions()
+            Editor.Options.Minimap = new EditorMinimapOptions()
             {
                 Enabled = !Editor.Options.Minimap?.Enabled ?? false
             };

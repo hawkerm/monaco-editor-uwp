@@ -1,11 +1,7 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Foundation.Metadata;
 
 namespace Monaco
@@ -17,6 +13,9 @@ namespace Monaco
     {
         [JsonProperty("isTrusted")]
         public bool IsTrusted { get; set; }
+
+        [JsonProperty("uris", NullValueHandling = NullValueHandling.Ignore)]
+        public IDictionary<string, IUri> Uris { get; set; }
 
         [JsonProperty("value")]
         public string Value { get; set; }
@@ -30,7 +29,7 @@ namespace Monaco
         }
     }
 
-    public static class StringExtensions
+    public static class MarkdownStringExtensions
     {
         [DefaultOverload]
         public static IMarkdownString ToMarkdownString(this string svalue)

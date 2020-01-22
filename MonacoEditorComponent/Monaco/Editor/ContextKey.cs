@@ -1,18 +1,12 @@
-﻿using Monaco.Helpers;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Monaco.Editor
 {
-    #pragma warning disable CS1591
     public sealed class ContextKey : IContextKey
     {
         [JsonIgnore]
-        private WeakReference<CodeEditor> _editor;
+        private readonly WeakReference<CodeEditor> _editor;
 
         [JsonProperty("key")]
         public string Key { get; private set; }
@@ -61,5 +55,4 @@ namespace Monaco.Editor
             return JsonConvert.SerializeObject(this);
         }
     }
-    #pragma warning restore CS1591
-}
+    }

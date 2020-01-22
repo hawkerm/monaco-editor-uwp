@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Monaco
+﻿namespace Monaco
 {
     /// <summary>
     /// https://microsoft.github.io/monaco-editor/api/enums/monaco.keycode.html
@@ -12,7 +6,6 @@ namespace Monaco
     /// </summary>
     public static class KeyCode
     {
-        #pragma warning disable CS1591
         /**
          * Placed first to cover the 0 value of the enum.
          */
@@ -181,6 +174,5 @@ namespace Monaco
         public static int KEY_IN_COMPOSITION => 109;
         public static int ABNT_C1 => 110;
         public static int ABNT_C2 => 111;
-        #pragma warning restore CS1591
     }
 }

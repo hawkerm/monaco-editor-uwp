@@ -1,42 +1,93 @@
-﻿using System;
-using Monaco.Helpers;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Monaco.Editor
 {
-    /// <summary>
-    /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditorscrollbaroptions.html
-    /// </summary>
-    #pragma warning disable CS1591
-    public sealed class IEditorScrollbarOptions : IJsonable
+    public sealed class IEditorScrollbarOptions
     {
-        [JsonProperty("arrowSize")]
-        public int? ArrowSize { get; set; } // = 11;
-        [JsonProperty("handleMouseWheel")]
-        public bool? HandleMouseWheel { get; set; } // = true;
-        [JsonProperty("horizontal")]
-        public string Horizontal { get; set; } // = "auto"; visible, hidden
-        [JsonProperty("horizontalHasArrows")]
-        public bool? HorizontalHasArrows { get; set; }
-        [JsonProperty("horizontalScrollbarSize")]
-        public uint? HorizontalScrollbarSize { get; set; } // = 10; (px)
-        [JsonProperty("horizontalSliderSize")]
-        public uint? HorizontalSliderSize { get; set; } // = 10; (px)
-        [JsonProperty("useShadows")]
-        public bool? UseShadows { get; set; }
-        [JsonProperty("vertical")]
-        public string Vertical { get; set; } // = "auto"; visible, hidden
-        [JsonProperty("verticalHasArrows")]
-        public bool? VerticalHasArrows { get; set; }
-        [JsonProperty("verticalScrollbarSize")]
-        public uint? VerticalScrollbarSize { get; set; } // = 10; (px)
-        [JsonProperty("verticalSliderSize")]
-        public uint? VerticalSliderSize { get; set; } // = 10; (px)
+        /// <summary>
+        /// Always consume mouse wheel events (always call preventDefault() and stopPropagation() on
+        /// the browser events).
+        /// Defaults to true.
+        /// </summary>
+        [JsonProperty("alwaysConsumeMouseWheel", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? AlwaysConsumeMouseWheel { get; set; }
 
-        public string ToJson()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
+        /// <summary>
+        /// The size of arrows (if displayed).
+        /// Defaults to 11.
+        /// </summary>
+        [JsonProperty("arrowSize", NullValueHandling = NullValueHandling.Ignore)]
+        public int? ArrowSize { get; set; }
+
+        /// <summary>
+        /// Listen to mouse wheel events and react to them by scrolling.
+        /// Defaults to true.
+        /// </summary>
+        [JsonProperty("handleMouseWheel", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? HandleMouseWheel { get; set; }
+
+        /// <summary>
+        /// Render horizontal scrollbar.
+        /// Defaults to 'auto'.
+        /// </summary>
+        [JsonProperty("horizontal", NullValueHandling = NullValueHandling.Ignore)]
+        public Horizontal? Horizontal { get; set; }
+
+        /// <summary>
+        /// Render arrows at the left and right of the horizontal scrollbar.
+        /// Defaults to false.
+        /// </summary>
+        [JsonProperty("horizontalHasArrows", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? HorizontalHasArrows { get; set; }
+
+        /// <summary>
+        /// Height in pixels for the horizontal scrollbar.
+        /// Defaults to 10 (px).
+        /// </summary>
+        [JsonProperty("horizontalScrollbarSize", NullValueHandling = NullValueHandling.Ignore)]
+        public int? HorizontalScrollbarSize { get; set; }
+
+        /// <summary>
+        /// Height in pixels for the horizontal slider.
+        /// Defaults to `horizontalScrollbarSize`.
+        /// </summary>
+        [JsonProperty("horizontalSliderSize", NullValueHandling = NullValueHandling.Ignore)]
+        public int? HorizontalSliderSize { get; set; }
+
+        /// <summary>
+        /// Cast horizontal and vertical shadows when the content is scrolled.
+        /// Defaults to true.
+        /// </summary>
+        [JsonProperty("useShadows", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? UseShadows { get; set; }
+
+        /// <summary>
+        /// Render vertical scrollbar.
+        /// Defaults to 'auto'.
+        /// </summary>
+        [JsonProperty("vertical", NullValueHandling = NullValueHandling.Ignore)]
+        public Horizontal? Vertical { get; set; }
+
+        /// <summary>
+        /// Render arrows at the top and bottom of the vertical scrollbar.
+        /// Defaults to false.
+        /// </summary>
+        [JsonProperty("verticalHasArrows", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? VerticalHasArrows { get; set; }
+
+        /// <summary>
+        /// Width in pixels for the vertical scrollbar.
+        /// Defaults to 10 (px).
+        /// </summary>
+        [JsonProperty("verticalScrollbarSize", NullValueHandling = NullValueHandling.Ignore)]
+        public int? VerticalScrollbarSize { get; set; }
+
+        /// <summary>
+        /// Width in pixels for the vertical slider.
+        /// Defaults to `verticalScrollbarSize`.
+        /// </summary>
+        [JsonProperty("verticalSliderSize", NullValueHandling = NullValueHandling.Ignore)]
+        public int? VerticalSliderSize { get; set; }
     }
-    #pragma warning restore CS1591
+
 }

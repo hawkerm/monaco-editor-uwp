@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using Windows.Foundation;
 
@@ -11,14 +10,13 @@ namespace Monaco.Editor
     /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.imodel.html
     /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.itextmodel.html
     /// </summary>
-#pragma warning disable CS1591
     public sealed class ModelHelper : IModel
     {
-        private WeakReference<CodeEditor> _editor;
+        private readonly WeakReference<CodeEditor> _editor;
 
         public ModelHelper(CodeEditor editor)
         {
-            this._editor = new WeakReference<CodeEditor>(editor);
+            _editor = new WeakReference<CodeEditor>(editor);
         }
 
         public string Id => throw new NotImplementedException();
@@ -346,5 +344,4 @@ namespace Monaco.Editor
             return null;
         }
     }
-    #pragma warning restore CS1591
-}
+    }

@@ -4,7 +4,6 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Windows.Data.Json;
 using Windows.UI.Xaml.Controls;
@@ -87,10 +86,10 @@ namespace Monaco.Extensions
                 return JsonConvert.DeserializeObject<T>(returnstring);
             }
 
-            return default(T);
+            return default;
         }
 
-        private static JsonSerializerSettings _settings = new JsonSerializerSettings()
+        private static readonly JsonSerializerSettings _settings = new JsonSerializerSettings()
         {
             NullValueHandling = NullValueHandling.Ignore,
             ContractResolver = new CamelCasePropertyNamesContractResolver()
@@ -186,10 +185,10 @@ namespace Monaco.Extensions
         public JavaScriptExecutionException(string member, string filename, int line, string script, Exception inner)
             : base("Error Executing JavaScript Code for " + member + "\nLine " + line + " of " + filename + "\n" + script + "\n", inner)
         {
-            this.Member = member;
-            this.FileName = filename;
-            this.LineNumber = line;
-            this.Script = script;
+            Member = member;
+            FileName = filename;
+            LineNumber = line;
+            Script = script;
         }
     }
 
@@ -200,7 +199,7 @@ namespace Monaco.Extensions
         public JavaScriptInnerException(string message, string stack)
             : base(message)
         {
-            this.JavaScriptStackTrace = stack;
+            JavaScriptStackTrace = stack;
         }
     }
 }

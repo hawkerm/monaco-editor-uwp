@@ -1,9 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Monaco
 {
@@ -72,18 +68,12 @@ namespace Monaco
 
         public override string ToString()
         {
-            return String.Format("[{0}, {1}-> {2}, {3}]", this.SelectionStartLineNumber, this.SelectionStartColumn, this.PositionLineNumber, this.PositionColumn);
+            return string.Format("[{0}, {1}-> {2}, {3}]", SelectionStartLineNumber, SelectionStartColumn, PositionLineNumber, PositionColumn);
         }
 
         public string ToJson()
         {
             throw new NotImplementedException();
         }
-    }
-
-    public enum SelectionDirection
-    {
-        LTR,
-        RTL
     }
 }

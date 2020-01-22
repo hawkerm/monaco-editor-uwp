@@ -28,8 +28,8 @@ namespace MonacoEditorTestApp.Helpers
                     {
                         Items = new List<CompletionItem>()
                         {
-                            new CompletionItem("booyah", CompletionItemKind.Folder),
-                            new CompletionItem("booboo", CompletionItemKind.File),
+                            new CompletionItem("booyah", "booyah", CompletionItemKind.Folder),
+                            new CompletionItem("booboo", "booboo", CompletionItemKind.File),
                         }
                     };
                 }
@@ -39,8 +39,8 @@ namespace MonacoEditorTestApp.Helpers
                     {
                         Items = new List<CompletionItem>()
                         {
-                            new CompletionItem("class", CompletionItemKind.Keyword),
-                            new CompletionItem("cookie", CompletionItemKind.Reference),
+                            new CompletionItem("class", "class", CompletionItemKind.Keyword),
+                            new CompletionItem("cookie", "cookie", CompletionItemKind.Reference),
                         }
                     };
                 }
@@ -49,11 +49,7 @@ namespace MonacoEditorTestApp.Helpers
                 {
                     Items = new List<CompletionItem>()
                     {
-                        new CompletionItem("foreach", CompletionItemKind.Snippet)
-                        {
-                            // https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax
-                            InsertText = "foreach (var ${2:element} in ${1:array}) {\n\t$0\n}".ToSnippetString()
-                        }
+                        new CompletionItem("foreach", "foreach (var ${2:element} in ${1:array}) {\n\t$0\n}", CompletionItemKind.Snippet)
                     }
                 };
             });
@@ -61,9 +57,9 @@ namespace MonacoEditorTestApp.Helpers
 
         public IAsyncOperation<CompletionItem> ResolveCompletionItemAsync(CompletionItem item)
         {
-            return AsyncInfo.Run(async delegate (CancellationToken cancelationToken)
+            return AsyncInfo.Run(delegate (CancellationToken cancelationToken)
             {
-                return item; // throw new NotImplementedException();
+                return Task.FromResult(item); // throw new NotImplementedException();
             });
         }
     }

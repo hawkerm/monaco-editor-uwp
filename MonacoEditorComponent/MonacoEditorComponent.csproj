@@ -11,7 +11,7 @@
     <AssemblyName>MonacoEditorComponent</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.17763.0</TargetPlatformVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.18362.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
@@ -114,6 +114,7 @@
     <Compile Include="CodeEditor.cs" />
     <Compile Include="CodeEditor.Methods.cs" />
     <Compile Include="CodeEditor.Properties.cs" />
+    <Compile Include="Editor\ISingleEditOperation.cs" />
     <Compile Include="Extensions\WebViewExtensions.cs" />
     <Compile Include="Helpers\DebugLogger.cs" />
     <Compile Include="Helpers\DispatcherTaskExtensions.cs" />
@@ -121,24 +122,93 @@
     <Compile Include="Helpers\KeyboardListener.cs" />
     <Compile Include="Helpers\ParentAccessor.cs" />
     <Compile Include="Helpers\ThemeListener.cs" />
+    <Compile Include="Monaco\Editor\AcceptSuggestionOnEnter.cs" />
+    <Compile Include="Monaco\Editor\AcceptSuggestionOnEnterConverter.cs" />
+    <Compile Include="Monaco\Editor\AccessibilitySupport.cs" />
+    <Compile Include="Monaco\Editor\AccessibilitySupportConverter.cs" />
+    <Compile Include="Monaco\Editor\AutoClosingQuotes.cs" />
+    <Compile Include="Monaco\Editor\AutoClosingBrackets.cs" />
+    <Compile Include="Monaco\Editor\AutoClosingQuotesConverter.cs" />
+    <Compile Include="Monaco\Editor\AutoClosingBracketsConverter.cs" />
+    <Compile Include="Monaco\Editor\AutoClosingOvertype.cs" />
+    <Compile Include="Monaco\Editor\AutoClosingOvertypeConverter.cs" />
+    <Compile Include="Monaco\Editor\AutoFindInSelection.cs" />
+    <Compile Include="Monaco\Editor\AutoFindInSelectionConverter.cs" />
+    <Compile Include="Monaco\Editor\AutoIndent.cs" />
+    <Compile Include="Monaco\Editor\AutoIndentConverter.cs" />
+    <Compile Include="Monaco\Editor\AutoSurround.cs" />
+    <Compile Include="Monaco\Editor\AutoSurroundConverter.cs" />
     <Compile Include="Monaco\Editor\ContextKey.cs" />
+    <Compile Include="Monaco\Editor\CursorBlinking.cs" />
+    <Compile Include="Monaco\Editor\CursorBlinkingConverter.cs" />
+    <Compile Include="Monaco\Editor\CursorStyle.cs" />
+    <Compile Include="Monaco\Editor\CursorStyleConverter.cs" />
+    <Compile Include="Monaco\Editor\CursorSurroundingLinesStyle.cs" />
+    <Compile Include="Monaco\Editor\CursorSurroundingLinesStyleConverter.cs" />
+    <Compile Include="Monaco\Editor\Dimension.cs" />
+    <Compile Include="Monaco\Editor\EditorFindOptions.cs" />
+    <Compile Include="Monaco\Editor\EditorHoverOptions.cs" />
+    <Compile Include="Monaco\Editor\EditorLightbulbOptions.cs" />
+    <Compile Include="Monaco\Editor\EditorMinimapOptions.cs" />
+    <Compile Include="Monaco\Editor\FoldingStrategy.cs" />
+    <Compile Include="Monaco\Editor\FoldingStrategyConverter.cs" />
+    <Compile Include="Monaco\Editor\GoToLocationOptions.cs" />
+    <Compile Include="Monaco\Editor\Horizontal.cs" />
+    <Compile Include="Monaco\Editor\HorizontalConverter.cs" />
     <Compile Include="Monaco\Editor\IContextKey.cs" />
+    <Compile Include="Monaco\Editor\IDimension.cs" />
     <Compile Include="Monaco\Editor\IEditorConstructionOptions.cs" />
+    <Compile Include="Monaco\Editor\IStandaloneEditorConstructionOptions.cs" />
+    <Compile Include="Monaco\Editor\StandaloneEditorConstructionOptions.cs" />
     <Compile Include="Monaco\Editor\IActionDescriptor.cs" />
     <Compile Include="Monaco\Editor\IEditorFindOptions.cs" />
-    <Compile Include="Monaco\Editor\IEditorMinimapOptions.cs" />
     <Compile Include="Monaco\Editor\IEditorOptions.cs" />
     <Compile Include="Monaco\Editor\IEditorScrollbarOptions.cs" />
+    <Compile Include="Monaco\Editor\IGlobalEditorOptions.cs" />
     <Compile Include="Monaco\Editor\IMarker.cs" />
     <Compile Include="Monaco\Editor\IMarkerData.cs" />
     <Compile Include="Monaco\Editor\IModel.cs" />
     <Compile Include="Monaco\Editor\IModelDecorationOptions.cs" />
     <Compile Include="Monaco\Editor\IModelDeltaDecoration.cs" />
+    <Compile Include="Monaco\Editor\InsertMode.cs" />
+    <Compile Include="Monaco\Editor\InsertModeConverter.cs" />
+    <Compile Include="Monaco\Editor\InternalParameterHintOptions.cs" />
+    <Compile Include="Monaco\Editor\InternalSuggestOptions.cs" />
+    <Compile Include="Monaco\Editor\LineNumbersType.cs" />
+    <Compile Include="Monaco\Editor\LineNumbersTypeConverter.cs" />
     <Compile Include="Monaco\Editor\Marker.cs" />
     <Compile Include="Monaco\Editor\MarkerData.cs" />
+    <Compile Include="Monaco\Editor\MatchBrackets.cs" />
+    <Compile Include="Monaco\Editor\MatchBracketsConverter.cs" />
+    <Compile Include="Monaco\Editor\MouseStyle.cs" />
+    <Compile Include="Monaco\Editor\MouseStyleConverter.cs" />
+    <Compile Include="Monaco\Editor\MultiCursorModifier.cs" />
+    <Compile Include="Monaco\Editor\MultiCursorModifierConverter.cs" />
+    <Compile Include="Monaco\Editor\MultiCursorPaste.cs" />
+    <Compile Include="Monaco\Editor\MultiCursorPasteConverter.cs" />
+    <Compile Include="Monaco\Editor\Multiple.cs" />
+    <Compile Include="Monaco\Editor\MultipleConverter.cs" />
+    <Compile Include="Monaco\Editor\RenderLineHighlight.cs" />
+    <Compile Include="Monaco\Editor\RenderLineHighlightConverter.cs" />
+    <Compile Include="Monaco\Editor\RenderWhitespace.cs" />
+    <Compile Include="Monaco\Editor\RenderWhitespaceConverter.cs" />
+    <Compile Include="Monaco\Editor\Show.cs" />
+    <Compile Include="Monaco\Editor\ShowConverter.cs" />
+    <Compile Include="Monaco\Editor\Side.cs" />
+    <Compile Include="Monaco\Editor\SideConverter.cs" />
+    <Compile Include="Monaco\Editor\SnippetSuggestions.cs" />
+    <Compile Include="Monaco\Editor\SnippetSuggestionsConverter.cs" />
+    <Compile Include="Monaco\Editor\SuggestSelection.cs" />
+    <Compile Include="Monaco\Editor\SuggestSelectionConverter.cs" />
+    <Compile Include="Monaco\Editor\TabCompletion.cs" />
+    <Compile Include="Monaco\Editor\TabCompletionConverter.cs" />
     <Compile Include="Monaco\Editor\TrackedRangeStickiness.cs" />
     <Compile Include="Monaco\Editor\WordAtPosition.cs" />
     <Compile Include="Monaco\Editor\IWordAtPosition.cs" />
+    <Compile Include="Monaco\Editor\WordWrap.cs" />
+    <Compile Include="Monaco\Editor\WordWrapConverter.cs" />
+    <Compile Include="Monaco\Editor\WrappingIndent.cs" />
+    <Compile Include="Monaco\Editor\WrappingIndentConverter.cs" />
     <Compile Include="Monaco\Helpers\CssInlineStyle.cs" />
     <Compile Include="Monaco\Helpers\CssLineStyle.cs" />
     <Compile Include="Monaco\Helpers\CssStyleBroker.cs" />
@@ -158,25 +228,25 @@
     <Compile Include="Monaco\Languages\HoverProvider.cs" />
     <Compile Include="Monaco\Languages\ILanguageExtensionPoint.cs" />
     <Compile Include="Monaco\LanguagesHelper.cs" />
-    <Compile Include="Monaco\Languages\SnippetString.cs" />
     <Compile Include="Monaco\Languages\SuggestTriggerKind.cs" />
     <Compile Include="Monaco\ModelHelper.cs" />
     <Compile Include="Monaco\Position.cs" />
     <Compile Include="Monaco\Range.cs" />
     <Compile Include="Monaco\Selection.cs" />
+    <Compile Include="Monaco\SelectionDirection.cs" />
     <Compile Include="Monaco\Severity.cs" />
     <Compile Include="Monaco\IUri.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.1.9</Version>
+      <Version>6.2.9</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.1</Version>
+      <Version>12.0.3</Version>
     </PackageReference>
     <PackageReference Include="Nito.AsyncEx">
-      <Version>5.0.0-pre-05</Version>
+      <Version>5.0.0</Version>
     </PackageReference>
     <PackageReference Include="ObservableVector">
       <Version>2.1.0</Version>

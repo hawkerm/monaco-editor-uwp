@@ -1,18 +1,12 @@
 ﻿using Monaco.Helpers;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Data.Json;
 
 namespace Monaco.Editor
 {
     /// <summary>
     /// Object Parser for https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.imodeldecorationoptions.html
     /// </summary>
-    #pragma warning disable CS1591
     public sealed class IModelDecorationOptions
     {
         [JsonProperty("isWholeLine")]
@@ -47,9 +41,7 @@ namespace Monaco.Editor
         [JsonProperty("zIndex")]
         public int ZIndex { get; set; }
     }
-    #pragma warning restore CS1591
-
-    internal class CssStyleConverter: JsonConverter
+    internal class CssStyleConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {

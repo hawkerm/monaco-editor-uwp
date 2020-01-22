@@ -1,6 +1,4 @@
-﻿using System;
-using Monaco.Helpers;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Monaco.Editor
 {
@@ -8,7 +6,6 @@ namespace Monaco.Editor
     /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.iactiondescriptor.html
     /// https://microsoft.github.io/monaco-editor/playground.html#interacting-with-the-editor-adding-an-action-to-an-editor-instance
     /// </summary>
-    #pragma warning disable CS1591
     public interface IActionDescriptor
     {
         /**
@@ -53,5 +50,4 @@ namespace Monaco.Editor
 
         void Run(CodeEditor editor);
     }
-    #pragma warning restore CS1591
-}
+    }

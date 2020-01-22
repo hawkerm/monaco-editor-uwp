@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Monaco.Helpers
 {
@@ -24,7 +23,7 @@ namespace Monaco.Helpers
             StringBuilder output = new StringBuilder("[", 100);
             foreach (string msg in strings)
             {
-                output.Append(String.Format("\"{0}\",", msg));
+                output.Append(string.Format("\"{0}\",", msg));
             }
             if (strings.Length > 0)
             {
@@ -45,7 +44,7 @@ namespace Monaco.Helpers
             StringBuilder output = new StringBuilder("[", 100);
             foreach (var obj in objects)
             {
-                output.Append(String.Format("{0},", obj.ToJson()));
+                output.Append(string.Format("{0},", obj.ToJson()));
             }
             if (objects.Count() > 0)
             {
@@ -64,7 +63,7 @@ namespace Monaco.Helpers
         /// <returns></returns>
         public static string Parse(string json)
         {
-            return String.Format("JSON.parse(\"{0}\")", json.Replace("\"", "\\\""));
+            return string.Format("JSON.parse(\"{0}\")", json.Replace("\"", "\\\""));
         }
     }
 }

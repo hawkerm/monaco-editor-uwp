@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Foundation.Metadata;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
 
 namespace Monaco.Helpers
 {
@@ -28,7 +21,7 @@ namespace Monaco.Helpers
     [AllowForWeb]
     public sealed class KeyboardListener
     {
-        private WeakReference<CodeEditor> parent;
+        private readonly WeakReference<CodeEditor> parent;
 
         public KeyboardListener(CodeEditor parent) // TODO: Make Interface for event usage
         {

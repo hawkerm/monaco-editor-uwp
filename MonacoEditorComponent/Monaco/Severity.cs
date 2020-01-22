@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Monaco
+﻿namespace Monaco
 {
     /// <summary>
     /// https://microsoft.github.io/monaco-editor/api/enums/monaco.severity.html

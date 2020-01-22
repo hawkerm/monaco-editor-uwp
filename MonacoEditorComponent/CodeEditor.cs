@@ -3,13 +3,11 @@ using Monaco.Editor;
 using Monaco.Extensions;
 using Monaco.Helpers;
 using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -33,23 +31,13 @@ namespace Monaco
         /// <summary>
         /// Template Property used during loading to prevent blank control visibility when it's still loading WebView.
         /// </summary>
-        public bool IsLoaded
+        public new bool IsLoaded
         {
             get { return (bool)GetValue(IsLoadedProperty); }
             private set { SetValue(IsLoadedProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for HorizontalLayout.  This enables animation, styling, binding, etc...
-        private static readonly DependencyProperty IsLoadedPropertyField =
-            DependencyProperty.Register("IsLoaded", typeof(string), typeof(CodeEditor), new PropertyMetadata(false));
-
-        public static DependencyProperty IsLoadedProperty
-        {
-            get
-            {
-                return IsLoadedPropertyField;
-            }
-        }
+        public static DependencyProperty IsLoadedProperty { get; } = DependencyProperty.Register("IsLoaded", typeof(string), typeof(CodeEditor), new PropertyMetadata(false));
 
         /// <summary>
         /// Construct a new IStandAloneCodeEditor.
@@ -189,7 +177,7 @@ namespace Monaco
             {
                 try
                 {
-                    return await this._view.RunScriptAsync<T>(script, member, file, line);
+                    return await _view.RunScriptAsync<T>(script, member, file, line);
                 }
                 catch (Exception e)
                 {
@@ -203,7 +191,7 @@ namespace Monaco
                 #endif
             }
 
-            return default(T);
+            return default;
         }
 
         internal async Task InvokeScriptAsync(
@@ -214,7 +202,7 @@ namespace Monaco
             [CallerFilePath] string file = null,
             [CallerLineNumber] int line = 0)
         {
-            await this.InvokeScriptAsync<object>(method, new object[] { arg }, serialize, member, file, line);
+            await InvokeScriptAsync<object>(method, new object[] { arg }, serialize, member, file, line);
         }
 
         internal async Task InvokeScriptAsync(
@@ -225,7 +213,7 @@ namespace Monaco
             [CallerFilePath] string file = null,
             [CallerLineNumber] int line = 0)
         {
-            await this.InvokeScriptAsync<object>(method, args, serialize, member, file, line);
+            await InvokeScriptAsync<object>(method, args, serialize, member, file, line);
         }
 
         internal async Task<T> InvokeScriptAsync<T>(
@@ -236,7 +224,7 @@ namespace Monaco
             [CallerFilePath] string file = null,
             [CallerLineNumber] int line = 0)
         {
-            return await this.InvokeScriptAsync<T>(method, new object[] { arg }, serialize, member, file, line);
+            return await InvokeScriptAsync<T>(method, new object[] { arg }, serialize, member, file, line);
         }
 
         internal async Task<T> InvokeScriptAsync<T>(
@@ -251,7 +239,7 @@ namespace Monaco
             {
                 try
                 {
-                    return await this._view.InvokeScriptAsync<T>(method, args, serialize, member, file, line);
+                    return await _view.InvokeScriptAsync<T>(method, args, serialize, member, file, line);
                 }
                 catch (Exception e)
                 {
@@ -265,15 +253,12 @@ namespace Monaco
                 #endif
             }
 
-            return default(T);
+            return default;
         }
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

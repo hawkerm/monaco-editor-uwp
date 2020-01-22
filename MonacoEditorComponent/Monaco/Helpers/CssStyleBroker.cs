@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Monaco.Helpers
 {
@@ -19,10 +17,8 @@ namespace Monaco.Helpers
     public sealed class CssStyleBroker
     {
         private static uint Id = 0;
-        private Dictionary<string, ICssStyle> _registered = new Dictionary<string, ICssStyle>();
+        private readonly Dictionary<string, ICssStyle> _registered = new Dictionary<string, ICssStyle>();
 
-        // http://csharpindepth.com/Articles/General/Singleton.aspx
-        private static readonly CssStyleBroker _instance = new CssStyleBroker();
         // Explicit static constructor to tell C# compiler
         // not to mark type as beforefieldinit
         static CssStyleBroker()
@@ -32,13 +28,8 @@ namespace Monaco.Helpers
         {
         }
         public static CssStyleBroker Instance // TODO: Probably need to tie this to a specific Editor
-        {
-            get
-            {
-                return _instance;
-            }
-        }
-        
+        { get; } = new CssStyleBroker();
+
         /// <summary>
         /// Returns the name for a style to use after registered.
         /// </summary>
@@ -48,7 +39,7 @@ namespace Monaco.Helpers
         {
             CssStyleBroker.Id += 1;
             var name = "generated-style-" + Id;
-            this._registered.Add(name, style);
+            _registered.Add(name, style);
             return name;
         }
 
@@ -68,7 +59,7 @@ namespace Monaco.Helpers
 
         public static string WrapCssClassName(ICssStyle style, string inner)
         {
-            return String.Format(".{0} {{ {1} }}", style.Name, inner);
+            return string.Format(".{0} {{ {1} }}", style.Name, inner);
         }
     }
 }

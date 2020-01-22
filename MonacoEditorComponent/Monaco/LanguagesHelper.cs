@@ -2,10 +2,6 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Data.Json;
 using Windows.Foundation;
 
 namespace Monaco
@@ -16,7 +12,7 @@ namespace Monaco
     /// </summary>
     public sealed class LanguagesHelper
     {
-        private WeakReference<CodeEditor> _editor;
+        private readonly WeakReference<CodeEditor> _editor;
 
         public LanguagesHelper(CodeEditor editor)
         {

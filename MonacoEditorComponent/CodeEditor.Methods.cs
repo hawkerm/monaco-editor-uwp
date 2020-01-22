@@ -3,9 +3,7 @@ using Monaco.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Data.Json;
 using Windows.Foundation;
 
 namespace Monaco
@@ -20,8 +18,7 @@ namespace Monaco
     /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditor.html
     /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.icommoncodeeditor.html
     /// </summary>
-    #pragma warning disable CS1591
-    public partial class CodeEditor
+        public partial class CodeEditor
     {
         #region Reveal Methods
         public IAsyncAction RevealLineAsync(uint lineNumber)
@@ -174,5 +171,4 @@ namespace Monaco
             }).AsAsyncAction();
         }
     }
-    #pragma warning restore CS1591
-}
+    }

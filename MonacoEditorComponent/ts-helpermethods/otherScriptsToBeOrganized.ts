@@ -112,8 +112,6 @@ var keyDown = function (event) {
     //Debug.log("Key Down:" + event.keyCode + " " + event.ctrlKey);
     var result = Keyboard.keyDown(event.keyCode, event.ctrlKey, event.shiftKey, event.altKey, event.metaKey);
     if (result) {
-        // TODO: Figure out which of these things actually works...
-        event.keyCode = 0;
         event.cancelBubble = true;
         event.preventDefault();
         event.stopPropagation();
