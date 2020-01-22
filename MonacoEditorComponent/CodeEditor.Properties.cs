@@ -21,7 +21,7 @@ namespace Monaco
             set { SetValue(TextProperty, value); }
         }
 
-        public static DependencyProperty TextProperty { get; } = DependencyProperty.Register("Text", typeof(string), typeof(CodeEditor), new PropertyMetadata(string.Empty, (d, e) =>
+        public static DependencyProperty TextProperty { get; } = DependencyProperty.Register(nameof(Text), typeof(string), typeof(CodeEditor), new PropertyMetadata(string.Empty, (d, e) =>
         {
             if (!(d as CodeEditor).IsSettingValue)
             {
@@ -65,7 +65,7 @@ namespace Monaco
             set { SetValue(CodeLanguageProperty, value); }
         }
 
-        internal static DependencyProperty CodeLanguageProperty { get; } = DependencyProperty.Register("CodeLanguage", typeof(string), typeof(CodeEditor), new PropertyMetadata("xml", (d, e) =>
+        internal static DependencyProperty CodeLanguageProperty { get; } = DependencyProperty.Register(nameof(CodeLanguage), typeof(string), typeof(CodeEditor), new PropertyMetadata("xml", (d, e) =>
         {
             var editor = d as CodeEditor;
 
@@ -90,7 +90,7 @@ namespace Monaco
             set { SetValue(OptionsProperty, value); }
         }
 
-        public static DependencyProperty OptionsProperty { get; } = DependencyProperty.Register("Options", typeof(StandaloneEditorConstructionOptions), typeof(CodeEditor), new PropertyMetadata(new StandaloneEditorConstructionOptions(), (d, e) =>
+        public static DependencyProperty OptionsProperty { get; } = DependencyProperty.Register(nameof(Options), typeof(StandaloneEditorConstructionOptions), typeof(CodeEditor), new PropertyMetadata(new StandaloneEditorConstructionOptions(), (d, e) =>
         {
             if (e.NewValue is StandaloneEditorConstructionOptions value)
             {
@@ -114,7 +114,7 @@ namespace Monaco
             set { SetValue(HasGlyphMarginProperty, value); }
         }
 
-        public static DependencyProperty HasGlyphMarginProperty { get; } = DependencyProperty.Register("HasGlyphMargin", typeof(bool), typeof(CodeEditor), new PropertyMetadata(false, (d, e) =>
+        public static DependencyProperty HasGlyphMarginProperty { get; } = DependencyProperty.Register(nameof(HasGlyphMargin), typeof(bool), typeof(CodeEditor), new PropertyMetadata(false, (d, e) =>
         {
             (d as CodeEditor).Options.GlyphMargin = e.NewValue as bool?;
         }));
@@ -142,7 +142,7 @@ namespace Monaco
             }
         }
 
-        public static DependencyProperty DecorationsProperty { get; } = DependencyProperty.Register("Decorations", typeof(IModelDeltaDecoration), typeof(CodeEditor), new PropertyMetadata(null, async (d, e) =>
+        public static DependencyProperty DecorationsProperty { get; } = DependencyProperty.Register(nameof(Decorations), typeof(IModelDeltaDecoration), typeof(CodeEditor), new PropertyMetadata(null, async (d, e) =>
         {
             if (d is CodeEditor editor)
             {
@@ -195,7 +195,7 @@ namespace Monaco
             }
         }
 
-        public static DependencyProperty MarkersProperty { get; } = DependencyProperty.Register("Markers", typeof(IMarkerData), typeof(CodeEditor), new PropertyMetadata(null, async (d, e) =>
+        public static DependencyProperty MarkersProperty { get; } = DependencyProperty.Register(nameof(Markers), typeof(IMarkerData), typeof(CodeEditor), new PropertyMetadata(null, async (d, e) =>
         {
             if (d is CodeEditor editor)
             {

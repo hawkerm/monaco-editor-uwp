@@ -28,6 +28,7 @@ namespace MonacoEditorTestApp
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private readonly StandaloneEditorConstructionOptions options = new StandaloneEditorConstructionOptions();
         public string CodeContent
         {
             get { return (string)GetValue(CodeContentProperty); }
@@ -290,15 +291,15 @@ namespace MonacoEditorTestApp
 
         private void ButtonFolding_Click(object sender, RoutedEventArgs e)
         {
-            Editor.Options.Folding = !Editor.Options.Folding ?? true;
+            options.Folding = !options.Folding ?? true;
         }
 
         private void ButtonMinimap_Click(object sender, RoutedEventArgs e)
         {
             // TODO: Need to propagate the INotifyPropertyChanged from the Sub-Option Objects
-            Editor.Options.Minimap = new EditorMinimapOptions()
+            options.Minimap = new EditorMinimapOptions()
             {
-                Enabled = !Editor.Options.Minimap?.Enabled ?? false
+                Enabled = !options.Minimap?.Enabled ?? false
             };
         }
 
@@ -473,7 +474,7 @@ namespace MonacoEditorTestApp
 
         private void ButtonSetReadonly_Click(object sender, RoutedEventArgs e)
         {
-            Editor.Options.ReadOnly = !(Editor.Options.ReadOnly ?? false);
+            options.ReadOnly = !(options.ReadOnly ?? false);
         }
 
         private async void ButtonRunScript_Click(object sender, RoutedEventArgs e)

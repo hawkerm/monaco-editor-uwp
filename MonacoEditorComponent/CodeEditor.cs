@@ -37,7 +37,7 @@ namespace Monaco
             private set { SetValue(IsLoadedProperty, value); }
         }
 
-        public static DependencyProperty IsLoadedProperty { get; } = DependencyProperty.Register("IsLoaded", typeof(string), typeof(CodeEditor), new PropertyMetadata(false));
+        public static DependencyProperty IsLoadedProperty { get; } = DependencyProperty.Register(nameof(IsLoaded), typeof(string), typeof(CodeEditor), new PropertyMetadata(false));
 
         /// <summary>
         /// Construct a new IStandAloneCodeEditor.

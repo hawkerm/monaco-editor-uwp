@@ -28,7 +28,9 @@
                            HasGlyphMargin="True"
                            CodeLanguage="csharp"
                            KeyDown="Editor_KeyDown"
-                           Text="{Binding CodeContent, Mode=TwoWay}">
+                           Text="{x:Bind CodeContent, Mode=TwoWay}"
+                           Options="{x:Bind options, Mode=OneWay}"
+                           ReadOnly="True">
         </monaco:CodeEditor>
         <TextBlock Text="{x:Bind CodeContent, Mode=OneWay}" Grid.Row="1" Grid.Column="1"/>
         <TextBox x:Name="TextEditor"
