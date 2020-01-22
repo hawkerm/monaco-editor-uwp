@@ -475,5 +475,11 @@ namespace MonacoEditorTestApp
         {
             Editor.Options.ReadOnly = !(Editor.Options.ReadOnly ?? false);
         }
+
+        private async void ButtonRunScript_Click(object sender, RoutedEventArgs e)
+        {
+            var result = await Editor.InvokeScriptAsync(@"function test(a, b) { return a + b; }; test(3, 4).toString()");
+            Debug.WriteLine(result);
+        }
     }
 }

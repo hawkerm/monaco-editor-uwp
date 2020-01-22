@@ -18,7 +18,7 @@ namespace Monaco
     /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditor.html
     /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.icommoncodeeditor.html
     /// </summary>
-        public partial class CodeEditor
+    public partial class CodeEditor
     {
         #region Reveal Methods
         public IAsyncAction RevealLineAsync(uint lineNumber)
@@ -100,8 +100,18 @@ namespace Monaco
         public IAsyncAction AddActionAsync(IActionDescriptor action)
         {
             var wref = new WeakReference<CodeEditor>(this);
-            _parentAccessor.RegisterAction("Action" + action.Id, new Action(() => { if (wref.TryGetTarget(out CodeEditor editor)) { action?.Run(editor); }}));
+            _parentAccessor.RegisterAction("Action" + action.Id, new Action(() => { if (wref.TryGetTarget(out CodeEditor editor)) { action?.Run(editor); } }));
             return InvokeScriptAsync("addAction", action).AsAsyncAction();
+        }
+
+        /// <summary>
+        /// Invoke scripts, return value must be strings
+        /// </summary>
+        /// <param name="script">Script to invoke</param>
+        /// <returns>An async operation result to string</returns>
+        public IAsyncOperation<string> InvokeScriptAsync(string script)
+        {
+            return _view.InvokeScriptAsync("eval", new[] { script });
         }
 
         public IAsyncOperation<string> AddCommandAsync(int keybinding, CommandHandler handler)
@@ -171,4 +181,4 @@ namespace Monaco
             }).AsAsyncAction();
         }
     }
-    }
+}
