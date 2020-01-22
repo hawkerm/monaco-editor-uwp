@@ -470,5 +470,10 @@ namespace MonacoEditorTestApp
         {
             Editor.SelectedText = "This is some Selected Text!";
         }
+
+        private void ButtonSetReadonly_Click(object sender, RoutedEventArgs e)
+        {
+            Editor.Options.ReadOnly = !(Editor.Options.ReadOnly ?? false);
+        }
     }
 }
