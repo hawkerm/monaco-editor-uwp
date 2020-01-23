@@ -28,7 +28,7 @@ namespace MonacoEditorTestApp
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private readonly StandaloneEditorConstructionOptions options = new StandaloneEditorConstructionOptions();
+        private readonly StandaloneEditorConstructionOptions options;
         public string CodeContent
         {
             get { return (string)GetValue(CodeContentProperty); }
@@ -44,7 +44,7 @@ namespace MonacoEditorTestApp
         public MainPage()
         {
             InitializeComponent();
-
+            options = Editor.Options;
             Editor.Loading += Editor_Loading;
             Editor.Loaded += Editor_Loaded;
             Editor.OpenLinkRequested += Editor_OpenLinkRequest;
@@ -305,7 +305,7 @@ namespace MonacoEditorTestApp
 
         private void ButtonChangeLanguage_Click(object sender, RoutedEventArgs e)
         {
-            Editor.CodeLanguage = (Editor.CodeLanguage == "csharp") ? "xml" : "csharp";
+            Editor.Options.Language = (Editor.Options.Language == "csharp") ? "xml" : "csharp";
         }
 
         private async void ButtonSetMarker_Click(object sender, RoutedEventArgs e)

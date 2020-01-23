@@ -17,8 +17,8 @@ namespace Monaco
         /// </summary>
         public string Text
         {
-            get { return (string)GetValue(TextProperty); }
-            set { SetValue(TextProperty, value); }
+            get => (string)GetValue(TextProperty);
+            set => SetValue(TextProperty, value);
         }
 
         public static DependencyProperty TextProperty { get; } = DependencyProperty.Register(nameof(Text), typeof(string), typeof(CodeEditor), new PropertyMetadata(string.Empty, (d, e) =>
@@ -34,8 +34,8 @@ namespace Monaco
         /// </summary>
         public string SelectedText
         {
-            get { return (string)GetValue(SelectedTextProperty); }
-            set { SetValue(SelectedTextProperty, value); }
+            get => (string)GetValue(SelectedTextProperty);
+            set => SetValue(SelectedTextProperty, value);
         }
 
         public static DependencyProperty SelectedTextProperty { get; } = DependencyProperty.Register(nameof(SelectedText), typeof(string), typeof(CodeEditor), new PropertyMetadata(string.Empty, (d, e) =>
@@ -48,8 +48,8 @@ namespace Monaco
 
         public Selection SelectedRange
         {
-            get { return (Selection)GetValue(SelectedRangeProperty); }
-            set { SetValue(SelectedRangeProperty, value); }
+            get => (Selection)GetValue(SelectedRangeProperty);
+            set => SetValue(SelectedRangeProperty, value);
         }
 
         public static DependencyProperty SelectedRangeProperty { get; } = DependencyProperty.Register(nameof(SelectedRange), typeof(Selection), typeof(CodeEditor), new PropertyMetadata(null));
@@ -61,47 +61,33 @@ namespace Monaco
         /// </summary>
         public string CodeLanguage
         {
-            get { return (string)GetValue(CodeLanguageProperty); }
-            set { SetValue(CodeLanguageProperty, value); }
+            get => (string)GetValue(CodeLanguageProperty);
+            set => SetValue(CodeLanguageProperty, value);
         }
 
         internal static DependencyProperty CodeLanguageProperty { get; } = DependencyProperty.Register(nameof(CodeLanguage), typeof(string), typeof(CodeEditor), new PropertyMetadata("xml", (d, e) =>
         {
-            var editor = d as CodeEditor;
-
-            if (editor.Options != null)
-            {
-                // Will trigger its own update of Options, but need this for initialization changes.
-                editor.Options.Language = e.NewValue.ToString();
-            }
-
-            // TODO: Push this to Options property change check instead...
-            // Changes to Language are ignored in Updated Options.
-            // https://microsoft.github.io/monaco-editor/api/modules/monaco.editor.html#setmodellanguage.
-            (d as CodeEditor)?.InvokeScriptAsync("updateLanguage", e.NewValue.ToString());
+            if (!(d is CodeEditor editor)) return;
+            if (editor.Options != null) editor.Options.Language = e.NewValue.ToString();
         }));
 
         /// <summary>
-        /// Get or set the CodeEditor Options.
+        /// Get or set the CodeEditor Options. Node: Will overwrite CodeLanguage.
         /// </summary>
         public StandaloneEditorConstructionOptions Options
         {
-            get { return (StandaloneEditorConstructionOptions)GetValue(OptionsProperty); }
-            set { SetValue(OptionsProperty, value); }
+            get => (StandaloneEditorConstructionOptions)GetValue(OptionsProperty);
+            set => SetValue(OptionsProperty, value);
         }
 
         public static DependencyProperty OptionsProperty { get; } = DependencyProperty.Register(nameof(Options), typeof(StandaloneEditorConstructionOptions), typeof(CodeEditor), new PropertyMetadata(new StandaloneEditorConstructionOptions(), (d, e) =>
         {
-            if (e.NewValue is StandaloneEditorConstructionOptions value)
+            if (d is CodeEditor editor)
             {
-                if (d is CodeEditor editor)
-                {
-                    // Register for sub-property changes on new object
-                    value.PropertyChanged -= editor.Options_PropertyChanged;
-                    editor.InvokeScriptAsync("updateOptions", value.ToJson()).GetAwaiter().GetResult();
-
+                if (e.OldValue is StandaloneEditorConstructionOptions oldValue)
+                    oldValue.PropertyChanged -= editor.Options_PropertyChanged;
+                if (e.NewValue is StandaloneEditorConstructionOptions value)
                     value.PropertyChanged += editor.Options_PropertyChanged;
-                }
             }
         }));
 
@@ -110,8 +96,8 @@ namespace Monaco
         /// </summary>
         public bool HasGlyphMargin
         {
-            get { return (bool)GetValue(HasGlyphMarginProperty); }
-            set { SetValue(HasGlyphMarginProperty, value); }
+            get => (bool)GetValue(HasGlyphMarginProperty);
+            set => SetValue(HasGlyphMarginProperty, value);
         }
 
         public static DependencyProperty HasGlyphMarginProperty { get; } = DependencyProperty.Register(nameof(HasGlyphMargin), typeof(bool), typeof(CodeEditor), new PropertyMetadata(false, (d, e) =>
@@ -124,8 +110,8 @@ namespace Monaco
         /// </summary>
         public IObservableVector<IModelDeltaDecoration> Decorations
         {
-            get { return (IObservableVector<IModelDeltaDecoration>)GetValue(DecorationsProperty); }
-            set { SetValue(DecorationsProperty, value); }
+            get => (IObservableVector<IModelDeltaDecoration>)GetValue(DecorationsProperty);
+            set => SetValue(DecorationsProperty, value);
         }
 
         private readonly AsyncLock _mutexLineDecorations = new AsyncLock();
@@ -177,8 +163,8 @@ namespace Monaco
         /// </summary>
         public IObservableVector<IMarkerData> Markers
         {
-            get { return (IObservableVector<IMarkerData>)GetValue(MarkersProperty); }
-            set { SetValue(MarkersProperty, value); }
+            get => (IObservableVector<IMarkerData>)GetValue(MarkersProperty);
+            set => SetValue(MarkersProperty, value);
         }
 
         private readonly AsyncLock _mutexMarkers = new AsyncLock();

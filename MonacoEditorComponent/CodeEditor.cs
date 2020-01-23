@@ -33,8 +33,8 @@ namespace Monaco
         /// </summary>
         public new bool IsLoaded
         {
-            get { return (bool)GetValue(IsLoadedProperty); }
-            private set { SetValue(IsLoadedProperty, value); }
+            get => (bool)GetValue(IsLoadedProperty);
+            private set => SetValue(IsLoadedProperty, value);
         }
 
         public static DependencyProperty IsLoadedProperty { get; } = DependencyProperty.Register(nameof(IsLoaded), typeof(string), typeof(CodeEditor), new PropertyMetadata(false));
@@ -45,7 +45,6 @@ namespace Monaco
         public CodeEditor()
         {
             DefaultStyleKey = typeof(CodeEditor);
-
             if (Options != null)
             {
                 // Set Pass-Thru Properties
@@ -67,8 +66,13 @@ namespace Monaco
 
         private async void Options_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            // TODO: Check for Language property and call other method instead?
-            await InvokeScriptAsync("updateOptions", sender);
+            if (!(sender is StandaloneEditorConstructionOptions options)) return;
+            if (e.PropertyName == nameof(StandaloneEditorConstructionOptions.Language))
+            {
+                await InvokeScriptAsync("updateLanguage", options.Language);
+                if (CodeLanguage != options.Language) CodeLanguage = options.Language;
+            }
+            await InvokeScriptAsync("updateOptions", options);
         }
 
         private void CodeEditor_Loaded(object sender, RoutedEventArgs e)
@@ -77,20 +81,6 @@ namespace Monaco
             if (_model == null && _view != null)
             {
                 _model = new ModelHelper(this);
-
-                _parentAccessor = new ParentAccessor(this);
-                _parentAccessor.AddAssemblyForTypeLookup(typeof(Range).GetTypeInfo().Assembly);
-                _parentAccessor.RegisterAction("Loaded", CodeEditorLoaded);
-
-                _themeListener = new ThemeListener();
-                _themeListener.ThemeChanged += ThemeListener_ThemeChanged;
-                _themeToken = RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedTheme_PropertyChanged);
-
-                _keyboardListener = new KeyboardListener(this);
-
-                _view.AddWebAllowedObject("Parent", _parentAccessor);
-                _view.AddWebAllowedObject("Theme", _themeListener);
-                _view.AddWebAllowedObject("Keyboard", _keyboardListener);
 
                 Options.PropertyChanged += Options_PropertyChanged;
 
