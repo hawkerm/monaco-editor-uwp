@@ -10,10 +10,10 @@ namespace Monaco.Monaco.Editor
     public sealed class Dimension : IDimension, IJsonable
     {
         [JsonProperty("height", NullValueHandling = NullValueHandling.Ignore)]
-        public double Height { get; set; }
+        public uint Height { get; set; }
 
         [JsonProperty("width", NullValueHandling = NullValueHandling.Ignore)]
-        public double Width { get; set; }
+        public uint Width { get; set; }
 
         public string ToJson()
         {

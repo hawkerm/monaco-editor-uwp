@@ -27,12 +27,14 @@ namespace Monaco.Helpers
                                                                                     BackgroundColor.Color.G,
                                                                                     BackgroundColor.Color.B));
             }
+#pragma warning disable CS0618 // Type or member is obsolete
             if (ForegroundColor != null)
             {
                 output.AppendLine(string.Format("color: #{0:X2}{1:X2}{2:X2} !important;", ForegroundColor.Color.R,
                                                                                ForegroundColor.Color.G,
                                                                                ForegroundColor.Color.B));
             }
+#pragma warning restore CS0618 // Type or member is obsolete
 
             return CssStyleBroker.WrapCssClassName(this, output.ToString());
         }

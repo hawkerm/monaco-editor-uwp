@@ -1,67 +1,111 @@
 ﻿using Monaco.Helpers;
 using Newtonsoft.Json;
-using System;
 
 namespace Monaco.Editor
 {
     /// <summary>
-    /// Object Parser for https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.imodeldecorationoptions.html
+    /// Options for a model decoration.
+    ///
+    /// Options associated with this decoration.
     /// </summary>
     public sealed class IModelDecorationOptions
     {
-        [JsonProperty("isWholeLine")]
-        public bool IsWholeLine { get; set; }
+        /// <summary>
+        /// If set, the decoration will be rendered after the text with this CSS class name.
+        /// </summary>
+        [JsonProperty("afterContentClassName")]
+        public string AfterContentClassName { get; set; }
 
-        [JsonProperty("hoverMessage")]
-        public IMarkdownString[] HoverMessage { get; set; }
+        /// <summary>
+        /// If set, the decoration will be rendered before the text with this CSS class name.
+        /// </summary>
+        [JsonProperty("beforeContentClassName")]
+        public string BeforeContentClassName { get; set; }
 
-        [JsonProperty("glyphMarginHoverMessage")]
-        public IMarkdownString[] GlyphMarginHoverMessage { get; set; }
-
-        [JsonConverter(typeof(CssStyleConverter))]
+        /// <summary>
+        /// CSS class name describing the decoration.
+        /// </summary>
         [JsonProperty("className")]
         public CssLineStyle ClassName { get; set; }
 
-        [JsonConverter(typeof(CssStyleConverter))]
+        /// <summary>
+        /// If set, the decoration will be rendered in the glyph margin with this CSS class name.
+        /// </summary>
         [JsonProperty("glyphMarginClassName")]
         public CssGlyphStyle GlyphMarginClassName { get; set; }
 
-        [JsonConverter(typeof(CssStyleConverter))]
+        /// <summary>
+        /// Message to be rendered when hovering over the glyph margin decoration.
+        /// </summary>
+        [JsonProperty("glyphMarginHoverMessage")]
+        public IMarkdownString[] GlyphMarginHoverMessage { get; set; }
+
+        /// <summary>
+        /// Array of MarkdownString to render as the decoration message.
+        /// </summary>
+        [JsonProperty("hoverMessage")]
+        public IMarkdownString[] HoverMessage { get; set; }
+
+        /// <summary>
+        /// If set, the decoration will be rendered inline with the text with this CSS class name.
+        /// Please use this only for CSS rules that must impact the text. For example, use
+        /// `className`
+        /// to have a background color decoration.
+        /// </summary>
         [JsonProperty("inlineClassName")]
         public CssInlineStyle InlineClassName { get; set; }
 
-        // TODO: Provide LinesDecorationsClassName
+        /// <summary>
+        /// If there is an `inlineClassName` which affects letter spacing.
+        /// </summary>
+        [JsonProperty("inlineClassNameAffectsLetterSpacing", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? InlineClassNameAffectsLetterSpacing { get; set; }
 
-        [JsonProperty("inlineClassNameAffectsLetterSpacing")]
-        public bool InlineClassNameAffectsLetterSpacing { get; set; }
+        /// <summary>
+        /// Should the decoration expand to encompass a whole line.
+        /// </summary>
+        [JsonProperty("isWholeLine", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? IsWholeLine { get; set; }
 
-        [JsonProperty("stickiness")]
-        public TrackedRangeStickiness Stickiness { get; set; }
+        /// <summary>
+        /// If set, the decoration will be rendered in the lines decorations with this CSS class name.
+        /// </summary>
+        [JsonProperty("linesDecorationsClassName")]
+        public string LinesDecorationsClassName { get; set; }
 
-        [JsonProperty("zIndex")]
-        public int ZIndex { get; set; }
-    }
-    internal class CssStyleConverter : JsonConverter
-    {
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            var style = value as ICssStyle;
-            writer.WriteValue(style.Name);
-        }
+        /// <summary>
+        /// If set, the decoration will be rendered in the margin (covering its full width) with this
+        /// CSS class name.
+        /// </summary>
+        [JsonProperty("marginClassName")]
+        public string MarginClassName { get; set; }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            throw new NotImplementedException("Unnecessary because CanRead is false.");
-        }
+        /// <summary>
+        /// If set, render this decoration in the minimap.
+        /// </summary>
+        [JsonProperty("minimap")]
+        public IModelDecorationMinimapOptions Minimap { get; set; }
 
-        public override bool CanRead
-        {
-            get { return false; }
-        }
+        /// <summary>
+        /// If set, render this decoration in the overview ruler.
+        /// </summary>
+        [JsonProperty("overviewRuler")]
+        public IModelDecorationOverviewRulerOptions OverviewRuler { get; set; }
 
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(ICssStyle);
-        }
+        /// <summary>
+        /// Customize the growing behavior of the decoration when typing at the edges of the
+        /// decoration.
+        /// Defaults to TrackedRangeStickiness.AlwaysGrowsWhenTypingAtEdges
+        /// </summary>
+        [JsonProperty("stickiness", NullValueHandling = NullValueHandling.Ignore)]
+        public int? Stickiness { get; set; }
+
+        /// <summary>
+        /// Specifies the stack order of a decoration.
+        /// A decoration with greater stack order is always in front of a decoration with a lower
+        /// stack order.
+        /// </summary>
+        [JsonProperty("zIndex", NullValueHandling = NullValueHandling.Ignore)]
+        public int? ZIndex { get; set; }
     }
 }

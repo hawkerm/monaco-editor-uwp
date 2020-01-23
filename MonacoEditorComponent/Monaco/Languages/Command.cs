@@ -3,17 +3,16 @@
 namespace Monaco.Languages
 {
     /// <summary>
-    /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.languages.command.html
+    /// A command that should be run upon acceptance of this item.
     /// </summary>
     public sealed class Command
     {
-        //// TODO: Find a usage example for this in Monaco.
         [JsonProperty("arguments", NullValueHandling = NullValueHandling.Ignore)]
         public object[] Arguments { get; set; }
 
         [JsonProperty("id")]
         public string Id { get; set; }
-        
+
         [JsonProperty("title")]
         public string Title { get; set; }
 

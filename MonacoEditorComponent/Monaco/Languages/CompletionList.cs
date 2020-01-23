@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace Monaco.Languages
 {
@@ -9,9 +8,9 @@ namespace Monaco.Languages
     public sealed class CompletionList
     {
         [JsonProperty("incomplete", NullValueHandling = NullValueHandling.Ignore)]
-        public bool IsIncomplete { get; set; }
+        public bool? Incomplete { get; set; }
 
         [JsonProperty("suggestions")]
-        public IList<CompletionItem> Items { get; set; } = new List<CompletionItem>();
+        public CompletionItem[] Suggestions { get; set; }
     }
 }

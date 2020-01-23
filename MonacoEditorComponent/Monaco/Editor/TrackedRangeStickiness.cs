@@ -8,6 +8,6 @@
         AlwaysGrowsWhenTypingAtEdges = 0,
         NeverGrowsWhenTypingAtEdges = 1,
         GrowsOnlyWhenTypingBefore = 2,
-        GrowsOnlyWhenTypingAfter = 3,
+        GrowsOnlyWhenTypingAfter = 3
     }
 }

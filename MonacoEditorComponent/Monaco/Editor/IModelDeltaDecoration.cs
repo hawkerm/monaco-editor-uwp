@@ -3,7 +3,7 @@
 namespace Monaco.Editor
 {
     /// <summary>
-    /// Object Parser for https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.imodeldeltadecoration.html
+    /// New model decorations.
     /// </summary>
     public sealed class IModelDeltaDecoration
     {

@@ -205,7 +205,7 @@ namespace MonacoEditorTestApp
                         "This is a test message.",
                         "*YES*, **it is**."
                     }.ToMarkdownString(),
-                    Stickiness = TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges
+                    Stickiness = (int)TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges
                 }));
         }
 

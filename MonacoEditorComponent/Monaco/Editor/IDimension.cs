@@ -8,9 +8,9 @@ namespace Monaco.Editor
     public interface IDimension
     {
         [JsonProperty("height", NullValueHandling = NullValueHandling.Ignore)]
-        double Height { get; set; }
+        uint Height { get; set; }
 
         [JsonProperty("width", NullValueHandling = NullValueHandling.Ignore)]
-        double Width { get; set; }
+        uint Width { get; set; }
     }
 }

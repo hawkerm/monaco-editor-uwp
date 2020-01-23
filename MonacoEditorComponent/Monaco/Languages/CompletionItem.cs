@@ -74,7 +74,7 @@ namespace Monaco.Languages
         /// an icon is chosen by the editor.
         /// </summary>
         [JsonProperty("kind")]
-        public int Kind { get; set; }
+        public CompletionItemKind Kind { get; set; }
 
         /// <summary>
         /// The label of this completion item. By default
@@ -125,7 +125,7 @@ namespace Monaco.Languages
         {
             InsertText = insertText;
             Label = label;
-            Kind = (int)kind;
+            Kind = kind;
         }
     }
 }

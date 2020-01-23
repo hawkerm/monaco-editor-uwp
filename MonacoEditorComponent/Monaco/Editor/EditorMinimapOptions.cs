@@ -1,7 +1,5 @@
 ﻿using Monaco.Helpers;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System.Globalization;
 
 namespace Monaco.Editor
 {
@@ -53,20 +51,9 @@ namespace Monaco.Editor
         [JsonProperty("side", NullValueHandling = NullValueHandling.Ignore)]
         public Side? Side { get; set; }
 
-        private static readonly JsonSerializerSettings settings = new JsonSerializerSettings
-        {
-            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
-            DateParseHandling = DateParseHandling.None,
-            Converters =
-            {
-                ShowConverter.Singleton,
-                SideConverter.Singleton,
-                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
-            },
-        };
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(this, settings);
+            return JsonConvert.SerializeObject(this);
         }
     }
 

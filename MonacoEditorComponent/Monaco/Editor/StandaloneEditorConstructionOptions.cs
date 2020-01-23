@@ -1,10 +1,8 @@
 ﻿using Monaco.Helpers;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.Runtime.CompilerServices;
 
 namespace Monaco.Editor
@@ -18,7 +16,7 @@ namespace Monaco.Editor
 
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(this, settings);
+            return JsonConvert.SerializeObject(this);
         }
 
         private readonly Dictionary<string, object> _propertyBackingDictionary = new Dictionary<string, object>();
@@ -45,45 +43,6 @@ namespace Monaco.Editor
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             return true;
         }
-
-        private static readonly JsonSerializerSettings settings = new JsonSerializerSettings
-        {
-            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
-            DateParseHandling = DateParseHandling.None,
-            Converters =
-            {
-                AcceptSuggestionOnEnterConverter.Singleton,
-                AccessibilitySupportConverter.Singleton,
-                AutoClosingBracketsConverter.Singleton,
-                AutoClosingOvertypeConverter.Singleton,
-                AutoClosingQuotesConverter.Singleton,
-                AutoIndentConverter.Singleton,
-                AutoSurroundConverter.Singleton,
-                CursorBlinkingConverter.Singleton,
-                CursorStyleConverter.Singleton,
-                CursorSurroundingLinesStyleConverter.Singleton,
-                AutoFindInSelectionConverter.Singleton,
-                FoldingStrategyConverter.Singleton,
-                MultipleConverter.Singleton,
-                LineNumbersTypeConverter.Singleton,
-                MatchBracketsConverter.Singleton,
-                ShowConverter.Singleton,
-                SideConverter.Singleton,
-                MouseStyleConverter.Singleton,
-                MultiCursorModifierConverter.Singleton,
-                MultiCursorPasteConverter.Singleton,
-                RenderLineHighlightConverter.Singleton,
-                RenderWhitespaceConverter.Singleton,
-                HorizontalConverter.Singleton,
-                SnippetSuggestionsConverter.Singleton,
-                InsertModeConverter.Singleton,
-                SuggestSelectionConverter.Singleton,
-                TabCompletionConverter.Singleton,
-                WordWrapConverter.Singleton,
-                WrappingIndentConverter.Singleton,
-                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
-            },
-        };
 
         /// <summary>
         /// Accept suggestions on provider defined characters.
