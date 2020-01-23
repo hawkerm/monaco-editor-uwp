@@ -5,7 +5,6 @@ using Monaco.Helpers;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
@@ -20,7 +19,7 @@ namespace Monaco
     /// https://microsoft.github.io/monaco-editor/
     /// </summary>
     [TemplatePart(Name = "View", Type = typeof(WebView))]
-    public sealed partial class CodeEditor : Control, INotifyPropertyChanged
+    public sealed partial class CodeEditor : Control, INotifyPropertyChanged, IDisposable
     {
         private bool _initialized;
         private WebView _view;
@@ -49,7 +48,6 @@ namespace Monaco
             {
                 // Set Pass-Thru Properties
                 Options.GlyphMargin = HasGlyphMargin;
-                Options.Language = CodeLanguage;
 
                 // Register for changes
                 Options.PropertyChanged += Options_PropertyChanged;
@@ -71,6 +69,14 @@ namespace Monaco
             {
                 await InvokeScriptAsync("updateLanguage", options.Language);
                 if (CodeLanguage != options.Language) CodeLanguage = options.Language;
+            }
+            if (e.PropertyName == nameof(StandaloneEditorConstructionOptions.GlyphMargin))
+            {
+                if (HasGlyphMargin != options.GlyphMargin) options.GlyphMargin = HasGlyphMargin;
+            }
+            if (e.PropertyName == nameof(StandaloneEditorConstructionOptions.ReadOnly))
+            {
+                if (ReadOnly != options.ReadOnly) options.ReadOnly = ReadOnly;
             }
             await InvokeScriptAsync("updateOptions", options);
         }
@@ -115,8 +121,6 @@ namespace Monaco
             Decorations.VectorChanged -= Decorations_VectorChanged;
             Markers.VectorChanged -= Markers_VectorChanged;
 
-            _parentAccessor?.Dispose();
-            _parentAccessor = null;
             Options.PropertyChanged -= Options_PropertyChanged;
 
             if (_themeListener != null)
@@ -252,6 +256,13 @@ namespace Monaco
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void Dispose()
+        {
+            _parentAccessor?.Dispose();
+            _parentAccessor = null;
+            CssStyleBroker.DetachEditor(this);
         }
     }
 }

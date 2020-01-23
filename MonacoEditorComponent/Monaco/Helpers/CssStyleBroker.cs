@@ -33,6 +33,12 @@ namespace Monaco.Helpers
             if (instances.ContainsKey(editor)) return instances[editor];
             return instances[editor] = new CssStyleBroker();
         }
+
+        public static bool DetachEditor(CodeEditor editor)
+        {
+            if (instances.ContainsKey(editor)) return instances.Remove(editor);
+            return true;
+        }
         /// <summary>
         /// Returns the name for a style to use after registered.
         /// </summary>

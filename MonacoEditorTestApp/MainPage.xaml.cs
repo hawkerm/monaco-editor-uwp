@@ -305,7 +305,7 @@ namespace MonacoEditorTestApp
 
         private void ButtonChangeLanguage_Click(object sender, RoutedEventArgs e)
         {
-            Editor.Options.Language = (Editor.Options.Language == "csharp") ? "xml" : "csharp";
+            Editor.CodeLanguage = (Editor.CodeLanguage == "csharp") ? "xml" : "csharp";
         }
 
         private async void ButtonSetMarker_Click(object sender, RoutedEventArgs e)
@@ -403,6 +403,7 @@ namespace MonacoEditorTestApp
                 Editor.InternalException -= Editor_InternalException;
 
                 RootGrid.Children.Remove(Editor);
+                Editor.Dispose();
                 Editor = null;
 
                 GC.Collect();
@@ -474,7 +475,7 @@ namespace MonacoEditorTestApp
 
         private void ButtonSetReadonly_Click(object sender, RoutedEventArgs e)
         {
-            options.ReadOnly = !(options.ReadOnly ?? false);
+            Editor.ReadOnly = !Editor.ReadOnly;
         }
 
         private async void ButtonRunScript_Click(object sender, RoutedEventArgs e)

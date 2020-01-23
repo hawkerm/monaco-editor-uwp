@@ -72,6 +72,21 @@ namespace Monaco
         }));
 
         /// <summary>
+        /// Set the ReadOnly option for the Code CodeEditor.
+        /// </summary>
+        public bool ReadOnly
+        {
+            get => (bool)GetValue(ReadOnlyProperty);
+            set => SetValue(ReadOnlyProperty, value);
+        }
+
+        internal static DependencyProperty ReadOnlyProperty { get; } = DependencyProperty.Register(nameof(ReadOnly), typeof(bool), typeof(CodeEditor), new PropertyMetadata(false, (d, e) =>
+        {
+            if (!(d is CodeEditor editor)) return;
+            if (editor.Options != null) editor.Options.ReadOnly = bool.Parse(e.NewValue?.ToString() ?? "false");
+        }));
+
+        /// <summary>
         /// Get or set the CodeEditor Options. Node: Will overwrite CodeLanguage.
         /// </summary>
         public StandaloneEditorConstructionOptions Options
