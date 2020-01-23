@@ -112,6 +112,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CodeEditor.cs" />
+    <Compile Include="CodeEditor.Events.cs" />
     <Compile Include="CodeEditor.Methods.cs" />
     <Compile Include="CodeEditor.Properties.cs" />
     <Compile Include="Editor\ISingleEditOperation.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="Monaco\Editor\IWordAtPosition.cs" />
     <Compile Include="Monaco\Editor\WordWrap.cs" />
     <Compile Include="Monaco\Editor\WrappingIndent.cs" />
+    <Compile Include="Monaco\Helpers\CssGlyphStyle.cs" />
     <Compile Include="Monaco\Helpers\CssInlineStyle.cs" />
     <Compile Include="Monaco\Helpers\CssLineStyle.cs" />
     <Compile Include="Monaco\Helpers\CssStyleBroker.cs" />
@@ -254,12 +256,8 @@
     <Content Include="MonacoEditor.html" />
     <Content Include="monaco-editor\*.*" />
     <Content Include="monaco-editor\min\**\*.*" />
-    <Compile Include="Monaco\Helpers\CssGlyphStyle.cs" />
     <Content Include="ts-helpermethods\*.js" />
     <EmbeddedResource Include="Properties\MonacoEditorComponent.rd.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="CodeEditor.Events.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
