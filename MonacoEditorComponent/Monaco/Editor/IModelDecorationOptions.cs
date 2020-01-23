@@ -26,13 +26,13 @@ namespace Monaco.Editor
         /// CSS class name describing the decoration.
         /// </summary>
         [JsonProperty("className")]
-        public CssLineStyle ClassName { get; set; }
+        public string ClassName { get; set; }
 
         /// <summary>
         /// If set, the decoration will be rendered in the glyph margin with this CSS class name.
         /// </summary>
         [JsonProperty("glyphMarginClassName")]
-        public CssGlyphStyle GlyphMarginClassName { get; set; }
+        public string GlyphMarginClassName { get; set; }
 
         /// <summary>
         /// Message to be rendered when hovering over the glyph margin decoration.
@@ -53,7 +53,7 @@ namespace Monaco.Editor
         /// to have a background color decoration.
         /// </summary>
         [JsonProperty("inlineClassName")]
-        public CssInlineStyle InlineClassName { get; set; }
+        public string InlineClassName { get; set; }
 
         /// <summary>
         /// If there is an `inlineClassName` which affects letter spacing.

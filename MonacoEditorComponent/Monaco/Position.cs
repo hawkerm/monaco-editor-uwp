@@ -72,7 +72,7 @@ namespace Monaco
         {
             if (obj is IPosition)
             {
-                return CompareTo(Position.Lift(obj as IPosition));
+                return CompareTo(Lift(obj as IPosition));
             }
 
             throw new NotImplementedException();

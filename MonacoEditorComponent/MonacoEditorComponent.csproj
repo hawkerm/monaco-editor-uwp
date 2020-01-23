@@ -186,6 +186,7 @@
     <Compile Include="Monaco\Helpers\CssLineStyle.cs" />
     <Compile Include="Monaco\Helpers\CssStyleBroker.cs" />
     <Compile Include="Monaco\Helpers\Json.cs" />
+    <Compile Include="Monaco\Helpers\TextDecoration.cs" />
     <Compile Include="Monaco\IMarkdownString.cs" />
     <Compile Include="Monaco\IPosition.cs" />
     <Compile Include="Monaco\IRange.cs" />

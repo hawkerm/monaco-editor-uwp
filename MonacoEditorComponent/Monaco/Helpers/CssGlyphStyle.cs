@@ -8,9 +8,9 @@ namespace Monaco.Helpers
 
         public string Name { get; private set; }
 
-        public CssGlyphStyle()
+        public CssGlyphStyle(CodeEditor editor)
         {
-            Name = CssStyleBroker.Instance.Register(this);
+            Name = CssStyleBroker.GetInstance(editor).Register(this);
         }
 
         public string ToCss()

@@ -14,8 +14,9 @@ namespace Monaco.Helpers
 
         public string Name { get; private set; }
 
-        public CssLineStyle() {
-            Name = CssStyleBroker.Instance.Register(this);
+        public CssLineStyle(CodeEditor editor)
+        {
+            Name = CssStyleBroker.GetInstance(editor).Register(this);
         }
 
         public string ToCss()

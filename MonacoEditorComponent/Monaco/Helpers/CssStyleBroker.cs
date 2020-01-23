@@ -18,6 +18,7 @@ namespace Monaco.Helpers
     {
         private static uint Id = 0;
         private readonly Dictionary<string, ICssStyle> _registered = new Dictionary<string, ICssStyle>();
+        private static readonly IDictionary<CodeEditor, CssStyleBroker> instances = new Dictionary<CodeEditor, CssStyleBroker>();
 
         // Explicit static constructor to tell C# compiler
         // not to mark type as beforefieldinit
@@ -27,9 +28,11 @@ namespace Monaco.Helpers
         private CssStyleBroker()
         {
         }
-        public static CssStyleBroker Instance // TODO: Probably need to tie this to a specific Editor
-        { get; } = new CssStyleBroker();
-
+        public static CssStyleBroker GetInstance(CodeEditor editor)
+        {
+            if (instances.ContainsKey(editor)) return instances[editor];
+            return instances[editor] = new CssStyleBroker();
+        }
         /// <summary>
         /// Returns the name for a style to use after registered.
         /// </summary>
@@ -37,7 +40,7 @@ namespace Monaco.Helpers
         /// <returns></returns>
         public string Register(ICssStyle style)
         {
-            CssStyleBroker.Id += 1;
+            Id += 1;
             var name = "generated-style-" + Id;
             _registered.Add(name, style);
             return name;

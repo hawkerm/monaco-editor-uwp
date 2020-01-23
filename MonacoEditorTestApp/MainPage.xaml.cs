@@ -190,16 +190,16 @@ namespace MonacoEditorTestApp
             this.Editor.Decorations.Add(
                 new IModelDeltaDecoration(new Range(3, 1, 3, 10), new IModelDecorationOptions()
                 {
-                    ClassName = new CssLineStyle() // TODO: Save these styles so we don't keep regenerating them and adding new ones.
+                    ClassName = new CssLineStyle(Editor) // TODO: Save these styles so we don't keep regenerating them and adding new ones.
                     {
                         BackgroundColor = new SolidColorBrush(Colors.DarkRed),
-                    },
-                    InlineClassName = new CssInlineStyle()
+                    }.Name,
+                    InlineClassName = new CssInlineStyle(Editor)
                     {
                         ForegroundColor = new SolidColorBrush(Colors.White),
                         FontWeight = FontWeights.Bold,
-                        FontStyle = Windows.UI.Text.FontStyle.Italic
-                    },
+                        FontStyle = FontStyle.Italic
+                    }.Name,
                     HoverMessage = new string[]
                     {
                         "This is a test message.",
@@ -214,14 +214,14 @@ namespace MonacoEditorTestApp
             Editor.Decorations.Add(
                 new IModelDeltaDecoration(new Range(4, 1, 4, 1), new IModelDecorationOptions() {
                     IsWholeLine = true,
-                    ClassName = new CssLineStyle()
+                    ClassName = new CssLineStyle(Editor)
                     {
                         BackgroundColor = new SolidColorBrush(Colors.AliceBlue)
-                    },
-                    GlyphMarginClassName = new CssGlyphStyle()
+                    }.Name,
+                    GlyphMarginClassName = new CssGlyphStyle(Editor)
                     {
                         GlyphImage = new Uri("ms-appx-web:///Icons/error.png")
-                    },
+                    }.Name,
                     HoverMessage = new string[]
                     {
                         "This is *another* \"test\" message about 'thing'."
@@ -236,14 +236,14 @@ namespace MonacoEditorTestApp
                 new IModelDeltaDecoration(new Range(2, 1, 2, await Editor.GetModel().GetLineLengthAsync(2)), new IModelDecorationOptions()
                 {
                     IsWholeLine = true,
-                    InlineClassName = new CssInlineStyle()
+                    InlineClassName = new CssInlineStyle(Editor)
                     {
                         TextDecoration = TextDecoration.LineThrough
-                    },
-                    GlyphMarginClassName = new CssGlyphStyle()
+                    }.Name,
+                    GlyphMarginClassName = new CssGlyphStyle(Editor)
                     {
                         GlyphImage = new Uri("ms-appx-web:///Icons/warning.png")
-                    },
+                    }.Name,
                     HoverMessage = new string[]
                     {
                         "Deprecated"

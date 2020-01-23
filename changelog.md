@@ -2,7 +2,11 @@ v0.9 - 01/23/2020
 -----------------
 - Updated Monaco Reference to v0.19.3
 - Fix broken snippet function
-- **Breaking changes**: Replace IEditorConstructionOptions with StandaloneEditorConstructionOptions
+- Tie css styles to CodeEditor
+
+**Breaking changes**: 
+- Use StandaloneEditorConstructionOptions for Options instead of IEditorConstructionOptions
+- Use ClassName string instead of CssStyle type
 
 v0.8.1 - 01/15/2019
 -------------------
