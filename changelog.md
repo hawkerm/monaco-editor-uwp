@@ -3,6 +3,7 @@ v0.9 - 01/23/2020
 - Updated Monaco Reference to v0.19.3
 - Fix broken snippet function
 - Tie css styles to CodeEditor
+- Sync CodeLanguage and Options.Language
 
 **Breaking changes**: 
 - Use StandaloneEditorConstructionOptions for Options instead of IEditorConstructionOptions
