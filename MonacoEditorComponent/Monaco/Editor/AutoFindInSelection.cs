@@ -3,10 +3,11 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(AutoFindInSelectionConverter))]
+
     /// <summary>
     /// Controls if Find in Selection flag is turned on in the editor.
     /// </summary>
+    [JsonConverter(typeof(AutoFindInSelectionConverter))]
     public enum AutoFindInSelection { Always, Multiline, Never };
 
     internal class AutoFindInSelectionConverter : JsonConverter

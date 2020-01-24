@@ -3,11 +3,12 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(AutoIndentConverter))]
+
     /// <summary>
     /// Enable auto indentation adjustment.
     /// Defaults to false.
     /// </summary>
+    [JsonConverter(typeof(AutoIndentConverter))]
     public enum AutoIndent { Advanced, Brackets, Full, Keep, None };
 
     internal class AutoIndentConverter : JsonConverter

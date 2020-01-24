@@ -3,11 +3,12 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(AutoClosingQuotesConverter))]
+
     /// <summary>
     /// Options for auto closing quotes.
     /// Defaults to language defined behavior.
     /// </summary>
+    [JsonConverter(typeof(AutoClosingQuotesConverter))]
     public enum AutoClosingQuotes { Always, BeforeWhitespace, LanguageDefined, Never };
 
     internal class AutoClosingQuotesConverter : JsonConverter

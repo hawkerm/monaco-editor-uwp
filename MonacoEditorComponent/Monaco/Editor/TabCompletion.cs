@@ -3,10 +3,11 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(TabCompletionConverter))]
+
     /// <summary>
     /// Enable tab completion.
     /// </summary>
+    [JsonConverter(typeof(TabCompletionConverter))]
     public enum TabCompletion { Off, On, OnlySnippets };
 
     internal class TabCompletionConverter : JsonConverter

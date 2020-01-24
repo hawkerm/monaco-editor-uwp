@@ -3,11 +3,12 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(WrappingIndentConverter))]
+
     /// <summary>
     /// Control indentation of wrapped lines. Can be: 'none', 'same', 'indent' or 'deepIndent'.
     /// Defaults to 'same' in vscode and to 'none' in monaco-editor.
     /// </summary>
+    [JsonConverter(typeof(WrappingIndentConverter))]
     public enum WrappingIndent { DeepIndent, Indent, None, Same };
 
     internal class WrappingIndentConverter : JsonConverter

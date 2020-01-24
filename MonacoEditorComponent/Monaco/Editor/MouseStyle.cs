@@ -3,11 +3,12 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(MouseStyleConverter))]
+
     /// <summary>
     /// Control the mouse pointer style, either 'text' or 'default' or 'copy'
     /// Defaults to 'text'
     /// </summary>
+    [JsonConverter(typeof(MouseStyleConverter))]
     public enum MouseStyle { Copy, Default, Text };
 
     internal class MouseStyleConverter : JsonConverter

@@ -3,7 +3,7 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(WordWrapConverter))]
+
     /// <summary>
     /// Control the wrapping of the editor.
     /// When `wordWrap` = "off", the lines will never wrap.
@@ -12,6 +12,7 @@ namespace Monaco.Editor
     /// When `wordWrap` = "bounded", the lines will wrap at min(viewport width, wordWrapColumn).
     /// Defaults to "off".
     /// </summary>
+    [JsonConverter(typeof(WordWrapConverter))]
     public enum WordWrap { Bounded, Off, On, WordWrapColumn };
 
     internal class WordWrapConverter : JsonConverter

@@ -3,11 +3,10 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(AutoSurroundConverter))]
     /// <summary>
     /// Options for auto surrounding.
     /// Defaults to always allowing auto surrounding.
-    /// </summary>
+    /// </summary>    [JsonConverter(typeof(AutoSurroundConverter))]
     public enum AutoSurround { Brackets, LanguageDefined, Never, Quotes };
 
     internal class AutoSurroundConverter : JsonConverter

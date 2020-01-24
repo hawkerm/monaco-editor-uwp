@@ -3,12 +3,11 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(CursorBlinkingConverter))]
     /// <summary>
     /// Control the cursor animation style, possible values are 'blink', 'smooth', 'phase',
     /// 'expand' and 'solid'.
     /// Defaults to 'blink'.
-    /// </summary>
+    /// </summary>    [JsonConverter(typeof(CursorBlinkingConverter))]
     public enum CursorBlinking { Blink, Expand, Phase, Smooth, Solid };
 
     internal class CursorBlinkingConverter : JsonConverter

@@ -3,11 +3,12 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(SideConverter))]
+
     /// <summary>
     /// Control the side of the minimap in editor.
     /// Defaults to 'right'.
     /// </summary>
+    [JsonConverter(typeof(SideConverter))]
     public enum Side { Left, Right };
 
     internal class SideConverter : JsonConverter

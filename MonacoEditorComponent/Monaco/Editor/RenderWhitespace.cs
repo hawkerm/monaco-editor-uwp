@@ -3,11 +3,12 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(RenderWhitespaceConverter))]
+
     /// <summary>
     /// Enable rendering of whitespace.
     /// Defaults to none.
     /// </summary>
+    [JsonConverter(typeof(RenderWhitespaceConverter))]
     public enum RenderWhitespace { All, Boundary, None, Selection };
 
     internal class RenderWhitespaceConverter : JsonConverter

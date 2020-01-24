@@ -3,20 +3,38 @@
 namespace Monaco.Editor
 {
     /// <summary>
-    /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.imarkerdata.html
+    /// A structure defining a problem/warning/etc.
     /// </summary>
-    public interface IMarkerData : IRange
+    interface IMarkerData : IRange
     {
-        [JsonProperty("code")]
-        string Code { get; }
+        [JsonProperty("code", NullValueHandling = NullValueHandling.Ignore)]
+        string Code { get; set; }
+
+        [JsonProperty("endColumn")]
+        uint EndColumn { get; set; }
+
+        [JsonProperty("endLineNumber")]
+        uint EndLineNumber { get; set; }
 
         [JsonProperty("message")]
-        string Message { get; }
+        string Message { get; set; }
+
+        [JsonProperty("relatedInformation", NullValueHandling = NullValueHandling.Ignore)]
+        IRelatedInformation[] RelatedInformation { get; set; }
 
         [JsonProperty("severity")]
-        Severity Severity { get; }
+        int Severity { get; set; }
 
-        [JsonProperty("source")]
-        string Source { get; }
+        [JsonProperty("source", NullValueHandling = NullValueHandling.Ignore)]
+        string Source { get; set; }
+
+        [JsonProperty("startColumn")]
+        uint StartColumn { get; set; }
+
+        [JsonProperty("startLineNumber")]
+        uint StartLineNumber { get; set; }
+
+        [JsonProperty("tags", NullValueHandling = NullValueHandling.Ignore)]
+        int[] Tags { get; set; }
     }
 }

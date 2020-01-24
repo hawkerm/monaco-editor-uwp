@@ -3,7 +3,7 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(HorizontalConverter))]
+
     /// <summary>
     /// Render horizontal scrollbar.
     /// Defaults to 'auto'.
@@ -11,6 +11,7 @@ namespace Monaco.Editor
     /// Render vertical scrollbar.
     /// Defaults to 'auto'.
     /// </summary>
+    [JsonConverter(typeof(HorizontalConverter))]
     public enum Horizontal { Auto, Hidden, Visible };
 
     internal class HorizontalConverter : JsonConverter

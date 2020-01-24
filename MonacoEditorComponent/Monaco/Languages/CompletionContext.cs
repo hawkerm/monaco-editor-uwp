@@ -20,6 +20,6 @@ namespace Monaco.Languages
         /// How the completion was triggered.
         /// </summary>
         [JsonProperty("triggerKind")]
-        public SuggestTriggerKind TriggerKind { get; set; }
+        public CompletionTriggerKind TriggerKind { get; set; }
     }
 }

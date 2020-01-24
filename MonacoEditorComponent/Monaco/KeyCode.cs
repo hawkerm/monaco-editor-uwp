@@ -174,5 +174,10 @@
         public static int KEY_IN_COMPOSITION => 109;
         public static int ABNT_C1 => 110;
         public static int ABNT_C2 => 111;
+        /**
+         * Placed last to cover the length of the enum.
+         * Please do not depend on this value!
+         */
+        public static int MAX_VALUE => 112;
     }
 }

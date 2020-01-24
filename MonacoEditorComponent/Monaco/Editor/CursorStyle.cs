@@ -3,11 +3,10 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(CursorStyleConverter))]
     /// <summary>
     /// Control the cursor style, either 'block' or 'line'.
     /// Defaults to 'line'.
-    /// </summary>
+    /// </summary>    [JsonConverter(typeof(CursorStyleConverter))]
     public enum CursorStyle { Block, BlockOutline, Line, LineThin, Underline, UnderlineThin };
 
     internal class CursorStyleConverter : JsonConverter

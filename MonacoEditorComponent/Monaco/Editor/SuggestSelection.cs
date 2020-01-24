@@ -3,10 +3,11 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(SuggestSelectionConverter))]
+
     /// <summary>
     /// The history mode for suggestions.
     /// </summary>
+    [JsonConverter(typeof(SuggestSelectionConverter))]
     public enum SuggestSelection { First, RecentlyUsed, RecentlyUsedByPrefix };
 
     internal class SuggestSelectionConverter : JsonConverter

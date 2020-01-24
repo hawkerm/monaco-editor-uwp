@@ -3,10 +3,11 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(AutoClosingOvertypeConverter))]
+
     /// <summary>
     /// Options for typing over closing quotes or brackets.
     /// </summary>
+    [JsonConverter(typeof(AutoClosingOvertypeConverter))]
     public enum AutoClosingOvertype { Always, Auto, Never };
     internal class AutoClosingOvertypeConverter : JsonConverter
     {

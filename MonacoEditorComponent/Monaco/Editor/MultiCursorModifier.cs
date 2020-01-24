@@ -3,11 +3,12 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(MultiCursorModifierConverter))]
+
     /// <summary>
     /// The modifier to be used to add multiple cursors with the mouse.
     /// Defaults to 'alt'
     /// </summary>
+    [JsonConverter(typeof(MultiCursorModifierConverter))]
     public enum MultiCursorModifier { Alt, CtrlCmd };
 
     internal class MultiCursorModifierConverter : JsonConverter

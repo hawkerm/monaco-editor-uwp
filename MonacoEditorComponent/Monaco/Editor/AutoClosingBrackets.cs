@@ -3,11 +3,12 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(AutoClosingBracketsConverter))]
+
     /// <summary>
     /// Options for auto closing brackets.
     /// Defaults to language defined behavior.
     /// </summary>
+    [JsonConverter(typeof(AutoClosingBracketsConverter))]
     public enum AutoClosingBrackets { Always, BeforeWhitespace, LanguageDefined, Never };
 
     internal class AutoClosingBracketsConverter : JsonConverter

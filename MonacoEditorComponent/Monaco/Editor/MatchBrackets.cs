@@ -3,11 +3,12 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(MatchBracketsConverter))]
+
     /// <summary>
     /// Enable highlighting of matching brackets.
     /// Defaults to 'always'.
     /// </summary>
+    [JsonConverter(typeof(MatchBracketsConverter))]
     public enum MatchBrackets { Always, Near, Never };
 
     internal class MatchBracketsConverter : JsonConverter

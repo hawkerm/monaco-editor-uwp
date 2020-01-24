@@ -3,11 +3,12 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(AccessibilitySupportConverter))]
+
     /// <summary>
     /// Configure the editor's accessibility support.
     /// Defaults to 'auto'. It is best to leave this to 'auto'.
     /// </summary>
+    [JsonConverter(typeof(AccessibilitySupportConverter))]
     public enum AccessibilitySupport { Auto, Off, On };
     internal class AccessibilitySupportConverter : JsonConverter
     {

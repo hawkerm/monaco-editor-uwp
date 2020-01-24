@@ -144,10 +144,13 @@
     <Compile Include="Monaco\Editor\GoToLocationOptions.cs" />
     <Compile Include="Monaco\Editor\Horizontal.cs" />
     <Compile Include="Monaco\Editor\IContextKey.cs" />
+    <Compile Include="Monaco\Editor\IDiffEditorConstructionOptions.cs" />
+    <Compile Include="Monaco\Editor\IDiffEditorOptions.cs" />
     <Compile Include="Monaco\Editor\IDimension.cs" />
     <Compile Include="Monaco\Editor\IEditorConstructionOptions.cs" />
     <Compile Include="Monaco\Editor\IModelDecorationMinimapOptions.cs" />
     <Compile Include="Monaco\Editor\IModelDecorationOverviewRulerOptions.cs" />
+    <Compile Include="Monaco\Editor\IRelatedInformation.cs" />
     <Compile Include="Monaco\Editor\IStandaloneEditorConstructionOptions.cs" />
     <Compile Include="Monaco\Editor\SnippetSuggestions.cs" />
     <Compile Include="Monaco\Editor\StandaloneEditorConstructionOptions.cs" />

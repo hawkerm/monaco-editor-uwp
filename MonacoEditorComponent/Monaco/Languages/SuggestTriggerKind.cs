@@ -1,12 +1,12 @@
 ﻿namespace Monaco.Languages
 {
     /// <summary>
-    /// https://microsoft.github.io/monaco-editor/api/enums/monaco.languages.suggesttriggerkind.html
+    /// How a suggest provider was triggered.
     /// </summary>
-    public enum SuggestTriggerKind
+    public enum CompletionTriggerKind
     {
         Invoke = 0,
         TriggerCharacter = 1,
-        TriggerForIncompleteCompletions = 2,
+        TriggerForIncompleteCompletions = 2
     }
 }

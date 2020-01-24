@@ -24,7 +24,7 @@ namespace Monaco.Editor
 
         [JsonProperty("contextMenuOrder", NullValueHandling = NullValueHandling.Ignore)]
         float ContextMenuOrder { get; }
-        
+
         [JsonProperty("id")]
         string Id { get; }
 
@@ -51,4 +51,4 @@ namespace Monaco.Editor
 
         void Run(CodeEditor editor);
     }
-    }
+}

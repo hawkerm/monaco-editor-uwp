@@ -30,7 +30,7 @@ namespace MonacoEditorTestApp.Helpers
                         }
                     };
                 }
-                else if (context.TriggerKind == SuggestTriggerKind.TriggerCharacter)
+                else if (context.TriggerKind == CompletionTriggerKind.TriggerCharacter)
                 {
                     return new CompletionList()
                     {

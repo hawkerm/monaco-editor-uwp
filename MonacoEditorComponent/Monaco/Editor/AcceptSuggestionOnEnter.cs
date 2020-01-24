@@ -3,11 +3,12 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(AcceptSuggestionOnEnterConverter))]
+
     /// <summary>
     /// Accept suggestions on ENTER.
     /// Defaults to 'on'.
     /// </summary>
+    [JsonConverter(typeof(AcceptSuggestionOnEnterConverter))]
     public enum AcceptSuggestionOnEnter { Off, On, Smart };
 
     internal class AcceptSuggestionOnEnterConverter : JsonConverter

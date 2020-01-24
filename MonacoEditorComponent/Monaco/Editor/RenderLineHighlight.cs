@@ -3,11 +3,12 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(RenderLineHighlightConverter))]
+
     /// <summary>
     /// Enable rendering of current line highlight.
     /// Defaults to all.
     /// </summary>
+    [JsonConverter(typeof(RenderLineHighlightConverter))]
     public enum RenderLineHighlight { All, Gutter, Line, None };
 
     internal class RenderLineHighlightConverter : JsonConverter

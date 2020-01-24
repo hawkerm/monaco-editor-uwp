@@ -3,7 +3,7 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(ShowConverter))]
+
     /// <summary>
     /// Control the rendering of the minimap slider.
     /// Defaults to 'mouseover'.
@@ -12,6 +12,7 @@ namespace Monaco.Editor
     /// mouse is over the gutter.
     /// Defaults to 'mouseover'.
     /// </summary>
+    [JsonConverter(typeof(ShowConverter))]
     public enum Show { Always, Mouseover };
 
     internal class ShowConverter : JsonConverter

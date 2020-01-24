@@ -3,13 +3,12 @@ using System;
 
 namespace Monaco.Editor
 {
-    [JsonConverter(typeof(CursorSurroundingLinesStyleConverter))]
     /// <summary>
     /// Controls when `cursorSurroundingLines` should be enforced
     /// Defaults to `default`, `cursorSurroundingLines` is not enforced when cursor position is
     /// changed
     /// by mouse.
-    /// </summary>
+    /// </summary>    [JsonConverter(typeof(CursorSurroundingLinesStyleConverter))]
     public enum CursorSurroundingLinesStyle { All, Default };
 
     internal class CursorSurroundingLinesStyleConverter : JsonConverter
