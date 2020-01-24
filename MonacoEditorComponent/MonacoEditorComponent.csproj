@@ -208,12 +208,13 @@
     <Compile Include="Monaco\Languages\ILanguageExtensionPoint.cs" />
     <Compile Include="Monaco\LanguagesHelper.cs" />
     <Compile Include="Monaco\Languages\SuggestTriggerKind.cs" />
+    <Compile Include="Monaco\MarkerTag.cs" />
     <Compile Include="Monaco\ModelHelper.cs" />
     <Compile Include="Monaco\Position.cs" />
     <Compile Include="Monaco\Range.cs" />
     <Compile Include="Monaco\Selection.cs" />
     <Compile Include="Monaco\SelectionDirection.cs" />
-    <Compile Include="Monaco\Severity.cs" />
+    <Compile Include="Monaco\MarkerSeverity.cs" />
     <Compile Include="Monaco\IUri.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

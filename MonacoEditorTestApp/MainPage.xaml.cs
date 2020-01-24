@@ -317,7 +317,7 @@ namespace MonacoEditorTestApp
                     {
                         Code = "2344",
                         Message = "This is a \"Warning\" about 'that thing'.",
-                        Severity = Severity.Warning,
+                        Severity = MarkerSeverity.Warning,
                         Source = "Origin",
                         StartLineNumber = 2,
                         StartColumn = 2,
@@ -330,7 +330,7 @@ namespace MonacoEditorTestApp
                     {
                         Code = "2345",
                         Message = "This is an \"Error\" about 'that thing'.",
-                        Severity = Severity.Error,
+                        Severity = MarkerSeverity.Error,
                         Source = "Origin",
                         StartLineNumber = 3,
                         StartColumn = 5,

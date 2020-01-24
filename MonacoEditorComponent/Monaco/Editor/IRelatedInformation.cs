@@ -2,7 +2,7 @@
 
 namespace Monaco.Editor
 {
-    public class IRelatedInformation
+    public sealed class IRelatedInformation
     {
         [JsonProperty("endColumn")]
         public uint EndColumn { get; set; }

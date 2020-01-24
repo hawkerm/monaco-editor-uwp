@@ -1,4 +1,5 @@
 ﻿using Monaco.Editor;
+using Monaco;
 using Newtonsoft.Json;
 
 namespace Monaco.Languages
@@ -119,7 +120,7 @@ namespace Monaco.Languages
         /// is rendered, e.g. Deprecated is rendered with a strikeout
         /// </summary>
         [JsonProperty("tags", NullValueHandling = NullValueHandling.Ignore)]
-        public int[] Tags { get; set; }
+        public MarkerTag[] Tags { get; set; }
 
         public CompletionItem(string label, string insertText, CompletionItemKind kind)
         {

@@ -8,10 +8,9 @@ namespace Monaco.Editor
     public interface IMarker : IMarkerData
     {
         [JsonProperty("owner")]
-        string Owner { get; }
+        string Owner { get; set; }
 
-        // TODO: Should I port over Monaco.Uri? https://microsoft.github.io/monaco-editor/api/classes/monaco.uri.html
         [JsonProperty("resource")]
-        IUri Resource { get; }
+        IUri Resource { get; set; }
     }
 }

@@ -3,11 +3,11 @@
     /// <summary>
     /// https://microsoft.github.io/monaco-editor/api/enums/monaco.severity.html
     /// </summary>
-    public enum Severity
+    public enum MarkerSeverity
     {
-        Ignore = 0,
-        Info = 1,
-        Warning = 2,
-        Error = 3
+        Hint = 1,
+        Info = 2,
+        Warning = 4,
+        Error = 8
     }
 }

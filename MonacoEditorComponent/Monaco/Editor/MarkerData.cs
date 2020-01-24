@@ -7,29 +7,35 @@ namespace Monaco.Editor
     /// </summary>
     public sealed class MarkerData : IMarkerData
     {
-        [JsonProperty("code")]
+        [JsonProperty("code", NullValueHandling = NullValueHandling.Ignore)]
         public string Code { get; set; }
 
-        [JsonProperty("message")]
-        public string Message { get; set; }
-
-        [JsonProperty("severity")]
-        public Severity Severity { get; set; }
-
-        [JsonProperty("source")]
-        public string Source { get; set; }
-
-        [JsonProperty("startLineNumber")]
-        public uint StartLineNumber { get; set; }
-
-        [JsonProperty("startColumn")]
-        public uint StartColumn { get; set; }
+        [JsonProperty("endColumn")]
+        public uint EndColumn { get; set; }
 
         [JsonProperty("endLineNumber")]
         public uint EndLineNumber { get; set; }
 
-        [JsonProperty("endColumn")]
-        public uint EndColumn { get; set; }
+        [JsonProperty("message")]
+        public string Message { get; set; }
+
+        [JsonProperty("relatedInformation", NullValueHandling = NullValueHandling.Ignore)]
+        public IRelatedInformation[] RelatedInformation { get; set; }
+
+        [JsonProperty("severity")]
+        public MarkerSeverity Severity { get; set; }
+
+        [JsonProperty("source", NullValueHandling = NullValueHandling.Ignore)]
+        public string Source { get; set; }
+
+        [JsonProperty("startColumn")]
+        public uint StartColumn { get; set; }
+
+        [JsonProperty("startLineNumber")]
+        public uint StartLineNumber { get; set; }
+
+        [JsonProperty("tags", NullValueHandling = NullValueHandling.Ignore)]
+        public MarkerTag[] Tags { get; set; }
 
         public string ToJson()
         {
