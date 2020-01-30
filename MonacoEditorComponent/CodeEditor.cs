@@ -124,9 +124,11 @@ namespace Monaco
             Options.PropertyChanged -= Options_PropertyChanged;
 
             if (_themeListener != null)
+            {
                 _themeListener.ThemeChanged -= ThemeListener_ThemeChanged;
-
+            }
             _themeListener = null;
+            
             UnregisterPropertyChangedCallback(RequestedThemeProperty, _themeToken);
             _keyboardListener = null;
             _model = null;
