@@ -1,16 +1,11 @@
 ﻿using Monaco;
 using Monaco.Editor;
 using Monaco.Helpers;
-using Monaco.Languages;
 using MonacoEditorTestApp.Actions;
 using MonacoEditorTestApp.Helpers;
 using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading;
-using System.Threading.Tasks;
-using Windows.ApplicationModel;
 using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Popups;
@@ -57,11 +52,12 @@ namespace MonacoEditorTestApp
             // This shouldn't happen, if it does, then it's a bug.
         }
 
+
         private async void Editor_Loading(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(CodeContent))
             {
-                CodeContent = await FileIO.ReadTextAsync(await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Content.txt")));
+                CodeContent = await FileIO.ReadTextAsync(await StorageFile.GetFileFromApplicationUriAsync(new System.Uri("ms-appx:///Content.txt")));
 
                 ButtonHighlightRange_Click(null, null);
             }
@@ -72,31 +68,13 @@ namespace MonacoEditorTestApp
             var available_languages = await languages.GetLanguagesAsync();
             //Debugger.Break();
 
-            await languages.RegisterHoverProviderAsync("csharp", (model, position) =>
-            {
-                // TODO: See if this can be internalized? Need to figure out the best pattern here to expose async method through WinRT, as can't use Task for 'async' language compatibility in WinRT Component...
-                return AsyncInfo.Run(async delegate(CancellationToken cancelationToken)
-                {
-                    var word = await model.GetWordAtPositionAsync(position);
-                    if (word != null && word.Word != null && word.Word.IndexOf("Hit", 0, StringComparison.CurrentCultureIgnoreCase) != -1)
-                    {
-                        return new Hover(new string[]
-                        {
-                        "*Hit* - press the keys following together.",
-                        "Some **more** text is here.",
-                        "And a [link](https://www.github.com/)."
-                        }, new Range(position.LineNumber, position.Column, position.LineNumber, position.Column + 5));
-                    }
-
-                    return default(Hover);
-                });
-            });
+            await languages.RegisterHoverProviderAsync("csharp", new EditorHoverProvider());
 
             await languages.RegisterCompletionItemProviderAsync("csharp", new LanguageProvider());
 
             _myCondition = await Editor.CreateContextKeyAsync("MyCondition", false);
 
-            await Editor.AddCommandAsync(Monaco.KeyCode.F5, async () => {
+            await Editor.AddCommandAsync(KeyCode.F5, async () => {
                 var md = new MessageDialog("You Hit F5!");
                 await md.ShowAsync();
 
@@ -107,7 +85,7 @@ namespace MonacoEditorTestApp
                 Editor.Focus(FocusState.Programmatic);
             }, _myCondition.Key);
 
-            await Editor.AddCommandAsync(Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KEY_R, async () =>
+            await Editor.AddCommandAsync(KeyMod.CtrlCmd | KeyCode.KEY_R, async () =>
             {
                 var range = await Editor.GetModel().GetFullModelRangeAsync();
 
@@ -117,7 +95,7 @@ namespace MonacoEditorTestApp
                 Editor.Focus(FocusState.Programmatic);
             });
 
-            await Editor.AddCommandAsync(Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KEY_W, async () =>
+            await Editor.AddCommandAsync(KeyMod.CtrlCmd | KeyCode.KEY_W, async () =>
             {
                 var word = await Editor.GetModel().GetWordAtPositionAsync(await Editor.GetPositionAsync());
 
@@ -135,7 +113,7 @@ namespace MonacoEditorTestApp
                 Editor.Focus(FocusState.Programmatic);
             });
 
-            await Editor.AddCommandAsync(Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KEY_L, async () =>
+            await Editor.AddCommandAsync(KeyMod.CtrlCmd | KeyCode.KEY_L, async () =>
             {
                 var model = Editor.GetModel();
                 var line = await model.GetLineContentAsync((await Editor.GetPositionAsync()).LineNumber);
@@ -148,7 +126,7 @@ namespace MonacoEditorTestApp
                 Editor.Focus(FocusState.Programmatic);
             });
 
-            await Editor.AddCommandAsync(Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KEY_U, async () =>
+            await Editor.AddCommandAsync(KeyMod.CtrlCmd | KeyCode.KEY_U, async () =>
             {
                 var range = new Range(2, 10, 3, 8);
                 var seg = await Editor.GetModel().GetValueInRangeAsync(range);
@@ -220,17 +198,17 @@ namespace MonacoEditorTestApp
                     }.Name,
                     GlyphMarginClassName = new CssGlyphStyle(Editor)
                     {
-                        GlyphImage = new Uri("ms-appx-web:///Icons/error.png")
+                        GlyphImage = new System.Uri("ms-appx-web:///Icons/error.png")
                     }.Name,
-                    HoverMessage = new string[]
+                    HoverMessage = (new string[]
                     {
                         "This is *another* \"test\" message about 'thing'."
-                    }.ToMarkdownString(),
-                    GlyphMarginHoverMessage = new string[]
+                    }).ToMarkdownString(),
+                    GlyphMarginHoverMessage = (new string[]
                     {
                         "This is some crazy \"Error\" here.",
                         "'Maybe'..."
-                    }.ToMarkdownString()
+                    }).ToMarkdownString()
                 }));
             Editor.Decorations.Add(
                 new IModelDeltaDecoration(new Range(2, 1, 2, await Editor.GetModel().GetLineLengthAsync(2)), new IModelDecorationOptions()
@@ -242,12 +220,12 @@ namespace MonacoEditorTestApp
                     }.Name,
                     GlyphMarginClassName = new CssGlyphStyle(Editor)
                     {
-                        GlyphImage = new Uri("ms-appx-web:///Icons/warning.png")
+                        GlyphImage = new System.Uri("ms-appx-web:///Icons/warning.png")
                     }.Name,
-                    HoverMessage = new string[]
+                    HoverMessage = (new string[]
                     {
                         "Deprecated"
-                    }.ToMarkdownString()
+                    }).ToMarkdownString()
                 }));
         }
 

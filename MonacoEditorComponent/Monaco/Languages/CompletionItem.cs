@@ -1,5 +1,4 @@
 ﻿using Monaco.Editor;
-using Monaco;
 using Newtonsoft.Json;
 
 namespace Monaco.Languages

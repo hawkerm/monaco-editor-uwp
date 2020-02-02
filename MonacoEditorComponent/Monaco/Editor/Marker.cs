@@ -26,7 +26,7 @@ namespace Monaco.Editor
         public IRelatedInformation[] RelatedInformation { get; set; }
 
         [JsonProperty("resource")]
-        public IUri Resource { get; set; }
+        public Uri Resource { get; set; }
 
         [JsonProperty("severity")]
         public MarkerSeverity Severity { get; set; }

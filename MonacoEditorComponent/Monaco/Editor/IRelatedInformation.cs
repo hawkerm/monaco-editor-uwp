@@ -14,7 +14,7 @@ namespace Monaco.Editor
         public string Message { get; set; }
 
         [JsonProperty("resource")]
-        public IUri Resource { get; set; }
+        public Uri Resource { get; set; }
 
         [JsonProperty("startColumn")]
         public uint StartColumn { get; set; }

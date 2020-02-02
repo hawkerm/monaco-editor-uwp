@@ -1,8 +1,5 @@
 ﻿namespace Monaco.Languages
 {
-    /// <summary>
-    /// https://microsoft.github.io/monaco-editor/api/enums/monaco.languages.completionitemkind.html
-    /// </summary>
     public enum CompletionItemKind
     {
         Method = 0,

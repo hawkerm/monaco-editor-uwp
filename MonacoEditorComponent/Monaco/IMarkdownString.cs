@@ -6,16 +6,13 @@ using Windows.Foundation.Metadata;
 
 namespace Monaco
 {
-    /// <summary>
-    /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.imarkdownstring.html
-    /// </summary>
     public sealed class IMarkdownString
     {
         [JsonProperty("isTrusted")]
         public bool IsTrusted { get; set; }
 
         [JsonProperty("uris", NullValueHandling = NullValueHandling.Ignore)]
-        public IDictionary<string, IUri> Uris { get; set; }
+        public IDictionary<string, Uri> Uris { get; set; }
 
         [JsonProperty("value")]
         public string Value { get; set; }

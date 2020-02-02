@@ -68,7 +68,7 @@ namespace Monaco
                     {
                         var position = JsonConvert.DeserializeObject<Position>(args[0]);
                         var requestedItem = JsonConvert.DeserializeObject<CompletionItem>(args[1]);
-                        var completionItem = await provider.ResolveCompletionItemAsync(requestedItem);
+                        var completionItem = await provider.ResolveCompletionItemAsync(editor.GetModel(), position, requestedItem);
 
                         if (completionItem != null)
                         {
@@ -95,7 +95,7 @@ namespace Monaco
                 {
                     if (args != null && args.Length >= 1)
                     {
-                        var hover = await provider.Invoke(editor.GetModel(), JsonConvert.DeserializeObject<Position>(args[0]));
+                        var hover = await provider.ProvideHover(editor.GetModel(), JsonConvert.DeserializeObject<Position>(args[0]));
 
                         if (hover != null)
                         {

@@ -1,8 +1,9 @@
 ﻿namespace Monaco
 {
     /// <summary>
-    /// https://microsoft.github.io/monaco-editor/api/enums/monaco.keycode.html
-    /// Transposed from 'standaloneBase.ts'
+    /// Virtual Key Codes, the value does not hold any inherent meaning.
+    /// Inspired somewhat from https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+    /// But these are "more general", as they should work across browsers &amp; OS`s.
     /// </summary>
     public static class KeyCode
     {

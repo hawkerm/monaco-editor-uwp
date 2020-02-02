@@ -4,17 +4,28 @@ using System;
 namespace Monaco
 {
     /// <summary>
-    /// Monaco Range in the editor. (startLineNumber,startColumn) is &lt;= (endLineNumber,endColumn)
-    /// https://microsoft.github.io/monaco-editor/api/classes/monaco.range.html
+    /// A range in the editor. (startLineNumber,startColumn) is &lt;= (endLineNumber,endColumn)
     /// </summary>
     public sealed class Range : IRange
     {
+        /// <summary>
+        /// Column on which the range ends in line `endLineNumber`.
+        /// </summary>
         [JsonProperty("endColumn")]
         public uint EndColumn { get; private set; }
+        /// <summary>
+        /// Line number on which the range ends.
+        /// </summary>
         [JsonProperty("endLineNumber")]
         public uint EndLineNumber { get; private set; }
+        /// <summary>
+        /// Column on which the range starts in line `startLineNumber` (starts at 1).
+        /// </summary>
         [JsonProperty("startColumn")]
         public uint StartColumn { get; private set; }
+        /// <summary>
+        /// Line number on which the range starts (starts at 1).
+        /// </summary>
         [JsonProperty("startLineNumber")]
         public uint StartLineNumber { get; private set; }
 

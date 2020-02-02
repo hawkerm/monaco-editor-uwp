@@ -1,11 +1,15 @@
 ﻿namespace Monaco.Languages
 {
-    /// <summary>
-    /// https://microsoft.github.io/monaco-editor/api/enums/monaco.languages.completioniteminserttextrule.html
-    /// </summary>
     public enum CompletionItemInsertTextRule
     {
-        KeepWhitespace = 1,
+        /// <summary>
+        /// `insertText` is a snippet.
+        /// </summary>
         InsertAsSnippet = 4,
+        /// <summary>
+        /// Adjust whitespace/indentation of multiline insert texts to
+        /// match the current line indentation.
+        /// </summary>
+        KeepWhitespace = 1
     }
 }

@@ -31,7 +31,7 @@ namespace Monaco.Editor
         /// Defaults to 'auto'.
         /// </summary>
         [JsonProperty("horizontal", NullValueHandling = NullValueHandling.Ignore)]
-        public Horizontal? Horizontal { get; set; }
+        public ScrollbarBehavior? Horizontal { get; set; }
 
         /// <summary>
         /// Render arrows at the left and right of the horizontal scrollbar.
@@ -66,7 +66,7 @@ namespace Monaco.Editor
         /// Defaults to 'auto'.
         /// </summary>
         [JsonProperty("vertical", NullValueHandling = NullValueHandling.Ignore)]
-        public Horizontal? Vertical { get; set; }
+        public ScrollbarBehavior? Vertical { get; set; }
 
         /// <summary>
         /// Render arrows at the top and bottom of the vertical scrollbar.

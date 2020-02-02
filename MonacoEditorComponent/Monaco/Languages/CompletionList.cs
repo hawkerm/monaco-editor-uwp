@@ -2,9 +2,6 @@
 
 namespace Monaco.Languages
 {
-    /// <summary>
-    /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.languages.completionlist.html
-    /// </summary>
     public sealed class CompletionList
     {
         [JsonProperty("incomplete", NullValueHandling = NullValueHandling.Ignore)]

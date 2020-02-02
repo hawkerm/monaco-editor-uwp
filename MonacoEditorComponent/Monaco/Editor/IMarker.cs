@@ -11,6 +11,6 @@ namespace Monaco.Editor
         string Owner { get; set; }
 
         [JsonProperty("resource")]
-        IUri Resource { get; set; }
+        Uri Resource { get; set; }
     }
 }

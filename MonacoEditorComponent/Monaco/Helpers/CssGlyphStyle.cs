@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace Monaco.Helpers
+﻿namespace Monaco.Helpers
 {
     public sealed class CssGlyphStyle : ICssStyle
     {
-        public Uri GlyphImage { get; set; }
+        public System.Uri GlyphImage { get; set; }
 
         public string Name { get; private set; }
 

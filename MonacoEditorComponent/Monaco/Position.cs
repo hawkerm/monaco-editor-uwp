@@ -7,14 +7,18 @@ namespace Monaco
 {
     /// <summary>
     /// A position in the editor.
-    /// https://microsoft.github.io/monaco-editor/api/classes/monaco.position.html
     /// </summary>
     public sealed class Position : IPosition
     {
-        // TODO: Investigate why with .NET Native the interface attributes aren't carried forward?
+        /// <summary>
+        /// column (the first character in a line is between column 1 and column 2)
+        /// </summary>
         [JsonProperty("column")]
         public uint Column { get; private set; }
 
+        /// <summary>
+        /// line number (starts at 1)
+        /// </summary>
         [JsonProperty("lineNumber")]
         public uint LineNumber { get; private set; }
 

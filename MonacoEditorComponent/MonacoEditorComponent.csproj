@@ -142,7 +142,7 @@
     <Compile Include="Monaco\Editor\EditorMinimapOptions.cs" />
     <Compile Include="Monaco\Editor\FoldingStrategy.cs" />
     <Compile Include="Monaco\Editor\GoToLocationOptions.cs" />
-    <Compile Include="Monaco\Editor\Horizontal.cs" />
+    <Compile Include="Monaco\Editor\ScrollbarBehavior.cs" />
     <Compile Include="Monaco\Editor\IContextKey.cs" />
     <Compile Include="Monaco\Editor\IDiffEditorConstructionOptions.cs" />
     <Compile Include="Monaco\Editor\IDiffEditorOptions.cs" />
@@ -216,7 +216,8 @@
     <Compile Include="Monaco\Selection.cs" />
     <Compile Include="Monaco\SelectionDirection.cs" />
     <Compile Include="Monaco\MarkerSeverity.cs" />
-    <Compile Include="Monaco\IUri.cs" />
+    <Compile Include="Monaco\Uri.cs" />
+    <Compile Include="Monaco\UriComponents.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

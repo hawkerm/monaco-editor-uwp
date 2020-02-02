@@ -13,7 +13,7 @@ namespace MonacoEditorTestApp.Helpers
     {
         public string[] TriggerCharacters => new string[] { "c" };
 
-        public IAsyncOperation<CompletionList> ProvideCompletionItemsAsync(IModel document, IPosition position, CompletionContext context)
+        public IAsyncOperation<CompletionList> ProvideCompletionItemsAsync(IModel document, Position position, CompletionContext context)
         {
             return AsyncInfo.Run(async delegate (CancellationToken cancelationToken)
             {
@@ -48,14 +48,14 @@ namespace MonacoEditorTestApp.Helpers
                     {
                         new CompletionItem("foreach", "foreach (var ${2:element} in ${1:array}) {\n\t$0\n}", CompletionItemKind.Snippet)
                         {
-                            InsertTextRules = Monaco.Languages.CompletionItemInsertTextRule.InsertAsSnippet
+                            InsertTextRules = CompletionItemInsertTextRule.InsertAsSnippet
                         }
                     }
                 };
             });
         }
 
-        public IAsyncOperation<CompletionItem> ResolveCompletionItemAsync(CompletionItem item)
+        public IAsyncOperation<CompletionItem> ResolveCompletionItemAsync(IModel model, Position position, CompletionItem item)
         {
             return AsyncInfo.Run(delegate (CancellationToken cancelationToken)
             {

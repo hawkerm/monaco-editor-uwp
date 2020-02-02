@@ -5,18 +5,15 @@ namespace Monaco.Editor
 {
 
     /// <summary>
-    /// Render horizontal scrollbar.
-    /// Defaults to 'auto'.
-    ///
-    /// Render vertical scrollbar.
+    /// Render horizontal or vertical scrollbar.
     /// Defaults to 'auto'.
     /// </summary>
-    [JsonConverter(typeof(HorizontalConverter))]
-    public enum Horizontal { Auto, Hidden, Visible };
+    [JsonConverter(typeof(ScrollbarBehaviorConverter))]
+    public enum ScrollbarBehavior { Auto, Hidden, Visible };
 
-    internal class HorizontalConverter : JsonConverter
+    internal class ScrollbarBehaviorConverter : JsonConverter
     {
-        public override bool CanConvert(Type t) => t == typeof(Horizontal) || t == typeof(Horizontal?);
+        public override bool CanConvert(Type t) => t == typeof(ScrollbarBehavior) || t == typeof(ScrollbarBehavior?);
 
         public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
         {
@@ -25,13 +22,13 @@ namespace Monaco.Editor
             switch (value)
             {
                 case "auto":
-                    return Horizontal.Auto;
+                    return ScrollbarBehavior.Auto;
                 case "hidden":
-                    return Horizontal.Hidden;
+                    return ScrollbarBehavior.Hidden;
                 case "visible":
-                    return Horizontal.Visible;
+                    return ScrollbarBehavior.Visible;
             }
-            throw new Exception("Cannot unmarshal type Horizontal");
+            throw new Exception("Cannot unmarshal type ScrollbarBehavior");
         }
 
         public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
@@ -41,20 +38,20 @@ namespace Monaco.Editor
                 serializer.Serialize(writer, null);
                 return;
             }
-            var value = (Horizontal)untypedValue;
+            var value = (ScrollbarBehavior)untypedValue;
             switch (value)
             {
-                case Horizontal.Auto:
+                case ScrollbarBehavior.Auto:
                     serializer.Serialize(writer, "auto");
                     return;
-                case Horizontal.Hidden:
+                case ScrollbarBehavior.Hidden:
                     serializer.Serialize(writer, "hidden");
                     return;
-                case Horizontal.Visible:
+                case ScrollbarBehavior.Visible:
                     serializer.Serialize(writer, "visible");
                     return;
             }
-            throw new Exception("Cannot marshal type Horizontal");
+            throw new Exception("Cannot marshal type ScrollbarBehavior");
         }
     }
 }
