@@ -9,6 +9,7 @@ v0.9 - 01/23/2020
 **Breaking changes**: 
 - Use StandaloneEditorConstructionOptions for Options instead of IEditorConstructionOptions
 - Use ClassName string instead of CssStyle type
+- Snippets need InsertTextRules property set to InsertAsSnippet
 
 v0.8.1 - 01/15/2019
 -------------------

@@ -47,6 +47,9 @@ namespace MonacoEditorTestApp.Helpers
                     Suggestions = new[]
                     {
                         new CompletionItem("foreach", "foreach (var ${2:element} in ${1:array}) {\n\t$0\n}", CompletionItemKind.Snippet)
+                        {
+                            InsertTextRules = Monaco.Languages.CompletionItemInsertTextRule.InsertAsSnippet
+                        }
                     }
                 };
             });
