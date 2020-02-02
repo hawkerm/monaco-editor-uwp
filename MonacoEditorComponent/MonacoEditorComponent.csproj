@@ -200,6 +200,7 @@
     <Compile Include="Monaco\Languages\Command.cs" />
     <Compile Include="Monaco\Languages\CompletionContext.cs" />
     <Compile Include="Monaco\Languages\CompletionItem.cs" />
+    <Compile Include="Monaco\Languages\CompletionItemInsertTextRule.cs" />
     <Compile Include="Monaco\Languages\CompletionItemKind.cs" />
     <Compile Include="Monaco\Languages\CompletionItemProvider.cs" />
     <Compile Include="Monaco\Languages\CompletionList.cs" />

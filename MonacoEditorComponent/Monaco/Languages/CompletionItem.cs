@@ -68,7 +68,7 @@ namespace Monaco.Languages
         /// this completion.
         /// </summary>
         [JsonProperty("insertTextRules", NullValueHandling = NullValueHandling.Ignore)]
-        public int? InsertTextRules { get; set; }
+        public CompletionItemInsertTextRule? InsertTextRules { get; set; }
 
         /// <summary>
         /// The kind of this completion item. Based on the kind
