@@ -115,7 +115,7 @@
     <Compile Include="CodeEditor.Events.cs" />
     <Compile Include="CodeEditor.Methods.cs" />
     <Compile Include="CodeEditor.Properties.cs" />
-    <Compile Include="Editor\ISingleEditOperation.cs" />
+    <Compile Include="Monaco\Editor\ISingleEditOperation.cs" />
     <Compile Include="Extensions\WebViewExtensions.cs" />
     <Compile Include="Helpers\DebugLogger.cs" />
     <Compile Include="Helpers\DispatcherTaskExtensions.cs" />
