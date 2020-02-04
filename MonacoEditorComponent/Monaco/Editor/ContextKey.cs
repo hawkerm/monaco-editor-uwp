@@ -49,10 +49,5 @@ namespace Monaco.Editor
 
             UpdateValueAsync();
         }
-
-        public string ToJson()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
     }
-    }
+}

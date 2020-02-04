@@ -8,7 +8,7 @@ namespace Monaco.Editor
     ///
     /// Configuration options for editor minimap
     /// </summary>
-    public sealed class EditorMinimapOptions : IJsonable
+    public sealed class EditorMinimapOptions
     {
         /// <summary>
         /// Enable the rendering of the minimap.
@@ -50,11 +50,5 @@ namespace Monaco.Editor
         /// </summary>
         [JsonProperty("side", NullValueHandling = NullValueHandling.Ignore)]
         public Side? Side { get; set; }
-
-        public string ToJson()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
     }
-
 }

@@ -112,10 +112,5 @@ namespace Monaco
         {
             return new Position(pos.LineNumber, pos.Column);
         }
-
-        public string ToJson()
-        {
-            return string.Format("{{ \"lineNumber\": {0}, \"column\": {1} }}", LineNumber, Column);
-        }
     }
 }

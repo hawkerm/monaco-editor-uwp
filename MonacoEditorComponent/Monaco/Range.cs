@@ -110,12 +110,6 @@ namespace Monaco
             return string.Format("[{0}, {1}-> {2}, {3}]", StartLineNumber, StartColumn, EndLineNumber, EndColumn);
         }
 
-        public string ToJson()
-        {
-            // Right json helper for this?  Or use JsonObject?  Or do I want a json lib dependency?
-            return string.Format("{{ \"startLineNumber\": {0}, \"startColumn\": {1}, \"endLineNumber\": {2}, \"endColumn\": {3} }}", StartLineNumber, StartColumn, EndLineNumber, EndColumn);
-        }
-
         public static Range Lift(IRange range)
         {
             return new Range(range.StartLineNumber, range.StartColumn, range.EndLineNumber, range.EndColumn);

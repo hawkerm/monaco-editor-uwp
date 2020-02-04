@@ -10,14 +10,9 @@ namespace Monaco.Editor
     /// <summary>
     /// The options to create an editor.
     /// </summary>
-    public sealed class StandaloneEditorConstructionOptions : IStandaloneEditorConstructionOptions, IJsonable, INotifyPropertyChanged
+    public sealed class StandaloneEditorConstructionOptions : IStandaloneEditorConstructionOptions, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-
-        public string ToJson()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
 
         private readonly Dictionary<string, object> _propertyBackingDictionary = new Dictionary<string, object>();
 

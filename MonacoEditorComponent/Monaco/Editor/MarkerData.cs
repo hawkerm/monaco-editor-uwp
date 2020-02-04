@@ -36,10 +36,5 @@ namespace Monaco.Editor
 
         [JsonProperty("tags", NullValueHandling = NullValueHandling.Ignore)]
         public MarkerTag[] Tags { get; set; }
-
-        public string ToJson()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 }

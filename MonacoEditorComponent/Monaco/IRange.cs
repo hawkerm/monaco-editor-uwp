@@ -6,7 +6,7 @@ namespace Monaco
     /// <summary>
     /// A range in the editor. This interface is suitable for serialization.
     /// </summary>
-    public interface IRange : IJsonable
+    public interface IRange
     {
         /// <summary>
         /// Line number on which the range starts (starts at 1).

@@ -98,10 +98,5 @@ namespace Monaco
         {
             return string.Format("[{0}, {1}-> {2}, {3}]", SelectionStartLineNumber, SelectionStartColumn, PositionLineNumber, PositionColumn);
         }
-
-        public string ToJson()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
