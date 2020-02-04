@@ -7,7 +7,8 @@ namespace Monaco.Editor
     /// Control the cursor animation style, possible values are 'blink', 'smooth', 'phase',
     /// 'expand' and 'solid'.
     /// Defaults to 'blink'.
-    /// </summary>    [JsonConverter(typeof(CursorBlinkingConverter))]
+    /// </summary>
+    [JsonConverter(typeof(CursorBlinkingConverter))]
     public enum CursorBlinking { Blink, Expand, Phase, Smooth, Solid };
 
     internal class CursorBlinkingConverter : JsonConverter

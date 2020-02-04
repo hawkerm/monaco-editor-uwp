@@ -8,7 +8,8 @@ namespace Monaco.Editor
     /// Defaults to `default`, `cursorSurroundingLines` is not enforced when cursor position is
     /// changed
     /// by mouse.
-    /// </summary>    [JsonConverter(typeof(CursorSurroundingLinesStyleConverter))]
+    /// </summary>
+    [JsonConverter(typeof(CursorSurroundingLinesStyleConverter))]
     public enum CursorSurroundingLinesStyle { All, Default };
 
     internal class CursorSurroundingLinesStyleConverter : JsonConverter

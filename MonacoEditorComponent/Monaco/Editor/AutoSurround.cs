@@ -6,7 +6,8 @@ namespace Monaco.Editor
     /// <summary>
     /// Options for auto surrounding.
     /// Defaults to always allowing auto surrounding.
-    /// </summary>    [JsonConverter(typeof(AutoSurroundConverter))]
+    /// </summary>
+    [JsonConverter(typeof(AutoSurroundConverter))]
     public enum AutoSurround { Brackets, LanguageDefined, Never, Quotes };
 
     internal class AutoSurroundConverter : JsonConverter
