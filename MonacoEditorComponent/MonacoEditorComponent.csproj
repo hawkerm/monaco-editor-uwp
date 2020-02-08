@@ -111,10 +111,10 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CodeEditor.cs" />
-    <Compile Include="CodeEditor.Events.cs" />
-    <Compile Include="CodeEditor.Methods.cs" />
-    <Compile Include="CodeEditor.Properties.cs" />
+    <Compile Include="CodeEditor\CodeEditor.cs" />
+    <Compile Include="CodeEditor\CodeEditor.Events.cs" />
+    <Compile Include="CodeEditor\CodeEditor.Methods.cs" />
+    <Compile Include="CodeEditor\CodeEditor.Properties.cs" />
     <Compile Include="Monaco\Editor\ISingleEditOperation.cs" />
     <Compile Include="Extensions\WebViewExtensions.cs" />
     <Compile Include="Helpers\DebugLogger.cs" />
@@ -264,7 +264,7 @@
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MonacoEditor.html" />
+    <Content Include="CodeEditor\CodeEditor.html" />
     <Content Include="monaco-editor\*.*" />
     <Content Include="monaco-editor\min\**\*.*" />
     <Content Include="ts-helpermethods\*.js" />
