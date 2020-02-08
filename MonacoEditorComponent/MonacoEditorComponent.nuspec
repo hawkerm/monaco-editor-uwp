@@ -31,7 +31,7 @@
     <file src="Themes\Generic.xaml" target="lib\uap10.0\Monaco\Themes"/>
     <file src="bin\Release\Themes\Generic.xbf" target="lib\uap10.0\Monaco\Themes"/>
     <!-- Dependencies -->
-    <file src="CodeEditor\CodeEditor.html" target="lib\uap10.0\Monaco"/>
+    <file src="CodeEditor\CodeEditor.html" target="lib\uap10.0\Monaco\CodeEditor"/>
     <file src="ts-helpermethods\*.js" target="lib\uap10.0\Monaco\ts-helpermethods" />
     <file src="monaco-editor\*" target="lib\uap10.0\Monaco\monaco-editor"/>
     <file src="monaco-editor\min\**\*.*" target="lib\uap10.0\Monaco\monaco-editor\min"/>
