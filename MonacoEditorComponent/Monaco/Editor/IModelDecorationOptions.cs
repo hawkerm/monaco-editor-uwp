@@ -1,5 +1,4 @@
-﻿using Monaco.Helpers;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Monaco.Editor
 {
@@ -98,7 +97,7 @@ namespace Monaco.Editor
         /// Defaults to TrackedRangeStickiness.AlwaysGrowsWhenTypingAtEdges
         /// </summary>
         [JsonProperty("stickiness", NullValueHandling = NullValueHandling.Ignore)]
-        public int? Stickiness { get; set; }
+        public TrackedRangeStickiness? Stickiness { get; set; }
 
         /// <summary>
         /// Specifies the stack order of a decoration.
