@@ -12,6 +12,7 @@ v0.9 - 01/23/2020
 - Snippets need InsertTextRules property set to InsertAsSnippet
 - Use HoverProvider interface instead of original delegate
 - IUri has been renamed to Uri
+- Rename IsLoaded to IsEditorLoaded
 
 v0.8.1 - 01/15/2019
 -------------------

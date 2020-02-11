@@ -30,13 +30,13 @@ namespace Monaco
         /// <summary>
         /// Template Property used during loading to prevent blank control visibility when it's still loading WebView.
         /// </summary>
-        public new bool IsLoaded
+        public bool IsEditorLoaded
         {
-            get => (bool)GetValue(IsLoadedProperty);
-            private set => SetValue(IsLoadedProperty, value);
+            get => (bool)GetValue(IsEditorLoadedProperty);
+            private set => SetValue(IsEditorLoadedProperty, value);
         }
 
-        public static DependencyProperty IsLoadedProperty { get; } = DependencyProperty.Register(nameof(IsLoaded), typeof(string), typeof(CodeEditor), new PropertyMetadata(false));
+        public static DependencyProperty IsEditorLoadedProperty { get; } = DependencyProperty.Register(nameof(IsEditorLoaded), typeof(string), typeof(CodeEditor), new PropertyMetadata(false));
 
         /// <summary>
         /// Construct a new IStandAloneCodeEditor.

@@ -51,7 +51,7 @@ namespace Monaco
 
         private async void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
-            IsLoaded = true;
+            IsEditorLoaded = true;
 
             // Make sure inner editor is focused
             await SendScriptAsync("editor.focus();");
