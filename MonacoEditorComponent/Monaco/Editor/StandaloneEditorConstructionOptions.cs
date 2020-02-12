@@ -1,5 +1,4 @@
-﻿using Monaco.Helpers;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -135,6 +134,12 @@ namespace Monaco.Editor
         public bool? ColorDecorators { get => GetPropertyValue<bool?>(); set => SetPropertyValue(value); }
 
         /// <summary>
+        /// Control the behaviour of comments in the editor.
+        /// </summary>
+        [JsonProperty("comments", NullValueHandling = NullValueHandling.Ignore)]
+        public IEditorCommentsOptions Comments { get => GetPropertyValue<IEditorCommentsOptions>(); set => SetPropertyValue(value); }
+
+        /// <summary>
         /// Enable custom contextmenu.
         /// Defaults to true.
         /// </summary>
@@ -253,6 +258,13 @@ namespace Monaco.Editor
         /// </summary>
         [JsonProperty("folding", NullValueHandling = NullValueHandling.Ignore)]
         public bool? Folding { get => GetPropertyValue<bool?>(); set => SetPropertyValue(value); }
+
+        /// <summary>
+        /// Enable highlight for folded regions.
+        /// Defaults to true.
+        /// </summary>
+        [JsonProperty("foldingHighlight", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? FoldingHighlight { get => GetPropertyValue<bool?>(); set => SetPropertyValue(value); }
 
         /// <summary>
         /// Selects the folding strategy. 'auto' uses the strategies contributed for the current
@@ -475,7 +487,14 @@ namespace Monaco.Editor
         /// Parameter hint options.
         /// </summary>
         [JsonProperty("parameterHints", NullValueHandling = NullValueHandling.Ignore)]
-        public InternalParameterHintOptions ParameterHints { get => GetPropertyValue<InternalParameterHintOptions>(); set => SetPropertyValue(value); }
+        public IEditorParameterHintOptions ParameterHints { get => GetPropertyValue<IEditorParameterHintOptions>(); set => SetPropertyValue(value); }
+
+        /// <summary>
+        /// Controls whether to focus the inline editor in the peek widget by default.
+        /// Defaults to false.
+        /// </summary>
+        [JsonProperty("peekWidgetDefaultFocus", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? PeekWidgetDefaultFocus { get => GetPropertyValue<bool?>(); set => SetPropertyValue(value); }
 
         /// <summary>
         /// Enable quick suggestions (shadow suggestions)
@@ -525,6 +544,13 @@ namespace Monaco.Editor
         /// </summary>
         [JsonProperty("renderLineHighlight", NullValueHandling = NullValueHandling.Ignore)]
         public RenderLineHighlight? RenderLineHighlight { get => GetPropertyValue<RenderLineHighlight?>(); set => SetPropertyValue(value); }
+
+        /// <summary>
+        /// Should the editor render validation decorations.
+        /// Defaults to editable.
+        /// </summary>
+        [JsonProperty("renderValidationDecorations", NullValueHandling = NullValueHandling.Ignore)]
+        public string RenderValidationDecorations { get => GetPropertyValue<string>(); set => SetPropertyValue(value); }
 
         /// <summary>
         /// Enable rendering of whitespace.
@@ -637,7 +663,7 @@ namespace Monaco.Editor
         /// Suggest options.
         /// </summary>
         [JsonProperty("suggest", NullValueHandling = NullValueHandling.Ignore)]
-        public InternalSuggestOptions Suggest { get => GetPropertyValue<InternalSuggestOptions>(); set => SetPropertyValue(value); }
+        public ISuggestOptions Suggest { get => GetPropertyValue<ISuggestOptions>(); set => SetPropertyValue(value); }
 
         /// <summary>
         /// The font size for the suggest widget.
@@ -712,14 +738,6 @@ namespace Monaco.Editor
         public string WordWrapBreakBeforeCharacters { get => GetPropertyValue<string>(); set => SetPropertyValue(value); }
 
         /// <summary>
-        /// Configure word wrapping characters. A break will be introduced after these characters
-        /// only if no `wordWrapBreakBeforeCharacters` or `wordWrapBreakAfterCharacters` were found.
-        /// Defaults to '.'.
-        /// </summary>
-        [JsonProperty("wordWrapBreakObtrusiveCharacters", NullValueHandling = NullValueHandling.Ignore)]
-        public string WordWrapBreakObtrusiveCharacters { get => GetPropertyValue<string>(); set => SetPropertyValue(value); }
-
-        /// <summary>
         /// Control the wrapping of the editor.
         /// When `wordWrap` = "off", the lines will never wrap.
         /// When `wordWrap` = "on", the lines will wrap at the viewport width.
@@ -743,7 +761,14 @@ namespace Monaco.Editor
         /// </summary>
         [JsonProperty("wrappingIndent", NullValueHandling = NullValueHandling.Ignore)]
         public WrappingIndent? WrappingIndent { get => GetPropertyValue<WrappingIndent?>(); set => SetPropertyValue(value); }
-        
+
+        /// <summary>
+        /// Controls the wrapping strategy to use.
+        /// Defaults to 'simple'.
+        /// </summary>
+        [JsonProperty("wrappingStrategy", NullValueHandling = NullValueHandling.Ignore)]
+        public string WrappingStrategy { get => GetPropertyValue<string>(); set => SetPropertyValue(value); }
+
         /// <summary>
         /// The initial editor dimension (to avoid measuring the container).
         /// </summary>

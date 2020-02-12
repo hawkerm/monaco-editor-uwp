@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
-using Monaco;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Monaco.Editor
 {
     /// <summary>
-    /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.iactiondescriptor.html
-    /// https://microsoft.github.io/monaco-editor/playground.html#interacting-with-the-editor-adding-an-action-to-an-editor-instance
+    /// Description of an action contribution
     /// </summary>
     public interface IActionDescriptor
     {
@@ -49,6 +48,6 @@ namespace Monaco.Editor
         [JsonProperty("precondition", NullValueHandling = NullValueHandling.Ignore)]
         string Precondition { get; }
 
-        void Run(CodeEditor editor);
+        void Run(CodeEditor editor, [ReadOnlyArray]object[] args);
     }
 }

@@ -2,9 +2,8 @@
 
 namespace Monaco.Editor
 {
-
     /// <summary>
-    /// Object Parser for https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditoroptions.html
+    /// Configuration options for the editor.
     /// </summary>
     public interface IEditorOptions
     {
@@ -62,8 +61,8 @@ namespace Monaco.Editor
         AutoClosingQuotes? AutoClosingQuotes { get; set; }
 
         /// <summary>
-        /// Enable auto indentation adjustment.
-        /// Defaults to false.
+        /// Controls whether the editor should automatically adjust the indentation when users type, paste, move or indent lines.
+        /// Defaults to advanced.
         /// </summary>
         [JsonProperty("autoIndent", NullValueHandling = NullValueHandling.Ignore)]
         AutoIndent? AutoIndent { get; set; }
@@ -103,6 +102,11 @@ namespace Monaco.Editor
         [JsonProperty("colorDecorators", NullValueHandling = NullValueHandling.Ignore)]
         bool? ColorDecorators { get; set; }
 
+        /// <summary>
+        /// Control the behaviour of comments in the editor.
+        /// </summary>
+        [JsonProperty("comments", NullValueHandling = NullValueHandling.Ignore)]
+        IEditorCommentsOptions Comments { get; set; }
         /// <summary>
         /// Enable custom contextmenu.
         /// Defaults to true.
@@ -224,6 +228,13 @@ namespace Monaco.Editor
         bool? Folding { get; set; }
 
         /// <summary>
+        /// Enable highlight for folded regions.
+        /// Defaults to true.
+        /// </summary>
+        [JsonProperty("foldingHighlight", NullValueHandling = NullValueHandling.Ignore)]
+        bool? FoldingHighlight { get; set; }
+
+        /// <summary>
         /// Selects the folding strategy. 'auto' uses the strategies contributed for the current
         /// document, 'indentation' uses the indentation based folding strategy.
         /// Defaults to 'auto'.
@@ -343,7 +354,7 @@ namespace Monaco.Editor
         /// Otherwise, if it is a truey, line numbers will be rendered normally (equivalent of using
         /// an identity function).
         /// Otherwise, line numbers will not be rendered.
-        /// Defaults to true.
+        /// Defaults to `on`.
         /// </summary>
         [JsonProperty("lineNumbers", NullValueHandling = NullValueHandling.Ignore)]
         LineNumbersType? LineNumbers { get; set; }
@@ -444,7 +455,14 @@ namespace Monaco.Editor
         /// Parameter hint options.
         /// </summary>
         [JsonProperty("parameterHints", NullValueHandling = NullValueHandling.Ignore)]
-        InternalParameterHintOptions ParameterHints { get; set; }
+        IEditorParameterHintOptions ParameterHints { get; set; }
+
+        /// <summary>
+        /// Controls whether to focus the inline editor in the peek widget by default.
+        /// Defaults to false.
+        /// </summary>
+        [JsonProperty("peekWidgetDefaultFocus", NullValueHandling = NullValueHandling.Ignore)]
+        bool? PeekWidgetDefaultFocus { get; set; }
 
         /// <summary>
         /// Enable quick suggestions (shadow suggestions)
@@ -494,6 +512,13 @@ namespace Monaco.Editor
         /// </summary>
         [JsonProperty("renderLineHighlight", NullValueHandling = NullValueHandling.Ignore)]
         RenderLineHighlight? RenderLineHighlight { get; set; }
+
+        /// <summary>
+        /// Should the editor render validation decorations.
+        /// Defaults to editable.
+        /// </summary>
+        [JsonProperty("renderValidationDecorations", NullValueHandling = NullValueHandling.Ignore)]
+        string RenderValidationDecorations { get; set; }
 
         /// <summary>
         /// Enable rendering of whitespace.
@@ -606,7 +631,7 @@ namespace Monaco.Editor
         /// Suggest options.
         /// </summary>
         [JsonProperty("suggest", NullValueHandling = NullValueHandling.Ignore)]
-        InternalSuggestOptions Suggest { get; set; }
+        ISuggestOptions Suggest { get; set; }
 
         /// <summary>
         /// The font size for the suggest widget.
@@ -668,25 +693,17 @@ namespace Monaco.Editor
 
         /// <summary>
         /// Configure word wrapping characters. A break will be introduced after these characters.
-        /// Defaults to ' \t})]?|&amp;,;'.
+        /// Defaults to ' \t})]?|/&amp;.,;¢°′″‰℃、。｡､￠，．：；？！％・･ゝゞヽヾーァィゥェォッャュョヮヵヶぁぃぅぇぉっゃゅょゎゕゖㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽㇾㇿ々〻ｧｨｩｪｫｬｭｮｯｰ”〉》」』】〕）］｝｣'.
         /// </summary>
         [JsonProperty("wordWrapBreakAfterCharacters", NullValueHandling = NullValueHandling.Ignore)]
         string WordWrapBreakAfterCharacters { get; set; }
 
         /// <summary>
         /// Configure word wrapping characters. A break will be introduced before these characters.
-        /// Defaults to '{([+'.
+        /// Defaults to '([{‘“〈《「『【〔（［｛｢£¥＄￡￥+＋'.
         /// </summary>
         [JsonProperty("wordWrapBreakBeforeCharacters", NullValueHandling = NullValueHandling.Ignore)]
         string WordWrapBreakBeforeCharacters { get; set; }
-
-        /// <summary>
-        /// Configure word wrapping characters. A break will be introduced after these characters
-        /// only if no `wordWrapBreakBeforeCharacters` or `wordWrapBreakAfterCharacters` were found.
-        /// Defaults to '.'.
-        /// </summary>
-        [JsonProperty("wordWrapBreakObtrusiveCharacters", NullValueHandling = NullValueHandling.Ignore)]
-        string WordWrapBreakObtrusiveCharacters { get; set; }
 
         /// <summary>
         /// Control the wrapping of the editor.
@@ -712,6 +729,13 @@ namespace Monaco.Editor
         /// </summary>
         [JsonProperty("wrappingIndent", NullValueHandling = NullValueHandling.Ignore)]
         WrappingIndent? WrappingIndent { get; set; }
+
+        /// <summary>
+        /// Controls the wrapping strategy to use.
+        /// Defaults to 'simple'.
+        /// </summary>
+        [JsonProperty("wrappingStrategy", NullValueHandling = NullValueHandling.Ignore)]
+        string WrappingStrategy { get; set; }
     }
 
 }

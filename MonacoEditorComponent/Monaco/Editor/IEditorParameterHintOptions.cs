@@ -3,11 +3,9 @@
 namespace Monaco.Editor
 {
     /// <summary>
-    /// Parameter hint options.
-    ///
     /// Configuration options for parameter hints
     /// </summary>
-    public sealed class InternalParameterHintOptions
+    public sealed class IEditorParameterHintOptions
     {
         /// <summary>
         /// Enable cycling of parameter hints.

@@ -17,10 +17,8 @@ namespace Monaco.Editor
 
         /// <summary>
         /// Insert spaces when pressing `Tab`.
-        /// This setting is overridden based on the file contents when detectIndentation` is
-        /// on.
-        /// * Defaults to true.
-        /// *
+        /// This setting is overridden based on the file contents when `detectIndentation` is on.
+        /// Defaults to true.
         /// </summary>
         [JsonProperty("insertSpaces", NullValueHandling = NullValueHandling.Ignore)]
         bool? InsertSpaces { get; set; }

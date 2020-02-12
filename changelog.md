@@ -1,6 +1,6 @@
 v0.9 - 01/23/2020
 -----------------
-- Updated Monaco Reference to v0.19.3
+- Updated Monaco Reference to v0.20.0
 - Fix broken snippet function
 - Tie css styles to CodeEditor
 - Sync CodeLanguage and Options.Language, HasGlyphMargin and Options.GlyphMargin

@@ -56,7 +56,7 @@ namespace Monaco.Languages
 
         /// <summary>
         /// A string or snippet that should be inserted in a document when selecting
-        /// this completion.
+        /// this completion. When `falsy` the [label](#CompletionItem.label)
         /// is used.
         /// </summary>
         [JsonProperty("insertText")]

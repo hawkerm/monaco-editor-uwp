@@ -2,7 +2,10 @@
 
 namespace Monaco.Editor
 {
-    public sealed class InternalSuggestOptions
+    /// <summary>
+    /// Configuration options for editor suggest widget
+    /// </summary>
+    public sealed class ISuggestOptions
     {
         /// <summary>
         /// Enable graceful matching. Defaults to true.
@@ -11,8 +14,13 @@ namespace Monaco.Editor
         public bool? FilterGraceful { get; set; }
 
         /// <summary>
-        /// Show a highlight when suggestion replaces or keep text after the cursor. Defaults to
-        /// false.
+        /// Controls the visibility of the status bar at the bottom of the suggest widget.
+        /// </summary>
+        [JsonProperty("hideStatusBar", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? HideStatusBar { get; set; }
+
+        /// <summary>
+        /// Show a highlight when suggestion replaces or keep text after the cursor. Defaults to false.
         /// </summary>
         [JsonProperty("insertHighlight", NullValueHandling = NullValueHandling.Ignore)]
         public bool? InsertHighlight { get; set; }

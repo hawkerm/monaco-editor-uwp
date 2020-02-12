@@ -10,6 +10,8 @@ namespace Monaco
     {
         [JsonProperty("isTrusted")]
         public bool IsTrusted { get; set; }
+        [JsonProperty("supportThemeIcons", NullValueHandling =NullValueHandling.Ignore)]
+        public bool? SupportThemeIcons { get; set; }
 
         [JsonProperty("uris", NullValueHandling = NullValueHandling.Ignore)]
         public IDictionary<string, Uri> Uris { get; set; }

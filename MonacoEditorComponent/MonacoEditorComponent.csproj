@@ -123,6 +123,7 @@
     <Compile Include="CodeEditor\CodeEditor.Events.cs" />
     <Compile Include="CodeEditor\CodeEditor.Methods.cs" />
     <Compile Include="CodeEditor\CodeEditor.Properties.cs" />
+    <Compile Include="Monaco\Editor\IEditorCommentsOptions.cs" />
     <Compile Include="Monaco\Editor\ISingleEditOperation.cs" />
     <Compile Include="Extensions\WebViewExtensions.cs" />
     <Compile Include="Helpers\DebugLogger.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="Monaco\Editor\EditorMinimapOptions.cs" />
     <Compile Include="Monaco\Editor\FoldingStrategy.cs" />
     <Compile Include="Monaco\Editor\GoToLocationOptions.cs" />
+    <Compile Include="Monaco\Editor\ISuggestOptions.cs" />
     <Compile Include="Monaco\Editor\ScrollbarBehavior.cs" />
     <Compile Include="Monaco\Editor\IContextKey.cs" />
     <Compile Include="Monaco\Editor\IDiffEditorConstructionOptions.cs" />
@@ -173,8 +175,7 @@
     <Compile Include="Monaco\Editor\IModelDecorationOptions.cs" />
     <Compile Include="Monaco\Editor\IModelDeltaDecoration.cs" />
     <Compile Include="Monaco\Editor\InsertMode.cs" />
-    <Compile Include="Monaco\Editor\InternalParameterHintOptions.cs" />
-    <Compile Include="Monaco\Editor\InternalSuggestOptions.cs" />
+    <Compile Include="Monaco\Editor\IEditorParameterHintOptions.cs" />
     <Compile Include="Monaco\Editor\LineNumbersType.cs" />
     <Compile Include="Monaco\Editor\Marker.cs" />
     <Compile Include="Monaco\Editor\MarkerData.cs" />
