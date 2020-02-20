@@ -3,10 +3,11 @@ using Monaco.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Data.Json;
+using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.Storage;
+using Windows.Storage.Search;
 
 namespace Monaco
 {
@@ -104,7 +105,7 @@ namespace Monaco
         {
             var wref = new WeakReference<CodeEditor>(this);
             _parentAccessor.RegisterAction("Action" + action.Id, new Action(() => { if (wref.TryGetTarget(out CodeEditor editor)) { action?.Run(editor); }}));
-            return InvokeScriptAsync("addAction", action).AsAsyncAction();
+            return ExecuteScriptAsync("addAction", action).AsAsyncAction();
         }
 
         public IAsyncOperation<string> AddCommandAsync(int keybinding, CommandHandler handler)
@@ -116,17 +117,68 @@ namespace Monaco
         {
             var name = "Command" + keybinding;
             _parentAccessor.RegisterAction(name, new Action(() => { handler?.Invoke(); }));
-            return InvokeScriptAsync<string>("addCommand", new object[] { keybinding, name, context }).AsAsyncOperation();
+            return ExecuteScriptAsync<string>("addCommand", new object[] { keybinding, name, context }).AsAsyncOperation();
         }
 
         public IAsyncOperation<ContextKey> CreateContextKeyAsync(string key, bool defaultValue)
         {
             var ck = new ContextKey(this, key, defaultValue);
 
-            return InvokeScriptAsync("createContext", ck).ContinueWith((noop) =>
+            return ExecuteScriptAsync("createContext", ck).ContinueWith((noop) =>
             {
                 return ck;
             }).AsAsyncOperation();
+        }
+
+        private async Task CopyAsync(StorageFolder source, StorageFolder destination)
+        {
+            var targetFolder = await destination.TryGetItemAsync(source.DisplayName);
+
+            if (targetFolder is StorageFolder)
+                return;
+
+            targetFolder = await destination.CreateFolderAsync(source.DisplayName);
+
+            var queryOptions = new QueryOptions
+            {
+                IndexerOption = IndexerOption.DoNotUseIndexer,
+                FolderDepth = FolderDepth.Shallow,
+            };
+            var queryFiles = source.CreateFileQueryWithOptions(queryOptions);
+            var files = await queryFiles.GetFilesAsync();
+
+            foreach (var storageFile in files)
+            {
+                await storageFile.CopyAsync((StorageFolder)targetFolder, storageFile.Name, NameCollisionOption.ReplaceExisting);
+            }
+
+            var queryFolders = source.CreateFolderQueryWithOptions(queryOptions);
+            var folders = await queryFolders.GetFoldersAsync();
+
+            foreach (var storageFolder in folders)
+            {
+                await CopyAsync(storageFolder, (StorageFolder)targetFolder);
+            }
+        }
+
+        private IAsyncAction PrepareMonacoHtmlFilesAsync()
+        {
+            return Task.Run(async () =>
+            {
+                var originFolder = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync(@"Monaco\monaco-editor");
+
+                var destFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Monaco", CreationCollisionOption.ReplaceExisting);
+
+                await CopyAsync(originFolder, destFolder);
+
+                var fileName = "ms-appx:///Monaco/MonacoEditor.html";
+
+                var sourceFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri(fileName));
+                var sourceText = await FileIO.ReadTextAsync(sourceFile);
+
+                var destFile = await destFolder.CreateFileAsync("MonacoEditor.html", CreationCollisionOption.ReplaceExisting);
+                await FileIO.WriteTextAsync(destFile, sourceText);
+            }).AsAsyncAction();
         }
 
         public IModel GetModel()
@@ -166,11 +218,11 @@ namespace Monaco
             var newDecorationsAdjust = newDecorations ?? Array.Empty<IModelDeltaDecoration>();
 
             // Update Styles
-            return InvokeScriptAsync("updateStyle", CssStyleBroker.Instance.GetStyles()).ContinueWith((noop) =>
+            return ExecuteScriptAsync("updateStyle", CssStyleBroker.Instance.GetStyles()).ContinueWith((noop) =>
             {
                 // Send Command to Modify Decorations
                 // IMPORTANT: Need to cast to object here as we want this to be a single array object passed as a parameter, not a list of parameters to expand.
-                return InvokeScriptAsync("updateDecorations", (object)newDecorationsAdjust);
+                return ExecuteScriptAsync("updateDecorations", (object)newDecorationsAdjust);
             }).AsAsyncAction();
         }
     }

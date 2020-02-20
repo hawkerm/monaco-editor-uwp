@@ -6,15 +6,15 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using Windows.Data.Json;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls;
+using Newtonsoft.Json.Linq;
 
 namespace Monaco.Extensions
 {
     internal static class WebViewExtensions
     {
         public static async Task RunScriptAsync(
-            this WebView _view,
+            this WebView2 _view,
             string script,
             [CallerMemberName] string member = null,
             [CallerFilePath] string file = null,
@@ -24,7 +24,7 @@ namespace Monaco.Extensions
         }
 
         public static async Task<T> RunScriptAsync<T>(
-            this WebView _view, 
+            this WebView2 _view, 
             string script, 
             [CallerMemberName] string member = null,
             [CallerFilePath] string file = null,
@@ -70,18 +70,22 @@ namespace Monaco.Extensions
             }
         }
 
-        private static async Task<T> RunScriptHelperAsync<T>(WebView _view, string script)
+        private static async Task<T> RunScriptHelperAsync<T>(WebView2 _view, string script)
         {            
-            var returnstring = await _view.InvokeScriptAsync("eval", new string[] { script });
+            var returnstring = await _view.ExecuteScriptAsync(script);
 
-            if (JsonObject.TryParse(returnstring, out JsonObject result))
+            JToken token = JToken.Parse(returnstring);
+            string s = (string)token;
+            if (!string.IsNullOrEmpty(s))
             {
-                if (result.ContainsKey("wv_internal_error") && result["wv_internal_error"].ValueType == JsonValueType.Boolean && result["wv_internal_error"].GetBoolean())
+                JObject result = JObject.Parse(s);
+
+                if (result.TryGetValue("wv_internal_error", out var wv_internal_error) && wv_internal_error.Type == JTokenType.Boolean && wv_internal_error.Value<bool>())
                 {
-                    throw new JavaScriptInnerException(result["message"].GetString(), result["stack"].GetString());
+                    throw new JavaScriptInnerException(result["message"].Value<string>(), result["stack"].Value<string>());
                 }
             }
-
+            
             if (returnstring != null && returnstring != "null")
             {
                 return JsonConvert.DeserializeObject<T>(returnstring);
@@ -96,8 +100,8 @@ namespace Monaco.Extensions
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
-        public static async Task InvokeScriptAsync(
-            this WebView _view,
+        public static async Task ExecuteScriptAsync(
+            this WebView2 _view,
             string method,
             object arg,
             bool serialize = true,
@@ -105,11 +109,11 @@ namespace Monaco.Extensions
             [CallerFilePath] string file = null,
             [CallerLineNumber] int line = 0)
         {
-            await _view.InvokeScriptAsync<object>(method, arg, serialize, member, file, line);
+            await _view.ExecuteScriptAsync<object>(method, arg, serialize, member, file, line);
         }
 
-        public static async Task InvokeScriptAsync(
-            this WebView _view,
+        public static async Task ExecuteScriptAsync(
+            this WebView2 _view,
             string method,
             object[] args,
             bool serialize = true,
@@ -117,11 +121,11 @@ namespace Monaco.Extensions
             [CallerFilePath] string file = null,
             [CallerLineNumber] int line = 0)
         {
-            await _view.InvokeScriptAsync<object>(method, args, serialize, member, file, line);
+            await _view.ExecuteScriptAsync<object>(method, args, serialize, member, file, line);
         }
 
-        public static async Task<T> InvokeScriptAsync<T>(
-            this WebView _view,
+        public static async Task<T> ExecuteScriptAsync<T>(
+            this WebView2 _view,
             string method,
             object arg,
             bool serialize = true,
@@ -129,11 +133,11 @@ namespace Monaco.Extensions
             [CallerFilePath] string file = null,
             [CallerLineNumber] int line = 0)
         {
-            return await _view.InvokeScriptAsync<T>(method, new object[] { arg }, serialize, member, file, line);
+            return await _view.ExecuteScriptAsync<T>(method, new object[] { arg }, serialize, member, file, line);
         }
 
-        public static async Task<T> InvokeScriptAsync<T>(
-            this WebView _view,
+        public static async Task<T> ExecuteScriptAsync<T>(
+            this WebView2 _view,
             string method,
             object[] args,
             bool serialize = true,

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.Data.Json;
 using Windows.Foundation;
 
 namespace Monaco
@@ -39,7 +38,7 @@ namespace Monaco
         {
             if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                return editor.InvokeScriptAsync("monaco.languages.register", language).AsAsyncAction();
+                return editor.ExecuteScriptAsync("monaco.languages.register", language).AsAsyncAction();
             }
 
             return null;
@@ -66,7 +65,7 @@ namespace Monaco
                     return null;
                 });
 
-                return editor.InvokeScriptAsync("registerCompletionItemProvider", new object[] { languageId, provider.TriggerCharacters }).AsAsyncAction();
+                return editor.ExecuteScriptAsync("registerCompletionItemProvider", new object[] { languageId, provider.TriggerCharacters }).AsAsyncAction();
             }
 
             return null;
@@ -93,7 +92,7 @@ namespace Monaco
                     return string.Empty;
                 });
 
-                return editor.InvokeScriptAsync("registerHoverProvider", languageId).AsAsyncAction();
+                return editor.ExecuteScriptAsync("registerHoverProvider", languageId).AsAsyncAction();
             }
 
             return null;

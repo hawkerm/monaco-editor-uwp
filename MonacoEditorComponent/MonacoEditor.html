@@ -21,7 +21,7 @@
 
     <div id="container" onkeydown="keyDown(event)"></div>
 
-    <script src="ms-appx-web:///Monaco/monaco-editor/min/vs/loader.js"></script>
+    <script src="./monaco-editor/min/vs/loader.js"></script>
     <script>
         var editor;
         var model;
@@ -29,8 +29,58 @@
         var decorations = [];
         var modifingSelection = false; // Supress updates to selection when making edits.
 
+        function Debug () {
+        }
+        Debug.log = function(p1) {
+            window.chrome.webview.postMessage(`{ class: "Debug", method: "Log", p1: "${p1}" }`);
+        }
+
+        function Parent () {
+        }
+        Parent.callEvent = function(p1, p2) {
+            window.chrome.webview.postMessage(`{ class: "Parent", method: "CallEvent", p1: "${p1}", p2: "${p2}" }`);
+        }
+        Parent.callAction = function(p1) {
+            window.chrome.webview.postMessage(`{ class: "Parent", method: "CallAction", p1: "${p1}" }`);
+        }
+        Parent.getValue = function(p1) {
+            window.chrome.webview.postMessage(`{ class: "Parent", method: "GetValue", p1: "${p1}" }`);
+            return "";
+        }
+        Parent.getJsonValue = function(p1) {
+            window.chrome.webview.postMessage(`{ class: "Parent", method: "GetJsonValue", p1: "${p1}" }`);
+            return "{}";
+        }
+        Parent.getChildValue = function(p1, p2) {
+            window.chrome.webview.postMessage(`{ class: "Parent", method: "GetChildValue", p1: "${p1}", p2: "${p2}" }`);
+            return "";
+        }
+        Parent.setValue = function (p1, p2, p3) {
+            if (typeof p3 !== "undefined")
+                window.chrome.webview.postMessage(`{ class: "Parent", method: "SetValue", p1: "${p1}", p2: ${JSON.stringify(p2)}, p3: "${p3}" }`);
+            else
+                window.chrome.webview.postMessage(`{ class: "Parent", method: "SetValue", p1: "${p1}", p2: ${JSON.stringify(p2)} }`);
+        }
+
+        function Theme () {
+        }
+        Theme.currentThemeName = function () {
+            window.chrome.webview.postMessage(`{ class: "Theme", method: "CurrentThemeName" }`);
+            return "";
+        }
+        Theme.isHighContrast = function () {
+            window.chrome.webview.postMessage(`{ class: "Theme", method: "IsHighContrast" }`);
+            return "";
+        }
+        function Keyboard() {
+        }
+        Keyboard.keyDown = function (keyCode, ctrlKey, shiftKey, altKey, metaKey) {
+            window.chrome.webview.postMessage(`{ class: "Keyboard", method: "KeyDown", keyCode: ${keyCode}, ctrlKey: ${ctrlKey}, shiftKey: ${shiftKey}, altKey: ${altKey}, metaKey: ${metaKey} }`);
+            return true;
+        }
+
         Debug.log("Starting Monaco Load");
-        require.config({ paths: { 'vs': 'ms-appx-web:///Monaco/monaco-editor/min/vs' }});
+        require.config({ paths: { 'vs': './monaco-editor/min/vs' }});
         require(['vs/editor/editor.main'], function () {
             Debug.log("Grabbing Monaco Options");
 
@@ -65,9 +115,9 @@
                 "2": "Dark"
             }[theme];
             if (theme == "Default") {
-                theme = Theme.currentThemeName.toString();
+                theme = Theme.currentThemeName();
             }
-            changeTheme(theme, Theme.isHighContrast.toString());
+            changeTheme(theme, Theme.isHighContrast());
 
             // Update Monaco Size when we receive a window resize event
             window.addEventListener("resize", () => {

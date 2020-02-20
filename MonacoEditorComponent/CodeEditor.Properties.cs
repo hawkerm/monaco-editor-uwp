@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
+using Microsoft.UI.Xaml;
 
 namespace Monaco
 {
@@ -30,7 +30,7 @@ namespace Monaco
             DependencyProperty.Register("Text", typeof(string), typeof(CodeEditor), new PropertyMetadata(string.Empty, (d, e) => {
                 if (!(d as CodeEditor).IsSettingValue)
                 {
-                    (d as CodeEditor)?.InvokeScriptAsync("updateContent", e.NewValue.ToString());
+                    (d as CodeEditor)?.ExecuteScriptAsync("updateContent", e.NewValue.ToString());
                 }
             }));
 
@@ -56,7 +56,7 @@ namespace Monaco
             DependencyProperty.Register(nameof(SelectedText), typeof(string), typeof(CodeEditor), new PropertyMetadata(string.Empty, (d, e) => {
                 if (!(d as CodeEditor).IsSettingValue)
                 {
-                    (d as CodeEditor)?.InvokeScriptAsync("updateSelectedContent", e.NewValue.ToString());
+                    (d as CodeEditor)?.ExecuteScriptAsync("updateSelectedContent", e.NewValue.ToString());
                 }
             }));
 
@@ -111,7 +111,7 @@ namespace Monaco
                 // TODO: Push this to Options property change check instead...
                 // Changes to Language are ignored in Updated Options.
                 // https://microsoft.github.io/monaco-editor/api/modules/monaco.editor.html#setmodellanguage.
-                (d as CodeEditor)?.InvokeScriptAsync("updateLanguage", e.NewValue.ToString());
+                (d as CodeEditor)?.ExecuteScriptAsync("updateLanguage", e.NewValue.ToString());
             }));
 
         internal static DependencyProperty CodeLanguageProperty
@@ -140,7 +140,7 @@ namespace Monaco
                     var editor = d as CodeEditor;
                     if (editor != null)
                     {
-                        editor.InvokeScriptAsync("updateOptions", value.ToJson());
+                        editor.ExecuteScriptAsync("updateOptions", value.ToJson());
 
                         // Register for sub-property changes on new object
                         value.PropertyChanged -= editor.Options_PropertyChanged;

@@ -3,15 +3,14 @@ using Monaco.Editor;
 using Monaco.Extensions;
 using Monaco.Helpers;
 using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Windows.Storage;
 
 // The Templated Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234235
 
@@ -21,12 +20,13 @@ namespace Monaco
     /// UWP Windows Runtime Component wrapper for the Monaco CodeEditor
     /// https://microsoft.github.io/monaco-editor/
     /// </summary>
-    [TemplatePart(Name = "View", Type = typeof(WebView))]
+    [TemplatePart(Name = "View", Type = typeof(WebView2))]
     public sealed partial class CodeEditor : Control, INotifyPropertyChanged
     {
         private bool _initialized;
-        private WebView _view;
+        private WebView2 _view;
         private ModelHelper _model;
+        private Border _layoutRootBorder;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -56,7 +56,7 @@ namespace Monaco
         /// </summary>
         public CodeEditor()
         {
-            DefaultStyleKey = typeof(CodeEditor);    
+            DefaultStyleKey = typeof(CodeEditor);
             
             if (Options != null)
             {
@@ -80,45 +80,59 @@ namespace Monaco
         private async void Options_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             // TODO: Check for Language property and call other method instead?
-            await InvokeScriptAsync("updateOptions", sender);
+            await ExecuteScriptAsync("updateOptions", sender);
         }
 
-        private void CodeEditor_Loaded(object sender, RoutedEventArgs e)
+        private async void CodeEditor_Loaded(object sender, RoutedEventArgs e)
         {
-            // Do this the 2nd time around.
-            if (_model == null && _view != null)
-            {
-                _model = new ModelHelper(this);
+            _model = new ModelHelper(this);
 
-                _parentAccessor = new ParentAccessor(this);
-                _parentAccessor.AddAssemblyForTypeLookup(typeof(Range).GetTypeInfo().Assembly);
-                _parentAccessor.RegisterAction("Loaded", CodeEditorLoaded);
+            _parentAccessor = new ParentAccessor(this);
+            _parentAccessor.AddAssemblyForTypeLookup(typeof(Range).GetTypeInfo().Assembly);
+            _parentAccessor.RegisterAction("Loaded", CodeEditorLoaded);
 
-                _themeListener = new ThemeListener();
-                _themeListener.ThemeChanged += _themeListener_ThemeChanged;
-                _themeToken = RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedTheme_PropertyChanged);
+            _themeListener = new ThemeListener();
+            _themeListener.ThemeChanged += _themeListener_ThemeChanged;
+            _themeToken = RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedTheme_PropertyChanged);
 
-                _keyboardListener = new KeyboardListener(this);
+            _keyboardListener = new KeyboardListener(this);
 
-                _view.AddWebAllowedObject("Parent", _parentAccessor);
-                _view.AddWebAllowedObject("Theme", _themeListener);
-                _view.AddWebAllowedObject("Keyboard", _keyboardListener);
+            _allowedObject.Clear();
 
-                Options.PropertyChanged += Options_PropertyChanged;
+            AddWebAllowedObject("Parent", _parentAccessor);
+            AddWebAllowedObject("Theme", _themeListener);
+            AddWebAllowedObject("Keyboard", _keyboardListener);
 
-                Decorations.VectorChanged += Decorations_VectorChanged;
-                Markers.VectorChanged += Markers_VectorChanged;
+            Options.PropertyChanged += Options_PropertyChanged;
 
-                _view.NewWindowRequested += WebView_NewWindowRequested;
+            Decorations.VectorChanged += Decorations_VectorChanged;
+            Markers.VectorChanged += Markers_VectorChanged;
 
-                _initialized = true;
+            //_view.NewWindowRequested += WebView_NewWindowRequested;
 
-                Loading?.Invoke(this, new RoutedEventArgs());
+            _initialized = true;
 
-                Unloaded += CodeEditor_Unloaded;
+            await Task.Delay(1000);
 
-                Loaded?.Invoke(this, new RoutedEventArgs());
-            }
+            _view = new WebView2();
+            _layoutRootBorder.Child = _view;
+
+            _view.NavigationStarting += WebView_NavigationStarting;
+            //_view.DOMContentLoaded += WebView_DOMContentLoaded;
+            _view.NavigationCompleted += WebView_NavigationCompleted;
+            //_view.NewWindowRequested += WebView_NewWindowRequested;
+            _view.WebMessageReceived += WebView_WebMessageReceived;
+
+            await PrepareMonacoHtmlFilesAsync();
+
+            var localAppDataPath = AppDataPaths.GetDefault().LocalAppData;
+            _view.UriSource = new Uri(@"file:///" + localAppDataPath + @"/Monaco/MonacoEditor.html");
+
+            Loading?.Invoke(this, new RoutedEventArgs());
+
+            Unloaded += CodeEditor_Unloaded;
+
+            Loaded?.Invoke(this, new RoutedEventArgs());
         }
 
         private void CodeEditor_Unloaded(object sender, RoutedEventArgs e)
@@ -128,9 +142,10 @@ namespace Monaco
             if (_view != null)
             {
                 _view.NavigationStarting -= WebView_NavigationStarting;
-                _view.DOMContentLoaded -= WebView_DOMContentLoaded;
+                //_view.DOMContentLoaded -= WebView_DOMContentLoaded;
                 _view.NavigationCompleted -= WebView_NavigationCompleted;
-                _view.NewWindowRequested -= WebView_NewWindowRequested;
+                //_view.NewWindowRequested -= WebView_NewWindowRequested;
+                _view.WebMessageReceived -= WebView_WebMessageReceived;
                 _initialized = false;
             }
 
@@ -140,8 +155,10 @@ namespace Monaco
             _parentAccessor?.Dispose();
             _parentAccessor = null;
             Options.PropertyChanged -= Options_PropertyChanged;
-            
-            _themeListener?.ThemeChanged -= _themeListener_ThemeChanged;
+
+            if (_themeListener != null)
+                _themeListener.ThemeChanged -= _themeListener_ThemeChanged;
+
             _themeListener = null;
             
             UnregisterPropertyChangedCallback(RequestedThemeProperty, _themeToken);
@@ -154,24 +171,34 @@ namespace Monaco
             if (_view != null)
             {
                 _view.NavigationStarting -= WebView_NavigationStarting;
-                _view.DOMContentLoaded -= WebView_DOMContentLoaded;
+                //_view.DOMContentLoaded -= WebView_DOMContentLoaded;
                 _view.NavigationCompleted -= WebView_NavigationCompleted;
-                _view.NewWindowRequested -= WebView_NewWindowRequested;
+                //_view.NewWindowRequested -= WebView_NewWindowRequested;
+                _view.WebMessageReceived -= WebView_WebMessageReceived;
                 _initialized = false;
             }
 
-            _view = (WebView)GetTemplateChild("View");
+            _layoutRootBorder = (Border)GetTemplateChild("LayoutRootBorder");
+            /*<controls:WebView2 x:Name="View"
+                Margin="{TemplateBinding Padding}"
+                Visibility="{Binding IsLoaded,RelativeSource={RelativeSource TemplatedParent}}"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"/>
+                */
 
-            if (_view != null)
-            {
-                _view.NavigationStarting += WebView_NavigationStarting;
-                _view.DOMContentLoaded += WebView_DOMContentLoaded;
-                _view.NavigationCompleted += WebView_NavigationCompleted;
-                _view.NewWindowRequested += WebView_NewWindowRequested;
-                _view.Source = new Uri("ms-appx-web:///Monaco/MonacoEditor.html");
-            }
+            //_view = (WebView2)GetTemplateChild("View");
 
-            base.OnApplyTemplate();
+            //base.OnApplyTemplate();
+
+            //if (_view != null)
+            //{
+            //    _view.NavigationStarting += WebView_NavigationStarting;
+            //    //_view.DOMContentLoaded += WebView_DOMContentLoaded;
+            //    _view.NavigationCompleted += WebView_NavigationCompleted;
+            //    //_view.NewWindowRequested += WebView_NewWindowRequested;
+            //    _view.WebMessageReceived += WebView_WebMessageReceived;
+            //    _view.UriSource = new Uri("ms-appx-web:///Monaco/MonacoEditor.html");
+            //}
         }
 
         internal async Task SendScriptAsync(string script,
@@ -208,7 +235,7 @@ namespace Monaco
             return default(T);
         }
 
-        internal async Task InvokeScriptAsync(
+        internal async Task ExecuteScriptAsync(
             string method,
             object arg,
             bool serialize = true,
@@ -216,10 +243,10 @@ namespace Monaco
             [CallerFilePath] string file = null,
             [CallerLineNumber] int line = 0)
         {
-            await this.InvokeScriptAsync<object>(method, new object[] { arg }, serialize, member, file, line);
+            await this.ExecuteScriptAsync<object>(method, new object[] { arg }, serialize, member, file, line);
         }
 
-        internal async Task InvokeScriptAsync(
+        internal async Task ExecuteScriptAsync(
             string method,
             object[] args,
             bool serialize = true,
@@ -227,10 +254,10 @@ namespace Monaco
             [CallerFilePath] string file = null,
             [CallerLineNumber] int line = 0)
         {
-            await this.InvokeScriptAsync<object>(method, args, serialize, member, file, line);
+            await this.ExecuteScriptAsync<object>(method, args, serialize, member, file, line);
         }
 
-        internal async Task<T> InvokeScriptAsync<T>(
+        internal async Task<T> ExecuteScriptAsync<T>(
             string method,
             object arg,
             bool serialize = true,
@@ -238,10 +265,10 @@ namespace Monaco
             [CallerFilePath] string file = null,
             [CallerLineNumber] int line = 0)
         {
-            return await this.InvokeScriptAsync<T>(method, new object[] { arg }, serialize, member, file, line);
+            return await this.ExecuteScriptAsync<T>(method, new object[] { arg }, serialize, member, file, line);
         }
 
-        internal async Task<T> InvokeScriptAsync<T>(
+        internal async Task<T> ExecuteScriptAsync<T>(
             string method,
             object[] args,
             bool serialize = true,
@@ -253,7 +280,7 @@ namespace Monaco
             {
                 try
                 {
-                    return await this._view.InvokeScriptAsync<T>(method, args, serialize, member, file, line);
+                    return await this._view.ExecuteScriptAsync<T>(method, args, serialize, member, file, line);
                 }
                 catch (Exception e)
                 {

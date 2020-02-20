@@ -9,15 +9,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
-using System.Threading.Tasks;
-using Windows.ApplicationModel;
 using Windows.Storage;
-using Windows.UI;
+using Microsoft.UI;
 using Windows.UI.Popups;
-using Windows.UI.Text;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
+using Microsoft.UI.Text;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.System;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -46,7 +45,7 @@ namespace MonacoEditorTestApp
 
             Editor.Loading += Editor_Loading;
             Editor.Loaded += Editor_Loaded;
-            Editor.OpenLinkRequested += Editor_OpenLinkRequest;
+            //Editor.OpenLinkRequested += Editor_OpenLinkRequest;
 
             Editor.InternalException += Editor_InternalException;
         }
@@ -166,13 +165,13 @@ namespace MonacoEditorTestApp
             // Ready for Display
         }
 
-        private void Editor_OpenLinkRequest(WebView sender, WebViewNewWindowRequestedEventArgs args)
-        {
-            if (this.AllowWeb.IsChecked == false)
-            {
-                args.Handled = true;
-            }
-        }
+        //private void Editor_OpenLinkRequest(WebView2 sender, WebView2NewWindowRequestedEventArgs args)
+        //{
+        //    if (this.AllowWeb.IsChecked == false)
+        //    {
+        //        args.Handled = true;
+        //    }
+        //}
 
         private void ButtonSetText_Click(object sender, RoutedEventArgs e)
         {
@@ -270,7 +269,7 @@ namespace MonacoEditorTestApp
 
                 // Skip await, so we can read intercept value.
                 #pragma warning disable CS4014
-                Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, async () =>
+                DispatcherQueue.GetForCurrentThread().TryEnqueue(DispatcherQueuePriority.Low, async () =>
                 {
                     var md = new MessageDialog("You Hit Ctrl+Enter!");
                     await md.ShowAsync();
@@ -398,7 +397,7 @@ namespace MonacoEditorTestApp
 
                 Editor.Loaded -= Editor_Loaded;
                 Editor.Loading -= Editor_Loading;
-                Editor.OpenLinkRequested -= Editor_OpenLinkRequest;
+                //Editor.OpenLinkRequested -= Editor_OpenLinkRequest;
                 Editor.InternalException -= Editor_InternalException;
 
                 RootGrid.Children.Remove(Editor);
@@ -422,7 +421,7 @@ namespace MonacoEditorTestApp
 
                 Editor.Loading += Editor_Loading;
                 Editor.Loaded += Editor_Loaded;
-                Editor.OpenLinkRequested += Editor_OpenLinkRequest;
+                //Editor.OpenLinkRequested += Editor_OpenLinkRequest;
                 Editor.InternalException += Editor_InternalException;
 
                 Grid.SetColumn(Editor, 1);
