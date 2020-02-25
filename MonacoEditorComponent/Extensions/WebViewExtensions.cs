@@ -33,7 +33,7 @@ namespace Monaco.Extensions
             var start = "try {\n";
             if (typeof(T) != typeof(object))
             {
-                script = script.Trim(';');
+                script = script.Trim(';'); 
                 start += "JSON.stringify(" + script + ");";
             }
             else
@@ -74,21 +74,32 @@ namespace Monaco.Extensions
         {            
             var returnstring = await _view.ExecuteScriptAsync(script);
 
-            JToken token = JToken.Parse(returnstring);
-            string s = (string)token;
+            string s = (string)JToken.Parse(returnstring);
             if (!string.IsNullOrEmpty(s))
             {
-                JObject result = JObject.Parse(s);
+                JToken resultToken = JToken.Parse(s);
 
-                if (result.TryGetValue("wv_internal_error", out var wv_internal_error) && wv_internal_error.Type == JTokenType.Boolean && wv_internal_error.Value<bool>())
+                if((resultToken == null) ||
+                    (resultToken.Type == JTokenType.String && resultToken.ToString() == string.Empty) ||
+                    (resultToken.Type == JTokenType.Null))
                 {
-                    throw new JavaScriptInnerException(result["message"].Value<string>(), result["stack"].Value<string>());
+                    return default(T);
+                }
+
+                if (resultToken.Type == JTokenType.Object)
+                {
+                    JObject result = (JObject)resultToken;
+
+                    if (result.TryGetValue("wv_internal_error", out var wv_internal_error) && wv_internal_error.Type == JTokenType.Boolean && wv_internal_error.Value<bool>())
+                    {
+                        throw new JavaScriptInnerException(result["message"].Value<string>(), result["stack"].Value<string>());
+                    }
                 }
             }
             
             if (returnstring != null && returnstring != "null")
             {
-                return JsonConvert.DeserializeObject<T>(returnstring);
+                return JsonConvert.DeserializeObject<T>(JsonConvert.DeserializeObject<string>(returnstring));
             }
 
             return default(T);

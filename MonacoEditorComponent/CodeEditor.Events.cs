@@ -127,7 +127,7 @@ namespace Monaco
                             switch (method)
                             {
                                 case "CallEvent":
-                                    await parentAccessor.CallEvent(result.GetValue("p1").Value<string>(), result.GetValue("p2").Value<string[]>());
+                                    await parentAccessor.CallEvent(result.GetValue("p1").Value<string>(), result.GetValue("p2").Values<string>().ToArray());
                                     break;
                                 case "CallAction":
                                     parentAccessor.CallAction(result.GetValue("p1").Value<string>());
