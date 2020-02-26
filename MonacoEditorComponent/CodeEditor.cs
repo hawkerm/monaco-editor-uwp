@@ -110,9 +110,9 @@ namespace Monaco
 
             //_view.NewWindowRequested += WebView_NewWindowRequested;
 
-            _initialized = true;
-
             await Task.Delay(1000);
+
+            _initialized = true;
 
             _view = new WebView2();
             _layoutRootBorder.Child = _view;

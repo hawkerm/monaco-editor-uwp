@@ -104,7 +104,7 @@ namespace Monaco
         private async void WebView_WebMessageReceived(WebView2 sender, WebView2WebMessageReceivedEventArgs e)
         {
             Debug.WriteLine(e.WebMessageAsString);
-
+            
             try
             {
                 JObject result = JObject.Parse(e.WebMessageAsString);
@@ -113,6 +113,11 @@ namespace Monaco
                     _allowedObject.TryGetValue(name.Value<string>(), out var obj))
                 {
                     var method = result.GetValue("method").Value<string>();
+                    string opId = "";
+                    if (result.TryGetValue("opId", out var opIdToken))
+                    {
+                        opId = opIdToken.Value<string>();
+                    }
                     switch (obj)
                     {
                         case DebugLogger debugLogger:
@@ -127,19 +132,19 @@ namespace Monaco
                             switch (method)
                             {
                                 case "CallEvent":
-                                    await parentAccessor.CallEvent(result.GetValue("p1").Value<string>(), result.GetValue("p2").Values<string>().ToArray());
+                                    ReturnMessage(opId, await parentAccessor.CallEvent(result.GetValue("p1").Value<string>(), result.GetValue("p2").Values<string>().ToArray()));
                                     break;
                                 case "CallAction":
-                                    parentAccessor.CallAction(result.GetValue("p1").Value<string>());
+                                    ReturnMessage(opId, parentAccessor.CallAction(result.GetValue("p1").Value<string>()));
                                     break;
                                 case "GetValue":
-                                    parentAccessor.GetValue(result.GetValue("p1").Value<string>());
+                                    ReturnMessage(opId, parentAccessor.GetValue(result.GetValue("p1").Value<string>()));
                                     break;
                                 case "GetJsonValue":
-                                    parentAccessor.GetJsonValue(result.GetValue("p1").Value<string>());
+                                    ReturnMessage(opId, parentAccessor.GetJsonValue(result.GetValue("p1").Value<string>()));
                                     break;
                                 case "GetChildValue":
-                                    parentAccessor.GetChildValue(result.GetValue("p1").Value<string>(), result.GetValue("p2").Value<string>());
+                                    ReturnMessage(opId, parentAccessor.GetChildValue(result.GetValue("p1").Value<string>(), result.GetValue("p2").Value<string>()));
                                     break;
                                 case "SetValue":
                                     if (result.TryGetValue("p3", out var p3))
@@ -157,10 +162,10 @@ namespace Monaco
                             switch (method)
                             {
                                 case "CurrentThemeName":
-                                    var x = themeListener.CurrentThemeName;
+                                    ReturnMessage(opId, themeListener.CurrentThemeName);
                                     break;
                                 case "IsHighContrast":
-                                    var y = themeListener.IsHighContrast;
+                                    ReturnMessage(opId, themeListener.IsHighContrast);
                                     break;
                             }
                             break;
@@ -168,11 +173,11 @@ namespace Monaco
                             switch (method)
                             {
                                 case "KeyDown":
-                                    keyboardListener.KeyDown(result.GetValue("keyCode").Value<int>(),
+                                    ReturnMessage(opId, keyboardListener.KeyDown(result.GetValue("keyCode").Value<int>(),
                                         result.GetValue("ctrlKey").Value<bool>(),
                                         result.GetValue("shiftKey").Value<bool>(),
                                         result.GetValue("altKey").Value<bool>(),
-                                        result.GetValue("metaKey").Value<bool>());
+                                        result.GetValue("metaKey").Value<bool>()));
                                     break;
                             }
                             break;
@@ -183,6 +188,11 @@ namespace Monaco
             {
                 Debug.WriteLine(ex);
             }
+        }
+
+        private async void ReturnMessage(string opId, object ret)
+        {
+            await this.ExecuteScriptAsync("messageHandler", new [] { opId, ret.ToString() });
         }
 
         private async void CodeEditorLoaded()

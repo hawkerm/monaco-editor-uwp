@@ -29,31 +29,54 @@
         var decorations = [];
         var modifingSelection = false; // Supress updates to selection when making edits.
 
+        var dict = {};
+
+        function messageHandler(opId, ret) {
+            var value = dict[opId];
+            value(ret);
+            delete dict[opId];
+        }
+
+        function getPromisse(opId) {
+            return new Promise((resolve, reject) => { dict[opId] = resolve; });
+        }
+
+        function getOpId() {
+            return Math.random().toString(36);
+        }
+
         function Debug () {
         }
-        Debug.log = function(p1) {
+        Debug.log = function (p1) {
             window.chrome.webview.postMessage(`{ class: "Debug", method: "Log", p1: "${p1}" }`);
         }
 
         function Parent () {
         }
-        Parent.callEvent = function(p1, p2) {
-            window.chrome.webview.postMessage(`{ class: "Parent", method: "CallEvent", p1: "${p1}", p2: ${JSON.stringify(p2)} }`);
+        Parent.callEvent = function (p1, p2) {
+            var opId = getOpId();
+            window.chrome.webview.postMessage(`{ opId:"${opId}", class: "Parent", method: "CallEvent", p1: "${p1}", p2: ${JSON.stringify(p2)} }`);
+            return getPromisse(opId);
         }
-        Parent.callAction = function(p1) {
-            window.chrome.webview.postMessage(`{ class: "Parent", method: "CallAction", p1: "${p1}" }`);
+        Parent.callAction = function (p1) {
+            var opId = getOpId();
+            window.chrome.webview.postMessage(`{ opId:"${opId}", class: "Parent", method: "CallAction", p1: "${p1}" }`);
+            return getPromisse(opId);
         }
-        Parent.getValue = function(p1) {
-            window.chrome.webview.postMessage(`{ class: "Parent", method: "GetValue", p1: "${p1}" }`);
-            return "";
+        Parent.getValue = function (p1) {
+            var opId = getOpId();
+            window.chrome.webview.postMessage(`{ opId:"${opId}", class: "Parent", method: "GetValue", p1: "${p1}" }`);
+            return getPromisse(opId);
         }
-        Parent.getJsonValue = function(p1) {
-            window.chrome.webview.postMessage(`{ class: "Parent", method: "GetJsonValue", p1: "${p1}" }`);
-            return "{}";
+        Parent.getJsonValue = function (p1) {
+            var opId = getOpId();
+            window.chrome.webview.postMessage(`{ opId:"${opId}", class: "Parent", method: "GetJsonValue", p1: "${p1}" }`);
+            return getPromisse(opId);
         }
-        Parent.getChildValue = function(p1, p2) {
-            window.chrome.webview.postMessage(`{ class: "Parent", method: "GetChildValue", p1: "${p1}", p2: "${p2}" }`);
-            return "";
+        Parent.getChildValue = function (p1, p2) {
+            var opId = getOpId();
+            window.chrome.webview.postMessage(`{ opId:"${opId}", class: "Parent", method: "GetChildValue", p1: "${p1}", p2: "${p2}" }`);
+            return getPromisse(opId);
         }
         Parent.setValue = function (p1, p2, p3) {
             if (typeof p3 !== "undefined")
@@ -65,27 +88,31 @@
         function Theme () {
         }
         Theme.currentThemeName = function () {
-            window.chrome.webview.postMessage(`{ class: "Theme", method: "CurrentThemeName" }`);
-            return "";
+            var opId = getOpId();
+            window.chrome.webview.postMessage(`{ opId:"${opId}", class: "Theme", method: "CurrentThemeName" }`);
+            return getPromisse(opId);
         }
         Theme.isHighContrast = function () {
-            window.chrome.webview.postMessage(`{ class: "Theme", method: "IsHighContrast" }`);
-            return "";
+            var opId = getOpId();
+            window.chrome.webview.postMessage(`{ opId:"${opId}", class: "Theme", method: "IsHighContrast" }`);
+            return getPromisse(opId);
         }
         function Keyboard() {
         }
         Keyboard.keyDown = function (keyCode, ctrlKey, shiftKey, altKey, metaKey) {
-            window.chrome.webview.postMessage(`{ class: "Keyboard", method: "KeyDown", keyCode: ${keyCode}, ctrlKey: ${ctrlKey}, shiftKey: ${shiftKey}, altKey: ${altKey}, metaKey: ${metaKey} }`);
-            return true;
+            var opId = getOpId();
+            window.chrome.webview.postMessage(`{ opId:"${opId}", class: "Keyboard", method: "KeyDown", keyCode: ${keyCode}, ctrlKey: ${ctrlKey}, shiftKey: ${shiftKey}, altKey: ${altKey}, metaKey: ${metaKey} }`);
+
+            return getPromisse(opId);
         }
 
         Debug.log("Starting Monaco Load");
         require.config({ paths: { 'vs': './monaco-editor/min/vs' }});
-        require(['vs/editor/editor.main'], function () {
+        require(['vs/editor/editor.main'], async function () {
             Debug.log("Grabbing Monaco Options");
 
-            let opt = getOptions();
-            opt["value"] = Parent.getValue("Text");
+            let opt = await getOptions();
+            opt["value"] = await Parent.getValue("Text");
 
             editor = monaco.editor.create(document.getElementById('container'), opt);
             model = editor.getModel();
@@ -108,16 +135,16 @@
             })
 
             // Set theme
-            let theme = Parent.getJsonValue("RequestedTheme");
+            let theme = await Parent.getJsonValue("RequestedTheme");
             theme = {
                 "0": "Default",
                 "1": "Light",
                 "2": "Dark"
             }[theme];
             if (theme == "Default") {
-                theme = Theme.currentThemeName();
+                theme = await Theme.currentThemeName();
             }
-            changeTheme(theme, Theme.isHighContrast());
+            changeTheme(theme, await Theme.isHighContrast());
 
             // Update Monaco Size when we receive a window resize event
             window.addEventListener("resize", () => {
@@ -129,7 +156,7 @@
 
             // Callback to Parent that we're loaded
             Debug.log("Loaded Monaco");
-            Parent.callAction("Loaded");
+            await Parent.callAction("Loaded");
         });
 
         // TODO: Split these helper functions out into separate .js/.ts files.
@@ -237,10 +264,10 @@
             style.innerHTML = innerStyle;
         };
 
-        var getOptions = function () {
+        var getOptions = async function () {
             let opt = null;
             try {
-                opt = JSON.parse(Parent.getJsonValue("Options"));
+                opt = JSON.parse(await Parent.getJsonValue("Options"));
             } finally {
 
             }
@@ -273,9 +300,9 @@
             monaco.editor.setTheme(newTheme);
         };
 
-        var keyDown = function (event) {
+        var keyDown = async function (event) {
             //Debug.log("Key Down:" + event.keyCode + " " + event.ctrlKey);
-            var result = Keyboard.keyDown(event.keyCode, event.ctrlKey, event.shiftKey, event.altKey, event.metaKey);
+            var result = await Keyboard.keyDown(event.keyCode, event.ctrlKey, event.shiftKey, event.altKey, event.metaKey);
             if (result) {
                 // TODO: Figure out which of these things actually works...
                 event.keyCode = 0;
