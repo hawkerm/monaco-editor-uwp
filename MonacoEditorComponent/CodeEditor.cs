@@ -123,10 +123,7 @@ namespace Monaco
             //_view.NewWindowRequested += WebView_NewWindowRequested;
             _view.WebMessageReceived += WebView_WebMessageReceived;
 
-            await PrepareMonacoHtmlFilesAsync();
-
-            var localAppDataPath = AppDataPaths.GetDefault().LocalAppData;
-            _view.UriSource = new Uri(@"file:///" + localAppDataPath + @"/Monaco/MonacoEditor.html");
+            _view.UriSource = new Uri(@"file:///" + (await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Monaco/MonacoEditor.html"))).Path);
 
             Loading?.Invoke(this, new RoutedEventArgs());
 

@@ -130,57 +130,6 @@ namespace Monaco
             }).AsAsyncOperation();
         }
 
-        private async Task CopyAsync(StorageFolder source, StorageFolder destination)
-        {
-            var targetFolder = await destination.TryGetItemAsync(source.DisplayName);
-
-            if (targetFolder is StorageFolder)
-                return;
-
-            targetFolder = await destination.CreateFolderAsync(source.DisplayName);
-
-            var queryOptions = new QueryOptions
-            {
-                IndexerOption = IndexerOption.DoNotUseIndexer,
-                FolderDepth = FolderDepth.Shallow,
-            };
-            var queryFiles = source.CreateFileQueryWithOptions(queryOptions);
-            var files = await queryFiles.GetFilesAsync();
-
-            foreach (var storageFile in files)
-            {
-                await storageFile.CopyAsync((StorageFolder)targetFolder, storageFile.Name, NameCollisionOption.ReplaceExisting);
-            }
-
-            var queryFolders = source.CreateFolderQueryWithOptions(queryOptions);
-            var folders = await queryFolders.GetFoldersAsync();
-
-            foreach (var storageFolder in folders)
-            {
-                await CopyAsync(storageFolder, (StorageFolder)targetFolder);
-            }
-        }
-
-        private IAsyncAction PrepareMonacoHtmlFilesAsync()
-        {
-            return Task.Run(async () =>
-            {
-                var originFolder = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync(@"Monaco\monaco-editor");
-
-                var destFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Monaco", CreationCollisionOption.ReplaceExisting);
-
-                await CopyAsync(originFolder, destFolder);
-
-                var fileName = "ms-appx:///Monaco/MonacoEditor.html";
-
-                var sourceFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri(fileName));
-                var sourceText = await FileIO.ReadTextAsync(sourceFile);
-
-                var destFile = await destFolder.CreateFileAsync("MonacoEditor.html", CreationCollisionOption.ReplaceExisting);
-                await FileIO.WriteTextAsync(destFile, sourceText);
-            }).AsAsyncAction();
-        }
-
         public IModel GetModel()
         {
             return _model;
