@@ -110,7 +110,7 @@ namespace Monaco
 
             //_view.NewWindowRequested += WebView_NewWindowRequested;
 
-            await Task.Delay(1000);
+            await Task.Delay(100);
 
             _initialized = true;
 
