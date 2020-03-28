@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2008
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonacoEditorComponent", "MonacoEditorComponent\MonacoEditorComponent.csproj", "{DD49485C-2D9B-4824-B64E-52193B43E4CB}"
 EndProject
@@ -9,6 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonacoEditorTestApp", "Mona
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C810EDD0-CB55-4B22-AA18-A6C8B3C29FBC}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		changelog.md = changelog.md
 		MonacoEditorComponent\MonacoEditorComponent.nuspec = MonacoEditorComponent\MonacoEditorComponent.nuspec
 		README.md = README.md
