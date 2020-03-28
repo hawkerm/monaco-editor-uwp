@@ -10,6 +10,7 @@ v0.9 - 01/23/2020
 **Breaking Changes**: 
 - Use `StandaloneEditorConstructionOptions` for Options instead of `IEditorConstructionOptions`
 - Use ClassName string instead of CssStyle type
+- `CompletionItem` constructor has changed
 - Snippets need `InsertTextRules` property set to `InsertAsSnippet`
 - Use `HoverProvider` interface instead of original delegate
 - `IUri` has been renamed to `Uri`
