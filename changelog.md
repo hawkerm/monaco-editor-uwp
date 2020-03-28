@@ -1,18 +1,19 @@
 v0.9 - 01/23/2020
 -----------------
 - Updated Monaco Reference to v0.20.0
-- Fix broken snippet function
-- Tie css styles to CodeEditor
-- Sync CodeLanguage and Options.Language, HasGlyphMargin and Options.GlyphMargin
-- Expose ReadOnly property
+- Add *[ColorProvider](https://microsoft.github.io/monaco-editor/api/modules/monaco.languages.html#registercolorprovider)* Language Service Support
+- Expose `ReadOnly` property
+- Fix broken Snippet function
+- Tie CSS Styles to CodeEditor
+- Sync `CodeLanguage` and `Options.Language`, `HasGlyphMargin` and `Options.GlyphMargin`
 
-**Breaking changes**: 
-- Use StandaloneEditorConstructionOptions for Options instead of IEditorConstructionOptions
+**Breaking Changes**: 
+- Use `StandaloneEditorConstructionOptions` for Options instead of `IEditorConstructionOptions`
 - Use ClassName string instead of CssStyle type
-- Snippets need InsertTextRules property set to InsertAsSnippet
-- Use HoverProvider interface instead of original delegate
-- IUri has been renamed to Uri
-- Rename IsLoaded to IsEditorLoaded
+- Snippets need `InsertTextRules` property set to `InsertAsSnippet`
+- Use `HoverProvider` interface instead of original delegate
+- `IUri` has been renamed to `Uri`
+- Rename `IsLoaded` to `IsEditorLoaded`
 
 v0.8.1 - 01/15/2019
 -------------------
@@ -23,18 +24,18 @@ v0.8 - 01/15/2019
 -----------------
 - Updated min target to 16299.
 - Add more inline decoration style properties.
-- Add SetPositionAsync. Fixes #24.
+- Add `SetPositionAsync`. Fixes #24.
 - Update NuGet dependencies
 - Work for .NET Native
 - Changed returns from IWordAtPosition to WordAtPosition for now for .NET Native.
 
-v0.7 - 07/22/2018 
------------------ 
+v0.7 - 07/22/2018
+-----------------
 - **Breaking:** `IModelDecorationOptions` now uses `IMarkdownString` for both `HoverMessage` and `GlyphMarginHoverMessage` to reflect change in Monaco API.  A convenience `string` and `string[]` extension `ToMarkdownString` has been provided.  Fixes #22. 
 - Updated Monaco Reference to v0.13.0 
 - Added initial Language Provider APIs 
-  - CompletionItem (IntelliSense, Snippets, etc...) 
-  - Hover
+  - *[CompletionItem](https://microsoft.github.io/monaco-editor/api/modules/monaco.languages.html#registercompletionitemprovider)* (IntelliSense, Snippets, etc...) 
+  - *[Hover](https://microsoft.github.io/monaco-editor/api/modules/monaco.languages.html#registerhoverprovider)*
 - Added `install-dependencies.ps1` script to pull down required Monaco reference. 
 - Test app loads content from file now and provides info on things to try. 
  
@@ -65,7 +66,7 @@ v0.3 - 08/21/2017
 - Added support for *[Action](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.istandalonecodeeditor.html#addaction)* and *[Command](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.istandalonecodeeditor.html#addcommand)* editor extensions.
 - Added *[IEditorOptions](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditoroptions.html)* support through the *CodeEditor.Options* property, primary-level property auto-update is supported.
 - Added initial single *[IModel](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.imodel.html)* support through *CodeEditor.GetModel()*.
-- Added support to retrieve **SelectedText**.
+- Added support to retrieve `SelectedText`.
 - Use minified Monaco library and build for Any CPU.
 
 v0.2 - 07/27/2017
@@ -78,8 +79,8 @@ v0.2 - 07/27/2017
 v0.1 - 07/24/2017
 -----------------
  - Two-way text binding for code content setting and retrieval.
- - CodeLanguage property to set initial syntax highlighting (must be set in XAML declaration).
+ - `CodeLanguage` property to set initial syntax highlighting (must be set in XAML declaration).
  - Support for *await new Monaco.LanguagesHelper(Editor).GetLanguagesAsync()* call to retrieve supported languages, use **Id** field in property above.
- - Theme Aware: Control automatically picks theme based on system/app light/dark theme and high contrast settings.
- - Render Aware: Control only displays once Code Editor has been loaded.
+ - **Theme Aware**: Control automatically picks theme based on system/app light/dark theme and high contrast settings.
+ - **Render Aware**: Control only displays once Code Editor has been loaded.
  
