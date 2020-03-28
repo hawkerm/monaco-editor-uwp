@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Monaco
 {
@@ -11,7 +7,6 @@ namespace Monaco
     /// </summary>
     public sealed class KeyMod
     {
-        #pragma warning disable CS1591
         public static int WinCtrl => 256;
         public static int Alt => 512;
         public static int Shift => 1024;
@@ -23,14 +18,12 @@ namespace Monaco
             var chordPart = ZeroFillRightShift((secondPart & 0x0000ffff) << 16, 0);
             return ZeroFillRightShift(firstPart | chordPart, 0);
         }
-        #pragma warning restore CS1591
-
         // Info on Zero-Fill Right Shift http://www.vanguardsw.com/dphelp4/dph00369.htm
         // Supported natively by JavaScript, but not C#
-        private static Int32 ZeroFillRightShift(Int32 i, Int32 j)
+        private static int ZeroFillRightShift(int i, int j)
         {
-            bool negativemask = (i < 0);
-            i = i >> j;
+            bool negativemask = i < 0;
+            i >>= j;
 
             if (negativemask)
             {

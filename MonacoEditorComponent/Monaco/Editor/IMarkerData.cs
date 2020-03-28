@@ -1,27 +1,28 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Monaco.Editor
 {
     /// <summary>
-    /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.imarkerdata.html
+    /// A structure defining a problem/warning/etc.
     /// </summary>
     public interface IMarkerData : IRange
     {
-        [JsonProperty("code")]
-        string Code { get; }
+        [JsonProperty("code", NullValueHandling = NullValueHandling.Ignore)]
+        string Code { get; set; }
 
         [JsonProperty("message")]
-        string Message { get; }
+        string Message { get; set; }
+
+        [JsonProperty("relatedInformation", NullValueHandling = NullValueHandling.Ignore)]
+        IRelatedInformation[] RelatedInformation { get; set; }
 
         [JsonProperty("severity")]
-        Severity Severity { get; }
+        MarkerSeverity Severity { get; set; }
 
-        [JsonProperty("source")]
-        string Source { get; }
+        [JsonProperty("source", NullValueHandling = NullValueHandling.Ignore)]
+        string Source { get; set; }
+
+        [JsonProperty("tags", NullValueHandling = NullValueHandling.Ignore)]
+        MarkerTag[] Tags { get; set; }
     }
 }

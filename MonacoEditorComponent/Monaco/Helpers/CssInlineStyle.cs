@@ -1,25 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using Windows.UI.Text;
 using Windows.UI.Xaml.Media;
 
 namespace Monaco.Helpers
 {
-    public enum TextDecoration
-    {
-        None,
-        Underline,
-        Overline,
-        LineThrough, // line-through
-        Initial,
-        Inherit
-    }
-
-    // Inline styles modify the text style itself and are useful for manipulating the colors and styles of text to indicate conditions.
-    public sealed class CssInlineStyle: ICssStyle
+    /// <summary>
+    /// Inline styles modify the text style itself and are useful for manipulating the colors and styles of text to indicate conditions.
+    /// </summary>
+    public sealed class CssInlineStyle : ICssStyle
     {
         public TextDecoration TextDecoration { get; set; }
         public FontWeight? FontWeight { get; set; }
@@ -33,9 +21,9 @@ namespace Monaco.Helpers
 
         public string Name { get; private set; }
 
-        public CssInlineStyle()
+        public CssInlineStyle(CodeEditor editor)
         {
-            Name = CssStyleBroker.Instance.Register(this);
+            Name = CssStyleBroker.GetInstance(editor).Register(this);
         }
 
         public string ToCss()

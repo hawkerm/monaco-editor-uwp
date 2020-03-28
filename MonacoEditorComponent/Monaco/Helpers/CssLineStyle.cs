@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Windows.UI.Xaml.Media;
 
 namespace Monaco.Helpers
 {
-    // Simple Proxy to general CSS Line Styles
-    // Line styles are overlayed behind text in the editor and are useful for highlighting sections of text efficiently
+    /// <summary>
+    /// Simple Proxy to general CSS Line Styles.
+    /// Line styles are overlayed behind text in the editor and are useful for highlighting sections of text efficiently
+    /// </summary>
     public sealed class CssLineStyle : ICssStyle
     {
         public SolidColorBrush BackgroundColor { get; set; }
@@ -17,8 +16,9 @@ namespace Monaco.Helpers
 
         public string Name { get; private set; }
 
-        public CssLineStyle() {
-            Name = CssStyleBroker.Instance.Register(this);
+        public CssLineStyle(CodeEditor editor)
+        {
+            Name = CssStyleBroker.GetInstance(editor).Register(this);
         }
 
         public string ToCss()
@@ -30,12 +30,14 @@ namespace Monaco.Helpers
                                                                                     BackgroundColor.Color.G,
                                                                                     BackgroundColor.Color.B));
             }
+#pragma warning disable CS0618 // Type or member is obsolete
             if (ForegroundColor != null)
             {
                 output.AppendLine(string.Format("color: #{0:X2}{1:X2}{2:X2} !important;", ForegroundColor.Color.R,
                                                                                ForegroundColor.Color.G,
                                                                                ForegroundColor.Color.B));
             }
+#pragma warning restore CS0618 // Type or member is obsolete
 
             return CssStyleBroker.WrapCssClassName(this, output.ToString());
         }

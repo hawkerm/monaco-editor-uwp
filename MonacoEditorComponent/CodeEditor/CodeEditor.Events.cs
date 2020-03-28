@@ -1,10 +1,7 @@
 ﻿using Monaco.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reflection;
 using Windows.Foundation;
 using Windows.UI.Xaml;
@@ -49,12 +46,12 @@ namespace Monaco
             #if DEBUG
             Debug.WriteLine("DOM Content Loaded");
             #endif
-            this._initialized = true;
+            _initialized = true;
         }
 
         private async void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
-            this.IsLoaded = true;
+            IsEditorLoaded = true;
 
             // Make sure inner editor is focused
             await SendScriptAsync("editor.focus();");
@@ -62,7 +59,7 @@ namespace Monaco
             // If we're supposed to have focus, make sure we try and refocus on our now loaded webview.
             if (FocusManager.GetFocusedElement() == this)
             {
-                this._view.Focus(FocusState.Programmatic);
+                _view.Focus(FocusState.Programmatic);
             }
 
             Loaded?.Invoke(this, new RoutedEventArgs());
@@ -82,15 +79,15 @@ namespace Monaco
             _parentAccessor.RegisterAction("Loaded", CodeEditorLoaded);
 
             _themeListener = new ThemeListener();
-            _themeListener.ThemeChanged += _themeListener_ThemeChanged;
+            _themeListener.ThemeChanged += ThemeListener_ThemeChanged;
             _themeToken = RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedTheme_PropertyChanged);
 
             _keyboardListener = new KeyboardListener(this);
 
-            this._view.AddWebAllowedObject("Debug", new DebugLogger());
-            this._view.AddWebAllowedObject("Parent", _parentAccessor);
-            this._view.AddWebAllowedObject("Theme", _themeListener);
-            this._view.AddWebAllowedObject("Keyboard", _keyboardListener);
+            _view.AddWebAllowedObject("Debug", new DebugLogger());
+            _view.AddWebAllowedObject("Parent", _parentAccessor);
+            _view.AddWebAllowedObject("Theme", _themeListener);
+            _view.AddWebAllowedObject("Keyboard", _keyboardListener);
         }        
 
         private async void CodeEditorLoaded()
@@ -126,26 +123,26 @@ namespace Monaco
                 tstr = theme.ToString();
             }
 
-            await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
             {
-                await this.InvokeScriptAsync("changeTheme", new string[] { tstr, _themeListener.IsHighContrast.ToString() });
+                await InvokeScriptAsync("changeTheme", new string[] { tstr, _themeListener.IsHighContrast.ToString() });
             });
         }
 
-        private async void _themeListener_ThemeChanged(ThemeListener sender)
+        private async void ThemeListener_ThemeChanged(ThemeListener sender)
         {
             if (RequestedTheme == ElementTheme.Default)
             {
-                await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
                 {
-                    await this.InvokeScriptAsync("changeTheme", args: new string[] { sender.CurrentTheme.ToString(), sender.IsHighContrast.ToString() });
+                    await InvokeScriptAsync("changeTheme", args: new string[] { sender.CurrentTheme.ToString(), sender.IsHighContrast.ToString() });
                 });
             }
         }
 
         internal bool TriggerKeyDown(WebKeyEventArgs args)
         {
-            this.KeyDown?.Invoke(this, args);
+            KeyDown?.Invoke(this, args);
 
             return args.Handled;
         }
@@ -154,10 +151,10 @@ namespace Monaco
         {
             base.OnGotFocus(e);
 
-            if (this._view != null && FocusManager.GetFocusedElement() == this)
+            if (_view != null && FocusManager.GetFocusedElement() == this)
             {
                 // Forward Focus onto our inner WebView
-                this._view.Focus(FocusState.Programmatic);
+                _view.Focus(FocusState.Programmatic);
             }
         }
     }

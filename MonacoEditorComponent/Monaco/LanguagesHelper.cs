@@ -2,10 +2,6 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Data.Json;
 using Windows.Foundation;
 
 namespace Monaco
@@ -16,7 +12,7 @@ namespace Monaco
     /// </summary>
     public sealed class LanguagesHelper
     {
-        private WeakReference<CodeEditor> _editor;
+        private readonly WeakReference<CodeEditor> _editor;
 
         public LanguagesHelper(CodeEditor editor)
         {
@@ -66,6 +62,23 @@ namespace Monaco
                     return null;
                 });
 
+                editor._parentAccessor.RegisterEvent("CompletionItemRequested" + languageId, async (args) =>
+                {
+                    if (args != null && args.Length >= 2)
+                    {
+                        var position = JsonConvert.DeserializeObject<Position>(args[0]);
+                        var requestedItem = JsonConvert.DeserializeObject<CompletionItem>(args[1]);
+                        var completionItem = await provider.ResolveCompletionItemAsync(editor.GetModel(), position, requestedItem);
+
+                        if (completionItem != null)
+                        {
+                            return JsonConvert.SerializeObject(completionItem);
+                        }
+                    }
+
+                    return null;
+                });
+
                 return editor.InvokeScriptAsync("registerCompletionItemProvider", new object[] { languageId, provider.TriggerCharacters }).AsAsyncAction();
             }
 
@@ -82,7 +95,7 @@ namespace Monaco
                 {
                     if (args != null && args.Length >= 1)
                     {
-                        var hover = await provider.Invoke(editor.GetModel(), JsonConvert.DeserializeObject<Position>(args[0]));
+                        var hover = await provider.ProvideHover(editor.GetModel(), JsonConvert.DeserializeObject<Position>(args[0]));
 
                         if (hover != null)
                         {

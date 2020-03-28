@@ -28,7 +28,8 @@
                            HasGlyphMargin="True"
                            CodeLanguage="csharp"
                            KeyDown="Editor_KeyDown"
-                           Text="{Binding CodeContent, Mode=TwoWay}">
+                           Text="{x:Bind CodeContent, Mode=TwoWay}"
+                           Options="{x:Bind options, Mode=OneWay}">
         </monaco:CodeEditor>
         <TextBlock Text="{x:Bind CodeContent, Mode=OneWay}" Grid.Row="1" Grid.Column="1"/>
         <TextBox x:Name="TextEditor"
@@ -61,6 +62,8 @@
                 <Button Content="Change Language" Click="ButtonChangeLanguage_Click" />
                 <Button Content="Set Marker" Click="ButtonSetMarker_Click" />
                 <Button Content="Load &amp; Set Pos" Click="LoadAndSet_Click" />
+                <Button Content="Set Readonly" Click="ButtonSetReadonly_Click" />
+                <Button Content="Run Script" Click="ButtonRunScript_Click" />
                 <Line X1="0" X2="100" Y1="0" Y2="0" StrokeThickness="1" Stroke="{ThemeResource AppBarSeparatorForegroundThemeBrush}"/>
                 <Button x:Name="HideButton" Content="Hide" Click="HideButton_Click"/>
                 <Button x:Name="DetachButton" Content="Detach" Click="DetachButton_Click"/>

@@ -1,3 +1,19 @@
+v0.9 - 01/23/2020
+-----------------
+- Updated Monaco Reference to v0.20.0
+- Fix broken snippet function
+- Tie css styles to CodeEditor
+- Sync CodeLanguage and Options.Language, HasGlyphMargin and Options.GlyphMargin
+- Expose ReadOnly property
+
+**Breaking changes**: 
+- Use StandaloneEditorConstructionOptions for Options instead of IEditorConstructionOptions
+- Use ClassName string instead of CssStyle type
+- Snippets need InsertTextRules property set to InsertAsSnippet
+- Use HoverProvider interface instead of original delegate
+- IUri has been renamed to Uri
+- Rename IsLoaded to IsEditorLoaded
+
 v0.8.1 - 01/15/2019
 -------------------
 - Revert min target back to 14393

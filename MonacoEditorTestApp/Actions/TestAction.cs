@@ -1,11 +1,8 @@
 ﻿using Monaco.Editor;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Monaco;
 using Windows.UI.Popups;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace MonacoEditorTestApp.Actions
 {
@@ -15,11 +12,11 @@ namespace MonacoEditorTestApp.Actions
         public float ContextMenuOrder => 1.5f;
         public string Id => "meta-test-action";
         public string KeybindingContext => null;
-        public int[] Keybindings => new int[] { Monaco.KeyMod.Chord(Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KEY_K, Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KEY_M) };
+        public int[] Keybindings => new int[] { KeyMod.Chord(KeyMod.CtrlCmd | KeyCode.KEY_K, KeyMod.CtrlCmd | KeyCode.KEY_M) };
         public string Label => "Test Action";
         public string Precondition => null;
 
-        public async void Run(CodeEditor editor)
+        public async void Run(CodeEditor editor, [ReadOnlyArray]object[] args)
         {
             var md = new MessageDialog("You have selected text:\n\n" + editor.SelectedText);
             await md.ShowAsync();

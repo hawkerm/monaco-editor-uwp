@@ -3,13 +3,10 @@ using Monaco.Editor;
 using Monaco.Extensions;
 using Monaco.Helpers;
 using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -22,7 +19,7 @@ namespace Monaco
     /// https://microsoft.github.io/monaco-editor/
     /// </summary>
     [TemplatePart(Name = "View", Type = typeof(WebView))]
-    public sealed partial class CodeEditor : Control, INotifyPropertyChanged
+    public sealed partial class CodeEditor : Control, INotifyPropertyChanged, IDisposable
     {
         private bool _initialized;
         private WebView _view;
@@ -33,36 +30,24 @@ namespace Monaco
         /// <summary>
         /// Template Property used during loading to prevent blank control visibility when it's still loading WebView.
         /// </summary>
-        public bool IsLoaded
+        public bool IsEditorLoaded
         {
-            get { return (bool)GetValue(IsLoadedProperty); }
-            private set { SetValue(IsLoadedProperty, value); }
+            get => (bool)GetValue(IsEditorLoadedProperty);
+            private set => SetValue(IsEditorLoadedProperty, value);
         }
 
-        // Using a DependencyProperty as the backing store for HorizontalLayout.  This enables animation, styling, binding, etc...
-        private static readonly DependencyProperty IsLoadedPropertyField =
-            DependencyProperty.Register("IsLoaded", typeof(string), typeof(CodeEditor), new PropertyMetadata(false));
-
-        public static DependencyProperty IsLoadedProperty
-        {
-            get
-            {
-                return IsLoadedPropertyField;
-            }
-        }
+        public static DependencyProperty IsEditorLoadedProperty { get; } = DependencyProperty.Register(nameof(IsEditorLoaded), typeof(string), typeof(CodeEditor), new PropertyMetadata(false));
 
         /// <summary>
         /// Construct a new IStandAloneCodeEditor.
         /// </summary>
         public CodeEditor()
         {
-            DefaultStyleKey = typeof(CodeEditor);    
-            
+            DefaultStyleKey = typeof(CodeEditor);
             if (Options != null)
             {
                 // Set Pass-Thru Properties
                 Options.GlyphMargin = HasGlyphMargin;
-                Options.Language = CodeLanguage;
 
                 // Register for changes
                 Options.PropertyChanged += Options_PropertyChanged;
@@ -79,8 +64,21 @@ namespace Monaco
 
         private async void Options_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            // TODO: Check for Language property and call other method instead?
-            await InvokeScriptAsync("updateOptions", sender);
+            if (!(sender is StandaloneEditorConstructionOptions options)) return;
+            if (e.PropertyName == nameof(StandaloneEditorConstructionOptions.Language))
+            {
+                await InvokeScriptAsync("updateLanguage", options.Language);
+                if (CodeLanguage != options.Language) CodeLanguage = options.Language;
+            }
+            if (e.PropertyName == nameof(StandaloneEditorConstructionOptions.GlyphMargin))
+            {
+                if (HasGlyphMargin != options.GlyphMargin) options.GlyphMargin = HasGlyphMargin;
+            }
+            if (e.PropertyName == nameof(StandaloneEditorConstructionOptions.ReadOnly))
+            {
+                if (ReadOnly != options.ReadOnly) options.ReadOnly = ReadOnly;
+            }
+            await InvokeScriptAsync("updateOptions", options);
         }
 
         private void CodeEditor_Loaded(object sender, RoutedEventArgs e)
@@ -89,20 +87,6 @@ namespace Monaco
             if (_model == null && _view != null)
             {
                 _model = new ModelHelper(this);
-
-                _parentAccessor = new ParentAccessor(this);
-                _parentAccessor.AddAssemblyForTypeLookup(typeof(Range).GetTypeInfo().Assembly);
-                _parentAccessor.RegisterAction("Loaded", CodeEditorLoaded);
-
-                _themeListener = new ThemeListener();
-                _themeListener.ThemeChanged += _themeListener_ThemeChanged;
-                _themeToken = RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedTheme_PropertyChanged);
-
-                _keyboardListener = new KeyboardListener(this);
-
-                _view.AddWebAllowedObject("Parent", _parentAccessor);
-                _view.AddWebAllowedObject("Theme", _themeListener);
-                _view.AddWebAllowedObject("Keyboard", _keyboardListener);
 
                 Options.PropertyChanged += Options_PropertyChanged;
 
@@ -137,11 +121,12 @@ namespace Monaco
             Decorations.VectorChanged -= Decorations_VectorChanged;
             Markers.VectorChanged -= Markers_VectorChanged;
 
-            _parentAccessor?.Dispose();
-            _parentAccessor = null;
             Options.PropertyChanged -= Options_PropertyChanged;
-            
-            _themeListener?.ThemeChanged -= _themeListener_ThemeChanged;
+
+            if (_themeListener != null)
+            {
+                _themeListener.ThemeChanged -= ThemeListener_ThemeChanged;
+            }
             _themeListener = null;
             
             UnregisterPropertyChangedCallback(RequestedThemeProperty, _themeToken);
@@ -168,7 +153,7 @@ namespace Monaco
                 _view.DOMContentLoaded += WebView_DOMContentLoaded;
                 _view.NavigationCompleted += WebView_NavigationCompleted;
                 _view.NewWindowRequested += WebView_NewWindowRequested;
-                _view.Source = new Uri("ms-appx-web:///Monaco/MonacoEditor.html");
+                _view.Source = new System.Uri("ms-appx-web:///Monaco/CodeEditor/CodeEditor.html");
             }
 
             base.OnApplyTemplate();
@@ -182,7 +167,7 @@ namespace Monaco
             await SendScriptAsync<object>(script, member, file, line);
         }
 
-        internal async Task<T> SendScriptAsync<T>(string script, 
+        internal async Task<T> SendScriptAsync<T>(string script,
             [CallerMemberName] string member = null,
             [CallerFilePath] string file = null,
             [CallerLineNumber] int line = 0)
@@ -191,7 +176,7 @@ namespace Monaco
             {
                 try
                 {
-                    return await this._view.RunScriptAsync<T>(script, member, file, line);
+                    return await _view.RunScriptAsync<T>(script, member, file, line);
                 }
                 catch (Exception e)
                 {
@@ -200,12 +185,12 @@ namespace Monaco
             }
             else
             {
-                #if DEBUG
+#if DEBUG
                 Debug.WriteLine("WARNING: Tried to call '" + script + "' before initialized.");
-                #endif
+#endif
             }
 
-            return default(T);
+            return default;
         }
 
         internal async Task InvokeScriptAsync(
@@ -216,7 +201,7 @@ namespace Monaco
             [CallerFilePath] string file = null,
             [CallerLineNumber] int line = 0)
         {
-            await this.InvokeScriptAsync<object>(method, new object[] { arg }, serialize, member, file, line);
+            await InvokeScriptAsync<object>(method, new object[] { arg }, serialize, member, file, line);
         }
 
         internal async Task InvokeScriptAsync(
@@ -227,7 +212,7 @@ namespace Monaco
             [CallerFilePath] string file = null,
             [CallerLineNumber] int line = 0)
         {
-            await this.InvokeScriptAsync<object>(method, args, serialize, member, file, line);
+            await InvokeScriptAsync<object>(method, args, serialize, member, file, line);
         }
 
         internal async Task<T> InvokeScriptAsync<T>(
@@ -238,7 +223,7 @@ namespace Monaco
             [CallerFilePath] string file = null,
             [CallerLineNumber] int line = 0)
         {
-            return await this.InvokeScriptAsync<T>(method, new object[] { arg }, serialize, member, file, line);
+            return await InvokeScriptAsync<T>(method, new object[] { arg }, serialize, member, file, line);
         }
 
         internal async Task<T> InvokeScriptAsync<T>(
@@ -253,7 +238,7 @@ namespace Monaco
             {
                 try
                 {
-                    return await this._view.InvokeScriptAsync<T>(method, args, serialize, member, file, line);
+                    return await _view.InvokeScriptAsync<T>(method, args, serialize, member, file, line);
                 }
                 catch (Exception e)
                 {
@@ -262,20 +247,24 @@ namespace Monaco
             }
             else
             {
-                #if DEBUG
+#if DEBUG
                 Debug.WriteLine("WARNING: Tried to call " + method + " before initialized.");
-                #endif
+#endif
             }
 
-            return default(T);
+            return default;
         }
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void Dispose()
+        {
+            _parentAccessor?.Dispose();
+            _parentAccessor = null;
+            CssStyleBroker.DetachEditor(this);
         }
     }
 }

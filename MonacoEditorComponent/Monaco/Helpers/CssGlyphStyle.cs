@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Monaco.Helpers
+﻿namespace Monaco.Helpers
 {
     public sealed class CssGlyphStyle : ICssStyle
     {
-        public Uri GlyphImage { get; set; }
+        public System.Uri GlyphImage { get; set; }
 
         public string Name { get; private set; }
 
-        public CssGlyphStyle()
+        public CssGlyphStyle(CodeEditor editor)
         {
-            Name = CssStyleBroker.Instance.Register(this);
+            Name = CssStyleBroker.GetInstance(editor).Register(this);
         }
 
         public string ToCss()

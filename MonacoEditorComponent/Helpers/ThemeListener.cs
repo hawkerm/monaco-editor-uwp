@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation.Metadata;
 using Windows.UI.ViewManagement;
@@ -20,15 +16,15 @@ namespace Monaco.Helpers
     [AllowForWeb]
     public sealed class ThemeListener
     {
-        public string CurrentThemeName { get { return this.CurrentTheme.ToString(); } } // For Web Retrieval
+        public string CurrentThemeName { get { return CurrentTheme.ToString(); } } // For Web Retrieval
 
         public ApplicationTheme CurrentTheme { get; set; }
         public bool IsHighContrast { get; set; }
 
         public event ThemeChangedEvent ThemeChanged;
 
-        private AccessibilitySettings _accessible = new AccessibilitySettings();
-        private UISettings _settings = new UISettings();
+        private readonly AccessibilitySettings _accessible = new AccessibilitySettings();
+        private readonly UISettings _settings = new UISettings();
 
         public ThemeListener()
         {
