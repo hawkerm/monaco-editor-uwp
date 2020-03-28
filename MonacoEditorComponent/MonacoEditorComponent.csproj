@@ -277,7 +277,9 @@
     <Content Include="CodeEditor\CodeEditor.html" />
     <Content Include="monaco-editor\*.*" />
     <Content Include="monaco-editor\min\**\*.*" />
-    <Content Include="ts-helpermethods\*.js" />
+    <Content Include="ts-helpermethods\*.js">
+      <DependentUpon>%(Filename).ts</DependentUpon>
+    </Content>
     <EmbeddedResource Include="Properties\MonacoEditorComponent.rd.xml" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
