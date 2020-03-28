@@ -4,8 +4,10 @@ using Windows.UI.Xaml.Media;
 
 namespace Monaco.Helpers
 {
-    // Simple Proxy to general CSS Line Styles
-    // Line styles are overlayed behind text in the editor and are useful for highlighting sections of text efficiently
+    /// <summary>
+    /// Simple Proxy to general CSS Line Styles.
+    /// Line styles are overlayed behind text in the editor and are useful for highlighting sections of text efficiently
+    /// </summary>
     public sealed class CssLineStyle : ICssStyle
     {
         public SolidColorBrush BackgroundColor { get; set; }

@@ -171,13 +171,13 @@ namespace MonacoEditorTestApp
                     ClassName = new CssLineStyle(Editor) // TODO: Save these styles so we don't keep regenerating them and adding new ones.
                     {
                         BackgroundColor = new SolidColorBrush(Colors.DarkRed),
-                    }.Name,
+                    },
                     InlineClassName = new CssInlineStyle(Editor)
                     {
                         ForegroundColor = new SolidColorBrush(Colors.White),
                         FontWeight = FontWeights.Bold,
                         FontStyle = FontStyle.Italic
-                    }.Name,
+                    },
                     HoverMessage = new string[]
                     {
                         "This is a test message.",
@@ -195,11 +195,11 @@ namespace MonacoEditorTestApp
                     ClassName = new CssLineStyle(Editor)
                     {
                         BackgroundColor = new SolidColorBrush(Colors.AliceBlue)
-                    }.Name,
+                    },
                     GlyphMarginClassName = new CssGlyphStyle(Editor)
                     {
                         GlyphImage = new System.Uri("ms-appx-web:///Icons/error.png")
-                    }.Name,
+                    },
                     HoverMessage = (new string[]
                     {
                         "This is *another* \"test\" message about 'thing'."
@@ -217,11 +217,11 @@ namespace MonacoEditorTestApp
                     InlineClassName = new CssInlineStyle(Editor)
                     {
                         TextDecoration = TextDecoration.LineThrough
-                    }.Name,
+                    },
                     GlyphMarginClassName = new CssGlyphStyle(Editor)
                     {
                         GlyphImage = new System.Uri("ms-appx-web:///Icons/warning.png")
-                    }.Name,
+                    },
                     HoverMessage = (new string[]
                     {
                         "Deprecated"

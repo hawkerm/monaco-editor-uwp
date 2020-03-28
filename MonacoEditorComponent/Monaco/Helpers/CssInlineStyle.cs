@@ -4,7 +4,9 @@ using Windows.UI.Xaml.Media;
 
 namespace Monaco.Helpers
 {
-    // Inline styles modify the text style itself and are useful for manipulating the colors and styles of text to indicate conditions.
+    /// <summary>
+    /// Inline styles modify the text style itself and are useful for manipulating the colors and styles of text to indicate conditions.
+    /// </summary>
     public sealed class CssInlineStyle : ICssStyle
     {
         public TextDecoration TextDecoration { get; set; }

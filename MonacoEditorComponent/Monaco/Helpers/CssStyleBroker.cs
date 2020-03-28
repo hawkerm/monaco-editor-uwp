@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 
 namespace Monaco.Helpers
 {
-    public interface ICssStyle
-    {
-        string Name { get; }
-
-        string ToCss();
-    }
-
     /// <summary>
     /// Singleton Broker to help us manage CSS Styles
     /// </summary>

@@ -199,6 +199,7 @@
     <Compile Include="Monaco\Helpers\CssInlineStyle.cs" />
     <Compile Include="Monaco\Helpers\CssLineStyle.cs" />
     <Compile Include="Monaco\Helpers\CssStyleBroker.cs" />
+    <Compile Include="Monaco\Helpers\ICssStyle.cs" />
     <Compile Include="Monaco\Helpers\Json.cs" />
     <Compile Include="Monaco\Helpers\TextDecoration.cs" />
     <Compile Include="Monaco\IMarkdownString.cs" />
@@ -231,10 +232,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.9</Version>
+      <Version>6.2.10</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.TypeScript.MSBuild">
-      <Version>3.7.4</Version>
+      <Version>3.8.3</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
