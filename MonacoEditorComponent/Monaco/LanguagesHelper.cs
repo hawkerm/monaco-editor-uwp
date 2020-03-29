@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Windows.Foundation;
 
 namespace Monaco
@@ -14,6 +15,8 @@ namespace Monaco
     {
         private readonly WeakReference<CodeEditor> _editor;
 
+        [Obsolete("Use <Editor Instance>.Languages.* instead of constructing your own LanguagesHelper.")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public LanguagesHelper(CodeEditor editor)
         {
             // We need the editor component in order to execute JavaScript within 

@@ -6,10 +6,10 @@ v0.9 - 01/23/2020
 - Fix broken Snippet function
 - Tie CSS Styles to CodeEditor
 - Sync `CodeLanguage` and `Options.Language`, `HasGlyphMargin` and `Options.GlyphMargin`
+- **Note:** Marked `LanguagesHelper` Obsolete, use <Editor Instance>.Languages.* instead.
 
 **Breaking Changes**: 
 - Use `StandaloneEditorConstructionOptions` for Options instead of `IEditorConstructionOptions`
-- Use ClassName string instead of CssStyle type
 - `CompletionItem` constructor has changed
 - Snippets need `InsertTextRules` property set to `InsertAsSnippet`
 - Use `HoverProvider` interface instead of original delegate

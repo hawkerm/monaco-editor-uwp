@@ -57,6 +57,7 @@ namespace Monaco
             Decorations = new ObservableVector<IModelDeltaDecoration>();
             Markers = new ObservableVector<IMarkerData>();
             _model = new ModelHelper(this);
+            Languages = new LanguagesHelper(this);
 
             base.Loaded += CodeEditor_Loaded;
             Unloaded += CodeEditor_Unloaded;
