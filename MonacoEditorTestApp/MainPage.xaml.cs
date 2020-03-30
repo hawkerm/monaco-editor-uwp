@@ -251,7 +251,7 @@ namespace MonacoEditorTestApp
         }
 
         // Note: Can't make this method async as otherwise handled won't be read for intercepts.
-        private void Editor_KeyDown(object sender, WebKeyEventArgs e)
+        private void Editor_KeyDown(CodeEditor sender, WebKeyEventArgs e)
         {
             Debug.WriteLine("KeyDown: " + e.KeyCode + " " + e.CtrlKey);
 
@@ -476,6 +476,16 @@ namespace MonacoEditorTestApp
         {
             var result = await Editor.InvokeScriptAsync(@"function test(a, b) { return a + b; }; test(3, 4).toString()");
             Debug.WriteLine(result);
+        }
+
+        private void Editor_GotFocus(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("Editor Got Focus");
+        }
+
+        private void Editor_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("Editor Lost Focus");
         }
     }
 }

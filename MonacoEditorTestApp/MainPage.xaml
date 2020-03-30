@@ -28,6 +28,8 @@
                            HasGlyphMargin="True"
                            CodeLanguage="csharp"
                            KeyDown="Editor_KeyDown"
+                           GotFocus="Editor_GotFocus"
+                           LostFocus="Editor_LostFocus"
                            Text="{x:Bind CodeContent, Mode=TwoWay}"
                            Options="{x:Bind options, Mode=OneWay}">
         </monaco:CodeEditor>
