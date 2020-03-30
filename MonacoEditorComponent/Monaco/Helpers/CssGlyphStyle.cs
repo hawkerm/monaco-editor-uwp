@@ -4,16 +4,19 @@
     {
         public System.Uri GlyphImage { get; set; }
 
-        public string Name { get; private set; }
+        public uint Id { get; }
 
-        public CssGlyphStyle(CodeEditor editor)
+        public string Name { get; }
+
+        public CssGlyphStyle()
         {
-            Name = CssStyleBroker.GetInstance(editor).Register(this);
+            Id = CssStyleBroker.Register(this);
+            Name = "generated-style-" + Id;
         }
 
         public string ToCss()
         {
-            return CssStyleBroker.WrapCssClassName(this, string.Format("background: url(\"{0}\");", GlyphImage.AbsoluteUri));
+            return this.WrapCssClassName(string.Format("background: url(\"{0}\");", GlyphImage.AbsoluteUri));
         }
     }
 }

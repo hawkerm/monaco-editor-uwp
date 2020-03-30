@@ -1,10 +1,10 @@
-v0.9 - 01/23/2020
+v0.9 - 04/??/2020
 -----------------
 - Updated Monaco Reference to v0.20.0
 - Add *[ColorProvider](https://microsoft.github.io/monaco-editor/api/modules/monaco.languages.html#registercolorprovider)* Language Service Support
 - Expose `ReadOnly` property
 - Fix broken Snippet function
-- Tie CSS Styles to CodeEditor
+- Optimized Decoration Style generation
 - Sync `CodeLanguage` and `Options.Language`, `HasGlyphMargin` and `Options.GlyphMargin`
 - **Note:** Marked `LanguagesHelper` Obsolete, use <Editor Instance>.Languages.* instead.
 
@@ -13,8 +13,9 @@ v0.9 - 01/23/2020
 - `CompletionItem` constructor has changed
 - Snippets need `InsertTextRules` property set to `InsertAsSnippet`
 - Use `HoverProvider` interface instead of original delegate
-- `IUri` has been renamed to `Uri`
+- `IUri` has been renamed to `Uri` (see another Future Break #33)
 - Rename `IsLoaded` to `IsEditorLoaded`
+- `CssStyleBroker` made internal
 
 v0.8.1 - 01/15/2019
 -------------------

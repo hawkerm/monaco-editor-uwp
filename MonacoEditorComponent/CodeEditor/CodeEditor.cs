@@ -24,6 +24,7 @@ namespace Monaco
         private bool _initialized;
         private WebView _view;
         private ModelHelper _model;
+        private CssStyleBroker _cssBroker;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -57,7 +58,10 @@ namespace Monaco
             Decorations = new ObservableVector<IModelDeltaDecoration>();
             Markers = new ObservableVector<IMarkerData>();
             _model = new ModelHelper(this);
+            #pragma warning disable CS0618 // Type or member is obsolete
             Languages = new LanguagesHelper(this);
+            #pragma warning restore CS0618 // Type or member is obsolete
+            _cssBroker = new CssStyleBroker(this);
 
             base.Loaded += CodeEditor_Loaded;
             Unloaded += CodeEditor_Unloaded;
@@ -263,9 +267,10 @@ namespace Monaco
 
         public void Dispose()
         {
+            _cssBroker?.Dispose();
+            _cssBroker = null;
             _parentAccessor?.Dispose();
             _parentAccessor = null;
-            CssStyleBroker.DetachEditor(this);
         }
     }
 }

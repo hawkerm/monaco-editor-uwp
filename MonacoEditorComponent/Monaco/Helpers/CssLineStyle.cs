@@ -14,11 +14,14 @@ namespace Monaco.Helpers
         [Obsolete("Use ForegroundColor on CssInlineStyle instead, this is an overlay.")]
         public SolidColorBrush ForegroundColor { get; set; }
 
-        public string Name { get; private set; }
+        public uint Id { get; }
 
-        public CssLineStyle(CodeEditor editor)
+        public string Name { get; }
+
+        public CssLineStyle()
         {
-            Name = CssStyleBroker.GetInstance(editor).Register(this);
+            Id = CssStyleBroker.Register(this);
+            Name = "generated-style-" + Id;
         }
 
         public string ToCss()
@@ -39,7 +42,7 @@ namespace Monaco.Helpers
             }
 #pragma warning restore CS0618 // Type or member is obsolete
 
-            return CssStyleBroker.WrapCssClassName(this, output.ToString());
+            return this.WrapCssClassName(output.ToString());
         }
     }
 }

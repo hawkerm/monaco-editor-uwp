@@ -17,7 +17,7 @@ namespace Monaco
 
         [Obsolete("Use <Editor Instance>.Languages.* instead of constructing your own LanguagesHelper.")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public LanguagesHelper(CodeEditor editor)
+        public LanguagesHelper(CodeEditor editor) // TODO: Make Internal later.
         {
             // We need the editor component in order to execute JavaScript within 
             // the WebView environment to retrieve data (even though this Monaco class is static).

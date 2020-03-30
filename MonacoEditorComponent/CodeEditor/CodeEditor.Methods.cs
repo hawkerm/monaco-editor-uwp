@@ -172,13 +172,22 @@ namespace Monaco
         {
             var newDecorationsAdjust = newDecorations ?? Array.Empty<IModelDeltaDecoration>();
 
-            // Update Styles
-            return InvokeScriptAsync("updateStyle", CssStyleBroker.GetInstance(this).GetStyles()).ContinueWith((noop) =>
+            if (_cssBroker.AssociateStyles(newDecorations))
             {
-                // Send Command to Modify Decorations
+                // Update Styles First
+                return InvokeScriptAsync("updateStyle", _cssBroker.GetStyles()).ContinueWith((noop) =>
+                {
+                    // Send Command to Modify Decorations
+                    // IMPORTANT: Need to cast to object here as we want this to be a single array object passed as a parameter, not a list of parameters to expand.
+                    return InvokeScriptAsync("updateDecorations", (object)newDecorationsAdjust);
+                }).AsAsyncAction();
+            }
+            else
+            {
+                // Only Send Command to Modify Decorations themselves
                 // IMPORTANT: Need to cast to object here as we want this to be a single array object passed as a parameter, not a list of parameters to expand.
-                return InvokeScriptAsync("updateDecorations", (object)newDecorationsAdjust);
-            }).AsAsyncAction();
+                return InvokeScriptAsync("updateDecorations", (object)newDecorationsAdjust).AsAsyncAction();
+            }             
         }
     }
 }

@@ -36,6 +36,40 @@ namespace MonacoEditorTestApp
 
         private ContextKey _myCondition;
 
+        #region CSS Style Objects
+        private readonly CssLineStyle CssLineDarkRed = new CssLineStyle()
+        {
+            BackgroundColor = new SolidColorBrush(Colors.DarkRed),
+        };
+
+        private readonly CssLineStyle CssLineAliceBlue = new CssLineStyle()
+        {
+            BackgroundColor = new SolidColorBrush(Colors.AliceBlue)
+        };
+
+        private readonly CssInlineStyle CssInlineWhiteBold = new CssInlineStyle()
+        {
+            ForegroundColor = new SolidColorBrush(Colors.White),
+            FontWeight = FontWeights.Bold,
+            FontStyle = FontStyle.Italic
+        };
+
+        private readonly CssInlineStyle CssInlineStrikeThrough = new CssInlineStyle()
+        {
+            TextDecoration = TextDecoration.LineThrough
+        };
+
+        private readonly CssGlyphStyle CssGlyphError = new CssGlyphStyle()
+        {
+            GlyphImage = new System.Uri("ms-appx-web:///Icons/error.png")
+        };
+
+        private readonly CssGlyphStyle CssGlyphWarning = new CssGlyphStyle()
+        {
+            GlyphImage = new System.Uri("ms-appx-web:///Icons/warning.png")
+        };
+        #endregion
+
         public MainPage()
         {
             InitializeComponent();
@@ -166,19 +200,11 @@ namespace MonacoEditorTestApp
 
         private void ButtonHighlightRange_Click(object sender, RoutedEventArgs e)
         {
-            this.Editor.Decorations.Add(
+            Editor.Decorations.Add(
                 new IModelDeltaDecoration(new Range(3, 1, 3, 10), new IModelDecorationOptions()
                 {
-                    ClassName = new CssLineStyle(Editor) // TODO: Save these styles so we don't keep regenerating them and adding new ones.
-                    {
-                        BackgroundColor = new SolidColorBrush(Colors.DarkRed),
-                    },
-                    InlineClassName = new CssInlineStyle(Editor)
-                    {
-                        ForegroundColor = new SolidColorBrush(Colors.White),
-                        FontWeight = FontWeights.Bold,
-                        FontStyle = FontStyle.Italic
-                    },
+                    ClassName = CssLineDarkRed,
+                    InlineClassName = CssInlineWhiteBold,
                     HoverMessage = new string[]
                     {
                         "This is a test message.",
@@ -193,14 +219,9 @@ namespace MonacoEditorTestApp
             Editor.Decorations.Add(
                 new IModelDeltaDecoration(new Range(4, 1, 4, 1), new IModelDecorationOptions() {
                     IsWholeLine = true,
-                    ClassName = new CssLineStyle(Editor)
-                    {
-                        BackgroundColor = new SolidColorBrush(Colors.AliceBlue)
-                    },
-                    GlyphMarginClassName = new CssGlyphStyle(Editor)
-                    {
-                        GlyphImage = new System.Uri("ms-appx-web:///Icons/error.png")
-                    },
+                    ClassName = CssLineAliceBlue,
+                    InlineClassName = CssInlineWhiteBold,
+                    GlyphMarginClassName = CssGlyphError,
                     HoverMessage = (new string[]
                     {
                         "This is *another* \"test\" message about 'thing'."
@@ -215,14 +236,8 @@ namespace MonacoEditorTestApp
                 new IModelDeltaDecoration(new Range(2, 1, 2, await Editor.GetModel().GetLineLengthAsync(2)), new IModelDecorationOptions()
                 {
                     IsWholeLine = true,
-                    InlineClassName = new CssInlineStyle(Editor)
-                    {
-                        TextDecoration = TextDecoration.LineThrough
-                    },
-                    GlyphMarginClassName = new CssGlyphStyle(Editor)
-                    {
-                        GlyphImage = new System.Uri("ms-appx-web:///Icons/warning.png")
-                    },
+                    InlineClassName = CssInlineStrikeThrough,
+                    GlyphMarginClassName = CssGlyphWarning,
                     HoverMessage = (new string[]
                     {
                         "Deprecated"
