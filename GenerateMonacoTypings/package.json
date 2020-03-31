@@ -1,0 +1,22 @@
+{
+  "name": "generatemonacotypings",
+  "version": "1.0.0",
+  "description": "Used to Generate C# Typing info for the Monaco editor from its TypeScript definitions (also requires PowerShell)",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./generate-typings.ps1"
+  },
+  "author": "",
+  "license": "MIT",
+  "config": {
+    "outdir": "../MonacoEditorComponent",
+    "typedocConverter": "https://github.com/hez2010/TypedocConverter/releases/download/v1.5/Windows_x64.zip"
+  },
+  "dependencies": {
+    "monaco-editor": "0.20.0"
+  },
+  "devDependencies": {
+    "typedoc": "^0.17.3",
+    "typescript": "^3.8.3"
+  }
+}

@@ -77,6 +77,7 @@ Built using Visual Studio 2019 for Windows 10 16299 and above.
 
 The **released** complete Monaco v0.20.0 build is used as a reference, this is not included in this repository and can be downloaded from the [Monaco site](https://microsoft.github.io/monaco-editor/).  The contents of its uncompressed 'package' directory should be placed in the *MonacoEditorComponent/monaco-editor* directory.  The `install-dependencies.ps1` PowerShell script can install this for you automatically.
 
+In order to re-generate C# typings from a version of Monaco, see the GenerateMonacoTypings Node.js project [readme here](GenerateMonacoTypings\README.md).
 
 License
 -------
