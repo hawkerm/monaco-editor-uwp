@@ -33,18 +33,18 @@ namespace MonacoEditorTestApp.Helpers
         {
             return AsyncInfo.Run(async delegate (CancellationToken cancelationToken)
             {
-                var colorRange = new Range(19, 33, 19, 42); // TODO: This is just our hard reference to where we stored the color in the doc for now.
+                var info = new List<ColorInformation>();
 
-                var value = await document.GetValueInRangeAsync(colorRange);
+                // Find all the 8 long hex values we can find in the document using regex.
+                var matches = await document.FindMatchesAsync("#[A-Fa-f0-9]{8}", true, true, true, null, true);
 
-                Color? color;
-
-                color = XamlBindingHelper.ConvertValue(typeof(Color), value) as Color?;
-
-                return new ColorInformation[]
+                foreach (var match in matches)
                 {
-                    new ColorInformation(color ?? Colors.Red, colorRange)
-                }.AsEnumerable();
+                    // Generate color info for each of these matches by using the XAML converter to read it to a Color value.
+                    info.Add(new ColorInformation(XamlBindingHelper.ConvertValue(typeof(Color), match.Matches.First()) as Color? ?? Colors.Black, match.Range));
+                }
+
+                return info.AsEnumerable();
             });
         }
     }

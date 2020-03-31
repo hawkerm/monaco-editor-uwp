@@ -16,6 +16,6 @@
 	 * - Type the letter 'c'
 	 * - Type the word 'boo'
 	 * - Type 'foreach' to see Snippet.
-	 * - Hover over the hex value: #FFFF0000
+	 * - Hover over the hex value: #FFFF0000 (Try adding hex values elsewhere too!)
 	 */
 }

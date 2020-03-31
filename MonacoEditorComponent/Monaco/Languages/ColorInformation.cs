@@ -1,9 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Monaco.Helpers;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.UI;
 
 namespace Monaco.Languages
@@ -18,9 +15,10 @@ namespace Monaco.Languages
         public Color Color { get; set; }
 
         [JsonProperty("range")]
+        [JsonConverter(typeof(InterfaceToClassConverter<IRange, Range>))]
         public IRange Range { get; set; }
 
-        public ColorInformation(Color color, Range range)
+        public ColorInformation(Color color, IRange range)
         {
             Color = color;
             Range = range;

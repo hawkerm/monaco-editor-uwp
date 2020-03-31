@@ -123,6 +123,9 @@
     <Compile Include="CodeEditor\CodeEditor.Events.cs" />
     <Compile Include="CodeEditor\CodeEditor.Methods.cs" />
     <Compile Include="CodeEditor\CodeEditor.Properties.cs" />
+    <Compile Include="Monaco\Editor\EndOfLinePreference.cs" />
+    <Compile Include="Monaco\Editor\EndOfLineSequence.cs" />
+    <Compile Include="Monaco\Editor\FindMatch.cs" />
     <Compile Include="Monaco\Editor\IEditorCommentsOptions.cs" />
     <Compile Include="Monaco\Editor\ISingleEditOperation.cs" />
     <Compile Include="Extensions\WebViewExtensions.cs" />

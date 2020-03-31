@@ -1,28 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using Windows.Foundation;
+using Windows.Foundation.Metadata;
 
 namespace Monaco.Editor
 {
-    /// <summary>
-    /// https://github.com/Microsoft/vscode/blob/master/src/vs/editor/common/editorCommon.ts#L228
-    /// </summary>
-    public enum EndOfLinePreference
-    {
-        TextDefined = 0,
-        LF = 1,
-        CRLF = 2
-    }
-
-    /// <summary>
-    /// https://github.com/Microsoft/vscode/blob/master/src/vs/editor/common/editorCommon.ts#L260
-    /// </summary>
-    public enum EndOfLineSequence
-    {
-        LF = 0,
-        CRLF = 1
-    }
-
     /// <summary>
     /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.imodel.html
     /// </summary>
@@ -38,9 +20,49 @@ namespace Monaco.Editor
         //IIdentifiedSingleEditOperation[] ApplyEditsAsync(IIdentifiedSingleEditOperation[] operations)
         //DeltaDecorationsAsync
         IAsyncAction DetectIndentationAsync(bool defaultInsertSpaces, bool defaultTabSize);
-        //FindMatchesAsync(string searchString, bool searchOnlyEditableRange, bool isRegex, ...)
-        //FindNextMatchAsync
-        //FindPreviousMatchAsync
+
+        /// <summary>
+        /// Search the model.
+        /// </summary>
+        /// <returns>
+        /// The ranges where the matches are. It is empty if not matches have been found.
+        /// 
+        /// </returns>
+        [DefaultOverload]
+        IAsyncOperation<IEnumerable<FindMatch>> FindMatchesAsync(string searchString, bool searchOnlyEditableRange, bool isRegex, bool matchCase, string wordSeparators, bool captureMatches);
+
+        [DefaultOverload]
+        IAsyncOperation<IEnumerable<FindMatch>> FindMatchesAsync(string searchString, bool searchOnlyEditableRange, bool isRegex, bool matchCase, string wordSeparators, bool captureMatches, double limitResultCount);
+
+        /// <summary>
+        /// Search the model.
+        /// </summary>
+        /// <returns>
+        /// The ranges where the matches are. It is empty if no matches have been found.
+        /// 
+        /// </returns>
+        IAsyncOperation<IEnumerable<FindMatch>> FindMatchesAsync(string searchString, IRange searchScope, bool isRegex, bool matchCase, string wordSeparators, bool captureMatches);
+
+        IAsyncOperation<IEnumerable<FindMatch>> FindMatchesAsync(string searchString, IRange searchScope, bool isRegex, bool matchCase, string wordSeparators, bool captureMatches, double limitResultCount);
+
+        /// <summary>
+        /// Search the model for the next match. Loops to the beginning of the model if needed.
+        /// </summary>
+        /// <returns>
+        /// The range where the next match is. It is null if no next match has been found.
+        /// 
+        /// </returns>
+        IAsyncOperation<FindMatch> FindNextMatchAsync(string searchString, IPosition searchStart, bool isRegex, bool matchCase, string wordSeparators, bool captureMatches);
+
+        /// <summary>
+        /// Search the model for the previous match. Loops to the end of the model if needed.
+        /// </summary>
+        /// <returns>
+        /// The range where the previous match is. It is null if no previous match has been found.
+        /// 
+        /// </returns>
+        IAsyncOperation<FindMatch> FindPreviousMatchAsync(string searchString, IPosition searchStart, bool isRegex, bool matchCase, string wordSeparators, bool captureMatches);
+
         //GetAllDecorationsAsync
         IAsyncOperation<uint> GetAlternativeVersionIdAsync();
         //GetDecorationOptionsAsync
