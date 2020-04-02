@@ -16,7 +16,7 @@ The following Monaco Editor features are currently supported by this component b
 - Stand Alone Code [Editor Options](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditoroptions.html)
 - [Markers](https://microsoft.github.io/monaco-editor/api/modules/monaco.editor.html#setmodelmarkers) and [Decorations](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.imodeldeltadecoration.html) (See #35)
 - [Actions](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.istandalonecodeeditor.html#addaction) and [Commands](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.istandalonecodeeditor.html#addcommand)
-- Basic Language Features
+- Basic [Language Features](https://code.visualstudio.com/api/language-extensions/programmatic-language-features)
   - [Color](https://microsoft.github.io/monaco-editor/api/modules/monaco.languages.html#registercolorprovider)
   - [CompletionItem](https://microsoft.github.io/monaco-editor/api/modules/monaco.languages.html#registercompletionitemprovider) (IntelliSense, Snippets)
   - [Hover](https://microsoft.github.io/monaco-editor/api/modules/monaco.languages.html#registerhoverprovider)
