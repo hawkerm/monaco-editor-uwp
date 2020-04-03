@@ -5,7 +5,7 @@
 
 # ------------------------
 $monaco_file = ".\node_modules\monaco-editor\monaco.d.ts"
-$typedoc_bin_url = $env:npm_package_config_typedocConverter #"https://github.com/hez2010/TypedocConverter/releases/download/v1.5/Windows_x64.zip"
+$typedoc_bin_url = $env:npm_package_config_typedocConverter #see config in package.json
 $temp_dir_name = ".temp"
 
 function Get-ScriptDirectory {

@@ -20,7 +20,7 @@ The following Monaco Editor features are currently supported by this component b
   - [Color](https://microsoft.github.io/monaco-editor/api/modules/monaco.languages.html#registercolorprovider)
   - [CompletionItem](https://microsoft.github.io/monaco-editor/api/modules/monaco.languages.html#registercompletionitemprovider) (IntelliSense, Snippets)
   - [Hover](https://microsoft.github.io/monaco-editor/api/modules/monaco.languages.html#registerhoverprovider)
-- Basic [ITextModel](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.itextmodel.html) Support (See #40)
+- Basic [ITextModel](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.itextmodel.html) Support
 - KeyDown Events
 - Responds Appropriately to Programmatic Focus Events
 - Render Aware: Only displays once Loading is complete.
@@ -77,7 +77,7 @@ Built using Visual Studio 2019 for Windows 10 16299 and above.
 
 The **released** complete Monaco v0.20.0 build is used as a reference, this is not included in this repository and can be downloaded from the [Monaco site](https://microsoft.github.io/monaco-editor/).  The contents of its uncompressed 'package' directory should be placed in the *MonacoEditorComponent/monaco-editor* directory.  The `install-dependencies.ps1` PowerShell script can install this for you automatically.
 
-In order to re-generate C# typings from a version of Monaco, see the GenerateMonacoTypings Node.js project [readme here](GenerateMonacoTypings\README.md).
+In order to re-generate C# typings from a version of Monaco, see the GenerateMonacoTypings Node.js project [readme here](GenerateMonacoTypings/README.md).
 
 License
 -------

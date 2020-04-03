@@ -10,7 +10,7 @@
   "license": "MIT",
   "config": {
     "outdir": "../MonacoEditorComponent",
-    "typedocConverter": "https://github.com/hez2010/TypedocConverter/releases/download/v1.5/Windows_x64.zip"
+    "typedocConverter": "https://github.com/hez2010/TypedocConverter/releases/download/v1.6/Windows_x64.zip"
   },
   "dependencies": {
     "monaco-editor": "0.20.0"

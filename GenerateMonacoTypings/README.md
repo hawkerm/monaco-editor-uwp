@@ -1,7 +1,7 @@
 Generate Monaco Typings
 =======================
 
-This [Node.js](https://nodejs.org/) project is provided as a simple way to download the required dependencies needed to take the Monaco TypeScript definition file and generate C# classes for the API. 
+This [Node.js](https://nodejs.org/) project is provided as a simple way to download the required dependencies needed to take the Monaco TypeScript definition file and generate C# classes for the API via the [TypedocConverter](https://github.com/hez2010/TypedocConverter) project. 
 
 This document assumes you have a Node.js environment setup running on Windows (as PowerShell is also required), but all other dependencies should be installed/setup as part of the script.
 
