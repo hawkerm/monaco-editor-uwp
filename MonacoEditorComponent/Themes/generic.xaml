@@ -16,7 +16,7 @@
                         VerticalAlignment="Stretch">
                         <!--<controls:WebView2 x:Name="View"
                                  Margin="{TemplateBinding Padding}"
-                                 Visibility="{Binding IsLoaded,RelativeSource={RelativeSource TemplatedParent}}"
+                                 Visibility="{Binding IsEditorLoaded,RelativeSource={RelativeSource TemplatedParent}}"
                                  HorizontalAlignment="Stretch"
                                  VerticalAlignment="Stretch"/>-->
                     </Border>
@@ -24,4 +24,5 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
 </ResourceDictionary>

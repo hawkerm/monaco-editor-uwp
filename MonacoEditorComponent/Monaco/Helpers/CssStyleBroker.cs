@@ -1,28 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Monaco.Helpers
 {
-    public interface ICssStyle
-    {
-        string Name { get; }
-
-        string ToCss();
-    }
-
     /// <summary>
     /// Singleton Broker to help us manage CSS Styles
     /// </summary>
     public sealed class CssStyleBroker
     {
         private static uint Id = 0;
-        private Dictionary<string, ICssStyle> _registered = new Dictionary<string, ICssStyle>();
+        private readonly Dictionary<string, ICssStyle> _registered = new Dictionary<string, ICssStyle>();
+        private static readonly IDictionary<CodeEditor, CssStyleBroker> instances = new Dictionary<CodeEditor, CssStyleBroker>();
 
-        // http://csharpindepth.com/Articles/General/Singleton.aspx
-        private static readonly CssStyleBroker _instance = new CssStyleBroker();
         // Explicit static constructor to tell C# compiler
         // not to mark type as beforefieldinit
         static CssStyleBroker()
@@ -31,14 +20,17 @@ namespace Monaco.Helpers
         private CssStyleBroker()
         {
         }
-        public static CssStyleBroker Instance // TODO: Probably need to tie this to a specific Editor
+        public static CssStyleBroker GetInstance(CodeEditor editor)
         {
-            get
-            {
-                return _instance;
-            }
+            if (instances.ContainsKey(editor)) return instances[editor];
+            return instances[editor] = new CssStyleBroker();
         }
-        
+
+        public static bool DetachEditor(CodeEditor editor)
+        {
+            if (instances.ContainsKey(editor)) return instances.Remove(editor);
+            return true;
+        }
         /// <summary>
         /// Returns the name for a style to use after registered.
         /// </summary>
@@ -46,9 +38,9 @@ namespace Monaco.Helpers
         /// <returns></returns>
         public string Register(ICssStyle style)
         {
-            CssStyleBroker.Id += 1;
+            Id += 1;
             var name = "generated-style-" + Id;
-            this._registered.Add(name, style);
+            _registered.Add(name, style);
             return name;
         }
 
@@ -68,7 +60,7 @@ namespace Monaco.Helpers
 
         public static string WrapCssClassName(ICssStyle style, string inner)
         {
-            return String.Format(".{0} {{ {1} }}", style.Name, inner);
+            return string.Format(".{0} {{ {1} }}", style.Name, inner);
         }
     }
 }

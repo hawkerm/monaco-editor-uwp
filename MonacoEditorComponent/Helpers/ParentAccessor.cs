@@ -16,8 +16,8 @@ namespace Monaco.Helpers
     [AllowForWeb]
     public sealed class ParentAccessor : IDisposable
     {
-        private WeakReference<IParentAccessorAcceptor> parent;
-        private Type typeinfo;
+        private readonly WeakReference<IParentAccessorAcceptor> parent;
+        private readonly Type typeinfo;
         private Dictionary<string, Action> actions;
         private Dictionary<string, Func<string[], Task<string>>> events;
 
@@ -56,7 +56,7 @@ namespace Monaco.Helpers
         }
 
         /// <summary>
-        /// Calls an Event registered before wit hthe <see cref="RegisterEvent(string, Func{string[], string})"/>.
+        /// Calls an Event registered before with the <see cref="RegisterEvent(string, Func{string[], Task{string}})"/>.
         /// </summary>
         /// <param name="name">Name of event to call.</param>
         /// <param name="parameters">JSON string Parameters.</param>
@@ -68,7 +68,7 @@ namespace Monaco.Helpers
                 return events[name]?.Invoke(parameters).AsAsyncOperation();
             }
 
-            return (new Task<string>(() => { return null; })).AsAsyncOperation();
+            return new Task<string>(() => { return null; }).AsAsyncOperation();
         }
 
         /// <summary>

@@ -4,10 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
 using Windows.Foundation;
-using Windows.Storage;
-using Windows.Storage.Search;
 
 namespace Monaco
 {
@@ -21,7 +18,6 @@ namespace Monaco
     /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditor.html
     /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.icommoncodeeditor.html
     /// </summary>
-    #pragma warning disable CS1591
     public partial class CodeEditor
     {
         #region Reveal Methods
@@ -104,8 +100,18 @@ namespace Monaco
         public IAsyncAction AddActionAsync(IActionDescriptor action)
         {
             var wref = new WeakReference<CodeEditor>(this);
-            _parentAccessor.RegisterAction("Action" + action.Id, new Action(() => { if (wref.TryGetTarget(out CodeEditor editor)) { action?.Run(editor); }}));
+            _parentAccessor.RegisterAction("Action" + action.Id, new Action(() => { if (wref.TryGetTarget(out CodeEditor editor)) { action?.Run(editor, null); } }));
             return ExecuteScriptAsync("addAction", action).AsAsyncAction();
+        }
+
+        /// <summary>
+        /// Invoke scripts, return value must be strings
+        /// </summary>
+        /// <param name="script">Script to invoke</param>
+        /// <returns>An async operation result to string</returns>
+        public IAsyncOperation<string> ExecuteScriptAsync(string script)
+        {
+            return _view.ExecuteScriptAsync(script);
         }
 
         public IAsyncOperation<string> AddCommandAsync(int keybinding, CommandHandler handler)
@@ -167,7 +173,7 @@ namespace Monaco
             var newDecorationsAdjust = newDecorations ?? Array.Empty<IModelDeltaDecoration>();
 
             // Update Styles
-            return ExecuteScriptAsync("updateStyle", CssStyleBroker.Instance.GetStyles()).ContinueWith((noop) =>
+            return ExecuteScriptAsync("updateStyle", CssStyleBroker.GetInstance(this).GetStyles()).ContinueWith((noop) =>
             {
                 // Send Command to Modify Decorations
                 // IMPORTANT: Need to cast to object here as we want this to be a single array object passed as a parameter, not a list of parameters to expand.
@@ -175,5 +181,4 @@ namespace Monaco
             }).AsAsyncAction();
         }
     }
-    #pragma warning restore CS1591
 }

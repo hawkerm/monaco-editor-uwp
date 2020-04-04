@@ -1,13 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Foundation;
 
 namespace Monaco.Editor
 {
-    #pragma warning disable CS1591
     /// <summary>
     /// https://github.com/Microsoft/vscode/blob/master/src/vs/editor/common/editorCommon.ts#L228
     /// </summary>
@@ -34,7 +30,9 @@ namespace Monaco.Editor
     {
         // TODO: Events
 
+        [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
         string Id { get; }
+        [JsonProperty("uri", NullValueHandling = NullValueHandling.Ignore)]
         Uri Uri { get; }
 
         //IIdentifiedSingleEditOperation[] ApplyEditsAsync(IIdentifiedSingleEditOperation[] operations)
@@ -88,5 +86,4 @@ namespace Monaco.Editor
         IAsyncOperation<Position> ValidatePositionAsync(IPosition position);
         IAsyncOperation<Range> ValidateRangeAsync(IRange range);
     }
-    #pragma warning restore CS1591
-}
+    }

@@ -1,13 +1,14 @@
 ﻿namespace Monaco.Editor
 {
     /// <summary>
-    /// https://microsoft.github.io/monaco-editor/api/enums/monaco.editor.trackedrangestickiness.html
+    /// Describes the behavior of decorations when typing/editing near their edges.
+    /// Note: Please do not edit the values, as they very carefully match `DecorationRangeBehavior`
     /// </summary>
     public enum TrackedRangeStickiness
     {
         AlwaysGrowsWhenTypingAtEdges = 0,
-        NeverGrowsWhenTypingAtEdges = 1,
-        GrowsOnlyWhenTypingBefore = 2,
         GrowsOnlyWhenTypingAfter = 3,
+        GrowsOnlyWhenTypingBefore = 2,
+        NeverGrowsWhenTypingAtEdges = 1
     }
 }

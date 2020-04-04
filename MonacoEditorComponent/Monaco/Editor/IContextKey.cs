@@ -1,9 +1,4 @@
 ﻿using Monaco.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Monaco.Editor
 {
@@ -12,7 +7,7 @@ namespace Monaco.Editor
     /// 
     /// Supports bools only as Windows Runtime Type doesn't support generics.
     /// </summary>
-    public interface IContextKey: IJsonable
+    public interface IContextKey
     {
         /// <summary>
         /// Get the current value of the key.

@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Monaco
+﻿namespace Monaco
 {
     /// <summary>
-    /// https://microsoft.github.io/monaco-editor/api/enums/monaco.keycode.html
-    /// Transposed from 'standaloneBase.ts'
+    /// Virtual Key Codes, the value does not hold any inherent meaning.
+    /// Inspired somewhat from https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+    /// But these are "more general", as they should work across browsers &amp; OS`s.
     /// </summary>
     public static class KeyCode
     {
-        #pragma warning disable CS1591
         /**
          * Placed first to cover the 0 value of the enum.
          */
@@ -181,6 +175,10 @@ namespace Monaco
         public static int KEY_IN_COMPOSITION => 109;
         public static int ABNT_C1 => 110;
         public static int ABNT_C2 => 111;
-        #pragma warning restore CS1591
+        /**
+         * Placed last to cover the length of the enum.
+         * Please do not depend on this value!
+         */
+        public static int MAX_VALUE => 112;
     }
 }

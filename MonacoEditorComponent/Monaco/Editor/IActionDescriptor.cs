@@ -1,14 +1,11 @@
-﻿using System;
-using Monaco.Helpers;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Monaco.Editor
 {
     /// <summary>
-    /// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.iactiondescriptor.html
-    /// https://microsoft.github.io/monaco-editor/playground.html#interacting-with-the-editor-adding-an-action-to-an-editor-instance
+    /// Description of an action contribution
     /// </summary>
-    #pragma warning disable CS1591
     public interface IActionDescriptor
     {
         /**
@@ -26,7 +23,7 @@ namespace Monaco.Editor
 
         [JsonProperty("contextMenuOrder", NullValueHandling = NullValueHandling.Ignore)]
         float ContextMenuOrder { get; }
-        
+
         [JsonProperty("id")]
         string Id { get; }
 
@@ -37,7 +34,7 @@ namespace Monaco.Editor
         string KeybindingContext { get; }
 
         /// <summary>
-        /// <see cref="Monaco.KeyMod"/>, <see cref="Monaco.KeyCode"/>, and <see cref="Monaco.KeyMod.Chord(int, int)"/>
+        /// <see cref="KeyMod"/>, <see cref="KeyCode"/>, and <see cref="KeyMod.Chord(int, int)"/>
         /// </summary>
         [JsonProperty("keybindings")]
         int[] Keybindings { get; }
@@ -51,7 +48,6 @@ namespace Monaco.Editor
         [JsonProperty("precondition", NullValueHandling = NullValueHandling.Ignore)]
         string Precondition { get; }
 
-        void Run(CodeEditor editor);
+        void Run(CodeEditor editor, [ReadOnlyArray]object[] args);
     }
-    #pragma warning restore CS1591
 }

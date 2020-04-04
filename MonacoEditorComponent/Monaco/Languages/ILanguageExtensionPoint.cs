@@ -7,28 +7,23 @@ using System.Threading.Tasks;
 
 namespace Monaco.Languages
 {
-    /// <summary>
-    /// Object Parser for https://microsoft.github.io/monaco-editor/api/interfaces/monaco.languages.ilanguageextensionpoint.html
-    /// </summary>
     public sealed class ILanguageExtensionPoint
     {
-        #pragma warning disable CS1591
-        [JsonProperty("id")]
-        public string Id { get; set; }
-        [JsonProperty("aliases")]
+        [JsonProperty("aliases", NullValueHandling = NullValueHandling.Ignore)]
         public string[] Aliases { get; set; }
-        [JsonProperty("configuration")]
-        public string Configuration { get; set; }
-        [JsonProperty("extensions")]
+        [JsonProperty("configuration", NullValueHandling = NullValueHandling.Ignore)]
+        public Uri Configuration { get; set; }
+        [JsonProperty("extensions", NullValueHandling = NullValueHandling.Ignore)]
         public string[] Extensions { get; set; }
-        [JsonProperty("filenames")]
-        public string[] Filenames { get; set; }
-        [JsonProperty("filenamePatterns")]
+        [JsonProperty("filenamePatterns", NullValueHandling = NullValueHandling.Ignore)]
         public string[] FilenamePatterns { get; set; }
-        [JsonProperty("firstLine")]
-        public string FirstLine { get; set; }        
-        [JsonProperty("mimetypes")]
-        public string[] Mimetypes { get; set; }        
-        #pragma warning restore CS1591
+        [JsonProperty("filenames", NullValueHandling = NullValueHandling.Ignore)]
+        public string[] Filenames { get; set; }
+        [JsonProperty("firstLine", NullValueHandling = NullValueHandling.Ignore)]
+        public string FirstLine { get; set; }
+        [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
+        public string Id { get; set; }
+        [JsonProperty("mimetypes", NullValueHandling = NullValueHandling.Ignore)]
+        public string[] Mimetypes { get; set; }
     }
 }

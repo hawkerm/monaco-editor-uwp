@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Monaco.Editor</id>
-    <version>0.9.0-alpha</version>
+    <version>0.10.0-alpha</version>
     <title>Monaco Editor UWP Component</title>
     <authors>Michael A. Hawker</authors>
     <owners>Michael A. Hawker</owners>
@@ -14,7 +14,7 @@
     <copyright>Copyright 2020</copyright>
     <tags>uwp monaco editor controls</tags>
     <dependencies>
-      <dependency id="Newtonsoft.Json" version="10.0.3"/>
+      <dependency id="Newtonsoft.Json" version="12.0.3"/>
       <dependency id="Nito.AsyncEx" version="5.0.0"/>
       <dependency id="ObservableVector" version="2.1.0"/>
       <dependency id="Microsoft.Web.WebView2" version="0.8.355"/>
@@ -33,7 +33,8 @@
     <file src="Themes\Generic.xaml" target="lib\uap10.0\Monaco\Themes"/>
     <file src="bin\Release\Themes\Generic.xbf" target="lib\uap10.0\Monaco\Themes"/>
     <!-- Dependencies -->
-    <file src="MonacoEditor.html" target="lib\uap10.0\Monaco"/>
+    <file src="CodeEditor\CodeEditor.html" target="lib\uap10.0\Monaco\CodeEditor"/>
+    <file src="ts-helpermethods\*.js" target="lib\uap10.0\Monaco\ts-helpermethods" />
     <file src="monaco-editor\*" target="lib\uap10.0\Monaco\monaco-editor"/>
     <file src="monaco-editor\min\**\*.*" target="lib\uap10.0\Monaco\monaco-editor\min"/>
     <!-- Docs -->

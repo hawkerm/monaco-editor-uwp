@@ -1,9 +1,9 @@
 ﻿using Monaco.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
 using Windows.Foundation;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -43,17 +43,17 @@ namespace Monaco
 
         private ThemeListener _themeListener;
 
-        //private void WebView_DOMContentLoaded(WebView2 sender, WebView2DOMContentLoadedEventArgs args)
+        //private void WebView_DOMContentLoaded(WebView sender, WebViewDOMContentLoadedEventArgs args)
         //{
         //    #if DEBUG
         //    Debug.WriteLine("DOM Content Loaded");
         //    #endif
-        //    this._initialized = true;
+        //    _initialized = true;
         //}
 
         private async void WebView_NavigationCompleted(WebView2 sender, WebView2NavigationCompletedEventArgs args)
         {
-            this.IsLoaded = true;
+            IsEditorLoaded = true;
 
             // Make sure inner editor is focused
             await SendScriptAsync("editor.focus();");
@@ -61,7 +61,7 @@ namespace Monaco
             // If we're supposed to have focus, make sure we try and refocus on our now loaded webview.
             if (FocusManager.GetFocusedElement() == this)
             {
-                this._view.Focus(FocusState.Programmatic);
+                _view.Focus(FocusState.Programmatic);
             }
 
             Loaded?.Invoke(this, new RoutedEventArgs());
@@ -81,7 +81,7 @@ namespace Monaco
             _parentAccessor.RegisterAction("Loaded", CodeEditorLoaded);
 
             _themeListener = new ThemeListener();
-            _themeListener.ThemeChanged += _themeListener_ThemeChanged;
+            _themeListener.ThemeChanged += ThemeListener_ThemeChanged;
             _themeToken = RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedTheme_PropertyChanged);
 
             _keyboardListener = new KeyboardListener(this);
@@ -228,26 +228,26 @@ namespace Monaco
                 tstr = theme.ToString();
             }
 
-            await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
             {
-                await this.ExecuteScriptAsync("changeTheme", new string[] { tstr, _themeListener.IsHighContrast.ToString() });
+                await ExecuteScriptAsync("changeTheme", new string[] { tstr, _themeListener.IsHighContrast.ToString() });
             });
         }
 
-        private async void _themeListener_ThemeChanged(ThemeListener sender)
+        private async void ThemeListener_ThemeChanged(ThemeListener sender)
         {
             if (RequestedTheme == ElementTheme.Default)
             {
-                await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
                 {
-                    await this.ExecuteScriptAsync("changeTheme", args: new string[] { sender.CurrentTheme.ToString(), sender.IsHighContrast.ToString() });
+                    await ExecuteScriptAsync("changeTheme", args: new string[] { sender.CurrentTheme.ToString(), sender.IsHighContrast.ToString() });
                 });
             }
         }
 
         internal bool TriggerKeyDown(WebKeyEventArgs args)
         {
-            this.KeyDown?.Invoke(this, args);
+            KeyDown?.Invoke(this, args);
 
             return args.Handled;
         }
@@ -256,10 +256,10 @@ namespace Monaco
         {
             base.OnGotFocus(e);
 
-            if (this._view != null && FocusManager.GetFocusedElement() == this)
+            if (_view != null && FocusManager.GetFocusedElement() == this)
             {
                 // Forward Focus onto our inner WebView
-                this._view.Focus(FocusState.Programmatic);
+                _view.Focus(FocusState.Programmatic);
             }
         }
     }

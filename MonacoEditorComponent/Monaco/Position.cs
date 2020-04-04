@@ -1,9 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Metadata;
 
@@ -11,27 +7,30 @@ namespace Monaco
 {
     /// <summary>
     /// A position in the editor.
-    /// https://microsoft.github.io/monaco-editor/api/classes/monaco.position.html
     /// </summary>
-    #pragma warning disable CS1591
-    public sealed class Position: IPosition
+    public sealed class Position : IPosition
     {
-        // TODO: Investigate why with .NET Native the interface attributes aren't carried forward?
+        /// <summary>
+        /// column (the first character in a line is between column 1 and column 2)
+        /// </summary>
         [JsonProperty("column")]
         public uint Column { get; private set; }
 
+        /// <summary>
+        /// line number (starts at 1)
+        /// </summary>
         [JsonProperty("lineNumber")]
         public uint LineNumber { get; private set; }
 
         public Position(uint lineNumber, uint column)
         {
-            this.Column = column;
-            this.LineNumber = lineNumber;
+            Column = column;
+            LineNumber = lineNumber;
         }
 
         public Position Clone()
         {
-            return new Position(this.LineNumber, this.Column);
+            return new Position(LineNumber, Column);
         }
 
         public override bool Equals(object obj)
@@ -39,7 +38,7 @@ namespace Monaco
             if (obj is Position)
             {
                 var other = obj as Position;
-                return this.LineNumber == other.LineNumber && this.Column == other.Column;
+                return LineNumber == other.LineNumber && Column == other.Column;
             }
 
             return base.Equals(obj);
@@ -47,12 +46,12 @@ namespace Monaco
 
         public override int GetHashCode()
         {
-            return new Point(this.LineNumber, this.Column).GetHashCode();
+            return new Point(LineNumber, Column).GetHashCode();
         }
 
         public override string ToString()
         {
-            return String.Format("({0}, {1})", this.LineNumber, this.Column);
+            return string.Format("({0}, {1})", LineNumber, Column);
         }
 
         public bool IsBefore(Position other)
@@ -77,7 +76,7 @@ namespace Monaco
         {
             if (obj is IPosition)
             {
-                return this.CompareTo(Position.Lift(obj as IPosition));
+                return CompareTo(Lift(obj as IPosition));
             }
 
             throw new NotImplementedException();
@@ -113,11 +112,5 @@ namespace Monaco
         {
             return new Position(pos.LineNumber, pos.Column);
         }
-
-        public string ToJson()
-        {
-            return String.Format("{{ \"lineNumber\": {0}, \"column\": {1} }}", this.LineNumber, this.Column);
-        }
     }
-    #pragma warning restore CS1591
 }
