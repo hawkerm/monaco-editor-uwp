@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using Windows.Storage;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
@@ -100,6 +101,15 @@ namespace MonacoEditorTestApp
 
             var available_languages = Editor.Languages.GetLanguagesAsync();
             //Debugger.Break();
+
+            // Code Lens Action
+            string cmdId = await Editor.AddCommandAsync(0, async (args) =>
+            {
+                var md = new MessageDialog("You hit the CodeLens command " + args[0].ToString());
+                await md.ShowAsync();
+            });
+
+            await Editor.Languages.RegisterCodeLensProviderAsync("csharp", new EditorCodeLensProvider(cmdId));
 
             await Editor.Languages.RegisterColorProviderAsync("csharp", new ColorProvider());
 
@@ -264,8 +274,7 @@ namespace MonacoEditorTestApp
                 // You can now do this with a Command as well, see above.
 
                 // Skip await, so we can read intercept value.
-                #pragma warning disable CS4014
-                Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, async () =>
+                _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, async () =>
                 {
                     var md = new MessageDialog("You Hit Ctrl+Enter!");
                     await md.ShowAsync();
@@ -273,7 +282,6 @@ namespace MonacoEditorTestApp
                     // Refocus on CodeEditor
                     Editor.Focus(FocusState.Programmatic);
                 });
-                #pragma warning restore CS4014
 
                 // Intercept input so we don't add a newline.
                 e.Handled = true;

@@ -11,7 +11,7 @@ namespace Monaco
     /// <summary>
     /// Action delegate for <see cref="CodeEditor.AddCommandAsync(int, CommandHandler)"/> and <see cref="CodeEditor.AddCommandAsync(int, CommandHandler, string)"/>.
     /// </summary>
-    public delegate void CommandHandler([ReadOnlyArray] string[] parameters);
+    public delegate void CommandHandler([ReadOnlyArray] object[] parameters);
 
     /// <summary>
     /// This file contains Monaco IEditor method implementations we can call on our control.
@@ -122,7 +122,23 @@ namespace Monaco
         public IAsyncOperation<string> AddCommandAsync(int keybinding, CommandHandler handler, string context)
         {
             var name = "Command" + keybinding;
-            _parentAccessor.RegisterActionWithParameters(name, (parameters) => { handler?.Invoke(parameters); });
+            _parentAccessor.RegisterActionWithParameters(name, (parameters) => 
+            {
+                if (parameters != null && parameters.Length > 0)
+                {
+                    object[] args = new object[parameters.Length];
+                    for (int i = 0; i < parameters.Length; i++)
+                    {
+                        args[i] = JsonConvert.DeserializeObject<object>(parameters[i]);
+                    }
+
+                    handler?.Invoke(args);
+                }
+                else
+                {
+                    handler?.Invoke(new object[] {});
+                }
+            });
             return InvokeScriptAsync<string>("addCommand", new object[] { keybinding, name, context }).AsAsyncOperation();
         }
 

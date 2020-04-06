@@ -44,6 +44,43 @@ namespace Monaco
             return null;
         }
 
+        public IAsyncAction RegisterCodeLensProviderAsync(string languageId, CodeLensProvider provider)
+        {
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                editor._parentAccessor.RegisterEvent("ProvideCodeLenses" + languageId, async (args) =>
+                {
+                    var list = await provider.ProvideCodeLensesAsync(editor.GetModel());
+
+                    if (list != null)
+                    {
+                        return JsonConvert.SerializeObject(list);
+                    }
+
+                    return null;
+                });
+
+                editor._parentAccessor.RegisterEvent("ResolveCodeLens" + languageId, async (args) =>
+                {
+                    if (args != null && args.Length >= 1)
+                    {
+                        var lens = await provider.ResolveCodeLensAsync(editor.GetModel(), JsonConvert.DeserializeObject<CodeLens>(args[0]));
+
+                        if (lens != null)
+                        {
+                            return JsonConvert.SerializeObject(lens);
+                        }
+                    }
+
+                    return null;
+                });
+
+                return editor.InvokeScriptAsync("registerCodeLensProvider", new object[] { languageId }).AsAsyncAction();
+            }
+
+            return null;
+        }
+
         public IAsyncAction RegisterColorProviderAsync(string languageId, DocumentColorProvider provider)
         {
             if (_editor.TryGetTarget(out CodeEditor editor))
