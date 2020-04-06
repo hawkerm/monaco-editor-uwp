@@ -19,11 +19,14 @@ namespace Monaco.Helpers
         public SolidColorBrush BackgroundColor { get; set; }
         public SolidColorBrush ForegroundColor { get; set; }
 
-        public string Name { get; private set; }
+        public uint Id { get; }
 
-        public CssInlineStyle(CodeEditor editor)
+        public string Name { get; }
+
+        public CssInlineStyle()
         {
-            Name = CssStyleBroker.GetInstance(editor).Register(this);
+            Id = CssStyleBroker.Register(this);
+            Name = "generated-style-" + Id;
         }
 
         public string ToCss()
@@ -64,7 +67,7 @@ namespace Monaco.Helpers
                                                                                ForegroundColor.Color.B));
             }
 
-            return CssStyleBroker.WrapCssClassName(this, output.ToString());
+            return this.WrapCssClassName(output.ToString());
         }
     }
 }

@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Windows.Foundation;
 
 namespace Monaco
@@ -14,7 +15,9 @@ namespace Monaco
     {
         private readonly WeakReference<CodeEditor> _editor;
 
-        public LanguagesHelper(CodeEditor editor)
+        [Obsolete("Use <Editor Instance>.Languages.* instead of constructing your own LanguagesHelper.")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public LanguagesHelper(CodeEditor editor) // TODO: Make Internal later.
         {
             // We need the editor component in order to execute JavaScript within 
             // the WebView environment to retrieve data (even though this Monaco class is static).
@@ -36,6 +39,80 @@ namespace Monaco
             if (_editor.TryGetTarget(out CodeEditor editor))
             {
                 return editor.InvokeScriptAsync("monaco.languages.register", language).AsAsyncAction();
+            }
+
+            return null;
+        }
+
+        public IAsyncAction RegisterCodeLensProviderAsync(string languageId, CodeLensProvider provider)
+        {
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                editor._parentAccessor.RegisterEvent("ProvideCodeLenses" + languageId, async (args) =>
+                {
+                    var list = await provider.ProvideCodeLensesAsync(editor.GetModel());
+
+                    if (list != null)
+                    {
+                        return JsonConvert.SerializeObject(list);
+                    }
+
+                    return null;
+                });
+
+                editor._parentAccessor.RegisterEvent("ResolveCodeLens" + languageId, async (args) =>
+                {
+                    if (args != null && args.Length >= 1)
+                    {
+                        var lens = await provider.ResolveCodeLensAsync(editor.GetModel(), JsonConvert.DeserializeObject<CodeLens>(args[0]));
+
+                        if (lens != null)
+                        {
+                            return JsonConvert.SerializeObject(lens);
+                        }
+                    }
+
+                    return null;
+                });
+
+                return editor.InvokeScriptAsync("registerCodeLensProvider", new object[] { languageId }).AsAsyncAction();
+            }
+
+            return null;
+        }
+
+        public IAsyncAction RegisterColorProviderAsync(string languageId, DocumentColorProvider provider)
+        {
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                editor._parentAccessor.RegisterEvent("ProvideColorPresentations" + languageId, async (args) =>
+                {
+                    if (args != null && args.Length >= 1)
+                    {
+                        var items = await provider.ProvideColorPresentationsAsync(editor.GetModel(), JsonConvert.DeserializeObject<ColorInformation>(args[0]));
+
+                        if (items != null)
+                        {
+                            return JsonConvert.SerializeObject(items);
+                        }
+                    }
+
+                    return null;
+                });
+
+                editor._parentAccessor.RegisterEvent("ProvideDocumentColors" + languageId, async (args) =>
+                {
+                    var items = await provider.ProvideDocumentColorsAsync(editor.GetModel());
+
+                    if (items != null)
+                    {
+                        return JsonConvert.SerializeObject(items);
+                    }
+
+                    return null;
+                });
+
+                return editor.InvokeScriptAsync("registerColorProvider", new object[] { languageId }).AsAsyncAction();
             }
 
             return null;

@@ -11,12 +11,14 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A Windows Runtime Component wrapper around the web-based Monaco Editor</description>
     <releaseNotes>Minor fixes, better .NET Native support.</releaseNotes>
-    <copyright>Copyright 2019</copyright>
+    <copyright>Copyright 2017-2020</copyright>
     <tags>uwp monaco editor controls</tags>
     <dependencies>
-      <dependency id="Newtonsoft.Json" version="12.0.3"/>
-      <dependency id="Nito.AsyncEx" version="5.0.0"/>
-      <dependency id="ObservableVector" version="2.1.0"/>
+      <group targetFramework="UAP10.0">
+        <dependency id="Newtonsoft.Json" version="12.0.3"/>
+        <dependency id="Nito.AsyncEx" version="5.0.0"/>
+        <dependency id="ObservableVector" version="2.1.0"/>
+      </group>
     </dependencies>
   </metadata>
   <files>
@@ -24,12 +26,9 @@
     <file src="bin\Release\Monaco.pri" target="lib\uap10.0"/>
     <file src="bin\Release\Monaco.winmd" target="lib\uap10.0"/>
     <file src="bin\Release\Monaco.xml" target="lib\uap10.0"/>
-    <file src="bin\Release\MonacoEditorComponent.xr.xml" target="lib\uap10.0\Monaco"/>
+    <file src="bin\Release\Monaco\MonacoEditorComponent.xr.xml" target="lib\uap10.0\Monaco"/>
     <!-- XAML controls -->
-    <!--<file src="Themes\Generic.xaml" target="lib\uap10.0\Themes"/>
-    <file src="bin\Release\Themes\Generic.xbf" target="lib\uap10.0\Themes"/>-->
     <file src="Themes\Generic.xaml" target="lib\uap10.0\Monaco\Themes"/>
-    <file src="bin\Release\Themes\Generic.xbf" target="lib\uap10.0\Monaco\Themes"/>
     <!-- Dependencies -->
     <file src="CodeEditor\CodeEditor.html" target="lib\uap10.0\Monaco\CodeEditor"/>
     <file src="ts-helpermethods\*.js" target="lib\uap10.0\Monaco\ts-helpermethods" />

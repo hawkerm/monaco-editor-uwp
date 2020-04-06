@@ -11,7 +11,7 @@ namespace Monaco
     /// <summary>
     /// Action delegate for <see cref="CodeEditor.AddCommandAsync(int, CommandHandler)"/> and <see cref="CodeEditor.AddCommandAsync(int, CommandHandler, string)"/>.
     /// </summary>
-    public delegate void CommandHandler();
+    public delegate void CommandHandler([ReadOnlyArray] object[] parameters);
 
     /// <summary>
     /// This file contains Monaco IEditor method implementations we can call on our control.
@@ -122,7 +122,23 @@ namespace Monaco
         public IAsyncOperation<string> AddCommandAsync(int keybinding, CommandHandler handler, string context)
         {
             var name = "Command" + keybinding;
-            _parentAccessor.RegisterAction(name, new Action(() => { handler?.Invoke(); }));
+            _parentAccessor.RegisterActionWithParameters(name, (parameters) => 
+            {
+                if (parameters != null && parameters.Length > 0)
+                {
+                    object[] args = new object[parameters.Length];
+                    for (int i = 0; i < parameters.Length; i++)
+                    {
+                        args[i] = JsonConvert.DeserializeObject<object>(parameters[i]);
+                    }
+
+                    handler?.Invoke(args);
+                }
+                else
+                {
+                    handler?.Invoke(new object[] {});
+                }
+            });
             return InvokeScriptAsync<string>("addCommand", new object[] { keybinding, name, context }).AsAsyncOperation();
         }
 
@@ -172,13 +188,22 @@ namespace Monaco
         {
             var newDecorationsAdjust = newDecorations ?? Array.Empty<IModelDeltaDecoration>();
 
-            // Update Styles
-            return InvokeScriptAsync("updateStyle", CssStyleBroker.GetInstance(this).GetStyles()).ContinueWith((noop) =>
+            if (_cssBroker.AssociateStyles(newDecorations))
             {
-                // Send Command to Modify Decorations
+                // Update Styles First
+                return InvokeScriptAsync("updateStyle", _cssBroker.GetStyles()).ContinueWith((noop) =>
+                {
+                    // Send Command to Modify Decorations
+                    // IMPORTANT: Need to cast to object here as we want this to be a single array object passed as a parameter, not a list of parameters to expand.
+                    return InvokeScriptAsync("updateDecorations", (object)newDecorationsAdjust);
+                }).AsAsyncAction();
+            }
+            else
+            {
+                // Only Send Command to Modify Decorations themselves
                 // IMPORTANT: Need to cast to object here as we want this to be a single array object passed as a parameter, not a list of parameters to expand.
-                return InvokeScriptAsync("updateDecorations", (object)newDecorationsAdjust);
-            }).AsAsyncAction();
+                return InvokeScriptAsync("updateDecorations", (object)newDecorationsAdjust).AsAsyncAction();
+            }             
         }
     }
 }

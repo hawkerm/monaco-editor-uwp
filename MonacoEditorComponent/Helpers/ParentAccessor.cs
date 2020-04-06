@@ -19,6 +19,7 @@ namespace Monaco.Helpers
         private readonly WeakReference<IParentAccessorAcceptor> parent;
         private readonly Type typeinfo;
         private Dictionary<string, Action> actions;
+        private Dictionary<string, Action<string[]>> action_parameters;
         private Dictionary<string, Func<string[], Task<string>>> events;
 
         private List<Assembly> Assemblies { get; set; } = new List<Assembly>();
@@ -32,6 +33,7 @@ namespace Monaco.Helpers
             this.parent = new WeakReference<IParentAccessorAcceptor>(parent);
             typeinfo = parent.GetType();
             actions = new Dictionary<string, Action>();
+            action_parameters = new Dictionary<string, Action<string[]>>();
             events = new Dictionary<string, Func<string[], Task<string>>>();
         }
 
@@ -43,6 +45,11 @@ namespace Monaco.Helpers
         internal void RegisterAction(string name, Action action)
         {
             actions[name] = action;
+        }
+
+        internal void RegisterActionWithParameters(string name, Action<string[]> action)
+        {
+            action_parameters[name] = action;
         }
 
         /// <summary>
@@ -90,6 +97,23 @@ namespace Monaco.Helpers
             if (actions.ContainsKey(name))
             {
                 actions[name]?.Invoke();
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Calls an Action registered before with <see cref="RegisterActionWithParameters(string, Action{string[]})"/>.
+        /// </summary>
+        /// <param name="name">String Key.</param>
+        /// <param name="parameters">Parameters to be passed to Action.</param>
+        /// <returns>True if method was found in registration.</returns>
+        public bool CallActionWithParameters(string name, [ReadOnlyArray] string[] parameters)
+        {
+            if (action_parameters.ContainsKey(name))
+            {
+                action_parameters[name]?.Invoke(parameters);
                 return true;
             }
 

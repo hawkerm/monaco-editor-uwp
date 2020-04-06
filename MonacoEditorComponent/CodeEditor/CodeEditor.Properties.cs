@@ -10,6 +10,11 @@ namespace Monaco
 {
     partial class CodeEditor : IParentAccessorAcceptor
     {
+        /// <summary>
+        /// Construct to help with syntax for accessing Monaco.Language.* APIs.
+        /// </summary>
+        public LanguagesHelper Languages { get; }
+
         public bool IsSettingValue { get; set; }
 
         /// <summary>

@@ -29,6 +29,10 @@ namespace Monaco
         [JsonProperty("startLineNumber")]
         public uint StartLineNumber { get; private set; }
 
+        public Range() // For Serialization
+        {
+        }
+
         public Range(uint startLineNumber, uint startColumn, uint endLineNumber, uint endColumn)
         {
             // TODO: Range Check? Monaco doesn't seem to do it currently...

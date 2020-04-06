@@ -96,7 +96,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EditorHoverProvider.cs" />
+    <Compile Include="Helpers\EditorCodeLensProvider.cs" />
+    <Compile Include="Helpers\ColorProvider.cs" />
+    <Compile Include="Helpers\EditorHoverProvider.cs" />
     <Compile Include="Helpers\LanguageProvider.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>

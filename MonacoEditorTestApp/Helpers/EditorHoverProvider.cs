@@ -6,9 +6,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using Windows.Foundation;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
-
-namespace MonacoEditorTestApp
+namespace MonacoEditorTestApp.Helpers
 {
     class EditorHoverProvider : HoverProvider
     {

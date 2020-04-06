@@ -33,6 +33,58 @@ namespace Monaco.Editor
             return null;
         }
 
+        public IAsyncOperation<IEnumerable<FindMatch>> FindMatchesAsync(string searchString, bool searchOnlyEditableRange, bool isRegex, bool matchCase, string wordSeparators, bool captureMatches)
+        {
+            // Default limit results: https://github.com/microsoft/vscode/blob/b2d0292a20c4a012005c94975019a5b572ce6a63/src/vs/editor/common/model/textModel.ts#L117
+            return FindMatchesAsync(searchString, searchOnlyEditableRange, isRegex, matchCase, wordSeparators, captureMatches, 999);
+        }
+
+        public IAsyncOperation<IEnumerable<FindMatch>> FindMatchesAsync(string searchString, IRange searchScope, bool isRegex, bool matchCase, string wordSeparators, bool captureMatches)
+        {
+            // Default limit results: https://github.com/microsoft/vscode/blob/b2d0292a20c4a012005c94975019a5b572ce6a63/src/vs/editor/common/model/textModel.ts#L117
+            return FindMatchesAsync(searchString, searchScope, isRegex, matchCase, wordSeparators, captureMatches, 999);
+        }
+
+        public IAsyncOperation<IEnumerable<FindMatch>> FindMatchesAsync(string searchString, bool searchOnlyEditableRange, bool isRegex, bool matchCase, string wordSeparators, bool captureMatches, double limitResultCount)
+        {
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                return editor.InvokeScriptAsync<IEnumerable<FindMatch>>("model.findMatches", new object[] { searchString, searchOnlyEditableRange, isRegex, matchCase, wordSeparators, captureMatches, limitResultCount }).AsAsyncOperation();
+            }
+
+            return null;
+        }
+
+        public IAsyncOperation<IEnumerable<FindMatch>> FindMatchesAsync(string searchString, IRange searchScope, bool isRegex, bool matchCase, string wordSeparators, bool captureMatches, double limitResultCount)
+        {
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                return editor.InvokeScriptAsync<IEnumerable<FindMatch>>("model.findMatches", new object[] { searchString, searchScope, isRegex, matchCase, wordSeparators, captureMatches, limitResultCount }).AsAsyncOperation();
+            }
+
+            return null;
+        }
+
+        public IAsyncOperation<FindMatch> FindNextMatchAsync(string searchString, IPosition searchStart, bool isRegex, bool matchCase, string wordSeparators, bool captureMatches)
+        {
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                return editor.InvokeScriptAsync<FindMatch>("model.findNextMatch", new object[] { searchString, searchString, isRegex, matchCase, wordSeparators, captureMatches }).AsAsyncOperation();
+            }
+
+            return null;
+        }
+
+        public IAsyncOperation<FindMatch> FindPreviousMatchAsync(string searchString, IPosition searchStart, bool isRegex, bool matchCase, string wordSeparators, bool captureMatches)
+        {
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                return editor.InvokeScriptAsync<FindMatch>("model.findPreviousMatch", new object[] { searchString, searchString, isRegex, matchCase, wordSeparators, captureMatches }).AsAsyncOperation();
+            }
+
+            return null;
+        }
+
         public IAsyncOperation<uint> GetAlternativeVersionIdAsync()
         {
             if (_editor.TryGetTarget(out CodeEditor editor))
