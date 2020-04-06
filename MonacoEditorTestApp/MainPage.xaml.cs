@@ -109,7 +109,7 @@ namespace MonacoEditorTestApp
 
             _myCondition = await Editor.CreateContextKeyAsync("MyCondition", false);
 
-            await Editor.AddCommandAsync(KeyCode.F5, async () => {
+            await Editor.AddCommandAsync(KeyCode.F5, async (args) => {
                 var md = new MessageDialog("You Hit F5!");
                 await md.ShowAsync();
 
@@ -120,7 +120,7 @@ namespace MonacoEditorTestApp
                 Editor.Focus(FocusState.Programmatic);
             }, _myCondition.Key);
 
-            await Editor.AddCommandAsync(KeyMod.CtrlCmd | KeyCode.KEY_R, async () =>
+            await Editor.AddCommandAsync(KeyMod.CtrlCmd | KeyCode.KEY_R, async (args) =>
             {
                 var range = await Editor.GetModel().GetFullModelRangeAsync();
 
@@ -130,7 +130,7 @@ namespace MonacoEditorTestApp
                 Editor.Focus(FocusState.Programmatic);
             });
 
-            await Editor.AddCommandAsync(KeyMod.CtrlCmd | KeyCode.KEY_W, async () =>
+            await Editor.AddCommandAsync(KeyMod.CtrlCmd | KeyCode.KEY_W, async (args) =>
             {
                 var word = await Editor.GetModel().GetWordAtPositionAsync(await Editor.GetPositionAsync());
 
@@ -148,7 +148,7 @@ namespace MonacoEditorTestApp
                 Editor.Focus(FocusState.Programmatic);
             });
 
-            await Editor.AddCommandAsync(KeyMod.CtrlCmd | KeyCode.KEY_L, async () =>
+            await Editor.AddCommandAsync(KeyMod.CtrlCmd | KeyCode.KEY_L, async (args) =>
             {
                 var model = Editor.GetModel();
                 var line = await model.GetLineContentAsync((await Editor.GetPositionAsync()).LineNumber);
@@ -161,7 +161,7 @@ namespace MonacoEditorTestApp
                 Editor.Focus(FocusState.Programmatic);
             });
 
-            await Editor.AddCommandAsync(KeyMod.CtrlCmd | KeyCode.KEY_U, async () =>
+            await Editor.AddCommandAsync(KeyMod.CtrlCmd | KeyCode.KEY_U, async (args) =>
             {
                 var range = new Range(2, 10, 3, 8);
                 var seg = await Editor.GetModel().GetValueInRangeAsync(range);

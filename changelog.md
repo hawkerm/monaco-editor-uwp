@@ -10,6 +10,7 @@ v0.9 - 04/??/2020
 - **Note:** Marked `LanguagesHelper` Obsolete, use <Editor Instance>.Languages.* instead.
 
 **Breaking Changes**: 
+- The `CommandHandler` delegate has changed to accept arguments to Commands.
 - Use `StandaloneEditorConstructionOptions` for Options instead of `IEditorConstructionOptions`
 - `CompletionItem` constructor has changed
 - Snippets need `InsertTextRules` property set to `InsertAsSnippet`
