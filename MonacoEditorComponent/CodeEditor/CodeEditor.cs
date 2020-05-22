@@ -16,6 +16,7 @@ namespace Monaco
     /// UWP Windows Runtime Component wrapper for the Monaco CodeEditor
     /// https://microsoft.github.io/monaco-editor/
     /// </summary>
+    [TemplatePart(Name = "RootBorder", Type = typeof(Border))]
     public sealed partial class CodeEditor : Control, INotifyPropertyChanged, IDisposable
     {
         private bool _initialized;
