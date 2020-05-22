@@ -8,17 +8,12 @@
             <Setter.Value>
                 <ControlTemplate TargetType="monaco:CodeEditor">
                     <Border
+                        x:Name="RootBorder"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch">
-                        <WebView x:Name="View"
-                                 Margin="{TemplateBinding Padding}"
-                                 Visibility="{Binding IsEditorLoaded,RelativeSource={RelativeSource TemplatedParent}}"
-                                 HorizontalAlignment="Stretch"
-                                 VerticalAlignment="Stretch"/>
-                    </Border>
+                        VerticalAlignment="Stretch"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
