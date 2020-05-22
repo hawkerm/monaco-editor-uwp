@@ -10,15 +10,12 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-// The Templated Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234235
-
 namespace Monaco
 {
     /// <summary>
     /// UWP Windows Runtime Component wrapper for the Monaco CodeEditor
     /// https://microsoft.github.io/monaco-editor/
     /// </summary>
-    [TemplatePart(Name = "View", Type = typeof(WebView))]
     public sealed partial class CodeEditor : Control, INotifyPropertyChanged, IDisposable
     {
         private bool _initialized;
