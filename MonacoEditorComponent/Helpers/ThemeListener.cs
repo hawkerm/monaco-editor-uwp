@@ -35,7 +35,10 @@ namespace Monaco.Helpers
             _settings.ColorValuesChanged += _settings_ColorValuesChanged;
 
             // Fallback in case either of the above fail, we'll check when we get activated next.
-            Window.Current.CoreWindow.Activated += CoreWindow_Activated; 
+            if (Window.Current != null)
+            {
+                Window.Current.CoreWindow.Activated += CoreWindow_Activated;
+            }
         }
 
         ~ThemeListener()
@@ -43,7 +46,10 @@ namespace Monaco.Helpers
             _accessible.HighContrastChanged -= _accessible_HighContrastChanged;
             _settings.ColorValuesChanged -= _settings_ColorValuesChanged;
 
-            Window.Current.CoreWindow.Activated -= CoreWindow_Activated;
+            if (Window.Current != null)
+            {
+                Window.Current.CoreWindow.Activated -= CoreWindow_Activated;
+            }
         }
 
         private void _accessible_HighContrastChanged(AccessibilitySettings sender, object args)

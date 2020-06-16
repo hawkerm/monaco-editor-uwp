@@ -3,13 +3,13 @@ using Monaco.Editor;
 using Monaco.Extensions;
 using Monaco.Helpers;
 using System;
-using System.Reflection;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Windows.Storage;
+using Windows.ApplicationModel;
+using System.IO;
 
 // The Templated Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234235
 
@@ -25,7 +25,6 @@ namespace Monaco
         private bool _initialized;
         private WebView2 _view;
         private ModelHelper _model;
-        private Border _layoutRootBorder;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -83,53 +82,29 @@ namespace Monaco
             await ExecuteScriptAsync("updateOptions", options);
         }
 
-        private async void CodeEditor_Loaded(object sender, RoutedEventArgs e)
+        private void CodeEditor_Loaded(object sender, RoutedEventArgs e)
         {
-            _model = new ModelHelper(this);
+            // Do this the 2nd time around.
+            if (_model == null && _view != null)
+            {
+                _model = new ModelHelper(this);
 
-            _parentAccessor = new ParentAccessor(this);
-            _parentAccessor.AddAssemblyForTypeLookup(typeof(Range).GetTypeInfo().Assembly);
-            _parentAccessor.RegisterAction("Loaded", CodeEditorLoaded);
+                Options.PropertyChanged += Options_PropertyChanged;
 
-            _themeListener = new ThemeListener();
-            _themeListener.ThemeChanged += ThemeListener_ThemeChanged;
-            _themeToken = RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedTheme_PropertyChanged);
+                Decorations.VectorChanged += Decorations_VectorChanged;
+                Markers.VectorChanged += Markers_VectorChanged;
 
-            _keyboardListener = new KeyboardListener(this);
+                //_view.NewWindowRequested += WebView_NewWindowRequested;
 
-            _allowedObject.Clear();
+                _initialized = true;
 
-            AddWebAllowedObject("Parent", _parentAccessor);
-            AddWebAllowedObject("Theme", _themeListener);
-            AddWebAllowedObject("Keyboard", _keyboardListener);
+                Loading?.Invoke(this, new RoutedEventArgs());
 
-            Options.PropertyChanged += Options_PropertyChanged;
+                Unloaded -= CodeEditor_Unloaded;
+                Unloaded += CodeEditor_Unloaded;
 
-            Decorations.VectorChanged += Decorations_VectorChanged;
-            Markers.VectorChanged += Markers_VectorChanged;
-
-            //_view.NewWindowRequested += WebView_NewWindowRequested;
-
-            await Task.Delay(100);
-
-            _initialized = true;
-
-            _view = new WebView2();
-            _layoutRootBorder.Child = _view;
-
-            _view.NavigationStarting += WebView_NavigationStarting;
-            //_view.DOMContentLoaded += WebView_DOMContentLoaded;
-            _view.NavigationCompleted += WebView_NavigationCompleted;
-            //_view.NewWindowRequested += WebView_NewWindowRequested;
-            _view.WebMessageReceived += WebView_WebMessageReceived;
-
-            _view.UriSource = new System.Uri(@"file:///" + (await StorageFile.GetFileFromApplicationUriAsync(new System.Uri("ms-appx:///Monaco/CodeEditor/CodeEditor.html"))).Path);
-
-            Loading?.Invoke(this, new RoutedEventArgs());
-
-            Unloaded += CodeEditor_Unloaded;
-
-            Loaded?.Invoke(this, new RoutedEventArgs());
+                Loaded?.Invoke(this, new RoutedEventArgs());
+            }
         }
 
         private void CodeEditor_Unloaded(object sender, RoutedEventArgs e)
@@ -174,27 +149,20 @@ namespace Monaco
                 _initialized = false;
             }
 
-            _layoutRootBorder = (Border)GetTemplateChild("LayoutRootBorder");
-            /*<controls:WebView2 x:Name="View"
-                Margin="{TemplateBinding Padding}"
-                Visibility="{Binding IsLoaded,RelativeSource={RelativeSource TemplatedParent}}"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"/>
-                */
+            _view = (WebView2)GetTemplateChild("View");
 
-            //_view = (WebView2)GetTemplateChild("View");
+            if (_view != null)
+            {
+                _view.NavigationStarting += WebView_NavigationStarting;
+                //_view.DOMContentLoaded += WebView_DOMContentLoaded;
+                _view.NavigationCompleted += WebView_NavigationCompleted;
+                //_view.NewWindowRequested += WebView_NewWindowRequested;
+                _view.WebMessageReceived += WebView_WebMessageReceived;
 
-            //base.OnApplyTemplate();
+                _view.Source = new System.Uri(@"file:///" + Path.Combine(Package.Current.InstalledLocation.Path, @"MonacoEditorComponent/CodeEditor/CodeEditor.html"));
+            }
 
-            //if (_view != null)
-            //{
-            //    _view.NavigationStarting += WebView_NavigationStarting;
-            //    //_view.DOMContentLoaded += WebView_DOMContentLoaded;
-            //    _view.NavigationCompleted += WebView_NavigationCompleted;
-            //    //_view.NewWindowRequested += WebView_NewWindowRequested;
-            //    _view.WebMessageReceived += WebView_WebMessageReceived;
-            //    _view.UriSource = new Uri("ms-appx-web:///Monaco/MonacoEditor.html");
-            //}
+            base.OnApplyTemplate();
         }
 
         internal async Task SendScriptAsync(string script,

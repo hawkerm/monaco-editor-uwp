@@ -32,7 +32,7 @@ namespace Monaco.Extensions
             var start = "try {\n";
             if (typeof(T) != typeof(object))
             {
-                script = script.Trim(';'); 
+                script = script.Trim(';');
                 start += "JSON.stringify(" + script + ");";
             }
             else

@@ -61,7 +61,7 @@ namespace Monaco
             // If we're supposed to have focus, make sure we try and refocus on our now loaded webview.
             if (FocusManager.GetFocusedElement() == this)
             {
-                _view.Focus(FocusState.Programmatic);
+                _ = FocusManager.TryFocusAsync(_view, FocusState.Programmatic);
             }
 
             Loaded?.Invoke(this, new RoutedEventArgs());
@@ -73,6 +73,8 @@ namespace Monaco
 
         private void WebView_NavigationStarting(WebView2 sender, WebView2NavigationStartingEventArgs args)
         {
+            _initialized = true;
+
 #if DEBUG
             Debug.WriteLine("Navigation Starting");
 #endif
@@ -259,7 +261,7 @@ namespace Monaco
             if (_view != null && FocusManager.GetFocusedElement() == this)
             {
                 // Forward Focus onto our inner WebView
-                _view.Focus(FocusState.Programmatic);
+                _ = FocusManager.TryFocusAsync(_view, FocusState.Programmatic);
             }
         }
     }

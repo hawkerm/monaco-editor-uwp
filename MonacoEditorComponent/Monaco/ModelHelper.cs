@@ -344,4 +344,4 @@ namespace Monaco.Editor
             return null;
         }
     }
-    }
+}
