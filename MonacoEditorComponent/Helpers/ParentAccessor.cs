@@ -14,7 +14,7 @@ namespace Monaco.Helpers
     /// Not Thread Safe.
     /// </summary>
     [AllowForWeb]
-    public sealed class ParentAccessor : IDisposable
+    public sealed partial class ParentAccessor : IDisposable
     {
         private readonly WeakReference<IParentAccessorAcceptor> parent;
         private readonly Type typeinfo;

@@ -13,11 +13,16 @@
                         BorderThickness="{TemplateBinding BorderThickness}"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
-                        <WebView x:Name="View"
+                        <monaco:CodeEditorPresenter x:Name="View"
                                  Margin="{TemplateBinding Padding}"
                                  Visibility="{Binding IsEditorLoaded,RelativeSource={RelativeSource TemplatedParent}}"
                                  HorizontalAlignment="Stretch"
                                  VerticalAlignment="Stretch"/>
+                        <!--<WebView x:Name="View"
+                                 Margin="{TemplateBinding Padding}"
+                                 Visibility="{Binding IsEditorLoaded,RelativeSource={RelativeSource TemplatedParent}}"
+                                 HorizontalAlignment="Stretch"
+                                 VerticalAlignment="Stretch"/>-->
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

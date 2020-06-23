@@ -27,7 +27,7 @@ namespace Monaco
         /// <summary>
         /// Called when a link is Ctrl+Clicked on in the editor, set Handled to true to prevent opening.
         /// </summary>
-        public event TypedEventHandler<WebView, WebViewNewWindowRequestedEventArgs> OpenLinkRequested;
+        public event TypedEventHandler<ICodeEditorPresenter, WebViewNewWindowRequestedEventArgs> OpenLinkRequested;
 
         /// <summary>
         /// Called when an internal exception is encountered while executing a command. (for testing/reporting issues)
@@ -41,7 +41,7 @@ namespace Monaco
 
         private ThemeListener _themeListener;
 
-        private void WebView_DOMContentLoaded(WebView sender, WebViewDOMContentLoadedEventArgs args)
+        private void WebView_DOMContentLoaded(ICodeEditorPresenter sender, WebViewDOMContentLoadedEventArgs args)
         {
             #if DEBUG
             Debug.WriteLine("DOM Content Loaded");
@@ -49,8 +49,11 @@ namespace Monaco
             _initialized = true;
         }
 
-        private async void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+        private async void WebView_NavigationCompleted(ICodeEditorPresenter sender, WebViewNavigationCompletedEventArgs args)
         {
+#if DEBUG
+            Debug.WriteLine($"Navigation completed - {args.IsSuccess}");
+#endif
             IsEditorLoaded = true;
 
             // Make sure inner editor is focused
@@ -69,10 +72,10 @@ namespace Monaco
         private KeyboardListener _keyboardListener;
         private long _themeToken;
 
-        private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
+        private void WebView_NavigationStarting(ICodeEditorPresenter sender, WebViewNavigationStartingEventArgs args)
         {
             #if DEBUG
-            Debug.WriteLine("Navigation Starting");
+            Debug.WriteLine($"Navigation Starting {args.Uri.ToString()}");
             #endif
             _parentAccessor = new ParentAccessor(this);
             _parentAccessor.AddAssemblyForTypeLookup(typeof(Range).GetTypeInfo().Assembly);
@@ -102,7 +105,7 @@ namespace Monaco
             Loading?.Invoke(this, new RoutedEventArgs());
         }
 
-        private void WebView_NewWindowRequested(WebView sender, WebViewNewWindowRequestedEventArgs args)
+        private void WebView_NewWindowRequested(ICodeEditorPresenter sender, WebViewNewWindowRequestedEventArgs args)
         {
             // TODO: Should probably create own event args here as we don't want to expose the referrer to our internal page?
             OpenLinkRequested?.Invoke(sender, args);

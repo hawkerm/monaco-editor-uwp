@@ -18,11 +18,11 @@ namespace Monaco
     /// UWP Windows Runtime Component wrapper for the Monaco CodeEditor
     /// https://microsoft.github.io/monaco-editor/
     /// </summary>
-    [TemplatePart(Name = "View", Type = typeof(WebView))]
+    [TemplatePart(Name = "View", Type = typeof(ICodeEditorPresenter))]
     public sealed partial class CodeEditor : Control, INotifyPropertyChanged, IDisposable
     {
         private bool _initialized;
-        private WebView _view;
+        private ICodeEditorPresenter _view;
         private ModelHelper _model;
         private CssStyleBroker _cssBroker;
 
@@ -150,7 +150,7 @@ namespace Monaco
                 _initialized = false;
             }
 
-            _view = (WebView)GetTemplateChild("View");
+            _view = (ICodeEditorPresenter)GetTemplateChild("View");
 
             if (_view != null)
             {
@@ -159,6 +159,7 @@ namespace Monaco
                 _view.NavigationCompleted += WebView_NavigationCompleted;
                 _view.NewWindowRequested += WebView_NewWindowRequested;
                 _view.Source = new System.Uri("ms-appx-web:///Monaco/CodeEditor/CodeEditor.html");
+                //_view.Source = new System.Uri("file:///MonacoCodeEditor.html", UriKind.RelativeOrAbsolute);
             }
 
             base.OnApplyTemplate();

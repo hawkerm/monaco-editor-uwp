@@ -19,7 +19,7 @@ namespace Monaco.Helpers
     }
 
     [AllowForWeb]
-    public sealed class KeyboardListener
+    public sealed partial class KeyboardListener
     {
         private readonly WeakReference<CodeEditor> parent;
 

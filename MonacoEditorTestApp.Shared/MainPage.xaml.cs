@@ -1,16 +1,19 @@
 ﻿using Monaco;
 using Monaco.Editor;
 using Monaco.Helpers;
+using Monaco.Languages;
 using MonacoEditorTestApp.Actions;
 using MonacoEditorTestApp.Helpers;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
+using System.Threading.Tasks;
+using Windows.ApplicationModel;
 using Windows.Storage;
 using Windows.UI;
-using Windows.UI.Core;
 using Windows.UI.Popups;
-using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -24,7 +27,6 @@ namespace MonacoEditorTestApp
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private readonly StandaloneEditorConstructionOptions options;
         public string CodeContent
         {
             get { return (string)GetValue(CodeContentProperty); }
@@ -37,44 +39,10 @@ namespace MonacoEditorTestApp
 
         private ContextKey _myCondition;
 
-        #region CSS Style Objects
-        private readonly CssLineStyle CssLineDarkRed = new CssLineStyle()
-        {
-            BackgroundColor = new SolidColorBrush(Colors.DarkRed),
-        };
-
-        private readonly CssLineStyle CssLineAliceBlue = new CssLineStyle()
-        {
-            BackgroundColor = new SolidColorBrush(Colors.AliceBlue)
-        };
-
-        private readonly CssInlineStyle CssInlineWhiteBold = new CssInlineStyle()
-        {
-            ForegroundColor = new SolidColorBrush(Colors.White),
-            FontWeight = FontWeights.Bold,
-            FontStyle = FontStyle.Italic
-        };
-
-        private readonly CssInlineStyle CssInlineStrikeThrough = new CssInlineStyle()
-        {
-            TextDecoration = TextDecoration.LineThrough
-        };
-
-        private readonly CssGlyphStyle CssGlyphError = new CssGlyphStyle()
-        {
-            GlyphImage = new System.Uri("ms-appx-web:///Icons/error.png")
-        };
-
-        private readonly CssGlyphStyle CssGlyphWarning = new CssGlyphStyle()
-        {
-            GlyphImage = new System.Uri("ms-appx-web:///Icons/warning.png")
-        };
-        #endregion
-
         public MainPage()
         {
             InitializeComponent();
-            options = Editor.Options;
+
             Editor.Loading += Editor_Loading;
             Editor.Loaded += Editor_Loaded;
             Editor.OpenLinkRequested += Editor_OpenLinkRequest;
@@ -87,39 +55,65 @@ namespace MonacoEditorTestApp
             // This shouldn't happen, if it does, then it's a bug.
         }
 
-
         private async void Editor_Loading(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(CodeContent))
             {
-                CodeContent = await FileIO.ReadTextAsync(await StorageFile.GetFileFromApplicationUriAsync(new System.Uri("ms-appx:///Content.txt")));
+                //CodeContent = await FileIO.ReadTextAsync(await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Content.txt")));
+				CodeContent = @"public class Program { // http://www.github.com/
+	public static void Main(string[] args) {
+		Console.WriteLine(\""Hello, World!\"");
+	}
 
-                ButtonHighlightRange_Click(null, null);
+	/*
+	 * Things to Try:
+	 * - Hover over the word 'Hit'
+	 * - Hit F1 and Search for 'TestAction'
+	 * - Press Ctrl+Enter
+	 * - After using Ctrl+Enter, hit F5
+	 * - Hit Ctrl+L
+	 * - Hit Ctrl+U
+	 * - Hit Ctrl+W
+	 * - Type the letter 'c'
+	 * - Type the word 'boo'
+	 * - Type 'foreach' to see Snippet.
+	 */
+}";
+
+				ButtonHighlightRange_Click(null, null);
             }
 
             // Ready for Code
+            var languages = new Monaco.LanguagesHelper(Editor);
 
-            var available_languages = Editor.Languages.GetLanguagesAsync();
+            var available_languages = await languages.GetLanguagesAsync();
             //Debugger.Break();
 
-            // Code Lens Action
-            string cmdId = await Editor.AddCommandAsync(0, async (args) =>
-            {
-                var md = new MessageDialog("You hit the CodeLens command " + args[0].ToString());
-                await md.ShowAsync();
-            });
+            //await languages.RegisterHoverProviderAsync("csharp", (model, position) =>
+            //{
+            //    // TODO: See if this can be internalized? Need to figure out the best pattern here to expose async method through WinRT, as can't use Task for 'async' language compatibility in WinRT Component...
+            //    return AsyncInfo.Run(async delegate(CancellationToken cancelationToken)
+            //    {
+            //        var word = await model.GetWordAtPositionAsync(position);
+            //        if (word != null && word.Word.IndexOf("Hit", 0, StringComparison.CurrentCultureIgnoreCase) != -1)
+            //        {
+            //            return new Hover(new string[]
+            //            {
+            //            "*Hit* - press the keys following together.",
+            //            "Some **more** text is here.",
+            //            "And a [link](https://www.github.com/)."
+            //            }, new Range(position.LineNumber, position.Column, position.LineNumber, position.Column + 5));
+            //        }
 
-            await Editor.Languages.RegisterCodeLensProviderAsync("csharp", new EditorCodeLensProvider(cmdId));
+            //        return null;
+            //    });
+            //});
 
-            await Editor.Languages.RegisterColorProviderAsync("csharp", new ColorProvider());
-
-            await Editor.Languages.RegisterCompletionItemProviderAsync("csharp", new LanguageProvider());
-
-            await Editor.Languages.RegisterHoverProviderAsync("csharp", new EditorHoverProvider());
+            await languages.RegisterCompletionItemProviderAsync("csharp", new LanguageProvider());
 
             _myCondition = await Editor.CreateContextKeyAsync("MyCondition", false);
 
-            await Editor.AddCommandAsync(KeyCode.F5, async (args) => {
+            await Editor.AddCommandAsync(Monaco.KeyCode.F5, async (parameters) => {
                 var md = new MessageDialog("You Hit F5!");
                 await md.ShowAsync();
 
@@ -130,17 +124,7 @@ namespace MonacoEditorTestApp
                 Editor.Focus(FocusState.Programmatic);
             }, _myCondition.Key);
 
-            await Editor.AddCommandAsync(KeyMod.CtrlCmd | KeyCode.KEY_R, async (args) =>
-            {
-                var range = await Editor.GetModel().GetFullModelRangeAsync();
-
-                var md = new MessageDialog("Document Range: " + range.ToString());
-                await md.ShowAsync();
-
-                Editor.Focus(FocusState.Programmatic);
-            });
-
-            await Editor.AddCommandAsync(KeyMod.CtrlCmd | KeyCode.KEY_W, async (args) =>
+            await Editor.AddCommandAsync(Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KEY_W, async (parameters) =>
             {
                 var word = await Editor.GetModel().GetWordAtPositionAsync(await Editor.GetPositionAsync());
 
@@ -158,7 +142,7 @@ namespace MonacoEditorTestApp
                 Editor.Focus(FocusState.Programmatic);
             });
 
-            await Editor.AddCommandAsync(KeyMod.CtrlCmd | KeyCode.KEY_L, async (args) =>
+            await Editor.AddCommandAsync(Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KEY_L, async (parameters) =>
             {
                 var model = Editor.GetModel();
                 var line = await model.GetLineContentAsync((await Editor.GetPositionAsync()).LineNumber);
@@ -171,7 +155,7 @@ namespace MonacoEditorTestApp
                 Editor.Focus(FocusState.Programmatic);
             });
 
-            await Editor.AddCommandAsync(KeyMod.CtrlCmd | KeyCode.KEY_U, async (args) =>
+            await Editor.AddCommandAsync(Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.KEY_U, async (parameters) =>
             {
                 var range = new Range(2, 10, 3, 8);
                 var seg = await Editor.GetModel().GetValueInRangeAsync(range);
@@ -210,11 +194,13 @@ namespace MonacoEditorTestApp
 
         private void ButtonHighlightRange_Click(object sender, RoutedEventArgs e)
         {
-            Editor.Decorations.Add(
+            this.Editor.Decorations.Add(
                 new IModelDeltaDecoration(new Range(3, 1, 3, 10), new IModelDecorationOptions()
                 {
-                    ClassName = CssLineDarkRed,
-                    InlineClassName = CssInlineWhiteBold,
+                    ClassName = new CssLineStyle() // TODO: Save these styles so we don't keep regenerating them and adding new ones.
+                    {
+                        BackgroundColor = new SolidColorBrush(Colors.Red)
+                    },
                     HoverMessage = new string[]
                     {
                         "This is a test message.",
@@ -229,29 +215,40 @@ namespace MonacoEditorTestApp
             Editor.Decorations.Add(
                 new IModelDeltaDecoration(new Range(4, 1, 4, 1), new IModelDecorationOptions() {
                     IsWholeLine = true,
-                    ClassName = CssLineAliceBlue,
-                    InlineClassName = CssInlineWhiteBold,
-                    GlyphMarginClassName = CssGlyphError,
-                    HoverMessage = (new string[]
+                    ClassName = new CssLineStyle()
+                    {
+                        BackgroundColor = new SolidColorBrush(Colors.AliceBlue)
+                    },
+                    GlyphMarginClassName = new CssGlyphStyle()
+                    {
+                        GlyphImage = new System.Uri("ms-appx-web:///Icons/error.png")
+                    },
+                    HoverMessage = new string[]
                     {
                         "This is *another* \"test\" message about 'thing'."
-                    }).ToMarkdownString(),
-                    GlyphMarginHoverMessage = (new string[]
+                    }.ToMarkdownString(),
+                    GlyphMarginHoverMessage = new string[]
                     {
                         "This is some crazy \"Error\" here.",
                         "'Maybe'..."
-                    }).ToMarkdownString()
+                    }.ToMarkdownString()
                 }));
             Editor.Decorations.Add(
                 new IModelDeltaDecoration(new Range(2, 1, 2, await Editor.GetModel().GetLineLengthAsync(2)), new IModelDecorationOptions()
                 {
                     IsWholeLine = true,
-                    InlineClassName = CssInlineStrikeThrough,
-                    GlyphMarginClassName = CssGlyphWarning,
-                    HoverMessage = (new string[]
+                    InlineClassName = new CssInlineStyle()
+                    {
+                        TextDecoration = TextDecoration.LineThrough
+                    },
+                    GlyphMarginClassName = new CssGlyphStyle()
+                    {
+                        GlyphImage = new System.Uri("ms-appx-web:///Icons/warning.png")
+                    },
+                    HoverMessage = new string[]
                     {
                         "Deprecated"
-                    }).ToMarkdownString()
+                    }.ToMarkdownString()
                 }));
         }
 
@@ -261,7 +258,7 @@ namespace MonacoEditorTestApp
         }
 
         // Note: Can't make this method async as otherwise handled won't be read for intercepts.
-        private void Editor_KeyDown(CodeEditor sender, WebKeyEventArgs e)
+        private void Editor_KeyDown(object sender, WebKeyEventArgs e)
         {
             Debug.WriteLine("KeyDown: " + e.KeyCode + " " + e.CtrlKey);
 
@@ -274,7 +271,8 @@ namespace MonacoEditorTestApp
                 // You can now do this with a Command as well, see above.
 
                 // Skip await, so we can read intercept value.
-                _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, async () =>
+                #pragma warning disable CS4014
+                Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, async () =>
                 {
                     var md = new MessageDialog("You Hit Ctrl+Enter!");
                     await md.ShowAsync();
@@ -282,6 +280,7 @@ namespace MonacoEditorTestApp
                     // Refocus on CodeEditor
                     Editor.Focus(FocusState.Programmatic);
                 });
+                #pragma warning restore CS4014
 
                 // Intercept input so we don't add a newline.
                 e.Handled = true;
@@ -293,16 +292,16 @@ namespace MonacoEditorTestApp
 
         private void ButtonFolding_Click(object sender, RoutedEventArgs e)
         {
-            options.Folding = !options.Folding ?? true;
+            Editor.Options.Folding = !Editor.Options.Folding ?? true;
         }
 
         private void ButtonMinimap_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Need to propagate the INotifyPropertyChanged from the Sub-Option Objects
-            options.Minimap = new EditorMinimapOptions()
-            {
-                Enabled = !options.Minimap?.Enabled ?? false
-            };
+            //// TODO: Need to propagate the INotifyPropertyChanged from the Sub-Option Objects
+            //Editor.Options.Minimap = new IEditorMinimapOptions()
+            //{
+            //    Enabled = !Editor.Options.Minimap?.Enabled ?? false
+            //};
         }
 
         private void ButtonChangeLanguage_Click(object sender, RoutedEventArgs e)
@@ -405,7 +404,6 @@ namespace MonacoEditorTestApp
                 Editor.InternalException -= Editor_InternalException;
 
                 RootGrid.Children.Remove(Editor);
-                Editor.Dispose();
                 Editor = null;
 
                 GC.Collect();
@@ -456,44 +454,6 @@ namespace MonacoEditorTestApp
 
             // Tell Editor about Update.
             Editor.RequestedTheme = RequestedTheme;
-        }
-
-        private async void LoadAndSet_Click(object sender, RoutedEventArgs e)
-        {
-            // remember current pos
-            var pos = await Editor.GetPositionAsync();
-
-            Editor.Text = "Testing some new content here.\n\tIf you placed your cursor near the start of the text before you hit the button.\nIt should still be in the same spot.";
-
-            await Editor.SetPositionAsync(pos);
-
-            Editor.Focus(FocusState.Programmatic);
-        }
-
-        private void ButtonSetSelectedText_Click(object sender, RoutedEventArgs e)
-        {
-            Editor.SelectedText = "This is some Selected Text!";
-        }
-
-        private void ButtonSetReadonly_Click(object sender, RoutedEventArgs e)
-        {
-            Editor.ReadOnly = !Editor.ReadOnly;
-        }
-
-        private async void ButtonRunScript_Click(object sender, RoutedEventArgs e)
-        {
-            var result = await Editor.InvokeScriptAsync(@"function test(a, b) { return a + b; }; test(3, 4).toString()");
-            Debug.WriteLine(result);
-        }
-
-        private void Editor_GotFocus(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine("Editor Got Focus");
-        }
-
-        private void Editor_LostFocus(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine("Editor Lost Focus");
         }
     }
 }

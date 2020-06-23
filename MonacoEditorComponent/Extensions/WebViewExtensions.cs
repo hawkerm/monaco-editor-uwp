@@ -10,10 +10,10 @@ using Windows.UI.Xaml.Controls;
 
 namespace Monaco.Extensions
 {
-    internal static class WebViewExtensions
+    internal static class ICodeEditorPresenterExtensions
     {
         public static async Task RunScriptAsync(
-            this WebView _view,
+            this ICodeEditorPresenter _view,
             string script,
             [CallerMemberName] string member = null,
             [CallerFilePath] string file = null,
@@ -23,7 +23,7 @@ namespace Monaco.Extensions
         }
 
         public static async Task<T> RunScriptAsync<T>(
-            this WebView _view, 
+            this ICodeEditorPresenter _view, 
             string script, 
             [CallerMemberName] string member = null,
             [CallerFilePath] string file = null,
@@ -69,7 +69,7 @@ namespace Monaco.Extensions
             }
         }
 
-        private static async Task<T> RunScriptHelperAsync<T>(WebView _view, string script)
+        private static async Task<T> RunScriptHelperAsync<T>(ICodeEditorPresenter _view, string script)
         {            
             var returnstring = await _view.InvokeScriptAsync("eval", new string[] { script });
 
@@ -96,7 +96,7 @@ namespace Monaco.Extensions
         };
 
         public static async Task InvokeScriptAsync(
-            this WebView _view,
+            this ICodeEditorPresenter _view,
             string method,
             object arg,
             bool serialize = true,
@@ -108,7 +108,7 @@ namespace Monaco.Extensions
         }
 
         public static async Task InvokeScriptAsync(
-            this WebView _view,
+            this ICodeEditorPresenter _view,
             string method,
             object[] args,
             bool serialize = true,
@@ -120,7 +120,7 @@ namespace Monaco.Extensions
         }
 
         public static async Task<T> InvokeScriptAsync<T>(
-            this WebView _view,
+            this ICodeEditorPresenter _view,
             string method,
             object arg,
             bool serialize = true,
@@ -132,7 +132,7 @@ namespace Monaco.Extensions
         }
 
         public static async Task<T> InvokeScriptAsync<T>(
-            this WebView _view,
+            this ICodeEditorPresenter _view,
             string method,
             object[] args,
             bool serialize = true,

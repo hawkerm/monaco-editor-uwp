@@ -4,7 +4,7 @@ using Windows.Foundation.Metadata;
 namespace Monaco.Helpers
 {
     [AllowForWeb]
-    public sealed class DebugLogger
+    public sealed partial class DebugLogger
     {
         public void Log(string message)
         {
