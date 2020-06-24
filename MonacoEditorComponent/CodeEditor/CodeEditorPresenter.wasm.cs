@@ -19,42 +19,44 @@ namespace Monaco
 		/// <inheritdoc />
 		JSObjectHandle IJSObject.Handle => _handle;
 
-		public CodeEditorPresenter() : base("iframe")
+		public CodeEditorPresenter() : base("div")
 		{
 			//Background = new SolidColorBrush(Colors.Red);
+			_handle = JSObjectHandle.Create(this);
+
 			RaiseDOMContentLoaded();
 
-			_handle = JSObjectHandle.Create(this);
-			WebAssemblyRuntime.InvokeJSWithInterop($@"
-				console.log(""///////////////////////////////// subscribing to DOMContentLoaded - "" + {HtmlId});
 
-				var frame = Uno.UI.WindowManager.current.getView({HtmlId});
+			//WebAssemblyRuntime.InvokeJSWithInterop($@"
+			//	console.log(""///////////////////////////////// subscribing to DOMContentLoaded - "" + {HtmlId});
+
+			//	var frame = Uno.UI.WindowManager.current.getView({HtmlId});
 				
-				console.log(""Got view"");
+			//	console.log(""Got view"");
 
-				frame.addEventListener(""loadstart"", function(event) {{
-					var frameDoc = frame.contentDocument;
-					console.log(""/////////////////////////////////  Frame DOMContentLoaded, subscribing to document"" + frameDoc);
-					{this}.RaiseDOMContentLoaded();
-				}}); 
-				console.log(""Added load start"");
-
-
-
-				frame.addEventListener(""load"", function(event) {{
-					var frameDoc = frame.contentDocument;
-					console.log(""/////////////////////////////////  Frame loaded, subscribing to document"" + frameDoc);
-					{this}.RaiseDOMContentLoaded();
-					//frameDoc.addEventListener(""DOMContentLoaded"", function(event) {{
-					//	console.log(""Raising RaiseDOMContentLoaded"");
-					//	{this}.RaiseDOMContentLoaded();
-					//}});
-				}}); 
-
-				console.log(""Added load"");
+			//	frame.addEventListener(""loadstart"", function(event) {{
+			//		var frameDoc = frame.contentDocument;
+			//		console.log(""/////////////////////////////////  Frame DOMContentLoaded, subscribing to document"" + frameDoc);
+			//		{this}.RaiseDOMContentLoaded();
+			//	}}); 
+			//	console.log(""Added load start"");
 
 
-				");
+
+			//	frame.addEventListener(""load"", function(event) {{
+			//		var frameDoc = frame.contentDocument;
+			//		console.log(""/////////////////////////////////  Frame loaded, subscribing to document"" + frameDoc);
+			//		{this}.RaiseDOMContentLoaded();
+			//		//frameDoc.addEventListener(""DOMContentLoaded"", function(event) {{
+			//		//	console.log(""Raising RaiseDOMContentLoaded"");
+			//		//	{this}.RaiseDOMContentLoaded();
+			//		//}});
+			//	}}); 
+
+			//	console.log(""Added load"");
+
+
+			//	");
 		}
 
 		public void RaiseDOMContentLoaded()
@@ -96,13 +98,16 @@ namespace Monaco
 
 
 				var script = $@"
+					console.log('starting');
 					var value = {native};
+					console.log('v>' + value);
 					var frame = Uno.UI.WindowManager.current.getView({HtmlId});
-					var frameWindow = frame.contentWindow;
-					
-					console.log(value);
+					console.log('f>' + (!frame));
+					var frameWindow = window;
+					console.log('fw>' + (!frameWindow));
 
 					frameWindow.{name} = value;
+					console.log('ended');
 					";
                 ////frameWindow.eval(""var {name} = window.parent.{obj.Handle.GetNativeInstance().Replace("\"", "\\\"")}; ""); 
 
@@ -116,7 +121,9 @@ namespace Monaco
                 {
                     Console.Error.WriteLine("FAILED " + e);
                 }
-            }
+
+				Console.Error.WriteLine("Add WebAllowed Compeleted");
+			}
 			else
 			{
 				Console.Error.WriteLine(name + " is not a JSObject :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( ");
@@ -216,6 +223,96 @@ namespace Monaco
 
 				return Task.FromResult("").AsAsyncOperation();
 			}
+		}
+
+		public void Launch()
+		{
+			string javascript = $@"
+        (function(){{
+            Debug.log(""Starting Monaco Load"");
+
+            var editor;
+            var model;
+            var contexts = {{}};
+            var decorations = [];
+            var modifingSelection = false; // Supress updates to selection when making edits.
+
+
+            Debug.log(""Grabbing Monaco Options"");
+
+			var opt = {{}};
+			try{{
+				opt = getOptions();
+				}}
+catch(err){{
+Debug.log(""Unable to read options"");
+				}}
+
+			Debug.log(""Getting Parent Text value"");
+            opt[""value""] = Parent.getValue(""Text"");
+
+			Debug.log(""Getting Host container"");
+			var container= Uno.UI.WindowManager.current.getView({HtmlId});
+			Debug.log(""Creating Editor"");
+            editor = monaco.editor.create(container, opt);
+			//Debug.log(""Getting Editor model"");
+   //         model = editor.getModel();
+
+   //         // Listen for Content Changes
+			//Debug.log(""Listening for changes in the editor model"");
+   //         model.onDidChangeContent((event) => {{
+   //                Parent.setValue(""Text"", model.getValue());
+   //                 //console.log(""buffers: "" + JSON.stringify(model._buffer._pieceTree._buffers));
+   //                 //console.log(""commandMgr: "" + JSON.stringify(model._commandManager));
+   //                 //console.log(""viewState:"" + JSON.stringify(editor.saveViewState()));
+   //             }});
+
+   //         // Listen for Selection Changes
+			//Debug.log(""Listening for changes in the editor selection"");
+   //         editor.onDidChangeCursorSelection((event) => {{
+   //                         if (!modifingSelection)
+   //                         {{
+   //                             console.log(event.source);
+   //                     Parent.setValue(""SelectedText"", model.getValueInRange(event.selection));
+   //                     Parent.setValue(""SelectedRange"", JSON.stringify(event.selection), ""Selection"");
+   //                     }}
+   //                 }});
+
+   //         // Set theme
+			//Debug.log(""Getting parent theme value"");
+   //         let theme = Parent.getJsonValue(""RequestedTheme"");
+   //         theme = {{
+   //                     ""0"": ""Default"",
+   //                     ""1"": ""Light"",
+   //                     ""2"": ""Dark""
+   //                 }}
+   //                 [theme];
+			//Debug.log(""Current theme value - "" + theme);
+   //         if (theme == ""Default"") {{
+			//	Debug.log(""Loading default theme"");
+
+   //             theme = Theme.currentThemeName.toString();
+   //         }}
+			//Debug.log(""Changing theme"");
+   //         changeTheme(theme, Theme.isHighContrast.toString());
+
+   //         // Update Monaco Size when we receive a window resize event
+			//Debug.log(""Listen for resize events on the window and resize the editor"");
+   //         window.addEventListener(""resize"", () => {{
+   //                         editor.layout();
+   //                     }});
+
+   //         // Disable WebView Scrollbar so Monaco Scrollbar can do heavy lifting
+   //         document.body.style.overflow = 'hidden';
+
+   //         // Callback to Parent that we're loaded
+   //         Debug.log(""Loaded Monaco"");
+   //         Parent.callAction(""Loaded"");
+
+   //         Debug.log(""Ending Monaco Load"");
+
+        }})();";
+			WebAssemblyRuntime.InvokeJS(javascript);
 		}
 	}
 }

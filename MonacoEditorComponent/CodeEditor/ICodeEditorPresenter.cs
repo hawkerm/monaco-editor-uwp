@@ -39,5 +39,7 @@ namespace Monaco
 		IAsyncOperation<string> InvokeScriptAsync(string scriptName, IEnumerable<string> arguments);
 
 		bool Focus(FocusState state);
+
+		void Launch();
 	}
 }

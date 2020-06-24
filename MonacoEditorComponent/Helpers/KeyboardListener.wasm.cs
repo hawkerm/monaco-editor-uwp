@@ -7,7 +7,7 @@ namespace Monaco.Helpers
 {
 	partial class KeyboardListener : IJSObject
 	{
-		public KeyboardListener()
+		partial void PartialCtor()
 		{
 			keyDown(0, false, false, false, false);
 
@@ -15,7 +15,7 @@ namespace Monaco.Helpers
 		}
 
 		/// <inheritdoc />
-		public JSObjectHandle Handle { get; }
+		public JSObjectHandle Handle { get; private set; }
 
 		public bool keyDown(int keycode, bool ctrl, bool shift, bool alt, bool meta)
 		{

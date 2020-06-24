@@ -34,5 +34,10 @@ namespace Monaco
 			return internalWebView.InvokeScriptAsync(scriptName, arguments);
 
 		}
-    }
+
+		public void Launch()
+        {
+
+        }
+	}
 }

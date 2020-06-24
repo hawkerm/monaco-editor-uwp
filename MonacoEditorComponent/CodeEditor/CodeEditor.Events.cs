@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -47,6 +48,12 @@ namespace Monaco
             Debug.WriteLine("DOM Content Loaded");
             #endif
             _initialized = true;
+
+#if __WASM__
+            InitialiseWebObjects();
+
+            _view.Launch();
+#endif
         }
 
         private async void WebView_NavigationCompleted(ICodeEditorPresenter sender, WebViewNavigationCompletedEventArgs args)
@@ -74,23 +81,36 @@ namespace Monaco
 
         private void WebView_NavigationStarting(ICodeEditorPresenter sender, WebViewNavigationStartingEventArgs args)
         {
-            #if DEBUG
+#if DEBUG
             Debug.WriteLine($"Navigation Starting {args.Uri.ToString()}");
-            #endif
-            _parentAccessor = new ParentAccessor(this);
-            _parentAccessor.AddAssemblyForTypeLookup(typeof(Range).GetTypeInfo().Assembly);
-            _parentAccessor.RegisterAction("Loaded", CodeEditorLoaded);
+#endif
+            InitialiseWebObjects();
+        }
 
-            _themeListener = new ThemeListener();
-            _themeListener.ThemeChanged += ThemeListener_ThemeChanged;
-            _themeToken = RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedTheme_PropertyChanged);
+        private void InitialiseWebObjects() {
+            Debug.WriteLine($"InitialiseWebObjects");
+            try
+            {
+                _parentAccessor = new ParentAccessor(this);
+                _parentAccessor.AddAssemblyForTypeLookup(typeof(Range).GetTypeInfo().Assembly);
+                _parentAccessor.RegisterAction("Loaded", CodeEditorLoaded);
 
-            _keyboardListener = new KeyboardListener(this);
+                _themeListener = new ThemeListener();
+                _themeListener.ThemeChanged += ThemeListener_ThemeChanged;
+                _themeToken = RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedTheme_PropertyChanged);
 
-            _view.AddWebAllowedObject("Debug", new DebugLogger());
-            _view.AddWebAllowedObject("Parent", _parentAccessor);
-            _view.AddWebAllowedObject("Theme", _themeListener);
-            _view.AddWebAllowedObject("Keyboard", _keyboardListener);
+                _keyboardListener = new KeyboardListener(this);
+
+                _view.AddWebAllowedObject("Debug", new DebugLogger());
+                _view.AddWebAllowedObject("Parent", _parentAccessor);
+                _view.AddWebAllowedObject("Theme", _themeListener);
+                _view.AddWebAllowedObject("Keyboard", _keyboardListener);
+                Debug.WriteLine($"InitialiseWebObjects - Completed");
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine($"InitialiseWebObjects Error {ex.Message} {ex.StackTrace}");
+            }
         }        
 
         private async void CodeEditorLoaded()
@@ -160,5 +180,8 @@ namespace Monaco
                 _view.Focus(FocusState.Programmatic);
             }
         }
+
+
+       
     }
 }

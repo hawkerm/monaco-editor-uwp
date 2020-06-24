@@ -35,7 +35,11 @@ namespace Monaco.Helpers
             actions = new Dictionary<string, Action>();
             action_parameters = new Dictionary<string, Action<string[]>>();
             events = new Dictionary<string, Func<string[], Task<string>>>();
+
+            PartialCtor();
         }
+
+        partial void PartialCtor();
 
         /// <summary>
         /// Registers an action from the .NET side which can be called from within the JavaScript code.

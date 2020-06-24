@@ -158,7 +158,12 @@ namespace Monaco
                 _view.DOMContentLoaded += WebView_DOMContentLoaded;
                 _view.NavigationCompleted += WebView_NavigationCompleted;
                 _view.NewWindowRequested += WebView_NewWindowRequested;
+
+#if __WASM__
+                //_view.Source = new System.Uri("ms-appx-web:///Monaco/CodeEditor/CodeEditor.html");
+#else
                 _view.Source = new System.Uri("ms-appx-web:///Monaco/CodeEditor/CodeEditor.html");
+#endif
                 //_view.Source = new System.Uri("file:///MonacoCodeEditor.html", UriKind.RelativeOrAbsolute);
             }
 

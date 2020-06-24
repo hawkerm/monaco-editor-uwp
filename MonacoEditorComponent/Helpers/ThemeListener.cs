@@ -29,7 +29,9 @@ namespace Monaco.Helpers
         public ThemeListener()
         {
             CurrentTheme = Application.Current.RequestedTheme;
+#if !__WASM__
             IsHighContrast = _accessible.HighContrast;
+#endif
 
             _accessible.HighContrastChanged += _accessible_HighContrastChanged;
             _settings.ColorValuesChanged += _settings_ColorValuesChanged;
@@ -52,9 +54,9 @@ namespace Monaco.Helpers
 
         private void _accessible_HighContrastChanged(AccessibilitySettings sender, object args)
         {
-            #if DEBUG
+#if DEBUG
             Debug.WriteLine("HighContrast Changed");
-            #endif
+#endif
 
             UpdateProperties();
         }
@@ -69,9 +71,9 @@ namespace Monaco.Helpers
                 if (CurrentTheme != Application.Current.RequestedTheme ||
                     IsHighContrast != _accessible.HighContrast)
                 {
-                    #if DEBUG
+#if DEBUG
                     Debug.WriteLine("Color Values Changed");
-                    #endif
+#endif
 
                     UpdateProperties();
                 }
@@ -83,9 +85,9 @@ namespace Monaco.Helpers
             if (CurrentTheme != Application.Current.RequestedTheme ||
                 IsHighContrast != _accessible.HighContrast)
             {
-                #if DEBUG
+#if DEBUG
                 Debug.WriteLine("CoreWindow Activated Changed");
-                #endif
+#endif
 
                 UpdateProperties();
             }

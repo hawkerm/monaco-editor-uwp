@@ -15,7 +15,7 @@ namespace Monaco.Helpers
 			getIsHighContrast();
 		}
 
-		public JSObjectHandle Handle { get; set; }
+		public JSObjectHandle Handle { get; private set; }
 
 		public string getCurrentThemeName() => CurrentThemeName;
 

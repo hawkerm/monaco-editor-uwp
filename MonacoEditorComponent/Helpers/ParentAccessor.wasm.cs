@@ -8,7 +8,7 @@ namespace Monaco.Helpers
 {
 	partial class ParentAccessor : IJSObject
 	{
-		public ParentAccessor()
+		partial void PartialCtor()
 		{
 			getValue(null);
 			setValue(null, null);
@@ -19,11 +19,11 @@ namespace Monaco.Helpers
 
 			Handle = JSObjectHandle.Create(this);
 
-			Console.Error.WriteLine(Handle.Metadata);
+			Console.Error.WriteLine($"Parent - {Handle.Metadata}");
 		}
 
 		/// <inheritdoc />
-		public JSObjectHandle Handle { get; }
+		public JSObjectHandle Handle { get; private set; }
 
 		public object getValue(string name)
 		{

@@ -26,7 +26,11 @@ namespace Monaco.Helpers
         public KeyboardListener(CodeEditor parent) // TODO: Make Interface for event usage
         {
             this.parent = new WeakReference<CodeEditor>(parent);
+
+            PartialCtor();
         }
+
+        partial void PartialCtor();
 
         /// <summary>
         /// Called from JavaScript, returns if event was handled or not.

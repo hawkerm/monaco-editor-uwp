@@ -27,6 +27,7 @@ namespace MonacoEditorTestApp
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private readonly StandaloneEditorConstructionOptions options;
         public string CodeContent
         {
             get { return (string)GetValue(CodeContentProperty); }
@@ -42,7 +43,7 @@ namespace MonacoEditorTestApp
         public MainPage()
         {
             InitializeComponent();
-
+            options = Editor.Options;
             Editor.Loading += Editor_Loading;
             Editor.Loaded += Editor_Loaded;
             Editor.OpenLinkRequested += Editor_OpenLinkRequest;
