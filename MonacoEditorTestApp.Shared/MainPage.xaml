@@ -27,6 +27,8 @@
                            TabIndex="0"
                            HasGlyphMargin="True"
                            CodeLanguage="csharp"
+                           Width="1000"
+                           Height="1000"
                            KeyDown="Editor_KeyDown"
                            Text="{x:Bind CodeContent, Mode=TwoWay}"
                            Options="{x:Bind options, Mode=OneWay}">

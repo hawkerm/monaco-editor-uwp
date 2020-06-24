@@ -37,11 +37,8 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<Content Include="..\MonacoEditorComponent\monaco-editor\min-maps\**\*">
-			<Link>min-maps\%(RecursiveDir)%(Filename)%(Extension)</Link>
-		</Content>
-		<EmbeddedResource Include="..\MonacoEditorComponent\monaco-editor\min\**\*">
-			<Link>WasmScripts\monaco-editor\min\%(RecursiveDir)%(Filename)%(Extension)</Link>
+		<EmbeddedResource Include="..\MonacoEditorComponent\monaco-editor\min\vs\loader.js">
+			<Link>WasmScripts\monaco-editor\min\vs\loader.js</Link>
 		</EmbeddedResource>
 		<Content Include="..\MonacoEditorComponent\ts-helpermethods\**\*.js.map">
 			<Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
@@ -49,6 +46,13 @@
 		<EmbeddedResource Include="..\MonacoEditorComponent\ts-helpermethods\**\*.js">
 			<Link>WasmScripts\ts-helpermethods\%(RecursiveDir)%(Filename)%(Extension)</Link>
 		</EmbeddedResource>
+			
+		<Content Include="..\MonacoEditorComponent\monaco-editor\**\*">
+			<Link>monaco-editor\%(RecursiveDir)%(Filename)%(Extension)</Link>
+		</Content>
+		<!--<Content Include="..\MonacoEditorComponent\ts-helpermethods\**\*">
+			<Link>ts-helpermethods\%(RecursiveDir)%(Filename)%(Extension)</Link>
+		</Content>-->
 		<Content Include="MonacoCodeEditor.html" />
 	</ItemGroup>
   <ItemGroup>
