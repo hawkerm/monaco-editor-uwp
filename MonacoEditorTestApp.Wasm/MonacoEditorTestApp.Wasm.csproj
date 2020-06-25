@@ -40,6 +40,9 @@
 		<EmbeddedResource Include="..\MonacoEditorComponent\monaco-editor\min\vs\loader.js">
 			<Link>WasmScripts\monaco-editor\min\vs\loader.js</Link>
 		</EmbeddedResource>
+		<Content Include="..\MonacoEditorComponent\ts-helpermethods\**\*.ts">
+			<Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+		</Content>
 		<Content Include="..\MonacoEditorComponent\ts-helpermethods\**\*.js.map">
 			<Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
 		</Content>
