@@ -14,6 +14,7 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
                         <monaco:CodeEditorPresenter x:Name="View"
+                                                    Background="Transparent"
                                  Margin="{TemplateBinding Padding}"
                                  Visibility="{Binding IsEditorLoaded,RelativeSource={RelativeSource TemplatedParent}}"
                                  HorizontalAlignment="Stretch"
