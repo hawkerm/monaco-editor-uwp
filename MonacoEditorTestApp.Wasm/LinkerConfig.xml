@@ -1,4 +1,5 @@
 ﻿<linker>
+  <assembly fullname="MonacoEditorComponent" />
   <assembly fullname="MonacoEditorTestApp.Wasm" />
   <assembly fullname="Uno.UI" />
 

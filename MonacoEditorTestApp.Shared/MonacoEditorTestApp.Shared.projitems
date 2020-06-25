@@ -8,11 +8,14 @@
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>MonacoEditorTestApp.Shared</Import_RootNamespace>
   </PropertyGroup>
-   <ItemGroup>
+  <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Actions\TestAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\ColorProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\EditorCodeLensProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\EditorHoverProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\LanguageProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>

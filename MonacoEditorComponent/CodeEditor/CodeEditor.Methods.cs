@@ -187,12 +187,15 @@ namespace Monaco
         private IAsyncAction DeltaDecorationsHelperAsync([ReadOnlyArray] IModelDeltaDecoration[] newDecorations)
         {
             var newDecorationsAdjust = newDecorations ?? Array.Empty<IModelDeltaDecoration>();
-
+            System.Diagnostics.Debug.WriteLine("associating decorations");
             if (_cssBroker.AssociateStyles(newDecorations))
             {
+                System.Diagnostics.Debug.WriteLine("updating associated styles");
                 // Update Styles First
                 return InvokeScriptAsync("updateStyle", _cssBroker.GetStyles()).ContinueWith((noop) =>
                 {
+                    System.Diagnostics.Debug.WriteLine($"updating decorations {newDecorationsAdjust}");
+
                     // Send Command to Modify Decorations
                     // IMPORTANT: Need to cast to object here as we want this to be a single array object passed as a parameter, not a list of parameters to expand.
                     return InvokeScriptAsync("updateDecorations", (object)newDecorationsAdjust);
@@ -200,6 +203,8 @@ namespace Monaco
             }
             else
             {
+                System.Diagnostics.Debug.WriteLine("updating unassociated decorations");
+
                 // Only Send Command to Modify Decorations themselves
                 // IMPORTANT: Need to cast to object here as we want this to be a single array object passed as a parameter, not a list of parameters to expand.
                 return InvokeScriptAsync("updateDecorations", (object)newDecorationsAdjust).AsAsyncAction();

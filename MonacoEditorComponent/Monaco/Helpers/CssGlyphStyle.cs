@@ -16,7 +16,7 @@
 
         public string ToCss()
         {
-            return this.WrapCssClassName(string.Format("background: url(\"{0}\");", GlyphImage.AbsoluteUri));
+            return this.WrapCssClassName(string.Format("background: url(\"{0}\");", GlyphImage.AbsoluteUriString()));
         }
     }
 }

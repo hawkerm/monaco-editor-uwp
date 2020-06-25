@@ -27,9 +27,9 @@
                            TabIndex="0"
                            HasGlyphMargin="True"
                            CodeLanguage="csharp"
-                           Width="1000"
-                           Height="1000"
                            KeyDown="Editor_KeyDown"
+                           GotFocus="Editor_GotFocus"
+                           LostFocus="Editor_LostFocus"
                            Text="{x:Bind CodeContent, Mode=TwoWay}"
                            Options="{x:Bind options, Mode=OneWay}">
         </monaco:CodeEditor>
@@ -54,6 +54,7 @@
                     <x:String>Dark</x:String>
                 </ComboBox>
                 <Button Content="Set Text" Click="ButtonSetText_Click" TabIndex="2"/>
+                <Button Content="Set Selected Text" Click="ButtonSetSelectedText_Click"/>
                 <Button Content="Reveal Position 10, 5 In Center" Click="ButtonRevealPositionInCenter_Click" />
                 <Button Content="Highlight Range 3,1-10" Click="ButtonHighlightRange_Click" />
                 <Button Content="Highlight Line 2 &amp; 4" Click="ButtonHighlightLine_Click" />
@@ -62,6 +63,9 @@
                 <Button Content="Minimap" Click="ButtonMinimap_Click" />
                 <Button Content="Change Language" Click="ButtonChangeLanguage_Click" />
                 <Button Content="Set Marker" Click="ButtonSetMarker_Click" />
+                <!--<Button Content="Load &amp; Set Pos" Click="LoadAndSet_Click" />-->
+                <Button Content="Set Readonly" Click="ButtonSetReadonly_Click" />
+                <Button Content="Run Script" Click="ButtonRunScript_Click" />
                 <Line X1="0" X2="100" Y1="0" Y2="0" StrokeThickness="1" Stroke="{ThemeResource AppBarSeparatorForegroundThemeBrush}"/>
                 <Button x:Name="HideButton" Content="Hide" Click="HideButton_Click"/>
                 <Button x:Name="DetachButton" Content="Detach" Click="DetachButton_Click"/>

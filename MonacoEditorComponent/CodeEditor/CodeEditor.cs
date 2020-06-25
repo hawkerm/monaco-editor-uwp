@@ -279,4 +279,38 @@ namespace Monaco
             _parentAccessor = null;
         }
     }
+
+    public static class UriHelper
+    {
+        private static readonly string UNO_BOOTSTRAP_APP_BASE = global::System.Environment.GetEnvironmentVariable(nameof(UNO_BOOTSTRAP_APP_BASE));
+
+        public static string AbsoluteUriString(this System.Uri uri)
+        {
+            string target;
+            if (uri.IsAbsoluteUri)
+            {
+#if __WASM__
+                if (uri.Scheme == "file" || uri.Scheme== "ms-appx-web")
+                {
+                    // Local files are assumed as coming from the remoter server
+                    target = UNO_BOOTSTRAP_APP_BASE == null ? uri.PathAndQuery : UNO_BOOTSTRAP_APP_BASE + uri.PathAndQuery;
+                }
+                else
+                {
+                    target = uri.AbsoluteUri;
+
+                }
+#else
+                target = uri.AbsoluteUri;
+#endif
+            }
+            else
+            {
+                target = UNO_BOOTSTRAP_APP_BASE == null
+                    ? uri.OriginalString
+                    : UNO_BOOTSTRAP_APP_BASE + "/" + uri.OriginalString;
+            }
+            return target;
+        }
+    }
 }
