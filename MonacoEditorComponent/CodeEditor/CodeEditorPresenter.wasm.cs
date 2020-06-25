@@ -232,6 +232,13 @@ namespace Monaco
 		{
 			string javascript = $@"
         (function(){{
+
+			Debug.log(""Create dynamic style element"");
+			var head = document.head || document.getElementsByTagName('head')[0];
+			var style = document.createElement('style');
+			style.id='dynamic';
+			head.appendChild(style);
+
             Debug.log(""Starting Monaco Load"");
 
             var editor;
@@ -271,25 +278,25 @@ namespace Monaco
 	            model = editor.getModel();
 				window.model = model;
 
-	            // Listen for Content Changes
-				Debug.log(""Listening for changes in the editor model - "" + (!model));
-	            model.onDidChangeContent((event) => {{
-	                   Parent.setValue(""Text"", model.getValue());
-	                    //console.log(""buffers: "" + JSON.stringify(model._buffer._pieceTree._buffers));
-	                    //console.log(""commandMgr: "" + JSON.stringify(model._commandManager));
-	                    //console.log(""viewState:"" + JSON.stringify(editor.saveViewState()));
-	                }});
+	   //         // Listen for Content Changes
+				//Debug.log(""Listening for changes in the editor model - "" + (!model));
+	   //         model.onDidChangeContent((event) => {{
+	   //                Parent.setValue(""Text"", model.getValue());
+	   //                 //console.log(""buffers: "" + JSON.stringify(model._buffer._pieceTree._buffers));
+	   //                 //console.log(""commandMgr: "" + JSON.stringify(model._commandManager));
+	   //                 //console.log(""viewState:"" + JSON.stringify(editor.saveViewState()));
+	   //             }});
 
-	            // Listen for Selection Changes
-				Debug.log(""Listening for changes in the editor selection"");
-	            editor.onDidChangeCursorSelection((event) => {{
-	                            if (!modifingSelection)
-	                            {{
-	                                console.log(event.source);
-	                        Parent.setValue(""SelectedText"", model.getValueInRange(event.selection));
-	                        Parent.setValue(""SelectedRange"", JSON.stringify(event.selection), ""Selection"");
-	                        }}
-	                    }});
+	   //         // Listen for Selection Changes
+				//Debug.log(""Listening for changes in the editor selection"");
+	   //         editor.onDidChangeCursorSelection((event) => {{
+	   //                         if (!modifingSelection)
+	   //                         {{
+	   //                             console.log(event.source);
+	   //                     Parent.setValue(""SelectedText"", model.getValueInRange(event.selection));
+	   //                     Parent.setValue(""SelectedRange"", JSON.stringify(event.selection), ""Selection"");
+	   //                     }}
+	   //                 }});
 
 	            // Set theme
 				Debug.log(""Getting parent theme value"");
