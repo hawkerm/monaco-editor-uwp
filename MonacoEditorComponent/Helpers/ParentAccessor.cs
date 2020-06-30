@@ -74,8 +74,10 @@ namespace Monaco.Helpers
         /// <returns></returns>
         public IAsyncOperation<string> CallEvent(string name, [ReadOnlyArray] string[] parameters)
         {
+            System.Diagnostics.Debug.WriteLine($"Event {name}");
             if (events.ContainsKey(name))
             {
+                System.Diagnostics.Debug.WriteLine($"Parameters: {parameters != null} - {parameters?.Length.ToString() ?? "N/A"}");
                 return events[name]?.Invoke(parameters).AsAsyncOperation();
             }
 

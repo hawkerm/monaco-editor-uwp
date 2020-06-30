@@ -33,14 +33,14 @@ namespace Monaco.Extensions
             if (typeof(T) != typeof(object))
             {
                 script = script.Trim(';');
-                start += "JSON.stringify(" + script + ");";
+                 start += "return JSON.stringify(" + script + ");";
             }
             else
             {
                 start += script;
             }
             var fullscript = start + 
-                "\n} catch (err) { JSON.stringify({ wv_internal_error: true, message: err.message, description: err.description, number: err.number, stack: err.stack }); }";
+                "\n} catch (err) { return JSON.stringify({ wv_internal_error: true, message: err.message, description: err.description, number: err.number, stack: err.stack }); }";
 
             if (_view.Dispatcher.HasThreadAccess)
             {

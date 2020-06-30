@@ -88,32 +88,6 @@
 			<Generator>MSBuild:Compile</Generator>
 			<SubType>Designer</SubType>
 		</Page>
-		<!--<TypeScriptCompile Include="ts-helpermethods\Monaco.Helpers.KeyboardListener.ts">
-			<SubType>Designer</SubType>
-		</TypeScriptCompile>
-		<TypeScriptCompile Include="ts-helpermethods\Monaco.Helpers.ParentAccessor.ts">
-			<SubType>Designer</SubType>
-		</TypeScriptCompile>
-		<TypeScriptCompile Include="ts-helpermethods\registerCodeLensProvider.ts">
-			<Generator>MSBuild:Compile</Generator>
-			<SubType>Designer</SubType>
-		</TypeScriptCompile>
-		<TypeScriptCompile Include="ts-helpermethods\registerColorProvider.ts">
-			<Generator>MSBuild:Compile</Generator>
-			<SubType>Designer</SubType>
-		</TypeScriptCompile>
-		<TypeScriptCompile Include="ts-helpermethods\updateSelectedContent.ts">
-			<Generator>MSBuild:Compile</Generator>
-			<SubType>Designer</SubType>
-		</TypeScriptCompile>
-		<TypeScriptCompile Include="ts-helpermethods\otherScriptsToBeOrganized.ts">
-			<SubType>Designer</SubType>
-			<Generator>MSBuild:Compile</Generator>
-		</TypeScriptCompile>
-		<TypeScriptCompile Include="ts-helpermethods\registerCompletionItemProvider.ts">
-			<SubType>Designer</SubType>
-			<Generator>MSBuild:Compile</Generator>
-		</TypeScriptCompile>-->
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Remove="**\*.uwp.*" />

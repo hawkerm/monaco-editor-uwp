@@ -170,6 +170,7 @@ namespace Monaco
                 // TODO: Add Incremented Id so that we can register multiple providers per language?
                 editor._parentAccessor.RegisterEvent("HoverProvider" + languageId, async (args) =>
                 {
+                    System.Diagnostics.Debug.WriteLine($"Hover provider.......... {args!=null}");
                     if (args != null && args.Length >= 1)
                     {
                         var hover = await provider.ProvideHover(editor.GetModel(), JsonConvert.DeserializeObject<Position>(args[0]));

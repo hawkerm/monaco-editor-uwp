@@ -11,14 +11,10 @@ declare var modifingSelection:boolean; // Supress updates to selection when maki
 var registerHoverProvider = function (languageId: string) {
     return monaco.languages.registerHoverProvider(languageId, {
         provideHover: function (model, position) {
-            return Parent.callEvent("HoverProvider" + languageId, [JSON.stringify(position)]).then(result => {
-                if (result) {
-                    return JSON.parse(result);
-                }
-            });
+            return invokeAsyncMethod((promiseId) => Parent.callEvent("HoverProvider" + languageId, promiseId, stringifyForMarshalling(position),null));
         }
     });
-}
+};
 
 var addAction = function (action: monaco.editor.IActionDescriptor) {
     action.run = function (ed) {
@@ -33,10 +29,12 @@ var addCommand = function (keybindingStr, handlerName, context) {
         let objs = [];
         if (arguments) { // Use arguments as Monaco will pass each as it's own parameter, so we don't know how many that may be.
             for (let i = 1; i < arguments.length; i++) { // Skip first one as that's the sender?
-                objs.push(JSON.stringify(arguments[i]));
+                objs.push(stringifyForMarshalling(arguments[i]));
             }
         }
-        Parent.callActionWithParameters(handlerName, objs);
+        Parent.callActionWithParameters(handlerName,
+            objs.length > 0 ? objs[0] : null,
+            objs.length > 1 ? objs[1] : null);
     }, context);
 };
 
