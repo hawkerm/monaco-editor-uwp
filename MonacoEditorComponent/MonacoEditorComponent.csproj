@@ -95,19 +95,29 @@
 		<None Remove="monaco-editor\**\*.*" />
 		<TypeScriptCompile Remove="monaco-editor\**\*.*" />
 		<Content Include="CodeEditor\CodeEditor.html" />
+		<Content Include="ts-helpermethods-wasm\tsconfig.json" />
+		<Content Include="ts-helpermethods\tsconfig.json" />
 		<Content Include="monaco-editor\*.*" />
 		<Content Include="monaco-editor\min\**\*.*" />
 		<Content Include="ts-helpermethods\*.js">
 			<DependentUpon>%(Filename).ts</DependentUpon>
 		</Content>
+		<None Remove="ts-helpermethods-wasm\tsconfig.json" />
+		<Content Include="ts-helpermethods\*.js">
+			<DependentUpon>%(Filename).ts</DependentUpon>
+		</Content>
+		<Content Include="ts-helpermethods\*.js">
+			<DependentUpon>%(Filename).ts</DependentUpon>
+		</Content>
+		<None Remove="ts-helpermethods\tsconfig.json" />
 		<EmbeddedResource Include="Properties\MonacoEditorComponent.rd.xml" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard'">
-		<Compile Include="**\*.wasm.*" />
+		<Compile Include="**\*.wasm.cs" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(IsWindows)' == 'true'">
-		<Compile Include="**\*.uwp.*" />
+		<Compile Include="**\*.uwp.cs" />
 	</ItemGroup>
 </Project>

@@ -278,25 +278,25 @@ namespace Monaco
 	            model = editor.getModel();
 				window.model = model;
 
-	   //         // Listen for Content Changes
-				//Debug.log(""Listening for changes in the editor model - "" + (!model));
-	   //         model.onDidChangeContent((event) => {{
-	   //                Parent.setValue(""Text"", model.getValue());
-	   //                 //console.log(""buffers: "" + JSON.stringify(model._buffer._pieceTree._buffers));
-	   //                 //console.log(""commandMgr: "" + JSON.stringify(model._commandManager));
-	   //                 //console.log(""viewState:"" + JSON.stringify(editor.saveViewState()));
-	   //             }});
+	            // Listen for Content Changes
+				Debug.log(""Listening for changes in the editor model - "" + (!model));
+	            model.onDidChangeContent((event) => {{
+	                   Parent.setValue(""Text"", stringifyForMarshalling(model.getValue()));
+	                    //console.log(""buffers: "" + JSON.stringify(model._buffer._pieceTree._buffers));
+	                    //console.log(""commandMgr: "" + JSON.stringify(model._commandManager));
+	                    //console.log(""viewState:"" + JSON.stringify(editor.saveViewState()));
+	                }});
 
-	   //         // Listen for Selection Changes
-				//Debug.log(""Listening for changes in the editor selection"");
-	   //         editor.onDidChangeCursorSelection((event) => {{
-	   //                         if (!modifingSelection)
-	   //                         {{
-	   //                             console.log(event.source);
-	   //                     Parent.setValue(""SelectedText"", model.getValueInRange(event.selection));
-	   //                     Parent.setValue(""SelectedRange"", JSON.stringify(event.selection), ""Selection"");
-	   //                     }}
-	   //                 }});
+	            // Listen for Selection Changes
+				Debug.log(""Listening for changes in the editor selection"");
+	            editor.onDidChangeCursorSelection((event) => {{
+	                            if (!modifingSelection)
+	                            {{
+	                                console.log(event.source);
+	                        Parent.setValue(""SelectedText"", stringifyForMarshalling(model.getValueInRange(event.selection)));
+	                        Parent.setValueWithType(""SelectedRange"", stringifyForMarshalling(JSON.stringify(event.selection)), ""Selection"");
+	                        }}
+	                    }});
 
 	            // Set theme
 				Debug.log(""Getting parent theme value"");
@@ -334,7 +334,7 @@ namespace Monaco
         }})();";
 			WebAssemblyRuntime.InvokeJS(javascript);
 
-			Dispatcher.RunAsync(CoreDispatcherPriority.Low, () => NavigationCompleted?.Invoke(this, new WebViewNavigationCompletedEventArgs()));
+			//Dispatcher.RunAsync(CoreDispatcherPriority.Low, () => NavigationCompleted?.Invoke(this, new WebViewNavigationCompletedEventArgs()));
 		}
 	}
 }

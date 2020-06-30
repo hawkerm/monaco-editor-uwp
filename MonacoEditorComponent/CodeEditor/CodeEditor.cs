@@ -94,12 +94,14 @@ namespace Monaco
                 _model = new ModelHelper(this);
 
                 Options.PropertyChanged += Options_PropertyChanged;
+                Debug.WriteLine("Connecting options property changed");
 
                 Decorations.VectorChanged += Decorations_VectorChanged;
                 Markers.VectorChanged += Markers_VectorChanged;
 
                 _view.NewWindowRequested += WebView_NewWindowRequested;
 
+                Debug.WriteLine("Setting initialized - true");
                 _initialized = true;
 
                 Loading?.Invoke(this, new RoutedEventArgs());
@@ -120,6 +122,7 @@ namespace Monaco
                 _view.DOMContentLoaded -= WebView_DOMContentLoaded;
                 _view.NavigationCompleted -= WebView_NavigationCompleted;
                 _view.NewWindowRequested -= WebView_NewWindowRequested;
+                Debug.WriteLine("Setting initialized - false");
                 _initialized = false;
             }
 
@@ -147,6 +150,7 @@ namespace Monaco
                 _view.DOMContentLoaded -= WebView_DOMContentLoaded;
                 _view.NavigationCompleted -= WebView_NavigationCompleted;
                 _view.NewWindowRequested -= WebView_NewWindowRequested;
+                Debug.WriteLine("Setting initialized - false");
                 _initialized = false;
             }
 

@@ -4,24 +4,18 @@ declare var Parent: ParentAccessor;
 var registerColorProvider = function (languageId) {
     return monaco.languages.registerColorProvider(languageId, {
         provideColorPresentations: function (model, colorInfo, token) {
-            return invokeAsyncMethod((promiseId) => Parent.callEvent("ProvideColorPresentations" + languageId, promiseId, stringifyForMarshalling(colorInfo), null));
-            //var result = 
-            //    if (result) {
-            //        return (JSON.parse(result));
-            //    }
-            //    else {
-            //        return (null);
-            //    }
+            return callParentEventAsync("ProvideColorPresentations" + languageId, [JSON.stringify(colorInfo)]).then(result => {
+                if (result) {
+                    return JSON.parse(result);
+                }
+            });
         },
         provideDocumentColors: function (model, token) {
-            return invokeAsyncMethod((promiseId) => Parent.callEvent("ProvideDocumentColors" + languageId, promiseId, null,null));
-            //var result = 
-            //    if (result) {
-            //        return (JSON.parse(result));
-            //    }
-            //    else {
-            //        return (null);
-            //    }
+            return callParentEventAsync("ProvideDocumentColors" + languageId, []).then(result => {
+                if (result) {
+                    return JSON.parse(result);
+                }
+            });
         }
     });
 }

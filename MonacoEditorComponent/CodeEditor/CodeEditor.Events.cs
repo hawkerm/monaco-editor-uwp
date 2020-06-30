@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -123,6 +124,10 @@ namespace Monaco
 
             // Now we're done loading
             Loading?.Invoke(this, new RoutedEventArgs());
+
+#if __WASM__
+            Dispatcher.RunAsync(CoreDispatcherPriority.Low, () => WebView_NavigationCompleted(_view, new WebViewNavigationCompletedEventArgs()));
+#endif
         }
 
         private void WebView_NewWindowRequested(ICodeEditorPresenter sender, WebViewNewWindowRequestedEventArgs args)

@@ -1,6 +1,4 @@
-﻿
-// TODO: Fix build issue related to Promise
-declare var Promise: any;
+﻿declare var Parent: ParentAccessor;
 
 type NumberCallback = (parameter: any) => void;
 declare var asyncCallbackMap: { [promiseId: string]: NumberCallback };
@@ -15,15 +13,16 @@ var asyncCallback = function (promiseId: string, parameter: string) {
     var promise = asyncCallbackMap[promiseId];
     if (promise) {
         console.log(">>>> Promise found <<<<<<");
-        if (parameter) {
-            var resultObject = JSON.parse(parameter);
-            console.log(">>>> Parameter decoded to object <<<<<<");
-            promise(resultObject);
-        }
-        else {
-            console.log(">>>> Parameter is null <<<<<<");
-            promise(parameter);
-        }
+        promise(parameter);
+        //if (parameter) {
+        //    var resultObject = JSON.parse(parameter);
+        //    console.log(">>>> Parameter decoded to object <<<<<<");
+        //    promise(resultObject);
+        //}
+        //else {
+        //    console.log(">>>> Parameter is null <<<<<<");
+        //    promise(parameter);
+        //}
         console.log(">>>> Promise resolved <<<<<<");
 
     }
@@ -64,5 +63,20 @@ var sanitize = function (jsonString: string): string {
 }
 
 var stringifyForMarshalling=function (value: any): string {
-    return sanitize(JSON.stringify(value));
+    return sanitize(value);
+}
+
+var callParentEventAsync = function (name: string, parameter1: string, parameter2: string): Promise<string>  {
+    return invokeAsyncMethod<string>((promiseId) => Parent.callEvent(name, promiseId, stringifyForMarshalling(parameter1), stringifyForMarshalling(parameter2))).then(result => {
+        if (result) {
+            return JSON.parse(result);
+        }
+    });
+}
+
+var callParentActionWithParameters = function (name: string, parameters: string[]): boolean {
+    return Parent.callActionWithParameters(name,
+        parameters.length > 0 ? stringifyForMarshalling(parameters[0]) : null,
+        parameters.length > 1 ? stringifyForMarshalling(parameters[1]) : null);
+
 }
