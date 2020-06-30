@@ -334,7 +334,7 @@ namespace Monaco
         }})();";
 			WebAssemblyRuntime.InvokeJS(javascript);
 
-			//Dispatcher.RunAsync(CoreDispatcherPriority.Low, () => NavigationCompleted?.Invoke(this, new WebViewNavigationCompletedEventArgs()));
-		}
+            //Dispatcher.RunAsync(CoreDispatcherPriority.Low, () => NavigationCompleted?.Invoke(this, new WebViewNavigationCompletedEventArgs()));
+        }
 	}
 }

@@ -50,14 +50,14 @@ namespace Monaco
                 // Set Pass-Thru Properties
                 Options.GlyphMargin = HasGlyphMargin;
 
-                // Register for changes
-                Options.PropertyChanged += Options_PropertyChanged;
+                //// Register for changes
+                //Options.PropertyChanged += Options_PropertyChanged;
             }
 
             // Initialize this here so property changed event will fire and register collection changed event.
             Decorations = new ObservableVector<IModelDeltaDecoration>();
             Markers = new ObservableVector<IMarkerData>();
-            _model = new ModelHelper(this);
+            //_model = new ModelHelper(this);
             #pragma warning disable CS0618 // Type or member is obsolete
             Languages = new LanguagesHelper(this);
             #pragma warning restore CS0618 // Type or member is obsolete
@@ -172,6 +172,10 @@ namespace Monaco
             }
 
             base.OnApplyTemplate();
+
+#if __WASM__
+            CodeEditor_Loaded(this, null);
+#endif
         }
 
         internal async Task SendScriptAsync(string script,
