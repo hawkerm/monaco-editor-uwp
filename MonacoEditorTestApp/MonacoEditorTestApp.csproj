@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp5.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <TargetPlatformVersion>10.0.18362.0</TargetPlatformVersion>
 
     <Platforms>x86;x64</Platforms>
@@ -30,8 +30,8 @@
       <Version>0.9.430</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VCRTForwarders.140" Version="1.0.6" />
-    <PackageReference Include="Microsoft.Windows.CsWinRT" Version="0.1.0-prerelease.200512.7" />
-    <PackageReference Include="Microsoft.WinUI" Version="3.0.0-preview1.200515.3" />
+    <PackageReference Include="Microsoft.Windows.CsWinRT" Version="0.1.0-prerelease.200629.3" />
+    <PackageReference Include="Microsoft.WinUI" Version="3.0.0-preview1.200629.2-CI" />
   </ItemGroup>
   
   <ItemGroup>
