@@ -45,14 +45,16 @@ namespace Monaco
         public CodeEditor()
         {
             DefaultStyleKey = typeof(CodeEditor);
-            if (Options != null)
-            {
+
+            Options = new StandaloneEditorConstructionOptions();
+            //if (Options != null)
+            //{
                 // Set Pass-Thru Properties
                 Options.GlyphMargin = HasGlyphMargin;
 
                 //// Register for changes
                 //Options.PropertyChanged += Options_PropertyChanged;
-            }
+            //}
 
             // Initialize this here so property changed event will fire and register collection changed event.
             Decorations = new ObservableVector<IModelDeltaDecoration>();
@@ -93,7 +95,7 @@ namespace Monaco
             {
                 _model = new ModelHelper(this);
 
-                Options.PropertyChanged += Options_PropertyChanged;
+                //Options.PropertyChanged += Options_PropertyChanged;
                 Debug.WriteLine("Connecting options property changed");
 
                 Decorations.VectorChanged += Decorations_VectorChanged;

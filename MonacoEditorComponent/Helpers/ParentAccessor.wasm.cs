@@ -16,10 +16,10 @@ namespace Monaco.Helpers
     {
         partial void PartialCtor()
         {
-            getValue(null);
+            //getValue(null);
             setValue(null, null);
             setValueWithType(null, null, null);
-            getJsonValue(null);
+            getJsonValue(null,null);
             callAction(null);
             callActionWithParameters(null, null, null);
             callEvent(null, null, null, null);
@@ -33,21 +33,21 @@ namespace Monaco.Helpers
         /// <inheritdoc />
         public JSObjectHandle Handle { get; private set; }
 
-        public object getValue(string name)
-        {
-            if (Handle == null) return null;
+        //public object getValue(string name)
+        //{
+        //    if (Handle == null) return null;
 
 
-            var obj = GetValue(name);
-            System.Diagnostics.Debug.WriteLine($"Get Value {name} - {obj?.ToString()}");
-            return obj;
-        }
+        //    var obj = GetValue(name);
+        //    System.Diagnostics.Debug.WriteLine($"Get Value {name} - {obj?.ToString()}");
+        //    return obj;
+        //}
 
         [Preserve]
         public void setValue(string name, string value)
         {
             if (Handle == null) return;
-            var json = unsanitize(value);
+            var json = Desanitize(value);
             json = json.Replace(@"\\",@"\");
             json = json.Trim('"');
             json = json.Replace(@"\r\n", Environment.NewLine);
@@ -60,7 +60,7 @@ namespace Monaco.Helpers
         public void setValueWithType(string name, string value, string type)
         {
             if (Handle == null) return;
-            var json = unsanitize(value);
+            var json = Desanitize(value);
             json = json.Replace(@"\\", @"\");
             json = json.Trim('"', ' ');
             json = json.Replace(@"\r\n", Environment.NewLine);
@@ -69,11 +69,47 @@ namespace Monaco.Helpers
             SetValue(name,json , type);
         }
 
-        [Preserve]
-        public string getJsonValue(string name)
+        /*
+         * var sanitize = function (jsonString: string): string {
+    if (jsonString == null) return null;
+
+    var replacements = "&\"'{}:,";
+    for (var i = 0; i < replacements.length; i++) {
+        jsonString = replaceAll(jsonString, replacements.charAt(i), "%" + replacements.charCodeAt(i));
+    }
+    return jsonString;
+}
+
+         * 
+         */
+        
+        private string Santize(string jsonString)
         {
-            if (Handle == null) return null;
-            return GetJsonValue(name);
+            if (jsonString == null) return null;
+
+            var replacements = @"%&\""'{}:,";
+            for (var i = 0; i < replacements.Length; i++)
+            {
+                jsonString = jsonString.Replace(replacements[i]+"", "%" + (int)replacements[i]);
+            }
+            return jsonString;
+        }
+
+        [Preserve]
+        public void getJsonValue(string name, string returnId)
+        {
+            if (Handle == null) return;
+            var json = GetJsonValue(name);
+
+            try
+            {
+                var callbackMethod = $"returnValueCallback('{returnId}','{json}');";
+                var result = WebAssemblyRuntime.InvokeJS(callbackMethod);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Result Callback - error {e.Message}");
+            }
         }
 
         [Preserve]
@@ -89,29 +125,29 @@ namespace Monaco.Helpers
         public bool callActionWithParameters(string name, string parameter1, string parameter2)
         {
             if (Handle == null) return false;
-            System.Diagnostics.Debug.WriteLine($"Calling action {name}");
+            //System.Diagnostics.Debug.WriteLine($"Calling action {name}");
 
-            var parameters = new[] { unsanitize(parameter1), unsanitize(parameter2) }.Where(x => x != null).ToArray();
+            var parameters = new[] { Desanitize(parameter1), Desanitize(parameter2) }.Where(x => x != null).ToArray();
             var result = CallActionWithParameters(name, parameters);
 
             return result;
         }
 
-        private string unsanitize(string parameter)
+        private string Desanitize(string parameter)
         {
-            System.Diagnostics.Debug.WriteLine($"Encoded String: {parameter}");
+           // System.Diagnostics.Debug.WriteLine($"Encoded String: {parameter}");
             if (parameter == null) return parameter;
-            var replacements = @"""'{}:,%";
-            System.Diagnostics.Debug.WriteLine($"Replacements: >{replacements}<");
+            var replacements = @"&\""'{}:,%";
+           // System.Diagnostics.Debug.WriteLine($"Replacements: >{replacements}<");
             for (int i = 0; i < replacements.Length; i++)
             {
-                System.Diagnostics.Debug.WriteLine($"Replacing: >%{(int)replacements[i]}< with >{(char)replacements[i] + "" }< ");
+             //   System.Diagnostics.Debug.WriteLine($"Replacing: >%{(int)replacements[i]}< with >{(char)replacements[i] + "" }< ");
                 parameter = parameter.Replace($"%{(int)replacements[i]}", (char)replacements[i] + "");
             }
 
             parameter = parameter.Replace(@"\\""", @"""");
 
-            System.Diagnostics.Debug.WriteLine($"Decoded String: {parameter}");
+           // System.Diagnostics.Debug.WriteLine($"Decoded String: {parameter}");
             return parameter;
         }
 
@@ -119,20 +155,23 @@ namespace Monaco.Helpers
         public async void callEvent(string name, string promiseId, string parameter1, string parameter2)
         {
             if (Handle == null) return;
-            System.Diagnostics.Debug.WriteLine($"Calling event {name}");
+            //System.Diagnostics.Debug.WriteLine($"Calling event {name}");
 
-            var parameters = new[] { unsanitize(parameter1), unsanitize(parameter2) }.Where(x => x != null).ToArray();
+            var parameters = new[] { Desanitize(parameter1), Desanitize(parameter2) }.Where(x => x != null).ToArray();
             var resultString = await CallEvent(name, parameters);
             try
             {
-                Console.WriteLine("Event Callback - start");
+              //  Console.WriteLine("Event Callback - start - "+ resultString);
 
-                var callbackMethod = $"asyncCallback({promiseId},'{resultString}');";
+                var sanitized = Santize(resultString);
+              //  Console.WriteLine("Santized for callback- " + sanitized);
+
+                var callbackMethod = $"asyncCallback('{promiseId}','{sanitized}');";
 
                 var result = WebAssemblyRuntime.InvokeJS(callbackMethod);
 
-                Console.WriteLine("Event Callback - end");
-                Console.WriteLine(result);
+              //  Console.WriteLine("Event Callback - end");
+              //  Console.WriteLine(result);
             }
             catch (Exception e)
             {

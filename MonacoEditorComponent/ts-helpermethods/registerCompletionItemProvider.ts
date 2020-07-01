@@ -9,6 +9,7 @@ var registerCompletionItemProvider = function (languageId, characters) {
                 if (result) {
                     return JSON.parse(result);
                 }
+                return null;
             });
 
         },
@@ -17,6 +18,7 @@ var registerCompletionItemProvider = function (languageId, characters) {
                 if (result) {
                     return JSON.parse(result);
                 }
+                return null;
             });
         }
     });

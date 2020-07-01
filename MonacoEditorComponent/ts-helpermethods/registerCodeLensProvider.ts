@@ -8,6 +8,8 @@ var registerCodeLensProvider = function (languageId) {
                 if (result) {
                     return JSON.parse(result);
                 }
+                return null;
+
             });
         },
         resolveCodeLens: function (model, codeLens, token) {
@@ -15,6 +17,7 @@ var registerCodeLensProvider = function (languageId) {
                 if (result) {
                     return JSON.parse(result);
                 }
+                return null;
             });
         }
         // TODO: onDidChange, don't know what this does.

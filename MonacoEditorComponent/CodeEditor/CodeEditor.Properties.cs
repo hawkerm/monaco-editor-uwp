@@ -100,7 +100,7 @@ namespace Monaco
             set => SetValue(OptionsProperty, value);
         }
 
-        public static DependencyProperty OptionsProperty { get; } = DependencyProperty.Register(nameof(Options), typeof(StandaloneEditorConstructionOptions), typeof(CodeEditor), new PropertyMetadata(new StandaloneEditorConstructionOptions(), (d, e) =>
+        public static DependencyProperty OptionsProperty { get; } = DependencyProperty.Register(nameof(Options), typeof(StandaloneEditorConstructionOptions), typeof(CodeEditor), new PropertyMetadata(null, (d, e) =>
         {
             if (d is CodeEditor editor)
             {

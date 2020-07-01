@@ -6,4 +6,9 @@ var callParentActionWithParameters = function (name: string, parameters: string[
     return Parent.callActionWithParameters(name, parameters);
 }
 
+var getParentJsonValue = function (name: string): string {
+    return Parent.getJsonValue(name);
+}
+
+
 

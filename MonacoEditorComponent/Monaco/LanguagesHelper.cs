@@ -132,7 +132,10 @@ namespace Monaco
 
                         if (items != null)
                         {
-                            return JsonConvert.SerializeObject(items);
+                            System.Diagnostics.Debug.WriteLine("Items: " + items);
+                            var serialized= JsonConvert.SerializeObject(items);
+                            System.Diagnostics.Debug.WriteLine("Items in JSON: " + serialized);
+                            return serialized;
                         }
                     }
 

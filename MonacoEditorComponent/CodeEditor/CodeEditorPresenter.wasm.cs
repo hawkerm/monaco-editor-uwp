@@ -261,11 +261,11 @@ namespace Monaco
 					opt = getOptions();
 				}}
 				catch(err){{
-					Debug.log(""Unable to read options"");
+					Debug.log(""Unable to read options - "" + err);
 				}}
 
 				Debug.log(""Getting Parent Text value"");
-				opt[""value""] = Parent.getValue(""Text"");
+				opt[""value""] = getParentValue(""Text"");
 
 				Debug.log(""Getting Host container"");
 				var container= Uno.UI.WindowManager.current.getView({HtmlId});
@@ -300,7 +300,7 @@ namespace Monaco
 
 	            // Set theme
 				Debug.log(""Getting parent theme value"");
-	            let theme = Parent.getJsonValue(""RequestedTheme"");
+	            let theme = getParentJsonValue(""RequestedTheme"");
 	            theme = {{
 	                        ""0"": ""Default"",
 	                        ""1"": ""Light"",
@@ -311,10 +311,10 @@ namespace Monaco
 	            if (theme == ""Default"") {{
 					Debug.log(""Loading default theme"");
 
-	                theme = Theme.currentThemeName.toString();
+	                theme = getThemeCurrentThemeName();
 	            }}
 				Debug.log(""Changing theme"");
-	            changeTheme(theme, 'false');//Theme.isHighContrast.toString());
+	            changeTheme(theme, getThemeIsHighContrast());
 
 	            // Update Monaco Size when we receive a window resize event
 				Debug.log(""Listen for resize events on the window and resize the editor"");

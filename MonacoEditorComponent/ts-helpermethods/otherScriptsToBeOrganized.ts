@@ -81,7 +81,9 @@ var updateStyle = function (innerStyle) {
 var getOptions = function (): monaco.editor.IEditorOptions {
     let opt = null;
     try {
-        opt = JSON.parse(Parent.getJsonValue("Options"));
+        var jopt = getParentJsonValue("Options");
+       // console.log('Options: ' + jopt);
+        opt = JSON.parse(jopt);
     } finally {
 
     }

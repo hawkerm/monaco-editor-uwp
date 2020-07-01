@@ -149,12 +149,18 @@ namespace Monaco.Helpers
                 var propinfo = typeinfo.GetProperty(name);
                 var obj = propinfo?.GetValue(tobj);
 
-                return JsonConvert.SerializeObject(obj, new JsonSerializerSettings()
+                if (obj != null)
                 {
-                    NullValueHandling = NullValueHandling.Ignore
-                });
+                    var json = JsonConvert.SerializeObject(obj, new JsonSerializerSettings()
+                    {
+                        NullValueHandling = NullValueHandling.Ignore
+                    });
+                    //System.Diagnostics.Debug.WriteLine($"Json Object - {json}");
+                    return json;
+                }
             }
 
+            //System.Diagnostics.Debug.WriteLine($"No Object");
             return "{}";
         }
 
