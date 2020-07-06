@@ -8,6 +8,7 @@
 		<NoWarn>$(NoWarn);Uno0001</NoWarn>
 		<PackageId>Uno.MonacoEditorComponent</PackageId>
 		<LangVersion>8.0</LangVersion>
+		<Version>0.0.2</Version>
 		<!-- Ensures the .xr.xml files are generated in a proper layout folder --> 
 		<GenerateLibraryLayout>true</GenerateLibraryLayout>
 
@@ -103,18 +104,15 @@
 			<DependentUpon>%(Filename).ts</DependentUpon>
 		</Content>
 		<None Remove="ts-helpermethods-wasm\tsconfig.json" />
-		<Content Include="ts-helpermethods\*.js">
-			<DependentUpon>%(Filename).ts</DependentUpon>
-		</Content>
-		<Content Include="ts-helpermethods\*.js">
-			<DependentUpon>%(Filename).ts</DependentUpon>
-		</Content>
 		<None Remove="ts-helpermethods\tsconfig.json" />
 		<EmbeddedResource Include="Properties\MonacoEditorComponent.rd.xml" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard'">
-		<Compile Include="**\*.wasm.cs" />
+		<Compile Include="**\*.wasm.cs" /> 
+		<Content Include="ts-helpermethods\ts-helpermethods-wasm\*.js">
+			<DependentUpon>%(Filename).ts</DependentUpon>
+		</Content>
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(IsWindows)' == 'true'">

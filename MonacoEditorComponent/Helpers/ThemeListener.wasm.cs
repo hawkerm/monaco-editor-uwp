@@ -45,6 +45,7 @@ namespace Monaco.Helpers
                 });
                // System.Diagnostics.Debug.WriteLine($"Json Object - {returnJson}");
             }
+            returnJson = ParentAccessor.Santize(returnJson);
 
             try
             {

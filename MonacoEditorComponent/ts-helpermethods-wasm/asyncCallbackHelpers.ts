@@ -90,6 +90,7 @@ var invokeWithReturnValue = function (methodToInvoke: MethodWithReturnId): strin
     methodToInvoke(nextId + '');
     var json = returnValueCallbackMap[nextId];
     //console.log('Return json ' + json);
+    json = desantize(json);
     return json;
 }
 

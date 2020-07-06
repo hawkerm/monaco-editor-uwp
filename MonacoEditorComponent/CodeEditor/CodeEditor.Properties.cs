@@ -26,11 +26,15 @@ namespace Monaco
             set => SetValue(TextProperty, value);
         }
 
-        public static DependencyProperty TextProperty { get; } = DependencyProperty.Register(nameof(Text), typeof(string), typeof(CodeEditor), new PropertyMetadata(string.Empty, (d, e) =>
+        public static DependencyProperty TextProperty { get; } = DependencyProperty.Register(nameof(Text), typeof(string), typeof(CodeEditor), new PropertyMetadata(string.Empty, async (d, e) =>
         {
-            if (!(d as CodeEditor).IsSettingValue)
+            if (d is CodeEditor editor)
             {
-                (d as CodeEditor)?.InvokeScriptAsync("updateContent", e.NewValue.ToString());
+                if (!editor.IsSettingValue)
+                {
+                    await editor.InvokeScriptAsync("updateContent", e.NewValue.ToString());
+                }
+                editor.NotifyPropertyChanged(nameof(Text));
             }
         }));
 
@@ -43,11 +47,15 @@ namespace Monaco
             set => SetValue(SelectedTextProperty, value);
         }
 
-        public static DependencyProperty SelectedTextProperty { get; } = DependencyProperty.Register(nameof(SelectedText), typeof(string), typeof(CodeEditor), new PropertyMetadata(string.Empty, (d, e) =>
+        public static DependencyProperty SelectedTextProperty { get; } = DependencyProperty.Register(nameof(SelectedText), typeof(string), typeof(CodeEditor), new PropertyMetadata(string.Empty, async (d, e) =>
         {
-            if (!(d as CodeEditor).IsSettingValue)
+            if (d is CodeEditor editor)
             {
-                (d as CodeEditor)?.InvokeScriptAsync("updateSelectedContent", e.NewValue.ToString());
+                if (!editor.IsSettingValue)
+                {
+                    await editor.InvokeScriptAsync("updateSelectedContent", e.NewValue.ToString());
+                }
+                editor.NotifyPropertyChanged(nameof(SelectedText));
             }
         }));
 

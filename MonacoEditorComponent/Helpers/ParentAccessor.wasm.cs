@@ -83,7 +83,7 @@ namespace Monaco.Helpers
          * 
          */
         
-        private string Santize(string jsonString)
+        public static string Santize(string jsonString)
         {
             if (jsonString == null) return null;
 
@@ -100,6 +100,7 @@ namespace Monaco.Helpers
         {
             if (Handle == null) return;
             var json = GetJsonValue(name);
+            json = Santize(json);
 
             try
             {

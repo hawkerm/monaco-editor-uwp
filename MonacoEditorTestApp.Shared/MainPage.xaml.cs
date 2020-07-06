@@ -4,6 +4,7 @@ using Monaco.Helpers;
 using MonacoEditorTestApp.Actions;
 using MonacoEditorTestApp.Helpers;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using Windows.Storage;
@@ -80,6 +81,12 @@ namespace MonacoEditorTestApp
             Editor.OpenLinkRequested += Editor_OpenLinkRequest;
 
             Editor.InternalException += Editor_InternalException;
+            Editor.PropertyChanged += Editor_PropertyChanged;
+        }
+
+        private void Editor_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            Debug.WriteLine("Property changed - " + e.PropertyName);
         }
 
         private void Editor_InternalException(CodeEditor sender, Exception args)
@@ -119,7 +126,7 @@ namespace MonacoEditorTestApp
 
             // Ready for Code
 
-            var available_languages = Editor.Languages.GetLanguagesAsync();
+            var available_languages = await Editor.Languages.GetLanguagesAsync();
             //Debugger.Break();
 
             // Code Lens Action
