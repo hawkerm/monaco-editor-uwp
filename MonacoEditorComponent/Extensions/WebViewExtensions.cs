@@ -70,8 +70,11 @@ namespace Monaco.Extensions
         }
 
         private static async Task<T> RunScriptHelperAsync<T>(WebView2 _view, string script)
-        {            
+        {
+            System.Diagnostics.Debug.WriteLine(script);
+            System.Diagnostics.Debug.WriteLine("BEFORE");
             var returnstring = await _view.ExecuteScriptAsync(script);
+            System.Diagnostics.Debug.WriteLine("AFTER");
 
             string s = (string)JToken.Parse(returnstring);
             if (!string.IsNullOrEmpty(s))

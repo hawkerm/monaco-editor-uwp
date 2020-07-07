@@ -9,6 +9,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
 namespace Monaco
 {
@@ -94,6 +95,16 @@ namespace Monaco
             AddWebAllowedObject("Parent", _parentAccessor);
             AddWebAllowedObject("Theme", _themeListener);
             AddWebAllowedObject("Keyboard", _keyboardListener);
+        }
+
+        private async void WebView_CoreProcessFailed(WebView2 sender, WebView2ProcessFailedEventArgs e)
+        {
+            if (e.ProcessFailedKind == WebView2ProcessFailedKind.BrowserProcessExited)
+            {
+                Debug.WriteLine("WARN: WebView Browser Process Exited! Navigating again.");
+                await Task.Delay(1000);
+                SetWebViewSource();
+            }
         }
 
         private Dictionary<string, object> _allowedObject = new Dictionary<string, object>();

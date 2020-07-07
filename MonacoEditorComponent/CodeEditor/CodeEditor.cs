@@ -113,6 +113,7 @@ namespace Monaco
 
             if (_view != null)
             {
+                _view.CoreProcessFailed -= WebView_CoreProcessFailed;
                 _view.NavigationStarting -= WebView_NavigationStarting;
                 //_view.DOMContentLoaded -= WebView_DOMContentLoaded;
                 _view.NavigationCompleted -= WebView_NavigationCompleted;
@@ -141,6 +142,7 @@ namespace Monaco
         {
             if (_view != null)
             {
+                _view.CoreProcessFailed -= WebView_CoreProcessFailed;
                 _view.NavigationStarting -= WebView_NavigationStarting;
                 //_view.DOMContentLoaded -= WebView_DOMContentLoaded;
                 _view.NavigationCompleted -= WebView_NavigationCompleted;
@@ -153,16 +155,22 @@ namespace Monaco
 
             if (_view != null)
             {
+                _view.CoreProcessFailed += WebView_CoreProcessFailed;
                 _view.NavigationStarting += WebView_NavigationStarting;
                 //_view.DOMContentLoaded += WebView_DOMContentLoaded;
                 _view.NavigationCompleted += WebView_NavigationCompleted;
                 //_view.NewWindowRequested += WebView_NewWindowRequested;
                 _view.WebMessageReceived += WebView_WebMessageReceived;
 
-                _view.Source = new System.Uri(@"file:///" + Path.Combine(Package.Current.InstalledLocation.Path, @"MonacoEditorComponent/CodeEditor/CodeEditor.html"));
+                SetWebViewSource();
             }
 
             base.OnApplyTemplate();
+        }
+
+        private void SetWebViewSource()
+        {
+            _view.Source = new System.Uri(@"file:///" + Path.Combine(Package.Current.InstalledLocation.Path, @"MonacoEditorComponent/CodeEditor/CodeEditor.html"));
         }
 
         internal async Task SendScriptAsync(string script,
