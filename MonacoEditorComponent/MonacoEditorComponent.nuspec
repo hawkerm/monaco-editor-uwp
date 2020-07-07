@@ -1,42 +1,80 @@
 <?xml version="1.0"?>
 <package >
-  <metadata>
-    <id>Monaco.Editor</id>
-    <version>0.9-beta</version>
-    <title>Monaco Editor UWP Component</title>
-    <authors>Michael A. Hawker</authors>
-    <owners>Michael A. Hawker</owners>
-    <license type="expression">MIT</license>
-    <projectUrl>https://github.com/hawkerm/monaco-editor-uwp</projectUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>A Windows Runtime Component wrapper around the web-based Monaco Editor</description>
-    <releaseNotes>Minor fixes, better .NET Native support.</releaseNotes>
-    <copyright>Copyright 2017-2020</copyright>
-    <tags>uwp monaco editor controls</tags>
-    <dependencies>
-      <group targetFramework="UAP10.0">
-        <dependency id="Newtonsoft.Json" version="12.0.3"/>
-        <dependency id="Nito.AsyncEx" version="5.0.0"/>
-        <dependency id="ObservableVector" version="2.1.0"/>
-      </group>
-    </dependencies>
-  </metadata>
-  <files>
-    <!-- WinMd and IntelliSense files -->
-    <file src="bin\Release\Monaco.pri" target="lib\uap10.0"/>
-    <file src="bin\Release\Monaco.winmd" target="lib\uap10.0"/>
-    <file src="bin\Release\Monaco.xml" target="lib\uap10.0"/>
-    <file src="bin\Release\Monaco\MonacoEditorComponent.xr.xml" target="lib\uap10.0\Monaco"/>
-    <!-- XAML controls -->
-    <file src="Themes\Generic.xaml" target="lib\uap10.0\Monaco\Themes"/>
-    <!-- Dependencies -->
-    <file src="CodeEditor\CodeEditor.html" target="lib\uap10.0\Monaco\CodeEditor"/>
-    <file src="ts-helpermethods\*.js" target="lib\uap10.0\Monaco\ts-helpermethods" />
-    <file src="monaco-editor\*" target="lib\uap10.0\Monaco\monaco-editor"/>
-    <file src="monaco-editor\min\**\*.*" target="lib\uap10.0\Monaco\monaco-editor\min"/>
-    <!-- Docs -->
-    <file src="..\README.md" target="content"/>
-    <file src="..\changelog.md" target="content"/>
-    <file src="..\LICENSE*" target="content"/>
-  </files>
+	<metadata>
+		<id>Uno.Monaco.Editor</id>
+		<version>$version$</version>
+		<title>Monaco Editor Component for UWP and WASM</title>
+		<authors>nventive</authors>
+		<owners>nventive</owners>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<license type="expression">MIT</license>
+		<projectUrl>https://github.com/unoplatform/uno.monaco-editor-uwp</projectUrl>
+		<description>A Windows Runtime Component and WASM wrapper around the web-based Monaco Editor. Designed for use with the Uno Platform</description>
+		<releaseNotes>Minor fixes, better .NET Native support.</releaseNotes>
+		<copyright>Copyright (C) 2015-2020 nventive inc. - all rights reserved</copyright>
+		<tags>uwp wasm monaco editor controls</tags>
+		<dependencies>
+			<group targetFramework=".NETStandard2.0">
+				<dependency id="Newtonsoft.Json" version="12.0.3"/>
+				<dependency id="Nito.AsyncEx" version="5.0.0"/>
+				<dependency id="Uno.UI" version="2.4.4" />
+			</group>
+			<group targetFramework="UAP10.0.16299">
+				<dependency id="Newtonsoft.Json" version="12.0.3"/>
+				<dependency id="Nito.AsyncEx" version="5.0.0"/>
+			</group>
+		</dependencies>
+		<contentFiles>
+
+			<files include="any/netstandard2.0/ts-helpermethods/*.js" buildAction="EmbeddedResource" />
+
+		</contentFiles>
+
+	</metadata>
+	<files>
+		<!-- Target: uap10.0.16299 (UWP) -->
+		<!-- WinMd and IntelliSense files -->
+		<file src="bin\$configuration$\uap10.0.16299\Monaco.pri" target="lib\uap10.0.16299"/>
+		<file src="bin\$configuration$\uap10.0.16299\Monaco.winmd" target="lib\uap10.0.16299"/>
+		<file src="bin\$configuration$\uap10.0.16299\Monaco\MonacoEditorComponent.xr.xml" target="lib\uap10.0.16299\Monaco"/>
+		<!-- XAML controls -->
+		<file src="Themes\Generic.xaml" target="lib\uap10.0.16299\Monaco\Themes"/>
+		<!-- Dependencies -->
+		<file src="CodeEditor\CodeEditor.html" target="lib\uap10.0.16299\Monaco\CodeEditor"/>
+		<file src="ts-helpermethods\*.js" target="lib\uap10.0.16299\Monaco\ts-helpermethods" />
+		<file src="monaco-editor\*" target="lib\uap10.0.16299\monaco-editor"/>
+		<file src="monaco-editor\min\**\*.*" target="lib\uap10.0.16299\Monaco\monaco-editor\min"/>
+
+		<!-- Target: .NETStandard2.0 (WASM) -->
+		<!-- Dll -->
+		<file src="bin\$configuration$\netstandard2.0\MonacoEditorComponent.dll" target="lib\netstandard2.0"/>
+		<!-- Dependencies -->
+		<file src="ts-helpermethods\*.js" target="lib\netstandard2.0\Monaco\ts-helpermethods" />
+		<file src="monaco-editor\*" target="lib\netstandard2.0\monaco-editor"/>
+		<file src="monaco-editor\min\**\*.*" target="lib\netstandard2.0\Monaco\monaco-editor\min"/>
+
+
+		<!-- Docs -->
+		<file src="..\README.md" target="content"/>
+		<file src="..\changelog.md" target="content"/>
+		<file src="..\LICENSE*" target="content"/>
+	</files>
+	<!--<contentFiles>
+		-->
+	<!-- Embed image resources --><!--
+		<files include="any/any/images/dnf.png" buildAction="EmbeddedResource" />
+		<files include="any/any/images/ui.png" buildAction="EmbeddedResource" />
+
+		--><!-- Embed all image resources under contentFiles/cs/ --><!--
+		<files include="cs/**/*.png" buildAction="EmbeddedResource" />
+
+		--><!-- Copy config.xml to the root of the output folder --><!--
+		<files include="cs/uap/config/config.xml" buildAction="None" copyToOutput="true" flatten="true" />
+
+		--><!-- Copy run.cmd to the output folder and keep the directory structure --><!--
+		<files include="cs/commands/run.cmd" buildAction="None" copyToOutput="true" flatten="false" />
+
+		--><!-- Include everything in the scripts folder except exe files --><!--
+		<files include="cs/net45/scripts/*" exclude="**/*.exe"  buildAction="None" copyToOutput="true" />
+	</contentFiles>-->
 </package>

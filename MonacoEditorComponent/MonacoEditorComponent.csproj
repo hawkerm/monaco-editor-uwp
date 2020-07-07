@@ -6,13 +6,15 @@
 		<!--<TargetFrameworks>netstandard2.0;</TargetFrameworks>-->
 		<Title>MonacoEditorComponent</Title>
 		<NoWarn>$(NoWarn);Uno0001</NoWarn>
-		<PackageId>Uno.MonacoEditorComponent</PackageId>
+		<PackageId>Uno.Monaco.Editor</PackageId>
 		<LangVersion>8.0</LangVersion>
 		<Version>0.0.2</Version>
 		<!-- Ensures the .xr.xml files are generated in a proper layout folder --> 
 		<GenerateLibraryLayout>true</GenerateLibraryLayout>
+		<NuspecProperties>version=$(Version);configuration=$(Configuration)</NuspecProperties>
 
 		<IsWindows>$(TargetFramework.StartsWith('uap'))</IsWindows>
+		<NuspecFile>$(MSBuildThisFileDirectory)$(MSBuildProjectName).nuspec</NuspecFile>
 </PropertyGroup>
 
 	<PropertyGroup Condition="'$(IsWindows)' == 'true'">
