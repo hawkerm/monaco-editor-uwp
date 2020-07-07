@@ -26,7 +26,9 @@
 		</dependencies>
 		<contentFiles>
 
-			<files include="any/netstandard2.0/ts-helpermethods/*.js" buildAction="EmbeddedResource" />
+			<files include="any/netstandard2.0/WasmScripts/ts-helpermethods/*.js" buildAction="EmbeddedResource" />
+			<files include="any/netstandard2.0/WasmScripts/monaco-editor/min/vs/loader.js" buildAction="EmbeddedResource" />
+			<files include="any/netstandard2.0/monaco-editor/min/**/*.*" buildAction="Content" />
 
 		</contentFiles>
 
@@ -49,32 +51,14 @@
 		<!-- Dll -->
 		<file src="bin\$configuration$\netstandard2.0\MonacoEditorComponent.dll" target="lib\netstandard2.0"/>
 		<!-- Dependencies -->
-		<file src="ts-helpermethods\*.js" target="lib\netstandard2.0\Monaco\ts-helpermethods" />
-		<file src="monaco-editor\*" target="lib\netstandard2.0\monaco-editor"/>
-		<file src="monaco-editor\min\**\*.*" target="lib\netstandard2.0\Monaco\monaco-editor\min"/>
-
+		<file src="ts-helpermethods\*.js" target="contentFiles\any\netstandard2.0\WasmScripts\ts-helpermethods" />
+		<file src="ts-helpermethods-wasm\*.js" target="contentFiles\any\netstandard2.0\WasmScripts\ts-helpermethods" />
+		<file src="monaco-editor\min\vs\loader.js" target="contentFiles\any\netstandard2.0\WasmScripts\monaco-editor\min\vs\loader.js"/>
+		<file src="monaco-editor\min\**\*.*" target="contentFiles\any\netstandard2.0\monaco-editor\min"/>
 
 		<!-- Docs -->
 		<file src="..\README.md" target="content"/>
 		<file src="..\changelog.md" target="content"/>
 		<file src="..\LICENSE*" target="content"/>
 	</files>
-	<!--<contentFiles>
-		-->
-	<!-- Embed image resources --><!--
-		<files include="any/any/images/dnf.png" buildAction="EmbeddedResource" />
-		<files include="any/any/images/ui.png" buildAction="EmbeddedResource" />
-
-		--><!-- Embed all image resources under contentFiles/cs/ --><!--
-		<files include="cs/**/*.png" buildAction="EmbeddedResource" />
-
-		--><!-- Copy config.xml to the root of the output folder --><!--
-		<files include="cs/uap/config/config.xml" buildAction="None" copyToOutput="true" flatten="true" />
-
-		--><!-- Copy run.cmd to the output folder and keep the directory structure --><!--
-		<files include="cs/commands/run.cmd" buildAction="None" copyToOutput="true" flatten="false" />
-
-		--><!-- Include everything in the scripts folder except exe files --><!--
-		<files include="cs/net45/scripts/*" exclude="**/*.exe"  buildAction="None" copyToOutput="true" />
-	</contentFiles>-->
 </package>

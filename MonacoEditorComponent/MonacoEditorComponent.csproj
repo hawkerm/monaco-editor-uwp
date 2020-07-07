@@ -8,7 +8,7 @@
 		<NoWarn>$(NoWarn);Uno0001</NoWarn>
 		<PackageId>Uno.Monaco.Editor</PackageId>
 		<LangVersion>8.0</LangVersion>
-		<Version>0.0.2</Version>
+		<Version>0.0.5</Version>
 		<!-- Ensures the .xr.xml files are generated in a proper layout folder --> 
 		<GenerateLibraryLayout>true</GenerateLibraryLayout>
 		<NuspecProperties>version=$(Version);configuration=$(Configuration)</NuspecProperties>
