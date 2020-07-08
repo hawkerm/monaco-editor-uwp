@@ -17,7 +17,7 @@
       <dependency id="Newtonsoft.Json" version="12.0.3"/>
       <dependency id="Nito.AsyncEx" version="5.0.0"/>
       <dependency id="Microsoft.Web.WebView2" version="0.9.430"/>
-      <dependency id="Microsoft.WinUI" version="3.0.0-preview1.200629.2-CI"/>
+      <dependency id="Microsoft.WinUI" version="3.0.0-preview2.200707.3-CI"/>
     </dependencies>
   </metadata>
   <files>
@@ -25,12 +25,8 @@
     <file src="bin\Release\net5.0\MonacoEditorComponent.pri" target="lib\net5.0"/>
     <file src="bin\Release\net5.0\MonacoEditorComponent.dll" target="lib\net5.0"/>
     <file src="bin\Release\net5.0\MonacoEditorComponent.xml" target="lib\net5.0"/>
-    <file src="bin\Release\net5.0\MonacoEditorComponent.xr.xml" target="lib\net5.0\MonacoEditorComponent"/>
     <!-- XAML controls -->
-    <!--<file src="Themes\Generic.xaml" target="lib\net5.0\Themes"/>
-    <file src="bin\Release\Themes\Generic.xbf" target="lib\net5.0\Themes"/>-->
     <file src="Themes\Generic.xaml" target="lib\net5.0\MonacoEditorComponent\Themes"/>
-    <file src="bin\Release\net5.0\Themes\Generic.xbf" target="lib\net5.0\MonacoEditorComponent\Themes"/>
     <!-- Dependencies -->
     <file src="CodeEditor\CodeEditor.html" target="lib\net5.0\MonacoEditorComponent\CodeEditor"/>
     <file src="ts-helpermethods\*.js" target="lib\net5.0\MonacoEditorComponent\ts-helpermethods" />
