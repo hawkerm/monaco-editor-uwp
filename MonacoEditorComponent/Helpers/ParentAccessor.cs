@@ -16,7 +16,7 @@ namespace Monaco.Helpers
     [AllowForWeb]
     public sealed class ParentAccessor : IDisposable
     {
-        private readonly WeakReference<IParentAccessorAcceptor> parent;
+        private readonly WinRT.WeakReference<IParentAccessorAcceptor> parent;
         private readonly Type typeinfo;
         private Dictionary<string, Action> actions;
         private Dictionary<string, Func<string[], Task<string>>> events;
@@ -29,7 +29,7 @@ namespace Monaco.Helpers
         /// <param name="parent">Object to provide Property Access.</param>
         public ParentAccessor(IParentAccessorAcceptor parent)
         { 
-            this.parent = new WeakReference<IParentAccessorAcceptor>(parent);
+            this.parent = new WinRT.WeakReference<IParentAccessorAcceptor>(parent);
             typeinfo = parent.GetType();
             actions = new Dictionary<string, Action>();
             events = new Dictionary<string, Func<string[], Task<string>>>();
