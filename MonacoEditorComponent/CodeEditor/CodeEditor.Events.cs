@@ -83,7 +83,7 @@ namespace Monaco
             _parentAccessor.AddAssemblyForTypeLookup(typeof(Range).GetTypeInfo().Assembly);
             _parentAccessor.RegisterAction("Loaded", CodeEditorLoaded);
 
-            _themeListener = new ThemeListener();
+            _themeListener = new ThemeListener(DispatcherQueue);
             _themeListener.ThemeChanged += ThemeListener_ThemeChanged;
             _themeToken = RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedTheme_PropertyChanged);
 

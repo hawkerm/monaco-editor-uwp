@@ -42,7 +42,7 @@ namespace Monaco.Extensions
             var fullscript = start + 
                 "\n} catch (err) { JSON.stringify({ wv_internal_error: true, message: err.message, description: err.description, number: err.number, stack: err.stack }); }";
 
-            if (_view.Dispatcher.HasThreadAccess)
+            if (_view.DispatcherQueue.HasThreadAccess)
             {
                 try
                 {
@@ -55,7 +55,7 @@ namespace Monaco.Extensions
             }
             else
             {
-                return await _view.Dispatcher.RunTaskAsync(async () =>
+                return await _view.DispatcherQueue.RunTaskAsync(async () =>
                 {
                     try
                     {

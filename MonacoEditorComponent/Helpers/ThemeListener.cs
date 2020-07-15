@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation.Metadata;
 using Windows.UI.ViewManagement;
 using Microsoft.UI.Xaml;
+using Microsoft.System;
 
 namespace Monaco.Helpers
 {
@@ -21,15 +21,19 @@ namespace Monaco.Helpers
         public ApplicationTheme CurrentTheme { get; set; }
         public bool IsHighContrast { get; set; }
 
+        public DispatcherQueue DispatcherQueue { get; set; }
+
         public event ThemeChangedEvent ThemeChanged;
 
         private readonly AccessibilitySettings _accessible = new AccessibilitySettings();
         private readonly UISettings _settings = new UISettings();
 
-        public ThemeListener()
+        public ThemeListener(DispatcherQueue dispatcherQueue = null)
         {
             CurrentTheme = Application.Current.RequestedTheme;
             IsHighContrast = _accessible.HighContrast;
+
+            DispatcherQueue = dispatcherQueue ?? DispatcherQueue.GetForCurrentThread();
 
             _accessible.HighContrastChanged += _accessible_HighContrastChanged;
             _settings.ColorValuesChanged += _settings_ColorValuesChanged;
@@ -54,9 +58,9 @@ namespace Monaco.Helpers
 
         private void _accessible_HighContrastChanged(AccessibilitySettings sender, object args)
         {
-            #if DEBUG
-            Debug.WriteLine("HighContrast Changed");
-            #endif
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("HighContrast Changed");
+#endif
 
             UpdateProperties();
         }
@@ -71,9 +75,9 @@ namespace Monaco.Helpers
                 if (CurrentTheme != Application.Current.RequestedTheme ||
                     IsHighContrast != _accessible.HighContrast)
                 {
-                    #if DEBUG
-                    Debug.WriteLine("Color Values Changed");
-                    #endif
+#if DEBUG
+                    System.Diagnostics.Debug.WriteLine("Color Values Changed");
+#endif
 
                     UpdateProperties();
                 }
@@ -85,9 +89,9 @@ namespace Monaco.Helpers
             if (CurrentTheme != Application.Current.RequestedTheme ||
                 IsHighContrast != _accessible.HighContrast)
             {
-                #if DEBUG
-                Debug.WriteLine("CoreWindow Activated Changed");
-                #endif
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("CoreWindow Activated Changed");
+#endif
 
                 UpdateProperties();
             }
