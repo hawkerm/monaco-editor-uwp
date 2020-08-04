@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Core;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Monaco.Extensions;
 using Uno.Foundation;
 using Uno.Foundation.Interop;
 
@@ -19,7 +21,7 @@ namespace Monaco
 		/// <inheritdoc />
 		JSObjectHandle IJSObject.Handle => _handle;
 
-		public CodeEditorPresenter() : base("div")
+		public CodeEditorPresenter()
 		{
 			//Background = new SolidColorBrush(Colors.Red);
 			_handle = JSObjectHandle.Create(this);
@@ -69,23 +71,6 @@ namespace Monaco
 		}
 
 		/// <inheritdoc />
-		protected override void OnLoaded()
-		{
-			base.OnLoaded();
-
-			/*Console.Error.WriteLine("---------------------- LOADED ");
-
-
-			var script = $@"
-					var frame = Uno.UI.WindowManager.current.getView({HtmlId});
-					var frameDoc = frame.contentDocument;
-					
-					return frameDoc.onload = function() { };
-
-			Console.Error.WriteLine("***************************************** AddWebAllowedObject: " + script);*/
-		}
-
-		/// <inheritdoc />
 		public void AddWebAllowedObject(string name, object pObject)
 		{
 			if (pObject is IJSObject obj)
@@ -97,11 +82,13 @@ namespace Monaco
 				Console.Error.WriteLine($"*** Native handle {native}");
 
 
+                var htmlId = this.GetHtmlId();
+
 				var script = $@"
 					console.log('starting');
 					var value = {native};
 					console.log('v>' + value);
-					var frame = Uno.UI.WindowManager.current.getView({HtmlId});
+					var frame = Uno.UI.WindowManager.current.getView({htmlId});
 					console.log('f>' + (!frame));
 					var frameWindow = window;
 					console.log('fw>' + (!frameWindow));
@@ -145,7 +132,7 @@ namespace Monaco
 		/// <inheritdoc />
 		public global::System.Uri Source
 		{
-			get => new global::System.Uri(GetAttribute("src"));
+			get => new global::System.Uri(this.GetHtmlAttribute("src"));
 			set
 			{
                 //var path = Environment.GetEnvironmentVariable("UNO_BOOTSTRAP_APP_BASE");
@@ -180,7 +167,7 @@ namespace Monaco
 
 				Console.Error.WriteLine($"---- Nav is null {NavigationStarting == null}");
 
-				SetAttribute("src", target);
+				this.SetHtmlAttribute("src", target);
 
 				//NavigationStarting?.Invoke(this, new WebViewNavigationStartingEventArgs());
 				Dispatcher.RunAsync(CoreDispatcherPriority.Low, () => NavigationStarting?.Invoke(this, new WebViewNavigationStartingEventArgs()));
@@ -193,9 +180,6 @@ namespace Monaco
 		{
 			Console.WriteLine("+++++++++++++++++++++++++++++++ Invoke Script +++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 			var script = $@"(function() {{
-				//var frame = Uno.UI.WindowManager.current.getView({HtmlId});
-				//var frameWindow = frame.contentWindow;
-				
 				try {{
 					window.__evalMethod = function() {{ {arguments.Single()} }};
 					
@@ -212,7 +196,7 @@ namespace Monaco
 
 			try
 			{
-				var result = WebAssemblyRuntime.InvokeJS(script);
+				var result = this.ExecuteJavascript(script);
 
 				Console.WriteLine("Ok++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 				Console.WriteLine(result);
@@ -254,6 +238,7 @@ namespace Monaco
 			require(['vs/editor/editor.main'], function () {{
 
 
+                debugger;
 				Debug.log(""Grabbing Monaco Options"");
 
 				var opt = {{}};
@@ -268,10 +253,8 @@ namespace Monaco
 				opt[""value""] = getParentValue(""Text"");
 
 				Debug.log(""Getting Host container"");
-				var container= Uno.UI.WindowManager.current.getView({HtmlId});
-				var containerElement = document.getElementById({HtmlId});
 				Debug.log(""Creating Editor"");
-				editor = monaco.editor.create(containerElement, opt);
+				const editor = monaco.editor.create(element, opt);
 				window.editor= editor;
 
 				Debug.log(""Getting Editor model"");
@@ -332,7 +315,8 @@ namespace Monaco
 	            Debug.log(""Ending Monaco Load"");
 			}});
         }})();";
-			WebAssemblyRuntime.InvokeJS(javascript);
+
+            this.ExecuteJavascript(javascript);
 
             //Dispatcher.RunAsync(CoreDispatcherPriority.Low, () => NavigationCompleted?.Invoke(this, new WebViewNavigationCompletedEventArgs()));
         }

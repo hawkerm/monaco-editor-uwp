@@ -17,7 +17,8 @@
 			<group targetFramework=".NETStandard2.0">
 				<dependency id="Newtonsoft.Json" version="12.0.3"/>
 				<dependency id="Nito.AsyncEx" version="5.0.0"/>
-				<dependency id="Uno.UI" version="2.4.4" />
+				<dependency id="Uno.UI" version="3.0.0-dev.1359" />
+				<dependency id="Uno.UI.Runtime.WebAssembly" version="3.0.0-dev.1359" />
 			</group>
 			<group targetFramework="UAP10.0.16299">
 				<dependency id="Newtonsoft.Json" version="12.0.3"/>
@@ -26,13 +27,12 @@
 		</dependencies>
 		<contentFiles>
 
-			<files include="any/netstandard2.0/WasmScripts/ts-helpermethods/*.js" buildAction="EmbeddedResource" />
-			<files include="any/netstandard2.0/WasmScripts/monaco-editor/min/vs/loader.js" buildAction="EmbeddedResource" />
 			<files include="any/netstandard2.0/monaco-editor/min/**/*.*" buildAction="Content" />
 
 		</contentFiles>
 
 	</metadata>
+
 	<files>
 		<!-- Target: uap10.0.16299 (UWP) -->
 		<!-- WinMd and IntelliSense files -->
@@ -51,9 +51,6 @@
 		<!-- Dll -->
 		<file src="bin\$configuration$\netstandard2.0\MonacoEditorComponent.dll" target="lib\netstandard2.0"/>
 		<!-- Dependencies -->
-		<file src="ts-helpermethods\*.js" target="contentFiles\any\netstandard2.0\WasmScripts\ts-helpermethods" />
-		<file src="ts-helpermethods-wasm\*.js" target="contentFiles\any\netstandard2.0\WasmScripts\ts-helpermethods" />
-		<file src="monaco-editor\min\vs\loader.js" target="contentFiles\any\netstandard2.0\WasmScripts\monaco-editor\min\vs\loader.js"/>
 		<file src="monaco-editor\min\**\*.*" target="contentFiles\any\netstandard2.0\monaco-editor\min"/>
 
 		<!-- Docs -->

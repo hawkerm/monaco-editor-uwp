@@ -15,63 +15,62 @@ declare var nextReturn: number;
 nextReturn = 1;
 returnValueCallbackMap = {};
 
-var asyncCallback = function (promiseId: string, parameter: string) {
-    var promise = asyncCallbackMap[promiseId];
+const asyncCallback = (promiseId: string, parameter: string) => {
+    const promise = asyncCallbackMap[promiseId];
     if (promise) {
         //console.log('Async response: ' + parameter);
         promise(parameter);
     }
 }
 
-var returnValueCallback = function (returnId: string, returnValue: string) {
+const returnValueCallback = (returnId: string, returnValue: string) => {
     //console.log('Return value for id ' + returnId + ' is ' + returnValue);
     returnValueCallbackMap[returnId] = returnValue;
 }
 
-var invokeAsyncMethod = function <T> (syncMethod: NumberCallback) : Promise<T>
-{
+const invokeAsyncMethod = <T>(syncMethod: NumberCallback): Promise<T> => {
     if (nextAsync==null) {
         nextAsync = 0;
     }
     if (asyncCallbackMap==null) {
         asyncCallbackMap = {};
     }
-    var promise = new Promise<T>((resolve, reject) => {
+    const promise = new Promise<T>((resolve, reject) => {
         var nextId = nextAsync++;
         asyncCallbackMap[nextId] = resolve;
-        syncMethod(nextId?.toString());
+        syncMethod(`${nextId}`);
     });
     return promise;
 }
 
-var replaceAll = function (str: string, find: string, rep: string): string {
+const replaceAll = (str: string, find: string, rep: string): string => {
     if (find == "\\")
     {
         find = "\\\\";
     }
-    return (str+'').replace(new RegExp(find, 'g'), rep);
+    return (`${str}`).replace(new RegExp(find, "g"), rep);
 }
 
-var sanitize = function (jsonString: string): string {
+const sanitize = (jsonString: string): string => {
     if (jsonString == null) {
         //console.log('Sanitized is null');
         return null;
     }
 
-    var replacements = "%&\\\"'{}:,";
-    for (var i = 0; i < replacements.length; i++) {
-        jsonString = replaceAll(jsonString, replacements.charAt(i), "%" + replacements.charCodeAt(i));
+    const replacements = "%&\\\"'{}:,";
+    for (let i = 0; i < replacements.length; i++) {
+        jsonString = replaceAll(jsonString, replacements.charAt(i), `%${replacements.charCodeAt(i)}`);
     }
     //console.log('Sanitized: ' + jsonString);
     return jsonString;
 }
 
-var desantize = function (parameter: string): string {
+const desantize = (parameter: string): string => {
     //System.Diagnostics.Debug.WriteLine($"Encoded String: {parameter}");
     if (parameter == null) return parameter;
-    var replacements = "&\\\"'{}:,%";
+    const replacements = "&\\\"'{}:,%";
     //System.Diagnostics.Debug.WriteLine($"Replacements: >{replacements}<");
-    for (var i = 0; i < replacements.length; i++)
+    for (let i = 0; i < replacements.length; i++)
     {
         //console.log("Replacing: >%" + replacements.charCodeAt(i) + "< with >" + replacements.charAt(i) + "< ");
         parameter = replaceAll(parameter, "%" + replacements.charCodeAt(i), replacements.charAt(i));
@@ -81,12 +80,10 @@ var desantize = function (parameter: string): string {
     return parameter;
 }
 
-var stringifyForMarshalling=function (value: any): string {
-    return sanitize(value);
-}
+const stringifyForMarshalling = (value: any): string => sanitize(value)
 
-var invokeWithReturnValue = function (methodToInvoke: MethodWithReturnId): string {
-    var nextId = nextReturn++;
+const invokeWithReturnValue = (methodToInvoke: MethodWithReturnId): string => {
+    const nextId = nextReturn++;
     methodToInvoke(nextId + '');
     var json = returnValueCallbackMap[nextId];
     //console.log('Return json ' + json);
@@ -94,59 +91,40 @@ var invokeWithReturnValue = function (methodToInvoke: MethodWithReturnId): strin
     return json;
 }
 
-var getParentValue = function (name: string): any {
-    var jsonString = invokeWithReturnValue((returnId) => Parent.getJsonValue(name, returnId));
-    var obj = JSON.parse(jsonString);
+const getParentValue = (name: string): any => {
+    const jsonString = invokeWithReturnValue((returnId) => Parent.getJsonValue(name, returnId));
+    const obj = JSON.parse(jsonString);
     return obj;
 }
 
-var getParentJsonValue = function (name: string): string {
-    return invokeWithReturnValue((returnId) => Parent.getJsonValue(name, returnId));
+const getParentJsonValue = (name: string): string =>
+    invokeWithReturnValue((returnId) => Parent.getJsonValue(name, returnId))
 
-    //var nextId = nextReturn++;
+const getThemeIsHighContrast = (): boolean =>
+    invokeWithReturnValue((returnId) => Theme.getIsHighContrast(returnId)) == "true";
 
-
-    //console.log('Getting parent json for ' + name + ' with id ' + nextId);
-    //var json = Parent.getJsonValue(name, nextId+'');
-    //console.log('Parent json ' + json);
-    //json = returnValueCallbackMap[nextId];
-    //console.log('Parent Return json ' + json);
-
-    ////json = desantize(json);
-    ////console.log('Parent json (desanitized) ' + json);
-    //return json;
-}
-
-var getThemeIsHighContrast = function (): boolean {
-    return invokeWithReturnValue((returnId) => Theme.getIsHighContrast(returnId))=="true";
-}
-
-var getThemeCurrentThemeName = function (): string {
-    return invokeWithReturnValue((returnId) => Theme.getCurrentThemeName(returnId));
-}
+const getThemeCurrentThemeName = (): string =>
+    invokeWithReturnValue((returnId) => Theme.getCurrentThemeName(returnId));
 
 
-var callParentEventAsync = function (name: string, parameters: string[]): Promise<string>  {
-    return invokeAsyncMethod<string>((promiseId) => Parent.callEvent(name, promiseId,
-        parameters!=null && parameters.length > 0 ? stringifyForMarshalling(parameters[0]) : null,
-        parameters != null && parameters.length > 1 ? stringifyForMarshalling(parameters[1]) : null))
-        .then(result => {
+const callParentEventAsync = (name: string, parameters: string[]): Promise<string> =>
+    invokeAsyncMethod<string>(async (promiseId) => {
+        let result = await Parent.callEvent(name,
+            promiseId,
+            parameters != null && parameters.length > 0 ? stringifyForMarshalling(parameters[0]) : null,
+            parameters != null && parameters.length > 1 ? stringifyForMarshalling(parameters[1]) : null);
         if (result) {
             //console.log('Parent event result: ' + name + ' -  ' +  result);
             result = desantize(result);
             //console.log('Desanitized: ' + name + ' -  ' + result);
-        }
-        else {
+        } else {
             //console.log('No Parent event result for ' + name);
-            }
+        }
 
         return result;
     });
-}
 
-var callParentActionWithParameters = function (name: string, parameters: string[]): boolean {
-    return Parent.callActionWithParameters(name,
+const callParentActionWithParameters = (name: string, parameters: string[]): boolean =>
+    Parent.callActionWithParameters(name,
         parameters != null && parameters.length > 0 ? stringifyForMarshalling(parameters[0]) : null,
         parameters != null && parameters.length > 1 ? stringifyForMarshalling(parameters[1]) : null);
-
-}

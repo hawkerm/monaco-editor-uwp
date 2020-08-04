@@ -29,17 +29,20 @@ var addAction = function (action: monaco.editor.IActionDescriptor) {
 };
 
 var addCommand = function (keybindingStr, handlerName, context) {
-    return editor.addCommand(parseInt(keybindingStr), function () {
-        let objs = [];
-        if (arguments) { // Use arguments as Monaco will pass each as it's own parameter, so we don't know how many that may be.
-            for (let i = 1; i < arguments.length; i++) { // Skip first one as that's the sender?
-                objs.push(arguments[i]);
+    return editor.addCommand(parseInt(keybindingStr),
+        function() {
+            let objs = [];
+            if (arguments
+            ) { // Use arguments as Monaco will pass each as it's own parameter, so we don't know how many that may be.
+                for (let i = 1; i < arguments.length; i++) { // Skip first one as that's the sender?
+                    objs.push(arguments[i]);
+                }
             }
-        }
 
-        return callParentActionWithParameters(handlerName, objs);
+            return callParentActionWithParameters(handlerName, objs);
+        },
         context
-    });
+    );
 };
 
 var createContext = function (context) {

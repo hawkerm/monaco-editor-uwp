@@ -8,7 +8,7 @@
 		<NoWarn>$(NoWarn);Uno0001</NoWarn>
 		<PackageId>Uno.Monaco.Editor</PackageId>
 		<LangVersion>8.0</LangVersion>
-		<Version>0.0.5</Version>
+		<Version>0.0.6</Version>
 		<!-- Ensures the .xr.xml files are generated in a proper layout folder --> 
 		<GenerateLibraryLayout>true</GenerateLibraryLayout>
 		<NuspecProperties>version=$(Version);configuration=$(Configuration)</NuspecProperties>
@@ -76,14 +76,14 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard'">
-		<PackageReference Include="Uno.UI" Version="2.4.4" />
-	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+		<PackageReference Include="Uno.UI" Version="33.0.0-dev.1359" />
+		<PackageReference Include="Uno.UI.Runtime.WebAssembly" Version="3.0.0-dev.1359" />
+		<PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.9.7">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 
-	<ItemGroup Condition="'$(IsWindows)' == 'true'">
-		<PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-		<Version>6.2.10</Version>
-	</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -98,26 +98,39 @@
 		<None Remove="monaco-editor\**\*.*" />
 		<TypeScriptCompile Remove="monaco-editor\**\*.*" />
 		<Content Include="CodeEditor\CodeEditor.html" />
-		<Content Include="ts-helpermethods-wasm\tsconfig.json" />
 		<Content Include="ts-helpermethods\tsconfig.json" />
 		<Content Include="monaco-editor\*.*" />
 		<Content Include="monaco-editor\min\**\*.*" />
 		<Content Include="ts-helpermethods\*.js">
 			<DependentUpon>%(Filename).ts</DependentUpon>
 		</Content>
-		<None Remove="ts-helpermethods-wasm\tsconfig.json" />
 		<None Remove="ts-helpermethods\tsconfig.json" />
+		<None Remove="WasmScripts\uno-monaco-helpers.js" />
 		<EmbeddedResource Include="Properties\MonacoEditorComponent.rd.xml" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard'">
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+		<Content Remove="ts-helpermethods\tsconfig.json" />
+		<Content Include="ts-helpermethods-wasm\tsconfig.json" />
+		<EmbeddedResource Include="WasmScripts\uno-monaco-helpers.js" />
+		<EmbeddedResource Include="monaco-editor\min\vs\loader.js">
+			<LogicalName>MonacoEditorComponent.WasmScripts.monaco-loader.js</LogicalName>
+		</EmbeddedResource>
+	</ItemGroup>
+
+
+	<ItemGroup Condition="'$(IsWindows)' == 'true'">
+		<PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
+			<Version>6.2.10</Version>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
 		<Compile Include="**\*.wasm.cs" /> 
-		<Content Include="ts-helpermethods\ts-helpermethods-wasm\*.js">
-			<DependentUpon>%(Filename).ts</DependentUpon>
-		</Content>
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(IsWindows)' == 'true'">
 		<Compile Include="**\*.uwp.cs" />
 	</ItemGroup>
+
 </Project>
