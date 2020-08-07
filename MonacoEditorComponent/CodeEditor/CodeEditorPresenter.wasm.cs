@@ -238,7 +238,6 @@ namespace Monaco
 			require(['vs/editor/editor.main'], function () {{
 
 
-                debugger;
 				Debug.log(""Grabbing Monaco Options"");
 
 				var opt = {{}};

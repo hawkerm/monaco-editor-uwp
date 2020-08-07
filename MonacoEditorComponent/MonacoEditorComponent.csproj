@@ -8,13 +8,17 @@
 		<NoWarn>$(NoWarn);Uno0001</NoWarn>
 		<PackageId>Uno.Monaco.Editor</PackageId>
 		<LangVersion>8.0</LangVersion>
-		<Version>0.0.6</Version>
+		<Version>0.1.0</Version>
 		<!-- Ensures the .xr.xml files are generated in a proper layout folder --> 
 		<GenerateLibraryLayout>true</GenerateLibraryLayout>
 		<NuspecProperties>version=$(Version);configuration=$(Configuration)</NuspecProperties>
 
 		<IsWindows>$(TargetFramework.StartsWith('uap'))</IsWindows>
 		<NuspecFile>$(MSBuildThisFileDirectory)$(MSBuildProjectName).nuspec</NuspecFile>
+		<Product>Uno.Monaco.Editor</Product>
+		<Description>Uno version of the MonacoEditor Component</Description>
+		<RepositoryUrl>https://github.com/unoplatform/uno.monaco-editor-uwp</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/unoplatform/uno.monaco-editor-uwp</PackageProjectUrl>
 </PropertyGroup>
 
 	<PropertyGroup Condition="'$(IsWindows)' == 'true'">
@@ -77,8 +81,8 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-		<PackageReference Include="Uno.UI" Version="33.0.0-dev.1359" />
-		<PackageReference Include="Uno.UI.Runtime.WebAssembly" Version="3.0.0-dev.1359" />
+		<PackageReference Include="Uno.UI" Version="3.0.0-dev.1388" />
+		<PackageReference Include="Uno.UI.Runtime.WebAssembly" Version="3.0.0-dev.1388" />
 		<PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.9.7">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
