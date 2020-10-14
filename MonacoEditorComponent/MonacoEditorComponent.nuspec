@@ -16,22 +16,21 @@
     <dependencies>
       <dependency id="Newtonsoft.Json" version="12.0.3"/>
       <dependency id="Nito.AsyncEx" version="5.0.0"/>
-      <dependency id="Microsoft.Web.WebView2" version="0.9.430"/>
-      <dependency id="Microsoft.WinUI" version="3.0.0-preview2.200713.0"/>
+      <dependency id="Microsoft.WinUI" version="3.0.0-development.201016.0-CI"/>
     </dependencies>
   </metadata>
   <files>
     <!-- WinMd and IntelliSense files -->
-    <file src="bin\Release\net5.0\MonacoEditorComponent.pri" target="lib\net5.0"/>
-    <file src="bin\Release\net5.0\MonacoEditorComponent.dll" target="lib\net5.0"/>
-    <file src="bin\Release\net5.0\MonacoEditorComponent.xml" target="lib\net5.0"/>
+    <file src="bin\Release\net5.0-windows10.0.18362.0\MonacoEditorComponent.pri" target="lib\net5.0-windows10.0.18362.0"/>
+    <file src="bin\Release\net5.0-windows10.0.18362.0\MonacoEditorComponent.dll" target="lib\net5.0-windows10.0.18362.0"/>
+    <file src="bin\Release\net5.0-windows10.0.18362.0\MonacoEditorComponent.xml" target="lib\net5.0-windows10.0.18362.0"/>
     <!-- XAML controls -->
-    <file src="Themes\Generic.xaml" target="lib\net5.0\MonacoEditorComponent\Themes"/>
+    <file src="Themes\Generic.xaml" target="lib\net5.0-windows10.0.18362.0\MonacoEditorComponent\Themes"/>
     <!-- Dependencies -->
-    <file src="CodeEditor\CodeEditor.html" target="lib\net5.0\MonacoEditorComponent\CodeEditor"/>
-    <file src="ts-helpermethods\*.js" target="lib\net5.0\MonacoEditorComponent\ts-helpermethods" />
-    <file src="monaco-editor\*" target="lib\net5.0\MonacoEditorComponent\monaco-editor"/>
-    <file src="monaco-editor\min\**\*.*" target="lib\net5.0\MonacoEditorComponent\monaco-editor\min"/>
+    <file src="CodeEditor\CodeEditor.html" target="lib\net5.0-windows10.0.18362.0\MonacoEditorComponent\CodeEditor"/>
+    <file src="ts-helpermethods\*.js" target="lib\net5.0-windows10.0.18362.0\MonacoEditorComponent\ts-helpermethods" />
+    <file src="monaco-editor\*" target="lib\net5.0-windows10.0.18362.0\MonacoEditorComponent\monaco-editor"/>
+    <file src="monaco-editor\min\**\*.*" target="lib\net5.0-windows10.0.18362.0\MonacoEditorComponent\monaco-editor\min"/>
     <!-- Docs -->
     <file src="..\README.md" target="content"/>
     <file src="..\changelog.md" target="content"/>

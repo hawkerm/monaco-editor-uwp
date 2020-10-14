@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Monaco.Editor
 {
@@ -48,6 +47,6 @@ namespace Monaco.Editor
         [JsonProperty("precondition", NullValueHandling = NullValueHandling.Ignore)]
         string Precondition { get; }
 
-        void Run(CodeEditor editor, [ReadOnlyArray]object[] args);
+        void Run(CodeEditor editor, object[] args);
     }
 }

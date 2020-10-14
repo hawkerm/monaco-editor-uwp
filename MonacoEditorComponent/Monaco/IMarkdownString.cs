@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation.Metadata;
 
 namespace Monaco
@@ -42,12 +41,12 @@ namespace Monaco
             return new IMarkdownString(svalue, isTrusted);
         }
 
-        public static IMarkdownString[] ToMarkdownString([ReadOnlyArray] this string[] values)
+        public static IMarkdownString[] ToMarkdownString(this string[] values)
         {
             return ToMarkdownString(values, false);
         }
 
-        public static IMarkdownString[] ToMarkdownString([ReadOnlyArray] this string[] values, bool isTrusted)
+        public static IMarkdownString[] ToMarkdownString(this string[] values, bool isTrusted)
         {
             return values.Select(value => new IMarkdownString(value, isTrusted)).ToArray();
         }

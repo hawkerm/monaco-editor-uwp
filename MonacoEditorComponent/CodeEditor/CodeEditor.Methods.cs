@@ -3,7 +3,6 @@ using Monaco.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 
 namespace Monaco
@@ -99,7 +98,7 @@ namespace Monaco
 
         public IAsyncAction AddActionAsync(IActionDescriptor action)
         {
-            var wref = new WinRT.WeakReference<CodeEditor>(this);
+            var wref = new WeakReference<CodeEditor>(this);
             _parentAccessor.RegisterAction("Action" + action.Id, new Action(() => { if (wref.TryGetTarget(out CodeEditor editor)) { action?.Run(editor, null); } }));
             return ExecuteScriptAsync("addAction", action).AsAsyncAction();
         }
@@ -146,7 +145,7 @@ namespace Monaco
             return SendScriptAsync<IEnumerable<Marker>>("monaco.editor.getModelMarkers();").AsAsyncOperation();
         }
 
-        public IAsyncAction SetModelMarkersAsync(string owner, [ReadOnlyArray] IMarkerData[] markers)
+        public IAsyncAction SetModelMarkersAsync(string owner, IMarkerData[] markers)
         {
             return SendScriptAsync("monaco.editor.setModelMarkers(model, " + JsonConvert.ToString(owner) + ", " + JsonConvert.SerializeObject(markers) + ");").AsAsyncAction();
         }
@@ -168,7 +167,7 @@ namespace Monaco
         /// </summary>
         /// <param name="newDecorations"></param>
         /// <returns></returns>
-        private IAsyncAction DeltaDecorationsHelperAsync([ReadOnlyArray] IModelDeltaDecoration[] newDecorations)
+        private IAsyncAction DeltaDecorationsHelperAsync(IModelDeltaDecoration[] newDecorations)
         {
             var newDecorationsAdjust = newDecorations ?? Array.Empty<IModelDeltaDecoration>();
 

@@ -1,7 +1,6 @@
 ﻿using Monaco.Editor;
 using System;
 using Monaco;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Microsoft.UI.Xaml.Controls;
 
 namespace MonacoEditorTestApp.Actions
@@ -16,7 +15,7 @@ namespace MonacoEditorTestApp.Actions
         public string Label => "Test Action";
         public string Precondition => null;
 
-        public async void Run(CodeEditor editor, [ReadOnlyArray]object[] args)
+        public async void Run(CodeEditor editor, object[] args)
         {
             var md = new ContentDialog
             {

@@ -1,4 +1,5 @@
-﻿using Windows.Foundation.Metadata;
+﻿using System;
+using Windows.Foundation.Metadata;
 
 namespace Monaco.Helpers
 {
@@ -20,11 +21,11 @@ namespace Monaco.Helpers
     [AllowForWeb]
     public sealed class KeyboardListener
     {
-        private readonly WinRT.WeakReference<CodeEditor> parent;
+        private readonly WeakReference<CodeEditor> parent;
 
         public KeyboardListener(CodeEditor parent) // TODO: Make Interface for event usage
         {
-            this.parent = new WinRT.WeakReference<CodeEditor>(parent);
+            this.parent = new WeakReference<CodeEditor>(parent);
         }
 
         /// <summary>

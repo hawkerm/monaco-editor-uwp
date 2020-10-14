@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Monaco.Languages
 {
@@ -23,9 +22,9 @@ namespace Monaco.Languages
         [JsonProperty("range", NullValueHandling = NullValueHandling.Ignore)]
         public IRange Range { get; set; }
 
-        public Hover([ReadOnlyArray] string[] contents, IRange range) : this(contents, range, false) { }
+        public Hover(string[] contents, IRange range) : this(contents, range, false) { }
         
-        public Hover([ReadOnlyArray] string[] contents, IRange range, bool isTrusted)
+        public Hover(string[] contents, IRange range, bool isTrusted)
         {
             Contents = contents.ToMarkdownString(isTrusted);
             Range = range;

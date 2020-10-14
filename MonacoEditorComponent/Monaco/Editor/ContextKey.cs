@@ -1,11 +1,12 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace Monaco.Editor
 {
     public sealed class ContextKey : IContextKey
     {
         [JsonIgnore]
-        private readonly WinRT.WeakReference<CodeEditor> _editor;
+        private readonly WeakReference<CodeEditor> _editor;
 
         [JsonProperty("key")]
         public string Key { get; private set; }
@@ -16,7 +17,7 @@ namespace Monaco.Editor
 
         internal ContextKey(CodeEditor editor, string key, bool defaultValue)
         {
-            _editor = new WinRT.WeakReference<CodeEditor>(editor);
+            _editor = new WeakReference<CodeEditor>(editor);
 
             Key = key;
             DefaultValue = defaultValue;
