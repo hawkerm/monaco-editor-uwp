@@ -1,5 +1,8 @@
 ﻿using Newtonsoft.Json;
+
+#if !NETSTANDARD2_0
 using System.Runtime.InteropServices.WindowsRuntime;
+#endif
 
 namespace Monaco.Editor
 {

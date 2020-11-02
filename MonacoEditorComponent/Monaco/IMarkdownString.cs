@@ -1,8 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation.Metadata;
+
+#if !NETSTANDARD2_0
+using System.Runtime.InteropServices.WindowsRuntime;
+#else
+using ReadOnlyArray = Monaco.Helpers.Stubs.ReadOnlyArrayAttribute;
+#endif
 
 namespace Monaco
 {

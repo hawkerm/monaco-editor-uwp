@@ -2,10 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Metadata;
+
+#if !NETSTANDARD2_0
+using System.Runtime.InteropServices.WindowsRuntime;
+#endif
 
 namespace Monaco.Helpers
 {
