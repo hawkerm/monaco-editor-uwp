@@ -8,6 +8,8 @@ using Windows.Foundation.Metadata;
 
 #if !NETSTANDARD2_0
 using System.Runtime.InteropServices.WindowsRuntime;
+#else
+using ReadOnlyArrayAttribute = Monaco.Helpers.Stubs.ReadOnlyArrayAttribute;
 #endif
 
 namespace Monaco.Helpers
