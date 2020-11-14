@@ -12,6 +12,8 @@
 		<!-- Ensures the .xr.xml files are generated in a proper layout folder --> 
 		<GenerateLibraryLayout>true</GenerateLibraryLayout>
 		<NuspecProperties>version=$(Version);configuration=$(Configuration)</NuspecProperties>
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>portable</DebugType>
 
 		<IsWindows>$(TargetFramework.StartsWith('uap'))</IsWindows>
 		<NuspecFile>$(MSBuildThisFileDirectory)$(MSBuildProjectName).nuspec</NuspecFile>
@@ -34,6 +36,7 @@
 		<FileAlignment>512</FileAlignment>
 		<AllowCrossPlatformRetargeting>false</AllowCrossPlatformRetargeting>
 		<DefineConstants>$(DefineConstants);NETFX_CORE;WINDOWS_UWP</DefineConstants>
+		<IncludeSymbols>True</IncludeSymbols>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -51,19 +54,7 @@
 		<MonoRuntimeDebuggerEnabled>true</MonoRuntimeDebuggerEnabled>
 	</PropertyGroup>
 
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<PlatformTarget>AnyCPU</PlatformTarget>
-		<DebugSymbols>true</DebugSymbols>
-		<DebugType>full</DebugType>
-		<Optimize>false</Optimize>
-		<OutputPath>bin\Debug\</OutputPath>
-		<ErrorReport>prompt</ErrorReport>
-		<WarningLevel>4</WarningLevel>
-	</PropertyGroup>
-
 	<ItemGroup>
-
-
 		<PackageReference Include="Microsoft.TypeScript.MSBuild" Condition="'$(IsWindows)' == 'true'">
 			<Version>3.8.3</Version>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -81,8 +72,8 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-		<PackageReference Include="Uno.UI" Version="3.0.0-dev.1388" />
-		<PackageReference Include="Uno.UI.Runtime.WebAssembly" Version="3.0.0-dev.1388" />
+		<PackageReference Include="Uno.UI" Version="3.1.6" />
+		<PackageReference Include="Uno.UI.Runtime.WebAssembly" Version="3.1.6" />
 		<PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.9.7">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -136,5 +127,12 @@
 	<ItemGroup Condition="'$(IsWindows)' == 'true'">
 		<Compile Include="**\*.uwp.cs" />
 	</ItemGroup>
+
+	<Target Name="RemoveWinMDPDB" AfterTargets="ExportWindowsMDFile">
+		<ItemGroup>
+			<!-- The PDB file for the Monaco.WinMD is not generated, and fails during packing -->
+			<WinMDExpArtifacts Remove="$(WinMDExpOutputPdb)" />
+		</ItemGroup>
+	</Target>
 
 </Project>

@@ -3,8 +3,13 @@ using Monaco.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
+
+#if !NETSTANDARD2_0
+using System.Runtime.InteropServices.WindowsRuntime;
+#else
+using ReadOnlyArrayAttribute = Monaco.Helpers.Stubs.ReadOnlyArrayAttribute;
+#endif
 
 namespace Monaco
 {
@@ -20,7 +25,7 @@ namespace Monaco
     /// </summary>
     public partial class CodeEditor
     {
-        #region Reveal Methods
+#region Reveal Methods
         public IAsyncAction RevealLineAsync(uint lineNumber)
         {
             return SendScriptAsync("editor.revealLine(" + lineNumber + ")").AsAsyncAction();
@@ -95,7 +100,7 @@ namespace Monaco
         {
             return SendScriptAsync("editor.revealRangeInCenterIfOutsideViewport(JSON.parse('" + range.ToJson() + "'))").AsAsyncAction();
         }
-        #endregion
+#endregion
 
         public IAsyncAction AddActionAsync(IActionDescriptor action)
         {
