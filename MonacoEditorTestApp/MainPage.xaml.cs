@@ -14,6 +14,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.System;
 using System.IO;
 using Windows.ApplicationModel;
+using Microsoft.Web.WebView2.Core;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -43,7 +44,7 @@ namespace MonacoEditorTestApp
             options = Editor.Options;
             Editor.Loading += Editor_Loading;
             Editor.Loaded += Editor_Loaded;
-            //Editor.OpenLinkRequested += Editor_OpenLinkRequest;
+            Editor.OpenLinkRequested += Editor_OpenLinkRequest;
 
             Editor.InternalException += Editor_InternalException;
         }
@@ -58,7 +59,7 @@ namespace MonacoEditorTestApp
         {
             if (string.IsNullOrWhiteSpace(CodeContent))
             {
-                CodeContent = File.ReadAllText(Path.Combine(Package.Current.InstalledLocation.Path, @"MonacoEditorTestApp/Content.txt"));
+                CodeContent = File.ReadAllText(Path.Combine(Package.Current.InstalledLocation.Path, "Content.txt"));
 
                 ButtonHighlightRange_Click(null, null);
             }
@@ -182,13 +183,13 @@ namespace MonacoEditorTestApp
             // Ready for Display
         }
 
-        //private void Editor_OpenLinkRequest(WebView2 sender, WebView2NewWindowRequestedEventArgs args)
-        //{
-        //    if (this.AllowWeb.IsChecked == false)
-        //    {
-        //        args.Handled = true;
-        //    }
-        //}
+        private void Editor_OpenLinkRequest(CoreWebView2 sender, CoreWebView2NewWindowRequestedEventArgs args)
+        {
+            if (this.AllowWeb.IsChecked == false)
+            {
+                args.Handled = true;
+            }
+        }
 
         private void ButtonSetText_Click(object sender, RoutedEventArgs e)
         {
@@ -420,7 +421,7 @@ namespace MonacoEditorTestApp
 
                 Editor.Loaded -= Editor_Loaded;
                 Editor.Loading -= Editor_Loading;
-                //Editor.OpenLinkRequested -= Editor_OpenLinkRequest;
+                Editor.OpenLinkRequested -= Editor_OpenLinkRequest;
                 Editor.InternalException -= Editor_InternalException;
 
                 RootGrid.Children.Remove(Editor);
@@ -445,7 +446,7 @@ namespace MonacoEditorTestApp
 
                 Editor.Loading += Editor_Loading;
                 Editor.Loaded += Editor_Loaded;
-                //Editor.OpenLinkRequested += Editor_OpenLinkRequest;
+                Editor.OpenLinkRequested += Editor_OpenLinkRequest;
                 Editor.InternalException += Editor_InternalException;
 
                 Grid.SetColumn(Editor, 1);

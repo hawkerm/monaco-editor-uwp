@@ -9,6 +9,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Newtonsoft.Json.Linq;
+using Microsoft.Web.WebView2.Core;
 using System.Threading.Tasks;
 
 namespace Monaco
@@ -30,7 +31,7 @@ namespace Monaco
         /// <summary>
         /// Called when a link is Ctrl+Clicked on in the editor, set Handled to true to prevent opening.
         /// </summary>
-        //public event TypedEventHandler<WebView2, WebView2NewWindowRequestedEventArgs> OpenLinkRequested;
+        public event TypedEventHandler<CoreWebView2, CoreWebView2NewWindowRequestedEventArgs> OpenLinkRequested;
 
         /// <summary>
         /// Called when an internal exception is encountered while executing a command. (for testing/reporting issues)
@@ -44,13 +45,13 @@ namespace Monaco
 
         private ThemeListener _themeListener;
 
-        //private void WebView_DOMContentLoaded(WebView sender, WebViewDOMContentLoadedEventArgs args)
-        //{
-        //    #if DEBUG
-        //    Debug.WriteLine("DOM Content Loaded");
-        //    #endif
-        //    _initialized = true;
-        //}
+        private void WebView_DOMContentLoaded(CoreWebView2 sender, CoreWebView2DOMContentLoadedEventArgs args)
+        {
+#if DEBUG
+            Debug.WriteLine("DOM Content Loaded");
+#endif
+            _initialized = true;
+        }
 
         private async void WebView_NavigationCompleted(WebView2 sender, WebView2NavigationCompletedEventArgs args)
         {
@@ -74,8 +75,6 @@ namespace Monaco
 
         private void WebView_NavigationStarting(WebView2 sender, WebView2NavigationStartingEventArgs args)
         {
-            _initialized = true;
-
 #if DEBUG
             Debug.WriteLine("Navigation Starting");
 #endif
@@ -220,11 +219,11 @@ namespace Monaco
             Loading?.Invoke(this, new RoutedEventArgs());
         }
 
-        //private void WebView_NewWindowRequested(WebView2 sender, WebView2NewWindowRequestedEventArgs args)
-        //{
-        //    // TODO: Should probably create own event args here as we don't want to expose the referrer to our internal page?
-        //    OpenLinkRequested?.Invoke(sender, args);
-        //}
+        private void WebView_NewWindowRequested(CoreWebView2 sender, CoreWebView2NewWindowRequestedEventArgs args)
+        {
+            // TODO: Should probably create own event args here as we don't want to expose the referrer to our internal page?
+            OpenLinkRequested?.Invoke(sender, args);
+        }
 
         private async void RequestedTheme_PropertyChanged(DependencyObject obj, DependencyProperty property)
         {

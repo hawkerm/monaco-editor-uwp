@@ -94,9 +94,11 @@ namespace Monaco
                 Decorations.VectorChanged += Decorations_VectorChanged;
                 Markers.VectorChanged += Markers_VectorChanged;
 
-                //_view.NewWindowRequested += WebView_NewWindowRequested;
-
-                _initialized = true;
+                if (_view.CoreWebView2 != null)
+                {
+                    _view.CoreWebView2.NewWindowRequested += WebView_NewWindowRequested;
+                    _view.CoreWebView2.DOMContentLoaded += WebView_DOMContentLoaded;
+                }
 
                 Loading?.Invoke(this, new RoutedEventArgs());
 
@@ -115,9 +117,13 @@ namespace Monaco
             {
                 _view.CoreProcessFailed -= WebView_CoreProcessFailed;
                 _view.NavigationStarting -= WebView_NavigationStarting;
-                //_view.DOMContentLoaded -= WebView_DOMContentLoaded;
                 _view.NavigationCompleted -= WebView_NavigationCompleted;
-                //_view.NewWindowRequested -= WebView_NewWindowRequested;
+                _view.CoreWebView2Ready -= WebView_CoreWebView2Ready;
+                if (_view.CoreWebView2 != null)
+                {
+                    _view.CoreWebView2.NewWindowRequested -= WebView_NewWindowRequested;
+                    _view.CoreWebView2.DOMContentLoaded -= WebView_DOMContentLoaded;
+                }
                 _view.WebMessageReceived -= WebView_WebMessageReceived;
                 _initialized = false;
             }
@@ -132,7 +138,7 @@ namespace Monaco
                 _themeListener.ThemeChanged -= ThemeListener_ThemeChanged;
             }
             _themeListener = null;
-            
+
             UnregisterPropertyChangedCallback(RequestedThemeProperty, _themeToken);
             _keyboardListener = null;
             _model = null;
@@ -144,9 +150,13 @@ namespace Monaco
             {
                 _view.CoreProcessFailed -= WebView_CoreProcessFailed;
                 _view.NavigationStarting -= WebView_NavigationStarting;
-                //_view.DOMContentLoaded -= WebView_DOMContentLoaded;
+                if (_view.CoreWebView2 != null)
+                {
+                    _view.CoreWebView2.NewWindowRequested -= WebView_NewWindowRequested;
+                    _view.CoreWebView2.DOMContentLoaded -= WebView_DOMContentLoaded;
+                }
                 _view.NavigationCompleted -= WebView_NavigationCompleted;
-                //_view.NewWindowRequested -= WebView_NewWindowRequested;
+                _view.CoreWebView2Ready -= WebView_CoreWebView2Ready;
                 _view.WebMessageReceived -= WebView_WebMessageReceived;
                 _initialized = false;
             }
@@ -157,15 +167,23 @@ namespace Monaco
             {
                 _view.CoreProcessFailed += WebView_CoreProcessFailed;
                 _view.NavigationStarting += WebView_NavigationStarting;
-                //_view.DOMContentLoaded += WebView_DOMContentLoaded;
                 _view.NavigationCompleted += WebView_NavigationCompleted;
-                //_view.NewWindowRequested += WebView_NewWindowRequested;
+                _view.CoreWebView2Ready += WebView_CoreWebView2Ready;
                 _view.WebMessageReceived += WebView_WebMessageReceived;
 
                 SetWebViewSource();
             }
 
             base.OnApplyTemplate();
+        }
+
+        private void WebView_CoreWebView2Ready(WebView2 sender, WebView2CoreWebView2ReadyEventArgs args)
+        {
+            _view.CoreWebView2.DOMContentLoaded -= WebView_DOMContentLoaded;
+            _view.CoreWebView2.NewWindowRequested -= WebView_NewWindowRequested;
+
+            _view.CoreWebView2.DOMContentLoaded += WebView_DOMContentLoaded;
+            _view.CoreWebView2.NewWindowRequested += WebView_NewWindowRequested;
         }
 
         private void SetWebViewSource()

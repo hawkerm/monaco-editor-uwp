@@ -16,7 +16,7 @@
     <dependencies>
       <dependency id="Newtonsoft.Json" version="12.0.3"/>
       <dependency id="Nito.AsyncEx" version="5.0.0"/>
-      <dependency id="Microsoft.WinUI" version="3.0.0-development.201016.0-CI"/>
+      <dependency id="Microsoft.WinUI" version="3.0.0-preview3.201113.0"/>
     </dependencies>
   </metadata>
   <files>

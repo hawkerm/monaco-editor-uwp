@@ -76,7 +76,7 @@ namespace Monaco.Extensions
             var returnstring = await _view.ExecuteScriptAsync(script);
             System.Diagnostics.Debug.WriteLine("AFTER");
 
-            string s = (string)JToken.Parse(returnstring);
+            var s = JToken.Parse(returnstring).ToString();
             if (!string.IsNullOrEmpty(s))
             {
                 JToken resultToken = JToken.Parse(s);
@@ -101,7 +101,14 @@ namespace Monaco.Extensions
             
             if (returnstring != null && returnstring != "null")
             {
-                return JsonConvert.DeserializeObject<T>(JsonConvert.DeserializeObject<string>(returnstring));
+                if (returnstring.StartsWith('"'))
+                {
+                    return JsonConvert.DeserializeObject<T>(JsonConvert.DeserializeObject<string>(returnstring));
+                }
+                else
+                {
+                    return JsonConvert.DeserializeObject<T>(returnstring);
+                }
             }
 
             return default;
