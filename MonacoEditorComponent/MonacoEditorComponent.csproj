@@ -8,10 +8,9 @@
 		<NoWarn>$(NoWarn);Uno0001</NoWarn>
 		<PackageId>Uno.Monaco.Editor</PackageId>
 		<LangVersion>8.0</LangVersion>
-		<Version>0.1.0</Version>
 		<!-- Ensures the .xr.xml files are generated in a proper layout folder --> 
 		<GenerateLibraryLayout>true</GenerateLibraryLayout>
-		<NuspecProperties>version=$(Version);configuration=$(Configuration)</NuspecProperties>
+		<NuspecProperties>version=$(PackageVersion);configuration=$(Configuration)</NuspecProperties>
 		<DebugSymbols>true</DebugSymbols>
 		<DebugType>portable</DebugType>
 
@@ -21,6 +20,7 @@
 		<Description>Uno version of the MonacoEditor Component</Description>
 		<RepositoryUrl>https://github.com/unoplatform/uno.monaco-editor-uwp</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/unoplatform/uno.monaco-editor-uwp</PackageProjectUrl>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 </PropertyGroup>
 
 	<PropertyGroup Condition="'$(IsWindows)' == 'true'">
