@@ -5,15 +5,12 @@ jobs:
     vmImage: 'windows-2019'
 
   steps:
-  - task: GitVersion@5
-    inputs:
-      updateAssemblyInfo: false
-      configFilePath: gitversion.yml
+  - template: build/templates/gitversion.yml
 
   - task: MSBuild@1
     inputs:
       solution: MonacoEditorComponent.sln
-      msbuildArguments: /r /p:Configuration=Release "/p:PackageOutputPath=$(build.artifactstagingdirectory)\nuget" "/p:PackageVersion=%GITVERSION_FullSemVer%" "/p:InformationalVersion=%GITVERSION_InformationalVersion%"  /detailedsummary
+      msbuildArguments: /r /p:Configuration=Release "/p:PackageOutputPath=$(build.artifactstagingdirectory)\nuget" "/p:PackageVersion=$(GITVERSION.FullSemVer)" "/p:InformationalVersion=$(GITVERSION.InformationalVersion)"  /detailedsummary
 
   - task: PowerShell@2
     displayName: Authenticode Sign Packages
@@ -26,15 +23,6 @@ jobs:
       SignPackageDescription: "uno.monaco-editor-uwp"
       ArtifactDirectory: $(build.artifactstagingdirectory)
     condition: and(succeeded(), not(eq(variables['build.reason'], 'PullRequest')), not(eq(variables['SignClientSecret'], '')), not(eq(variables['SignClientUser'], '')))
- 
-  # - task: CopyFiles@2
-  #   inputs:
-  #     SourceFolder: $(build.sourcesdirectory)/src/WasmWebSocketsSample/WasmWebSocketsSample.Wasm/bin/Release/netstandard2.0/dist
-  #     Contents: "**/*.*"
-  #     TargetFolder: $(build.artifactstagingdirectory)\wasm
-  #     CleanTargetFolder: false
-  #     OverWrite: false
-  #     flattenFolders: false
 
   - task: PublishBuildArtifacts@1
     inputs:
