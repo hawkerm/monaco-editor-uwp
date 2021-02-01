@@ -45,15 +45,18 @@ namespace Monaco
 
         private ThemeListener _themeListener;
 
+        private TaskCompletionSource<ulong> _initializedTcs;
+
         private void WebView_DOMContentLoaded(CoreWebView2 sender, CoreWebView2DOMContentLoadedEventArgs args)
         {
 #if DEBUG
             Debug.WriteLine("DOM Content Loaded");
 #endif
             _initialized = true;
+            _initializedTcs?.SetResult(args.NavigationId);
         }
 
-        private async void WebView_NavigationCompleted(WebView2 sender, WebView2NavigationCompletedEventArgs args)
+        private async void WebView_NavigationCompleted(WebView2 sender, CoreWebView2NavigationCompletedEventArgs args)
         {
             IsEditorLoaded = true;
 
@@ -61,7 +64,9 @@ namespace Monaco
             await SendScriptAsync("editor.focus();");
 
             // If we're supposed to have focus, make sure we try and refocus on our now loaded webview.
+#pragma warning disable CS0252 // Possible unintended reference comparison; left hand side needs cast
             if (FocusManager.GetFocusedElement() == this)
+#pragma warning restore CS0252 // Possible unintended reference comparison; left hand side needs cast
             {
                 _ = FocusManager.TryFocusAsync(_view, FocusState.Programmatic);
             }
@@ -73,7 +78,7 @@ namespace Monaco
         private KeyboardListener _keyboardListener;
         private long _themeToken;
 
-        private void WebView_NavigationStarting(WebView2 sender, WebView2NavigationStartingEventArgs args)
+        private void WebView_NavigationStarting(WebView2 sender, CoreWebView2NavigationStartingEventArgs args)
         {
 #if DEBUG
             Debug.WriteLine("Navigation Starting");
@@ -96,9 +101,9 @@ namespace Monaco
             AddWebAllowedObject("Keyboard", _keyboardListener);
         }
 
-        private async void WebView_CoreProcessFailed(WebView2 sender, WebView2ProcessFailedEventArgs e)
+        private async void WebView_CoreProcessFailed(WebView2 sender, CoreWebView2ProcessFailedEventArgs e)
         {
-            if (e.ProcessFailedKind == WebView2ProcessFailedKind.BrowserProcessExited)
+            if (e.ProcessFailedKind == CoreWebView2ProcessFailedKind.BrowserProcessExited)
             {
                 Debug.WriteLine("WARN: WebView Browser Process Exited! Navigating again.");
                 await Task.Delay(1000);
@@ -113,13 +118,13 @@ namespace Monaco
             _allowedObject.Add(name, pObject);
         }
 
-        private async void WebView_WebMessageReceived(WebView2 sender, WebView2WebMessageReceivedEventArgs e)
+        private async void WebView_WebMessageReceived(WebView2 sender, CoreWebView2WebMessageReceivedEventArgs e)
         {
-            Debug.WriteLine(e.WebMessageAsString);
+            Debug.WriteLine(e.TryGetWebMessageAsString());
             
             try
             {
-                JObject result = JObject.Parse(e.WebMessageAsString);
+                JObject result = JObject.Parse(e.TryGetWebMessageAsString());
 
                 if (result.TryGetValue("class", out var name) &&
                     _allowedObject.TryGetValue(name.Value<string>(), out var obj))
@@ -225,7 +230,7 @@ namespace Monaco
             OpenLinkRequested?.Invoke(sender, args);
         }
 
-        private async void RequestedTheme_PropertyChanged(DependencyObject obj, DependencyProperty property)
+        private void RequestedTheme_PropertyChanged(DependencyObject obj, DependencyProperty property)
         {
             var editor = obj as CodeEditor;
             var theme = editor.RequestedTheme;
@@ -240,17 +245,17 @@ namespace Monaco
                 tstr = theme.ToString();
             }
 
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+            DispatcherQueue.TryEnqueue(Microsoft.System.DispatcherQueuePriority.Normal, async () =>
             {
                 await ExecuteScriptAsync("changeTheme", new string[] { tstr, _themeListener.IsHighContrast.ToString() });
             });
         }
 
-        private async void ThemeListener_ThemeChanged(ThemeListener sender)
+        private void ThemeListener_ThemeChanged(ThemeListener sender)
         {
             if (RequestedTheme == ElementTheme.Default)
             {
-                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                DispatcherQueue.TryEnqueue(Microsoft.System.DispatcherQueuePriority.Normal, async () =>
                 {
                     await ExecuteScriptAsync("changeTheme", args: new string[] { sender.CurrentTheme.ToString(), sender.IsHighContrast.ToString() });
                 });
@@ -268,7 +273,9 @@ namespace Monaco
         {
             base.OnGotFocus(e);
 
+#pragma warning disable CS0252 // Possible unintended reference comparison; left hand side needs cast
             if (_view != null && FocusManager.GetFocusedElement() == this)
+#pragma warning restore CS0252 // Possible unintended reference comparison; left hand side needs cast
             {
                 // Forward Focus onto our inner WebView
                 _ = FocusManager.TryFocusAsync(_view, FocusState.Programmatic);

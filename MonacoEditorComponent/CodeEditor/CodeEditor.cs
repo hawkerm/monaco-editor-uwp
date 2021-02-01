@@ -57,7 +57,6 @@ namespace Monaco
             // Initialize this here so property changed event will fire and register collection changed event.
             Decorations = new ObservableVector<IModelDeltaDecoration>();
             Markers = new ObservableVector<IMarkerData>();
-            _model = new ModelHelper(this);
 
             base.Loaded += CodeEditor_Loaded;
             Unloaded += CodeEditor_Unloaded;
@@ -82,7 +81,7 @@ namespace Monaco
             await ExecuteScriptAsync("updateOptions", options);
         }
 
-        private void CodeEditor_Loaded(object sender, RoutedEventArgs e)
+        private async void CodeEditor_Loaded(object sender, RoutedEventArgs e)
         {
             // Do this the 2nd time around.
             if (_model == null && _view != null)
@@ -94,11 +93,19 @@ namespace Monaco
                 Decorations.VectorChanged += Decorations_VectorChanged;
                 Markers.VectorChanged += Markers_VectorChanged;
 
+                await _view.EnsureCoreWebView2Async();
+
                 if (_view.CoreWebView2 != null)
                 {
+                    _initializedTcs = new TaskCompletionSource<ulong>();
                     _view.CoreWebView2.NewWindowRequested += WebView_NewWindowRequested;
                     _view.CoreWebView2.DOMContentLoaded += WebView_DOMContentLoaded;
                 }
+
+                SetWebViewSource();
+
+                await _initializedTcs.Task;
+                _initializedTcs = null;
 
                 Loading?.Invoke(this, new RoutedEventArgs());
 
@@ -118,7 +125,7 @@ namespace Monaco
                 _view.CoreProcessFailed -= WebView_CoreProcessFailed;
                 _view.NavigationStarting -= WebView_NavigationStarting;
                 _view.NavigationCompleted -= WebView_NavigationCompleted;
-                _view.CoreWebView2Ready -= WebView_CoreWebView2Ready;
+                _view.CoreWebView2Initialized -= WebView_CoreWebView2Initialized;
                 if (_view.CoreWebView2 != null)
                 {
                     _view.CoreWebView2.NewWindowRequested -= WebView_NewWindowRequested;
@@ -156,7 +163,7 @@ namespace Monaco
                     _view.CoreWebView2.DOMContentLoaded -= WebView_DOMContentLoaded;
                 }
                 _view.NavigationCompleted -= WebView_NavigationCompleted;
-                _view.CoreWebView2Ready -= WebView_CoreWebView2Ready;
+                _view.CoreWebView2Initialized -= WebView_CoreWebView2Initialized;
                 _view.WebMessageReceived -= WebView_WebMessageReceived;
                 _initialized = false;
             }
@@ -168,16 +175,14 @@ namespace Monaco
                 _view.CoreProcessFailed += WebView_CoreProcessFailed;
                 _view.NavigationStarting += WebView_NavigationStarting;
                 _view.NavigationCompleted += WebView_NavigationCompleted;
-                _view.CoreWebView2Ready += WebView_CoreWebView2Ready;
+                _view.CoreWebView2Initialized += WebView_CoreWebView2Initialized;
                 _view.WebMessageReceived += WebView_WebMessageReceived;
-
-                SetWebViewSource();
             }
 
             base.OnApplyTemplate();
         }
 
-        private void WebView_CoreWebView2Ready(WebView2 sender, WebView2CoreWebView2ReadyEventArgs args)
+        private void WebView_CoreWebView2Initialized(WebView2 sender, CoreWebView2InitializedEventArgs args)
         {
             _view.CoreWebView2.DOMContentLoaded -= WebView_DOMContentLoaded;
             _view.CoreWebView2.NewWindowRequested -= WebView_NewWindowRequested;

@@ -4,6 +4,7 @@ using Windows.Foundation.Metadata;
 using Windows.UI.ViewManagement;
 using Microsoft.UI.Xaml;
 using Microsoft.System;
+using Windows.UI.Core;
 
 namespace Monaco.Helpers
 {
@@ -35,23 +36,23 @@ namespace Monaco.Helpers
 
             DispatcherQueue = dispatcherQueue ?? DispatcherQueue.GetForCurrentThread();
 
-            _accessible.HighContrastChanged += _accessible_HighContrastChanged;
-            _settings.ColorValuesChanged += _settings_ColorValuesChanged;
-
             // Fallback in case either of the above fail, we'll check when we get activated next.
             if (Window.Current != null)
             {
+                _accessible.HighContrastChanged += _accessible_HighContrastChanged;
+                _settings.ColorValuesChanged += _settings_ColorValuesChanged;
+
                 Window.Current.CoreWindow.Activated += CoreWindow_Activated;
             }
         }
 
         ~ThemeListener()
         {
-            _accessible.HighContrastChanged -= _accessible_HighContrastChanged;
-            _settings.ColorValuesChanged -= _settings_ColorValuesChanged;
-
             if (Window.Current != null)
             {
+                _accessible.HighContrastChanged -= _accessible_HighContrastChanged;
+                _settings.ColorValuesChanged -= _settings_ColorValuesChanged;
+
                 Window.Current.CoreWindow.Activated -= CoreWindow_Activated;
             }
         }
@@ -66,10 +67,10 @@ namespace Monaco.Helpers
         }
 
         // Note: This can get called multiple times during HighContrast switch, do we care?
-        private async void _settings_ColorValuesChanged(UISettings sender, object args)
+        private void _settings_ColorValuesChanged(UISettings sender, object args)
         {
             // Getting called off thread, so we need to dispatch to request value.
-            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Normal, () =>
             {
                 // TODO: This doesn't stop the multiple calls if we're in our faked 'White' HighContrast Mode below.
                 if (CurrentTheme != Application.Current.RequestedTheme ||
@@ -81,7 +82,7 @@ namespace Monaco.Helpers
 
                     UpdateProperties();
                 }
-            });            
+            });
         }
 
         private void CoreWindow_Activated(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.WindowActivatedEventArgs args)
