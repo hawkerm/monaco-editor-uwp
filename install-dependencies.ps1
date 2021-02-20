@@ -2,7 +2,7 @@
 # install dependencies into the project directory before building.
 
 # Reference to Monaco Version to Use in the Package
-$monaco_version = "0.21.2"
+$monaco_version = "0.22.3"
 
 # ------------------------
 $monaco_tgz_url = "https://registry.npmjs.org/monaco-editor/-/monaco-editor-$monaco_version.tgz"
