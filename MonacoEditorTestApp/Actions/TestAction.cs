@@ -1,8 +1,7 @@
 ﻿using Monaco.Editor;
 using System;
 using Monaco;
-using Windows.UI.Popups;
-using System.Runtime.InteropServices.WindowsRuntime;
+using Microsoft.UI.Xaml.Controls;
 
 namespace MonacoEditorTestApp.Actions
 {
@@ -16,12 +15,18 @@ namespace MonacoEditorTestApp.Actions
         public string Label => "Test Action";
         public string Precondition => null;
 
-        public async void Run(CodeEditor editor, [ReadOnlyArray]object[] args)
+        public async void Run(CodeEditor editor, object[] args)
         {
-            var md = new MessageDialog("You have selected text:\n\n" + editor.SelectedText);
+            var md = new ContentDialog
+            {
+                Title = "Monaco Editor Test App",
+                Content = "You have selected text:\n\n" + editor.SelectedText,
+                CloseButtonText = "Ok"
+            };
+            md.XamlRoot = editor.XamlRoot;
             await md.ShowAsync();
 
-            editor.Focus(Windows.UI.Xaml.FocusState.Programmatic);
+            editor.Focus(Microsoft.UI.Xaml.FocusState.Programmatic);
         }
     }
 }

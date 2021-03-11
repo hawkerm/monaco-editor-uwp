@@ -3,7 +3,6 @@ using Monaco.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 
 namespace Monaco
@@ -101,7 +100,7 @@ namespace Monaco
         {
             var wref = new WeakReference<CodeEditor>(this);
             _parentAccessor.RegisterAction("Action" + action.Id, new Action(() => { if (wref.TryGetTarget(out CodeEditor editor)) { action?.Run(editor, null); } }));
-            return InvokeScriptAsync("addAction", action).AsAsyncAction();
+            return ExecuteScriptAsync("addAction", action).AsAsyncAction();
         }
 
         /// <summary>
@@ -109,9 +108,9 @@ namespace Monaco
         /// </summary>
         /// <param name="script">Script to invoke</param>
         /// <returns>An async operation result to string</returns>
-        public IAsyncOperation<string> InvokeScriptAsync(string script)
+        public IAsyncOperation<string> ExecuteScriptAsync(string script)
         {
-            return _view.InvokeScriptAsync("eval", new[] { script });
+            return _view.ExecuteScriptAsync(script);
         }
 
         public IAsyncOperation<string> AddCommandAsync(int keybinding, CommandHandler handler)
@@ -123,14 +122,14 @@ namespace Monaco
         {
             var name = "Command" + keybinding;
             _parentAccessor.RegisterAction(name, new Action(() => { handler?.Invoke(); }));
-            return InvokeScriptAsync<string>("addCommand", new object[] { keybinding, name, context }).AsAsyncOperation();
+            return ExecuteScriptAsync<string>("addCommand", new object[] { keybinding, name, context }).AsAsyncOperation();
         }
 
         public IAsyncOperation<ContextKey> CreateContextKeyAsync(string key, bool defaultValue)
         {
             var ck = new ContextKey(this, key, defaultValue);
 
-            return InvokeScriptAsync("createContext", ck).ContinueWith((noop) =>
+            return ExecuteScriptAsync("createContext", ck).ContinueWith((noop) =>
             {
                 return ck;
             }).AsAsyncOperation();
@@ -146,7 +145,7 @@ namespace Monaco
             return SendScriptAsync<IEnumerable<Marker>>("monaco.editor.getModelMarkers();").AsAsyncOperation();
         }
 
-        public IAsyncAction SetModelMarkersAsync(string owner, [ReadOnlyArray] IMarkerData[] markers)
+        public IAsyncAction SetModelMarkersAsync(string owner, IMarkerData[] markers)
         {
             return SendScriptAsync("monaco.editor.setModelMarkers(model, " + JsonConvert.ToString(owner) + ", " + JsonConvert.SerializeObject(markers) + ");").AsAsyncAction();
         }
@@ -168,16 +167,16 @@ namespace Monaco
         /// </summary>
         /// <param name="newDecorations"></param>
         /// <returns></returns>
-        private IAsyncAction DeltaDecorationsHelperAsync([ReadOnlyArray] IModelDeltaDecoration[] newDecorations)
+        private IAsyncAction DeltaDecorationsHelperAsync(IModelDeltaDecoration[] newDecorations)
         {
             var newDecorationsAdjust = newDecorations ?? Array.Empty<IModelDeltaDecoration>();
 
             // Update Styles
-            return InvokeScriptAsync("updateStyle", CssStyleBroker.GetInstance(this).GetStyles()).ContinueWith((noop) =>
+            return ExecuteScriptAsync("updateStyle", CssStyleBroker.GetInstance(this).GetStyles()).ContinueWith((noop) =>
             {
                 // Send Command to Modify Decorations
                 // IMPORTANT: Need to cast to object here as we want this to be a single array object passed as a parameter, not a list of parameters to expand.
-                return InvokeScriptAsync("updateDecorations", (object)newDecorationsAdjust);
+                return ExecuteScriptAsync("updateDecorations", (object)newDecorationsAdjust);
             }).AsAsyncAction();
         }
     }

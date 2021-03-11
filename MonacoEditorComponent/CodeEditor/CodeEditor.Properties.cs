@@ -4,7 +4,7 @@ using Nito.AsyncEx;
 using System;
 using System.Linq;
 using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
+using Microsoft.UI.Xaml;
 
 namespace Monaco
 {
@@ -25,7 +25,7 @@ namespace Monaco
         {
             if (!(d as CodeEditor).IsSettingValue)
             {
-                (d as CodeEditor)?.InvokeScriptAsync("updateContent", e.NewValue.ToString());
+                (d as CodeEditor)?.ExecuteScriptAsync("updateContent", e.NewValue.ToString());
             }
         }));
 
@@ -42,7 +42,7 @@ namespace Monaco
         {
             if (!(d as CodeEditor).IsSettingValue)
             {
-                (d as CodeEditor)?.InvokeScriptAsync("updateSelectedContent", e.NewValue.ToString());
+                (d as CodeEditor)?.ExecuteScriptAsync("updateSelectedContent", e.NewValue.ToString());
             }
         }));
 

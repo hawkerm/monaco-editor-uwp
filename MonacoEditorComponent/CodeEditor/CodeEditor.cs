@@ -4,11 +4,12 @@ using Monaco.Extensions;
 using Monaco.Helpers;
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Windows.ApplicationModel;
+using System.IO;
 
 // The Templated Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234235
 
@@ -18,11 +19,11 @@ namespace Monaco
     /// UWP Windows Runtime Component wrapper for the Monaco CodeEditor
     /// https://microsoft.github.io/monaco-editor/
     /// </summary>
-    [TemplatePart(Name = "View", Type = typeof(WebView))]
+    [TemplatePart(Name = "View", Type = typeof(WebView2))]
     public sealed partial class CodeEditor : Control, INotifyPropertyChanged, IDisposable
     {
         private bool _initialized;
-        private WebView _view;
+        private WebView2 _view;
         private ModelHelper _model;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -56,7 +57,6 @@ namespace Monaco
             // Initialize this here so property changed event will fire and register collection changed event.
             Decorations = new ObservableVector<IModelDeltaDecoration>();
             Markers = new ObservableVector<IMarkerData>();
-            _model = new ModelHelper(this);
 
             base.Loaded += CodeEditor_Loaded;
             Unloaded += CodeEditor_Unloaded;
@@ -67,7 +67,7 @@ namespace Monaco
             if (!(sender is StandaloneEditorConstructionOptions options)) return;
             if (e.PropertyName == nameof(StandaloneEditorConstructionOptions.Language))
             {
-                await InvokeScriptAsync("updateLanguage", options.Language);
+                await ExecuteScriptAsync("updateLanguage", options.Language);
                 if (CodeLanguage != options.Language) CodeLanguage = options.Language;
             }
             if (e.PropertyName == nameof(StandaloneEditorConstructionOptions.GlyphMargin))
@@ -78,10 +78,10 @@ namespace Monaco
             {
                 if (ReadOnly != options.ReadOnly) options.ReadOnly = ReadOnly;
             }
-            await InvokeScriptAsync("updateOptions", options);
+            await ExecuteScriptAsync("updateOptions", options);
         }
 
-        private void CodeEditor_Loaded(object sender, RoutedEventArgs e)
+        private async void CodeEditor_Loaded(object sender, RoutedEventArgs e)
         {
             // Do this the 2nd time around.
             if (_model == null && _view != null)
@@ -93,12 +93,23 @@ namespace Monaco
                 Decorations.VectorChanged += Decorations_VectorChanged;
                 Markers.VectorChanged += Markers_VectorChanged;
 
-                _view.NewWindowRequested += WebView_NewWindowRequested;
+                await _view.EnsureCoreWebView2Async();
 
-                _initialized = true;
+                if (_view.CoreWebView2 != null)
+                {
+                    _initializedTcs = new TaskCompletionSource<ulong>();
+                    _view.CoreWebView2.NewWindowRequested += WebView_NewWindowRequested;
+                    _view.CoreWebView2.DOMContentLoaded += WebView_DOMContentLoaded;
+                }
+
+                SetWebViewSource();
+
+                await _initializedTcs.Task;
+                _initializedTcs = null;
 
                 Loading?.Invoke(this, new RoutedEventArgs());
 
+                Unloaded -= CodeEditor_Unloaded;
                 Unloaded += CodeEditor_Unloaded;
 
                 Loaded?.Invoke(this, new RoutedEventArgs());
@@ -111,10 +122,16 @@ namespace Monaco
 
             if (_view != null)
             {
+                _view.CoreProcessFailed -= WebView_CoreProcessFailed;
                 _view.NavigationStarting -= WebView_NavigationStarting;
-                _view.DOMContentLoaded -= WebView_DOMContentLoaded;
                 _view.NavigationCompleted -= WebView_NavigationCompleted;
-                _view.NewWindowRequested -= WebView_NewWindowRequested;
+                _view.CoreWebView2Initialized -= WebView_CoreWebView2Initialized;
+                if (_view.CoreWebView2 != null)
+                {
+                    _view.CoreWebView2.NewWindowRequested -= WebView_NewWindowRequested;
+                    _view.CoreWebView2.DOMContentLoaded -= WebView_DOMContentLoaded;
+                }
+                _view.WebMessageReceived -= WebView_WebMessageReceived;
                 _initialized = false;
             }
 
@@ -128,7 +145,7 @@ namespace Monaco
                 _themeListener.ThemeChanged -= ThemeListener_ThemeChanged;
             }
             _themeListener = null;
-            
+
             UnregisterPropertyChangedCallback(RequestedThemeProperty, _themeToken);
             _keyboardListener = null;
             _model = null;
@@ -138,25 +155,45 @@ namespace Monaco
         {
             if (_view != null)
             {
+                _view.CoreProcessFailed -= WebView_CoreProcessFailed;
                 _view.NavigationStarting -= WebView_NavigationStarting;
-                _view.DOMContentLoaded -= WebView_DOMContentLoaded;
+                if (_view.CoreWebView2 != null)
+                {
+                    _view.CoreWebView2.NewWindowRequested -= WebView_NewWindowRequested;
+                    _view.CoreWebView2.DOMContentLoaded -= WebView_DOMContentLoaded;
+                }
                 _view.NavigationCompleted -= WebView_NavigationCompleted;
-                _view.NewWindowRequested -= WebView_NewWindowRequested;
+                _view.CoreWebView2Initialized -= WebView_CoreWebView2Initialized;
+                _view.WebMessageReceived -= WebView_WebMessageReceived;
                 _initialized = false;
             }
 
-            _view = (WebView)GetTemplateChild("View");
+            _view = (WebView2)GetTemplateChild("View");
 
             if (_view != null)
             {
+                _view.CoreProcessFailed += WebView_CoreProcessFailed;
                 _view.NavigationStarting += WebView_NavigationStarting;
-                _view.DOMContentLoaded += WebView_DOMContentLoaded;
                 _view.NavigationCompleted += WebView_NavigationCompleted;
-                _view.NewWindowRequested += WebView_NewWindowRequested;
-                _view.Source = new System.Uri("ms-appx-web:///Monaco/CodeEditor/CodeEditor.html");
+                _view.CoreWebView2Initialized += WebView_CoreWebView2Initialized;
+                _view.WebMessageReceived += WebView_WebMessageReceived;
             }
 
             base.OnApplyTemplate();
+        }
+
+        private void WebView_CoreWebView2Initialized(WebView2 sender, CoreWebView2InitializedEventArgs args)
+        {
+            _view.CoreWebView2.DOMContentLoaded -= WebView_DOMContentLoaded;
+            _view.CoreWebView2.NewWindowRequested -= WebView_NewWindowRequested;
+
+            _view.CoreWebView2.DOMContentLoaded += WebView_DOMContentLoaded;
+            _view.CoreWebView2.NewWindowRequested += WebView_NewWindowRequested;
+        }
+
+        private void SetWebViewSource()
+        {
+            _view.Source = new System.Uri(@"file:///" + Path.Combine(Package.Current.InstalledLocation.Path, @"MonacoEditorComponent/CodeEditor/CodeEditor.html"));
         }
 
         internal async Task SendScriptAsync(string script,
@@ -186,14 +223,14 @@ namespace Monaco
             else
             {
 #if DEBUG
-                Debug.WriteLine("WARNING: Tried to call '" + script + "' before initialized.");
+                System.Diagnostics.Debug.WriteLine("WARNING: Tried to call '" + script + "' before initialized.");
 #endif
             }
 
             return default;
         }
 
-        internal async Task InvokeScriptAsync(
+        internal async Task ExecuteScriptAsync(
             string method,
             object arg,
             bool serialize = true,
@@ -201,10 +238,10 @@ namespace Monaco
             [CallerFilePath] string file = null,
             [CallerLineNumber] int line = 0)
         {
-            await InvokeScriptAsync<object>(method, new object[] { arg }, serialize, member, file, line);
+            await ExecuteScriptAsync<object>(method, new object[] { arg }, serialize, member, file, line);
         }
 
-        internal async Task InvokeScriptAsync(
+        internal async Task ExecuteScriptAsync(
             string method,
             object[] args,
             bool serialize = true,
@@ -212,10 +249,10 @@ namespace Monaco
             [CallerFilePath] string file = null,
             [CallerLineNumber] int line = 0)
         {
-            await InvokeScriptAsync<object>(method, args, serialize, member, file, line);
+            await ExecuteScriptAsync<object>(method, args, serialize, member, file, line);
         }
 
-        internal async Task<T> InvokeScriptAsync<T>(
+        internal async Task<T> ExecuteScriptAsync<T>(
             string method,
             object arg,
             bool serialize = true,
@@ -223,10 +260,10 @@ namespace Monaco
             [CallerFilePath] string file = null,
             [CallerLineNumber] int line = 0)
         {
-            return await InvokeScriptAsync<T>(method, new object[] { arg }, serialize, member, file, line);
+            return await ExecuteScriptAsync<T>(method, new object[] { arg }, serialize, member, file, line);
         }
 
-        internal async Task<T> InvokeScriptAsync<T>(
+        internal async Task<T> ExecuteScriptAsync<T>(
             string method,
             object[] args,
             bool serialize = true,
@@ -238,7 +275,7 @@ namespace Monaco
             {
                 try
                 {
-                    return await _view.InvokeScriptAsync<T>(method, args, serialize, member, file, line);
+                    return await _view.ExecuteScriptAsync<T>(method, args, serialize, member, file, line);
                 }
                 catch (Exception e)
                 {
@@ -248,7 +285,7 @@ namespace Monaco
             else
             {
 #if DEBUG
-                Debug.WriteLine("WARNING: Tried to call " + method + " before initialized.");
+                System.Diagnostics.Debug.WriteLine("WARNING: Tried to call " + method + " before initialized.");
 #endif
             }
 

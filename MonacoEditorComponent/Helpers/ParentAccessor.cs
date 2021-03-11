@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Metadata;
@@ -61,7 +60,7 @@ namespace Monaco.Helpers
         /// <param name="name">Name of event to call.</param>
         /// <param name="parameters">JSON string Parameters.</param>
         /// <returns></returns>
-        public IAsyncOperation<string> CallEvent(string name, [ReadOnlyArray] string[] parameters)
+        public IAsyncOperation<string> CallEvent(string name, string[] parameters)
         {
             if (events.ContainsKey(name))
             {

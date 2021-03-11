@@ -27,7 +27,7 @@ namespace Monaco.Editor
         {
             if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                return editor.InvokeScriptAsync("model.detectIndentationAsync", new object[] { defaultInsertSpaces, defaultTabSize }).AsAsyncAction();
+                return editor.ExecuteScriptAsync("model.detectIndentationAsync", new object[] { defaultInsertSpaces, defaultTabSize }).AsAsyncAction();
             }
 
             return null;
@@ -344,4 +344,4 @@ namespace Monaco.Editor
             return null;
         }
     }
-    }
+}

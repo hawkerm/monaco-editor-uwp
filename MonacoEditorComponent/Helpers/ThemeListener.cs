@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation.Metadata;
 using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
+using Microsoft.UI.Xaml;
+using Microsoft.System;
+using Windows.UI.Core;
 
 namespace Monaco.Helpers
 {
@@ -21,57 +22,67 @@ namespace Monaco.Helpers
         public ApplicationTheme CurrentTheme { get; set; }
         public bool IsHighContrast { get; set; }
 
+        public DispatcherQueue DispatcherQueue { get; set; }
+
         public event ThemeChangedEvent ThemeChanged;
 
         private readonly AccessibilitySettings _accessible = new AccessibilitySettings();
         private readonly UISettings _settings = new UISettings();
 
-        public ThemeListener()
+        public ThemeListener(DispatcherQueue dispatcherQueue = null)
         {
             CurrentTheme = Application.Current.RequestedTheme;
             IsHighContrast = _accessible.HighContrast;
 
-            _accessible.HighContrastChanged += _accessible_HighContrastChanged;
-            _settings.ColorValuesChanged += _settings_ColorValuesChanged;
+            DispatcherQueue = dispatcherQueue ?? DispatcherQueue.GetForCurrentThread();
 
             // Fallback in case either of the above fail, we'll check when we get activated next.
-            Window.Current.CoreWindow.Activated += CoreWindow_Activated; 
+            if (Window.Current != null)
+            {
+                _accessible.HighContrastChanged += _accessible_HighContrastChanged;
+                _settings.ColorValuesChanged += _settings_ColorValuesChanged;
+
+                Window.Current.CoreWindow.Activated += CoreWindow_Activated;
+            }
         }
 
         ~ThemeListener()
         {
-            _accessible.HighContrastChanged -= _accessible_HighContrastChanged;
-            _settings.ColorValuesChanged -= _settings_ColorValuesChanged;
+            if (Window.Current != null)
+            {
+                _accessible.HighContrastChanged -= _accessible_HighContrastChanged;
+                _settings.ColorValuesChanged -= _settings_ColorValuesChanged;
 
-            Window.Current.CoreWindow.Activated -= CoreWindow_Activated;
+                Window.Current.CoreWindow.Activated -= CoreWindow_Activated;
+            }
         }
 
         private void _accessible_HighContrastChanged(AccessibilitySettings sender, object args)
         {
-            #if DEBUG
-            Debug.WriteLine("HighContrast Changed");
-            #endif
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("HighContrast Changed");
+#endif
 
             UpdateProperties();
         }
 
         // Note: This can get called multiple times during HighContrast switch, do we care?
-        private async void _settings_ColorValuesChanged(UISettings sender, object args)
+        private void _settings_ColorValuesChanged(UISettings sender, object args)
         {
             // Getting called off thread, so we need to dispatch to request value.
-            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Normal, () =>
             {
                 // TODO: This doesn't stop the multiple calls if we're in our faked 'White' HighContrast Mode below.
                 if (CurrentTheme != Application.Current.RequestedTheme ||
                     IsHighContrast != _accessible.HighContrast)
                 {
-                    #if DEBUG
-                    Debug.WriteLine("Color Values Changed");
-                    #endif
+#if DEBUG
+                    System.Diagnostics.Debug.WriteLine("Color Values Changed");
+#endif
 
                     UpdateProperties();
                 }
-            });            
+            });
         }
 
         private void CoreWindow_Activated(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.WindowActivatedEventArgs args)
@@ -79,9 +90,9 @@ namespace Monaco.Helpers
             if (CurrentTheme != Application.Current.RequestedTheme ||
                 IsHighContrast != _accessible.HighContrast)
             {
-                #if DEBUG
-                Debug.WriteLine("CoreWindow Activated Changed");
-                #endif
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("CoreWindow Activated Changed");
+#endif
 
                 UpdateProperties();
             }

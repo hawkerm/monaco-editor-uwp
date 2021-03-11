@@ -70,10 +70,10 @@ var updateStyle = function (innerStyle) {
     style.innerHTML = innerStyle;
 };
 
-var getOptions = function (): monaco.editor.IEditorOptions {
+var getOptions = async function (): Promise<monaco.editor.IEditorOptions> {
     let opt = null;
     try {
-        opt = JSON.parse(Parent.getJsonValue("Options"));
+        opt = JSON.parse(await Parent.getJsonValue("Options"));
     } finally {
 
     }
@@ -108,9 +108,9 @@ var changeTheme = function (theme: string, highcontrast) {
 
 
 
-var keyDown = function (event) {
+var keyDown = async function (event) {
     //Debug.log("Key Down:" + event.keyCode + " " + event.ctrlKey);
-    var result = Keyboard.keyDown(event.keyCode, event.ctrlKey, event.shiftKey, event.altKey, event.metaKey);
+    var result = await Keyboard.keyDown(event.keyCode, event.ctrlKey, event.shiftKey, event.altKey, event.metaKey);
     if (result) {
         event.cancelBubble = true;
         event.preventDefault();
