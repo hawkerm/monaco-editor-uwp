@@ -48,7 +48,7 @@ Expand-Archive "TypedocConverter.zip" -DestinationPath .
 
 # Now run TypedocConverter on our monaco.json
 
-Invoke-Expression ".\TypedocConverter.exe --inputfile monaco.json --splitfiles true --outputdir ../$env:npm_package_config_outdir --promise-type WinRT"
+Invoke-Expression ".\TypedocConverter.exe --inputfile monaco.json --splitfiles true --outputdir ../$env:npm_package_config_outdir --promise-type WinRT --nrt-disabled true"
 
 Pop-Location
 
