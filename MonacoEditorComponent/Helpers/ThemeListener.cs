@@ -66,24 +66,28 @@ namespace Monaco.Helpers
         {
             // Getting called off thread, so we need to dispatch to request value.
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-            {
-                // TODO: This doesn't stop the multiple calls if we're in our faked 'White' HighContrast Mode below.
-                if (CurrentTheme != Application.Current.RequestedTheme ||
-                    IsHighContrast != _accessible.HighContrast)
-                {
+			{
+				// TODO: This doesn't stop the multiple calls if we're in our faked 'White' HighContrast Mode below.
+				if (CurrentTheme != Application.Current.RequestedTheme ||
+					IsHighContrast != IsSystemHighContrast())
+				{
 #if DEBUG
-                    Debug.WriteLine("Color Values Changed");
+					Debug.WriteLine("Color Values Changed");
 #endif
 
-                    UpdateProperties();
-                }
-            });            
+					UpdateProperties();
+				}
+			});            
         }
 
-        private void CoreWindow_Activated(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.WindowActivatedEventArgs args)
+		private bool IsSystemHighContrast() =>
+            ApiInformation.IsPropertyPresent("Windows.UI.ViewManagement.HighContrast", "HighContrast")
+			&& _accessible.HighContrast;
+
+		private void CoreWindow_Activated(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.WindowActivatedEventArgs args)
         {
             if (CurrentTheme != Application.Current.RequestedTheme ||
-                IsHighContrast != _accessible.HighContrast)
+                IsHighContrast != IsSystemHighContrast())
             {
 #if DEBUG
                 Debug.WriteLine("CoreWindow Activated Changed");
@@ -99,7 +103,7 @@ namespace Monaco.Helpers
         private void UpdateProperties()
         {
             // TODO: Not sure if HighContrastScheme names are localized?
-            if (_accessible.HighContrast && _accessible.HighContrastScheme.IndexOf("white", StringComparison.OrdinalIgnoreCase) != -1)
+            if (IsSystemHighContrast() && _accessible.HighContrastScheme.IndexOf("white", StringComparison.OrdinalIgnoreCase) != -1)
             {
                 // If our HighContrastScheme is ON & a lighter one, then we should remain in 'Light' theme mode for Monaco Themes Perspective
                 IsHighContrast = false;
