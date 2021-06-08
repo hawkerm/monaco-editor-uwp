@@ -17,6 +17,7 @@ namespace Monaco
     public partial class CodeEditorPresenter : Control, ICodeEditorPresenter, IJSObject
 	{
 		private static readonly string UNO_BOOTSTRAP_APP_BASE = global::System.Environment.GetEnvironmentVariable(nameof(UNO_BOOTSTRAP_APP_BASE));
+		private static readonly string UNO_BOOTSTRAP_WEBAPP_BASE_PATH = Environment.GetEnvironmentVariable(nameof(UNO_BOOTSTRAP_WEBAPP_BASE_PATH)) ?? "";
 
 		private readonly JSObjectHandle _handle;
 
@@ -180,7 +181,7 @@ namespace Monaco
 					if(value.Scheme=="file")
 					{
 						// Local files are assumed as coming from the remoter server
-						target = UNO_BOOTSTRAP_APP_BASE == null ? value.PathAndQuery : UNO_BOOTSTRAP_APP_BASE + value.PathAndQuery;
+						target = UNO_BOOTSTRAP_APP_BASE == null ? value.PathAndQuery : UNO_BOOTSTRAP_WEBAPP_BASE_PATH + UNO_BOOTSTRAP_APP_BASE + value.PathAndQuery;
 					}
                     else
                     {
@@ -193,7 +194,7 @@ namespace Monaco
 				{
 					target = UNO_BOOTSTRAP_APP_BASE == null
 						? value.OriginalString
-						: UNO_BOOTSTRAP_APP_BASE + "/" + value.OriginalString;
+						: UNO_BOOTSTRAP_WEBAPP_BASE_PATH + UNO_BOOTSTRAP_APP_BASE + "/" + value.OriginalString;
 				}
 
 				if (this.Log().IsEnabled(Microsoft.Extensions.Logging.LogLevel.Debug))
@@ -274,7 +275,7 @@ namespace Monaco
             var modifingSelection = false; // Supress updates to selection when making edits.
 			window.modifyingSelection=false;
 
-			require.config({{ paths: {{ 'vs': '{UNO_BOOTSTRAP_APP_BASE}/monaco-editor/min/vs' }} }});
+			require.config({{ paths: {{ 'vs': '{UNO_BOOTSTRAP_WEBAPP_BASE_PATH}{UNO_BOOTSTRAP_APP_BASE}/monaco-editor/min/vs' }} }});
 			require(['vs/editor/editor.main'], function () {{
 
 
