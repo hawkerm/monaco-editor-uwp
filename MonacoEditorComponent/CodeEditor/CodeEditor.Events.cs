@@ -59,7 +59,7 @@ namespace Monaco
 
         private async void WebView_NavigationCompleted(ICodeEditorPresenter sender, WebViewNavigationCompletedEventArgs args)
         {
-#if DEBUG
+#if DEBUG && !HAS_UNO_WASM
             Debug.WriteLine($"Navigation completed - {args.IsSuccess}");
 #endif
             IsEditorLoaded = true;
@@ -126,7 +126,7 @@ namespace Monaco
             Loading?.Invoke(this, new RoutedEventArgs());
 
 #if __WASM__
-            Dispatcher.RunAsync(CoreDispatcherPriority.Low, () => WebView_NavigationCompleted(_view, new WebViewNavigationCompletedEventArgs()));
+            Dispatcher.RunAsync(CoreDispatcherPriority.Low, () => WebView_NavigationCompleted(_view, null));
 #endif
         }
 
