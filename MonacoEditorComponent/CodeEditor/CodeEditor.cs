@@ -293,6 +293,7 @@ namespace Monaco
     public static class UriHelper
     {
         private static readonly string UNO_BOOTSTRAP_APP_BASE = global::System.Environment.GetEnvironmentVariable(nameof(UNO_BOOTSTRAP_APP_BASE));
+        private static readonly string UNO_BOOTSTRAP_WEBAPP_BASE_PATH = Environment.GetEnvironmentVariable(nameof(UNO_BOOTSTRAP_WEBAPP_BASE_PATH)) ?? "";
 
         public static string AbsoluteUriString(this System.Uri uri)
         {
@@ -303,12 +304,11 @@ namespace Monaco
                 if (uri.Scheme == "file" || uri.Scheme== "ms-appx-web")
                 {
                     // Local files are assumed as coming from the remoter server
-                    target = UNO_BOOTSTRAP_APP_BASE == null ? uri.PathAndQuery : UNO_BOOTSTRAP_APP_BASE + uri.PathAndQuery;
+                    target = UNO_BOOTSTRAP_APP_BASE == null ? uri.PathAndQuery : UNO_BOOTSTRAP_WEBAPP_BASE_PATH + UNO_BOOTSTRAP_APP_BASE + uri.PathAndQuery;
                 }
                 else
                 {
                     target = uri.AbsoluteUri;
-
                 }
 #else
                 target = uri.AbsoluteUri;
@@ -318,7 +318,7 @@ namespace Monaco
             {
                 target = UNO_BOOTSTRAP_APP_BASE == null
                     ? uri.OriginalString
-                    : UNO_BOOTSTRAP_APP_BASE + "/" + uri.OriginalString;
+                    : UNO_BOOTSTRAP_WEBAPP_BASE_PATH + UNO_BOOTSTRAP_APP_BASE + "/" + uri.OriginalString;
             }
             return target;
         }
