@@ -20,7 +20,7 @@
 		<Description>Uno version of the MonacoEditor Component</Description>
 		<RepositoryUrl>https://github.com/unoplatform/uno.monaco-editor-uwp</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/unoplatform/uno.monaco-editor-uwp</PackageProjectUrl>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
 </PropertyGroup>
 
 	<PropertyGroup Condition="'$(IsWindows)' == 'true'">

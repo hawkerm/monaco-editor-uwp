@@ -10,6 +10,7 @@ using Monaco.Extensions;
 using Uno.Foundation;
 using Uno.Foundation.Interop;
 using Uno.Logging;
+using Uno.Extensions;
 
 namespace Monaco
 {
@@ -64,10 +65,18 @@ namespace Monaco
 
 		public void RaiseDOMContentLoaded()
 		{
-			Console.Error.WriteLine($"Handle is null {_handle == null}");
+			if (this.Log().IsEnabled(Microsoft.Extensions.Logging.LogLevel.Debug))
+			{
+				this.Log().Debug($"RaiseDOMContentLoaded: Handle is null {_handle == null}");
+			}
+
 			if (_handle == null) return;
 
-			Console.Error.WriteLine("-------------------------------------------------------- RaiseDOMContentLoaded");
+			if (this.Log().IsEnabled(Microsoft.Extensions.Logging.LogLevel.Debug))
+			{
+				this.Log().Debug($"Raising DOMContentLoaded");
+			}
+
 			Dispatcher.RunAsync(CoreDispatcherPriority.Low, () => DOMContentLoaded?.Invoke(null, new WebViewDOMContentLoadedEventArgs()));
 		}
 
@@ -76,12 +85,24 @@ namespace Monaco
 		{
 			if (pObject is IJSObject obj)
 			{
-				Console.Error.WriteLine($"Add Web Allowed Object - {name}");
-				var method = obj.Handle.GetType().GetMethod("GetNativeInstance", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-				Console.Error.WriteLine($"*** Method exists {method != null}");
-				var native  = method.Invoke(obj.Handle,new object[] { }) as string;
-				Console.Error.WriteLine($"*** Native handle {native}");
+				if (this.Log().IsEnabled(Microsoft.Extensions.Logging.LogLevel.Debug))
+				{
+					this.Log().Debug($"AddWebAllowedObject: Add Web Allowed Object - {name}");
+				}
 
+				var method = obj.Handle.GetType().GetMethod("GetNativeInstance", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+				if (this.Log().IsEnabled(Microsoft.Extensions.Logging.LogLevel.Debug))
+				{
+					this.Log().Debug($"AddWebAllowedObject: Method exists {method != null}");
+				}
+
+				var native  = method.Invoke(obj.Handle,new object[] { }) as string;
+
+				if (this.Log().IsEnabled(Microsoft.Extensions.Logging.LogLevel.Debug))
+				{
+					this.Log().Debug($"AddWebAllowedObject: Native handle {native}");
+				}
 
                 var htmlId = this.GetHtmlId();
 
@@ -97,24 +118,35 @@ namespace Monaco
 					frameWindow.{name} = value;
 					console.log('ended');
 					";
-                ////frameWindow.eval(""var {name} = window.parent.{obj.Handle.GetNativeInstance().Replace("\"", "\\\"")}; ""); 
 
-                Console.Error.WriteLine("***************************************** AddWebAllowedObject: " + script);
+				if (this.Log().IsEnabled(Microsoft.Extensions.Logging.LogLevel.Debug))
+				{
+					this.Log().Debug($"AddWebAllowedObject: {script}");
+				}
 
                 try
                 {
                     WebAssemblyRuntime.InvokeJS(script);
                 }
                 catch (Exception e)
-                {
-                    Console.Error.WriteLine("FAILED " + e);
+				{
+					if (this.Log().IsEnabled(Microsoft.Extensions.Logging.LogLevel.Error))
+					{
+						this.Log().Error($"AddWebAllowedObject failed", e);
+					}
                 }
 
-				Console.Error.WriteLine("Add WebAllowed Compeleted");
+				if (this.Log().IsEnabled(Microsoft.Extensions.Logging.LogLevel.Debug))
+				{
+					this.Log().Debug($"Add WebAllowed Compeleted");
+				}
 			}
 			else
 			{
-				Console.Error.WriteLine(name + " is not a JSObject :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( ");
+				if (this.Log().IsEnabled(Microsoft.Extensions.Logging.LogLevel.Error))
+				{
+					this.Log().Error($"AddWebAllowedObject: {name} is not a JSObject");
+				}
 			}
 		}
 
@@ -164,15 +196,15 @@ namespace Monaco
 						: UNO_BOOTSTRAP_APP_BASE + "/" + value.OriginalString;
 				}
 
-				Console.Error.WriteLine("***** LOADING: " + target);
-
-				Console.Error.WriteLine($"---- Nav is null {NavigationStarting == null}");
+				if (this.Log().IsEnabled(Microsoft.Extensions.Logging.LogLevel.Debug))
+				{
+					this.Log().Debug($"Loading {target} (Nav is null {NavigationStarting == null})");
+				}
 
 				this.SetHtmlAttribute("src", target);
 
 				//NavigationStarting?.Invoke(this, new WebViewNavigationStartingEventArgs());
 				Dispatcher.RunAsync(CoreDispatcherPriority.Low, () => NavigationStarting?.Invoke(this, new WebViewNavigationStartingEventArgs()));
-
 			}
 		}
 
