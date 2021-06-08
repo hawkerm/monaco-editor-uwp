@@ -31,7 +31,7 @@ namespace MonacoEditorTestApp.Helpers
                         new CodeLens()
                         {
                             Id = "Second Line",
-                            Range = new Range(2, 1, 3, 1),
+                            Range = new Monaco.Range(2, 1, 3, 1),
                             Command = new Command()
                             {
                                 Id = _commandId,
