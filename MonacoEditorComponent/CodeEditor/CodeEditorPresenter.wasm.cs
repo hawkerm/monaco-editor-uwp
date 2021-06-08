@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Controls;
 using Monaco.Extensions;
 using Uno.Foundation;
 using Uno.Foundation.Interop;
+using Uno.Logging;
 
 namespace Monaco
 {
@@ -178,7 +179,6 @@ namespace Monaco
 		/// <inheritdoc />
 		public IAsyncOperation<string> InvokeScriptAsync(string scriptName, IEnumerable<string> arguments)
 		{
-			Console.WriteLine("+++++++++++++++++++++++++++++++ Invoke Script +++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 			var script = $@"(function() {{
 				try {{
 					window.__evalMethod = function() {{ {arguments.Single()} }};
@@ -192,21 +192,29 @@ namespace Monaco
 					window.__evalMethod = null;
 				}}
 			}})()";
-			Console.Error.WriteLine(script);
+
+			if (_log.IsEnabled(Microsoft.Extensions.Logging.LogLevel.Debug))
+			{
+				_log.Debug("Invoke Script: " + script);
+			}
 
 			try
 			{
 				var result = this.ExecuteJavascript(script);
 
-				Console.WriteLine("Ok++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-				Console.WriteLine(result);
+				if (_log.IsEnabled(Microsoft.Extensions.Logging.LogLevel.Debug))
+				{
+					_log.Debug($"Invoke Script result: {result}");
+				}
 
 				return Task.FromResult(result).AsAsyncOperation();
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine("ERR++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-				Console.WriteLine(e);
+				if (_log.IsEnabled(Microsoft.Extensions.Logging.LogLevel.Error))
+				{
+					_log.Error("Invoke Script failed", e);
+				}
 
 				return Task.FromResult("").AsAsyncOperation();
 			}
