@@ -107,16 +107,16 @@ namespace Monaco
                 var htmlId = this.GetHtmlId();
 
 				var script = $@"
-					console.log('starting');
+					// console.log('starting');
 					var value = {native};
-					console.log('v>' + value);
+					// console.log('v>' + value);
 					var frame = Uno.UI.WindowManager.current.getView({htmlId});
-					console.log('f>' + (!frame));
+					// console.log('f>' + (!frame));
 					var frameWindow = window;
-					console.log('fw>' + (!frameWindow));
+					// console.log('fw>' + (!frameWindow));
 
 					frameWindow.{name} = value;
-					console.log('ended');
+					// console.log('ended');
 					";
 
 				if (this.Log().IsEnabled(Microsoft.Extensions.Logging.LogLevel.Debug))
