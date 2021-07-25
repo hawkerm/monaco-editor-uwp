@@ -31,12 +31,12 @@ namespace MonacoEditorTestApp.Helpers
                         new CodeLens()
                         {
                             Id = "Second Line",
-                            Range = new Range(2, 1, 3, 1),
+                            Range = new Range(3, 1, 4, 1),
                             Command = new Command()
                             {
                                 Id = _commandId,
                                 Title = "Second Line Command",
-                                Arguments = new object[] { "Arg 1" , 5, new float[] { 4.5f, 0.3f } }, // Note: This 3rd element array will come back as a JArray TODO?
+                                Arguments = new object[] { "First Argument" , 5, new float[] { 4.5f, 0.3f } }, // Note: This 3rd element array will come back as a JArray TODO?
                                 Tooltip = "This is a CodeLens Command"
                             }
                         }

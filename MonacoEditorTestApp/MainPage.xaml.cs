@@ -108,7 +108,7 @@ namespace MonacoEditorTestApp
             // Code Lens Action
             string cmdId = await Editor.AddCommandAsync(0, async (args) =>
             {
-                var md = new MessageDialog("You hit the CodeLens command " + args[0].ToString());
+                var md = new MessageDialog($"You hit the CodeLens command, Arg[0] = {args[0]}, Arg[1] = {args[1]}, Args[2] = {args[2]}");
                 await md.ShowAsync();
             });
 
