@@ -141,11 +141,10 @@ namespace Monaco
 
                 editor._parentAccessor.RegisterEvent("CompletionItemRequested" + languageId, async (args) =>
                 {
-                    if (args != null && args.Length >= 2)
+                    if (args != null && args.Length >= 1)
                     {
-                        var position = JsonConvert.DeserializeObject<Position>(args[0]);
-                        var requestedItem = JsonConvert.DeserializeObject<CompletionItem>(args[1]);
-                        var completionItem = await provider.ResolveCompletionItemAsync(editor.GetModel(), position, requestedItem);
+                        var requestedItem = JsonConvert.DeserializeObject<CompletionItem>(args[0]);
+                        var completionItem = await provider.ResolveCompletionItemAsync(editor.GetModel(), requestedItem);
 
                         if (completionItem != null)
                         {

@@ -55,7 +55,7 @@ namespace MonacoEditorTestApp.Helpers
             });
         }
 
-        public IAsyncOperation<CompletionItem> ResolveCompletionItemAsync(IModel model, Position position, CompletionItem item)
+        public IAsyncOperation<CompletionItem> ResolveCompletionItemAsync(IModel model, CompletionItem item)
         {
             return AsyncInfo.Run(delegate (CancellationToken cancelationToken)
             {

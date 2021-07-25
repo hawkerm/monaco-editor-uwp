@@ -11,8 +11,8 @@ var registerCompletionItemProvider = function (languageId, characters) {
                 }
             });
         },
-        resolveCompletionItem: function (model, position, item, token) {
-            return Parent.callEvent("CompletionItemRequested" + languageId, [JSON.stringify(position), JSON.stringify(item)]).then(result => {
+        resolveCompletionItem: function (item, token) {
+            return Parent.callEvent("CompletionItemRequested" + languageId, [JSON.stringify(item)]).then(result => {
                 if (result) {
                     return JSON.parse(result);
                 }

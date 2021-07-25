@@ -27,6 +27,6 @@ namespace Monaco.Languages
         /// or [details](#CompletionItem.detail)./// The editor will only resolve a completion item once.
         /// 
         /// </summary>
-        IAsyncOperation<CompletionItem> ResolveCompletionItemAsync(IModel model, Position position, CompletionItem item);
+        IAsyncOperation<CompletionItem> ResolveCompletionItemAsync(IModel model, CompletionItem item);
     }
 }

@@ -39,10 +39,7 @@
                  ScrollViewer.VerticalScrollBarVisibility="Visible"
                  Grid.Row="2"
                  Grid.Column="1"
-                 TabIndex="1"
-                 Text="{x:Bind CodeContent, Mode=OneTime}"
-                 >
-        </TextBox>
+                 TabIndex="1"/>
         <TextBox Text="{Binding ElementName=Editor, Path=SelectedText, Mode=TwoWay}" Grid.Row="3" Grid.Column="1"
                  AcceptsReturn="True"/>
         <TextBlock Text="{Binding ElementName=Editor, Path=SelectedRange}" Grid.Row="4" Grid.Column="1"/>

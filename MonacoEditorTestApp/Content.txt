@@ -7,15 +7,17 @@
 	 * Things to Try:
 	 * - Hover over the word 'Hit'
 	 * - Hit F1 and Search for 'TestAction'
-	 * - Press Ctrl+Enter
-	 * - After using Ctrl+Enter, hit F5	 
-	 * - Hit Ctrl+L
-	 * - Hit Ctrl+R
-	 * - Hit Ctrl+U
-	 * - Hit Ctrl+W
-	 * - Type the letter 'c'
-	 * - Type the word 'boo'
-	 * - Type 'foreach' to see Snippet.
+	 * - Press Ctrl+Enter to show checking keyboard state
+	 * - After using Ctrl+Enter, hit F5	(a Command which we've set conditional on hitting Ctrl+Enter first)
+	 * - Hit Ctrl+L to get the current Line
+	 * - Hit Ctrl+R to get the range of the current document
+	 * - Hit Ctrl+U to get a specific range 2,10->3,8
+	 * - Hit Ctrl+W to get the current word
+	 * - Auto-complete examples (ctrl+space or on new line):
+	   * - Type the letter 'c'
+	   * - Type the word 'boo'
+	   * - Type 'foreach' to see Snippet.
 	 * - Hover over the hex value: #FFFF0000 (Try adding hex values elsewhere too!)
+	 * - Use the 'Set Text' button to set the Editor's text based on the textbox below
 	 */
 }

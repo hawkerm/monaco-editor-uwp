@@ -94,6 +94,9 @@ namespace MonacoEditorTestApp
             {
                 CodeContent = await FileIO.ReadTextAsync(await StorageFile.GetFileFromApplicationUriAsync(new System.Uri("ms-appx:///Content.txt")));
 
+                // Set the copy of our initial text.
+                TextEditor.Text = CodeContent;
+
                 ButtonHighlightRange_Click(null, null);
             }
 

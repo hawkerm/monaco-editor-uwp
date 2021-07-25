@@ -1,6 +1,6 @@
-v0.9 - 04/??/2020
+v0.9 - 08/??/2021
 -----------------
-- Updated Monaco Reference to v0.20.0
+- Updated Monaco Reference to v0.21.3
 - Add *[ColorProvider](https://microsoft.github.io/monaco-editor/api/modules/monaco.languages.html#registercolorprovider)* Language Service Support
 - Add *[FindMatches](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.itextmodel.html#findmatches)* Model Methods
 - Expose `ReadOnly` property
