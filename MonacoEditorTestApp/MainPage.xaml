@@ -56,14 +56,16 @@
                 <Button Content="Highlight Range 3,1-10" Click="ButtonHighlightRange_Click" />
                 <Button Content="Highlight Line 2 &amp; 4" Click="ButtonHighlightLine_Click" />
                 <Button Content="Clear Highlights" Click="ButtonClearHighlights_Click" />
+                <Button Content="Set Marker" Click="ButtonSetMarker_Click" />
+                <Button Content="Find 'Ctrl'" Click="ButtonFindCtrl_Click" />
+                <TextBlock Text="Options" Style="{StaticResource SubtitleTextBlockStyle}" Margin="8,12,0,0"/>
                 <Button Content="Code Folding" Click="ButtonFolding_Click" />
                 <Button Content="Minimap" Click="ButtonMinimap_Click" />
                 <Button Content="Change Language" Click="ButtonChangeLanguage_Click" />
-                <Button Content="Set Marker" Click="ButtonSetMarker_Click" />
                 <Button Content="Load &amp; Set Pos" Click="LoadAndSet_Click" />
                 <Button Content="Set Readonly" Click="ButtonSetReadonly_Click" />
+                <TextBlock Text="Advanced" Style="{StaticResource SubtitleTextBlockStyle}" Margin="8,12,0,0"/>
                 <Button Content="Run Script" Click="ButtonRunScript_Click" />
-                <Line X1="0" X2="100" Y1="0" Y2="0" StrokeThickness="1" Stroke="{ThemeResource AppBarSeparatorForegroundThemeBrush}"/>
                 <Button x:Name="HideButton" Content="Hide" Click="HideButton_Click"/>
                 <Button x:Name="DetachButton" Content="Detach" Click="DetachButton_Click"/>
                 <Button x:Name="RemoveButton" Content="Remove" Click="RemoveButton_Click"/>

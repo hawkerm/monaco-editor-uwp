@@ -486,7 +486,9 @@ namespace MonacoEditorTestApp
         private async void ButtonRunScript_Click(object sender, RoutedEventArgs e)
         {
             var result = await Editor.InvokeScriptAsync(@"function test(a, b) { return a + b; }; test(3, 4).toString()");
-            Debug.WriteLine(result);
+
+            var md = new MessageDialog($"Result (should be 7): {result}");
+            await md.ShowAsync();
         }
 
         private void Editor_GotFocus(object sender, RoutedEventArgs e)
@@ -497,6 +499,18 @@ namespace MonacoEditorTestApp
         private void Editor_LostFocus(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("Editor Lost Focus");
+        }
+
+        private async void ButtonFindCtrl_Click(object sender, RoutedEventArgs e)
+        {
+            var matches = await Editor.GetModel().FindMatchesAsync("Ctrl", true, false, true, null, true);
+
+            var toString = matches.Select((match) => $"Range: {match.Range.ToString()} contains {match.Matches.Length} Matches - First is: {match.Matches[0]}");
+
+            var output = string.Join("\n", toString);
+
+            var md = new MessageDialog("Results:\n" + output);
+            await md.ShowAsync();
         }
     }
 }
