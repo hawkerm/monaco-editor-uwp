@@ -48,6 +48,7 @@ namespace Monaco
         {
             if (_editor.TryGetTarget(out CodeEditor editor))
             {
+                // link:registerCodeLensProvider.ts:ProvideCodeLenses
                 editor._parentAccessor.RegisterEvent("ProvideCodeLenses" + languageId, async (args) =>
                 {
                     var list = await provider.ProvideCodeLensesAsync(editor.GetModel());
@@ -60,6 +61,7 @@ namespace Monaco
                     return null;
                 });
 
+                // link:registerCodeLensProvider.ts:ResolveCodeLens
                 editor._parentAccessor.RegisterEvent("ResolveCodeLens" + languageId, async (args) =>
                 {
                     if (args != null && args.Length >= 1)
@@ -75,6 +77,7 @@ namespace Monaco
                     return null;
                 });
 
+                // link:registerCodeLensProvider.ts:registerCodeLensProvider
                 return editor.InvokeScriptAsync("registerCodeLensProvider", new object[] { languageId }).AsAsyncAction();
             }
 
@@ -85,6 +88,7 @@ namespace Monaco
         {
             if (_editor.TryGetTarget(out CodeEditor editor))
             {
+                // link:registerColorProvider.ts:ProvideColorPresentations
                 editor._parentAccessor.RegisterEvent("ProvideColorPresentations" + languageId, async (args) =>
                 {
                     if (args != null && args.Length >= 1)
@@ -100,6 +104,7 @@ namespace Monaco
                     return null;
                 });
 
+                // link:registerColorProvider.ts:ProvideDocumentColors
                 editor._parentAccessor.RegisterEvent("ProvideDocumentColors" + languageId, async (args) =>
                 {
                     var items = await provider.ProvideDocumentColorsAsync(editor.GetModel());
@@ -112,6 +117,7 @@ namespace Monaco
                     return null;
                 });
 
+                // link:registerColorProvider.ts:registerColorProvider
                 return editor.InvokeScriptAsync("registerColorProvider", new object[] { languageId }).AsAsyncAction();
             }
 
@@ -122,8 +128,8 @@ namespace Monaco
         {
             if (_editor.TryGetTarget(out CodeEditor editor))
             {
-                // Wrapper around CompletionItem Provider to Monaco editor.
                 // TODO: Add Incremented Id so that we can register multiple providers per language?
+                // link:registerCompletionItemProvider.ts:CompletionItemProvider
                 editor._parentAccessor.RegisterEvent("CompletionItemProvider" + languageId, async (args) =>
                 {
                     if (args != null && args.Length >= 2)
@@ -139,6 +145,7 @@ namespace Monaco
                     return null;
                 });
 
+                // link:registerCompletionItemProvider.ts:CompletionItemRequested
                 editor._parentAccessor.RegisterEvent("CompletionItemRequested" + languageId, async (args) =>
                 {
                     if (args != null && args.Length >= 1)
@@ -155,6 +162,7 @@ namespace Monaco
                     return null;
                 });
 
+                // link:registerCompletionItemProvider.ts:registerCompletionItemProvider
                 return editor.InvokeScriptAsync("registerCompletionItemProvider", new object[] { languageId, provider.TriggerCharacters }).AsAsyncAction();
             }
 
@@ -182,6 +190,7 @@ namespace Monaco
                     return string.Empty;
                 });
 
+                // link:otherScriptsToBeOrganized.ts:registerHoverProvider
                 return editor.InvokeScriptAsync("registerHoverProvider", languageId).AsAsyncAction();
             }
 

@@ -50,6 +50,7 @@ var updateContext = function (key, value) {
     contexts[key].set(value);
 }
 
+// link:CodeEditor.Properties.cs:updateContent
 var updateContent = function (content) {
     // Need to ignore updates from us notifying of a change
     if (content != model.getValue()) {

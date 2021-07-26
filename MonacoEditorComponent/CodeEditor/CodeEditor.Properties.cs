@@ -30,6 +30,7 @@ namespace Monaco
         {
             if (!(d as CodeEditor).IsSettingValue)
             {
+                // link:otherScriptsToBeOrganized.ts:updateContent
                 (d as CodeEditor)?.InvokeScriptAsync("updateContent", e.NewValue.ToString());
             }
         }));
@@ -47,6 +48,7 @@ namespace Monaco
         {
             if (!(d as CodeEditor).IsSettingValue)
             {
+                // link:updateSelectedContent.ts:updateSelectedContent
                 (d as CodeEditor)?.InvokeScriptAsync("updateSelectedContent", e.NewValue.ToString());
             }
         }));

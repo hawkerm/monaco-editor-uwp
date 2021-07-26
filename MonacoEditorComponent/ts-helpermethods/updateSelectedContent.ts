@@ -8,6 +8,7 @@ declare var contexts: { [index: string]: monaco.editor.IContextKey<any> };//{};
 declare var decorations: string[];
 declare var modifingSelection: boolean; // Supress updates to selection when making edits.
 
+// link:CodeEditor.Properties.cs:updateSelectedContent
 var updateSelectedContent = function (content) {
     let selection = editor.getSelection();
 
