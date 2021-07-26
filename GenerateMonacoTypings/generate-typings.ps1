@@ -35,6 +35,7 @@ Copy-Item $monaco_file -Destination (Join-Path $temp_dir_name "monaco.ts")
 Push-Location $temp_dir_name
 
 # Run typedoc to generate json representation
+Write-Output '{"compilerOptions":{"target":"es2020"}}' > tsconfig.json
 Invoke-Expression "npx typedoc monaco.ts --json monaco.json"
 
 # Need TypedocConverter next
@@ -47,7 +48,6 @@ Write-Host "Extracting..."
 Expand-Archive "TypedocConverter.zip" -DestinationPath .
 
 # Now run TypedocConverter on our monaco.json
-
 Invoke-Expression ".\TypedocConverter.exe --inputfile monaco.json --splitfiles true --outputdir ../$env:npm_package_config_outdir --promise-type WinRT --nrt-disabled true"
 
 Pop-Location
