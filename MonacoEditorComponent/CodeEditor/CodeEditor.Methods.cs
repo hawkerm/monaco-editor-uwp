@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using Windows.Foundation;
 
 namespace Monaco
@@ -114,6 +115,13 @@ namespace Monaco
             return _view.InvokeScriptAsync("eval", new[] { script });
         }
 
+        private int _commandIndex = 0;
+
+        public IAsyncOperation<string> AddCommandAsync(CommandHandler handler)
+        {
+            return AddCommandAsync(0, handler, string.Empty);
+        }
+
         public IAsyncOperation<string> AddCommandAsync(int keybinding, CommandHandler handler)
         {
             return AddCommandAsync(keybinding, handler, string.Empty);
@@ -121,7 +129,7 @@ namespace Monaco
 
         public IAsyncOperation<string> AddCommandAsync(int keybinding, CommandHandler handler, string context)
         {
-            var name = "Command" + keybinding;
+            var name = "Command" + Interlocked.Increment(ref _commandIndex);
             _parentAccessor.RegisterActionWithParameters(name, (parameters) => 
             {
                 if (parameters != null && parameters.Length > 0)
