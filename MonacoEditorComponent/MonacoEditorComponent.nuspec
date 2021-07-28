@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/hawkerm/monaco-editor-uwp</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A Windows Runtime Component wrapper around the web-based Monaco Editor</description>
-    <releaseNotes>More provider features: CodeAction, CodeLens.</releaseNotes>
+    <releaseNotes>FindMatches support, more provider features: CodeAction, CodeLens, ColorProvider.</releaseNotes>
     <copyright>Copyright 2017-2021</copyright>
     <tags>uwp monaco editor controls</tags>
     <dependencies>

@@ -44,6 +44,36 @@ namespace Monaco
             return null;
         }
 
+        public IAsyncAction RegisterCodeActionProviderAsync(string languageId, CodeActionProvider provider)
+        {
+            if (_editor.TryGetTarget(out CodeEditor editor))
+            {
+                // link:registerCodeActionProvider.ts:ProvideCodeActions
+                editor._parentAccessor.RegisterEvent("ProvideCodeActions" + languageId, async (args) =>
+                {
+                    if (args != null && args.Length >= 2)
+                    {
+                        var range = JsonConvert.DeserializeObject<Range>(args[0]);
+                        var context = JsonConvert.DeserializeObject<CodeActionContext>(args[1]);
+
+                        var list = await provider.ProvideCodeActionsAsync(editor.GetModel(), range, context);
+
+                        if (list != null)
+                        {
+                            return JsonConvert.SerializeObject(list);
+                        }
+                    }
+
+                    return null;
+                });
+
+                // link:registerCodeActionProvider.ts:registerCodeActionProvider
+                return editor.InvokeScriptAsync("registerCodeActionProvider", new object[] { languageId }).AsAsyncAction();
+            }
+
+            return null;
+        }
+
         public IAsyncAction RegisterCodeLensProviderAsync(string languageId, CodeLensProvider provider)
         {
             if (_editor.TryGetTarget(out CodeEditor editor))

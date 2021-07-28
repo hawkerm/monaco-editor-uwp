@@ -37,6 +37,8 @@ namespace MonacoEditorTestApp
 
         private ContextKey _myCondition;
 
+        private EditorCodeActionProvider _actionProvider;
+
         #region CSS Style Objects
         private readonly CssLineStyle CssLineDarkRed = new CssLineStyle()
         {
@@ -105,12 +107,23 @@ namespace MonacoEditorTestApp
             var available_languages = Editor.Languages.GetLanguagesAsync();
             //Debugger.Break();
 
+            // Code Action Command - TODO: Should we just encapsulate these in the Provider class anyway as they're only being used there?
+            string cmdId = await Editor.AddCommandAsync(async (args) =>
+            {
+                var md = new MessageDialog($"You hit the CodeAction command, Arg[0] = {args[0]}");
+                await md.ShowAsync();
+            });
+
             // Code Lens Command
             string cmdId2 = await Editor.AddCommandAsync(async (args) =>
             {
                 var md = new MessageDialog($"You hit the CodeLens command, Arg[0] = {args[0]}, Arg[1] = {args[1]}, Args[2] = {args[2]}");
                 await md.ShowAsync();
             });
+
+            _actionProvider = new EditorCodeActionProvider(cmdId);
+
+            await Editor.Languages.RegisterCodeActionProviderAsync("csharp", _actionProvider);
 
             await Editor.Languages.RegisterCodeLensProviderAsync("csharp", new EditorCodeLensProvider(cmdId2));
 
@@ -342,11 +355,15 @@ namespace MonacoEditorTestApp
                         EndLineNumber = 3,
                         EndColumn = 15
                     });
+
+                _actionProvider.IsOn = true;
             }
             else
             {
                 //Editor.Markers.Clear();
                 await Editor.SetModelMarkersAsync("CodeEditor", Array.Empty<IMarkerData>());
+
+                _actionProvider.IsOn = false;
             }            
         }
 

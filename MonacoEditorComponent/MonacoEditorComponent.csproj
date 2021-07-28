@@ -211,6 +211,10 @@
     <Compile Include="Monaco\IRange.cs" />
     <Compile Include="Monaco\KeyCode.cs" />
     <Compile Include="Monaco\KeyMod.cs" />
+    <Compile Include="Monaco\Languages\CodeAction.cs" />
+    <Compile Include="Monaco\Languages\CodeActionContext.cs" />
+    <Compile Include="Monaco\Languages\CodeActionList.cs" />
+    <Compile Include="Monaco\Languages\CodeActionProvider.cs" />
     <Compile Include="Monaco\Languages\CodeLens.cs" />
     <Compile Include="Monaco\Languages\CodeLensList.cs" />
     <Compile Include="Monaco\Languages\CodeLensProvider.cs" />
@@ -229,6 +233,12 @@
     <Compile Include="Monaco\Languages\ILanguageExtensionPoint.cs" />
     <Compile Include="Monaco\LanguagesHelper.cs" />
     <Compile Include="Monaco\Languages\SuggestTriggerKind.cs" />
+    <Compile Include="Monaco\Languages\TextEdit.cs" />
+    <Compile Include="Monaco\Languages\WorkspaceEdit.cs" />
+    <Compile Include="Monaco\Languages\WorkspaceEditMetadata.cs" />
+    <Compile Include="Monaco\Languages\WorkspaceFileEdit.cs" />
+    <Compile Include="Monaco\Languages\WorkspaceFileEditOptions.cs" />
+    <Compile Include="Monaco\Languages\WorkspaceTextEdit.cs" />
     <Compile Include="Monaco\MarkerTag.cs" />
     <Compile Include="Monaco\ModelHelper.cs" />
     <Compile Include="Monaco\Position.cs" />
@@ -268,6 +278,10 @@
       <SubType>Designer</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ts-helpermethods\Monaco.Helpers.ParentAccessor.ts">
+      <SubType>Designer</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ts-helpermethods\registerCodeActionProvider.ts">
+      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ts-helpermethods\registerCodeLensProvider.ts">
