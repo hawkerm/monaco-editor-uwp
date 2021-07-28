@@ -14,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		install-dependencies.ps1 = install-dependencies.ps1
 		MonacoEditorComponent\MonacoEditorComponent.nuspec = MonacoEditorComponent\MonacoEditorComponent.nuspec
 		README.md = README.md
+		ThirdPartyNotices.txt = ThirdPartyNotices.txt
 	EndProjectSection
 EndProject
 Global

@@ -10,8 +10,8 @@
     <projectUrl>https://github.com/hawkerm/monaco-editor-uwp</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A Windows Runtime Component wrapper around the web-based Monaco Editor</description>
-    <releaseNotes>Minor fixes, better .NET Native support.</releaseNotes>
-    <copyright>Copyright 2017-2020</copyright>
+    <releaseNotes>More provider features: CodeAction, CodeLens.</releaseNotes>
+    <copyright>Copyright 2017-2021</copyright>
     <tags>uwp monaco editor controls</tags>
     <dependencies>
       <group targetFramework="UAP10.0">
@@ -34,9 +34,11 @@
     <file src="ts-helpermethods\*.js" target="lib\uap10.0\Monaco\ts-helpermethods" />
     <file src="monaco-editor\*" target="lib\uap10.0\Monaco\monaco-editor"/>
     <file src="monaco-editor\min\**\*.*" target="lib\uap10.0\Monaco\monaco-editor\min"/>
+    <file src="webcomponents-js\*" target="lib\uap10.0\Monaco\webcomponents-js"/>
     <!-- Docs -->
     <file src="..\README.md" target="content"/>
     <file src="..\changelog.md" target="content"/>
     <file src="..\LICENSE*" target="content"/>
+    <file src="..\ThirdPartyNotices.txt" target="content"/>
   </files>
 </package>

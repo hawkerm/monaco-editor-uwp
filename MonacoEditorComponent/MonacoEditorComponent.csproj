@@ -295,6 +295,7 @@
     <Content Include="CodeEditor\CodeEditor.html" />
     <Content Include="monaco-editor\*.*" />
     <Content Include="monaco-editor\min\**\*.*" />
+    <Content Include="webcomponents-js\*.*" />
     <Content Include="ts-helpermethods\*.js">
       <DependentUpon>%(Filename).ts</DependentUpon>
     </Content>
