@@ -1,7 +1,7 @@
 ﻿///<reference path="../monaco-editor/monaco.d.ts" />
 declare var Parent: ParentAccessor;
 
-var registerColorProvider = function (languageId) {
+const registerColorProvider = function (languageId) {
     return monaco.languages.registerColorProvider(languageId, {
         provideColorPresentations: function (model, colorInfo, token) {
             return Parent.callEvent("ProvideColorPresentations" + languageId, [JSON.stringify(colorInfo)]).then(result => {
