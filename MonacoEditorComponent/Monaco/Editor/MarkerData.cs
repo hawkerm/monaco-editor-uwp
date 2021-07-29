@@ -36,5 +36,19 @@ namespace Monaco.Editor
 
         [JsonProperty("tags", NullValueHandling = NullValueHandling.Ignore)]
         public MarkerTag[] Tags { get; set; }
+
+        public MarkerData() { }
+
+        /// <summary>
+        /// Initializes a new <see cref="MarkerData"/> instance in the specified <see cref="Range"/>. Provided as a helper.
+        /// </summary>
+        /// <param name="range"><see cref="Range"/> to scope Marker on.</param>
+        public MarkerData(Range range)
+        {
+            StartLineNumber = range.StartLineNumber;
+            StartColumn = range.StartColumn;
+            EndLineNumber = range.EndLineNumber;
+            EndColumn = range.EndColumn;
+        }
     }
 }

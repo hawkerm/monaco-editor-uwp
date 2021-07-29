@@ -1,7 +1,7 @@
 v0.9 - 08/??/2021
 -----------------
 - Updated Monaco Reference to v0.21.3
-- Add *[CodeAction](https://microsoft.github.io/monaco-editor/api/modules/monaco.languages.html#registercodeactionprovider)* Language Service Support (Commands only)
+- Add *[CodeAction](https://microsoft.github.io/monaco-editor/api/modules/monaco.languages.html#registercodeactionprovider)* Language Service Support
 - Add *[CodeLens](https://microsoft.github.io/monaco-editor/api/modules/monaco.languages.html#registercodelensprovider)* Language Sergvice Support (onDidChange not supported)
 - Add *[ColorProvider](https://microsoft.github.io/monaco-editor/api/modules/monaco.languages.html#registercolorprovider)* Language Service Support
 - Add *[FindMatches](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.itextmodel.html#findmatches)* Model Methods

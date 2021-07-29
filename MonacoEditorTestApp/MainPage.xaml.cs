@@ -338,9 +338,9 @@ namespace MonacoEditorTestApp
                         Severity = MarkerSeverity.Warning,
                         Source = "Origin",
                         StartLineNumber = 2,
-                        StartColumn = 2,
+                        StartColumn = 5,
                         EndLineNumber = 2,
-                        EndColumn = 8
+                        EndColumn = 10
                     });
 
                 Editor.Markers.Add(
@@ -350,10 +350,10 @@ namespace MonacoEditorTestApp
                         Message = "This is an \"Error\" about 'that thing'.",
                         Severity = MarkerSeverity.Error,
                         Source = "Origin",
-                        StartLineNumber = 3,
-                        StartColumn = 5,
-                        EndLineNumber = 3,
-                        EndColumn = 15
+                        StartLineNumber = 5,
+                        StartColumn = 3,
+                        EndLineNumber = 5,
+                        EndColumn = 10
                     });
 
                 _actionProvider.IsOn = true;

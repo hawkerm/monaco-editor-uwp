@@ -1,4 +1,5 @@
 ﻿public class Program { // Click a link: http://www.github.com/
+	// Click 'Set Marker', then the squiggle on this line, then apply the CodeAction
 	// Click on the CodeLens line below here.
 	public static void Main(string[] args) {
 		Console.WriteLine(\"Hello, World!\");

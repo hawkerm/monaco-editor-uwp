@@ -14,7 +14,7 @@ namespace MonacoEditorTestApp.Helpers
 {
     public class EditorCodeActionProvider : CodeActionProvider
     {
-        private readonly Range _targetRange = new Range(2, 2, 2, 8); // See MarkerData - link:MainPage.xaml.cs:MarkerData
+        private readonly Range _targetRange = new Range(2, 5, 2, 10); // See MarkerData - link:MainPage.xaml.cs:MarkerData
 
         private string _commandId;
 
@@ -52,19 +52,30 @@ namespace MonacoEditorTestApp.Helpers
                                 },
                                 Diagnostics = new IMarkerData[]
                                 {
-                                    new MarkerData()
+                                    new MarkerData(_targetRange)
                                     {
                                         Code = "2344",
                                         Message = "This is a \"Warning\" about 'that thing'.",
                                         Severity = MarkerSeverity.Warning,
                                         Source = "Origin",
-                                        StartLineNumber = 2,
-                                        StartColumn = 2,
-                                        EndLineNumber = 2,
-                                        EndColumn = 8
                                     }
                                 },
-                                // TODO: Edit not working yet.
+                                // TODO: We should write an extension method helper to create one of these easier maybe?
+                                Edit = new WorkspaceEdit()
+                                {
+                                    Edits = new WorkspaceTextEdit[]
+                                    {
+                                        new WorkspaceTextEdit()
+                                        {
+                                            //// Unlike Monaco, we only track one model, so we don't have to pass a resource uri here.
+                                            Edit = new TextEdit()
+                                            {
+                                                Text = "Done",
+                                                Range = _targetRange
+                                            }
+                                        }
+                                    }
+                                },
                             }
                         }
                     };
