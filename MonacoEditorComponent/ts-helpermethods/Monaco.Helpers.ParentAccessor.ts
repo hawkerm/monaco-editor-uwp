@@ -4,10 +4,10 @@
         callActionWithParameters(name: string, parameters: string[]): boolean;
         callEvent(name: string, parameters: string[]): Promise<string>;
         close();
-        getChildValue(name: string, child: string): any;
-        getJsonValue(name: string): string;
-        getValue(name: string): any;
-        setValue(name: string, value: any);
-        setValue(name: string, value: string, type: string);
+        getChildValue(name: string, child: string): Promise<any>;
+        getJsonValue(name: string): Promise<string>;
+        getValue(name: string): Promise<any>;
+        setValue(name: string, value: any): Promise<undefined>;
+        setValue(name: string, value: string, type: string): Promise<undefined>;
     }
 //}

@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -20,7 +21,10 @@ namespace Monaco
     public sealed partial class CodeEditor : Control, INotifyPropertyChanged, IDisposable
     {
         private bool _initialized;
+        private DispatcherQueue _queue;
+
         private readonly WebView _view;
+
         private ModelHelper _model;
         private CssStyleBroker _cssBroker;
 
@@ -49,10 +53,18 @@ namespace Monaco
         }
 
         /// <summary>
+        /// Construct a new Stand Alone Code Editor, assumes being constructed on UI Thread.
+        /// </summary>
+        public CodeEditor() : this(null) { }
+
+        /// <summary>
         /// Construct a new IStandAloneCodeEditor.
         /// </summary>
-        public CodeEditor()
+        /// <param name="queue"><see cref="DispatcherQueue"/> for the UI Thread, if none pass assumes the current thread is the UI thread.</param>
+        public CodeEditor(DispatcherQueue queue)
         {
+            _queue = queue ?? DispatcherQueue.GetForCurrentThread();
+
             DefaultStyleKey = typeof(CodeEditor);
             if (Options != null)
             {
@@ -143,8 +155,6 @@ namespace Monaco
             if (_view != null)
             {
                 _view.NavigationStarting -= WebView_NavigationStarting;
-                _view.DOMContentLoaded -= WebView_DOMContentLoaded;
-                _view.NavigationCompleted -= WebView_NavigationCompleted;
                 _view.NewWindowRequested -= WebView_NewWindowRequested;
                 _initialized = false;
             }
@@ -170,8 +180,6 @@ namespace Monaco
             if (_view != null)
             {
                 _view.NavigationStarting -= WebView_NavigationStarting;
-                _view.DOMContentLoaded -= WebView_DOMContentLoaded;
-                _view.NavigationCompleted -= WebView_NavigationCompleted;
                 _view.NewWindowRequested -= WebView_NewWindowRequested;
                 _initialized = false;
             }
@@ -186,8 +194,6 @@ namespace Monaco
             if (_view != null)
             {
                 _view.NavigationStarting += WebView_NavigationStarting;
-                _view.DOMContentLoaded += WebView_DOMContentLoaded;
-                _view.NavigationCompleted += WebView_NavigationCompleted;
                 _view.NewWindowRequested += WebView_NewWindowRequested;
                 _view.Source = new System.Uri("ms-appx-web:///Monaco/CodeEditor/CodeEditor.html");
             }

@@ -1,5 +1,11 @@
-﻿using System;
+﻿using Microsoft.Toolkit.Uwp;
+using System;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
+using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.Foundation.Metadata;
+using Windows.System;
 
 namespace Monaco.Helpers
 {
@@ -22,10 +28,12 @@ namespace Monaco.Helpers
     public sealed class KeyboardListener
     {
         private readonly WeakReference<CodeEditor> parent;
+        private readonly DispatcherQueue _queue;
 
-        public KeyboardListener(CodeEditor parent) // TODO: Make Interface for event usage
+        public KeyboardListener(CodeEditor parent, DispatcherQueue queue) // TODO: Make Interface for event usage
         {
             this.parent = new WeakReference<CodeEditor>(parent);
+            _queue = queue;
         }
 
         /// <summary>
@@ -37,21 +45,30 @@ namespace Monaco.Helpers
         /// <param name="alt"></param>
         /// <param name="meta"></param>
         /// <returns></returns>
-        public bool KeyDown(int keycode, bool ctrl, bool shift, bool alt, bool meta)
+        public IAsyncOperation<bool> KeyDown(int keycode, bool ctrl, bool shift, bool alt, bool meta)
         {
-            if (parent.TryGetTarget(out CodeEditor editor))
+            return AsyncInfo.Run(async delegate (CancellationToken cancelationToken)
             {
-                return editor.TriggerKeyDown(new WebKeyEventArgs()
-                {
-                    KeyCode = keycode, // TODO: Convert to a virtual key or something?
-                    CtrlKey = ctrl,
-                    ShiftKey = shift,
-                    AltKey = alt,
-                    MetaKey = meta
-                });
-            }
+                // TODO: Should we need to use the Deferred Events pattern maybe?
+                bool result = false;
 
-            return false;
+                await _queue.EnqueueAsync(() =>
+                {
+                    if (parent.TryGetTarget(out CodeEditor editor))
+                    {
+                        result = editor.TriggerKeyDown(new WebKeyEventArgs()
+                        {
+                            KeyCode = keycode, // TODO: Convert to a virtual key or something?
+                            CtrlKey = ctrl,
+                            ShiftKey = shift,
+                            AltKey = alt,
+                            MetaKey = meta
+                        });
+                    }
+                });
+
+                return result;
+            });            
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿///<reference path="../monaco-editor/monaco.d.ts" />
-declare var Parent: ParentAccessor;
+declare var Accessor: ParentAccessor;
 declare var Keyboard: KeyboardListener;
 
 declare var editor: monaco.editor.IStandaloneCodeEditor;
@@ -11,7 +11,7 @@ declare var modifingSelection: boolean; // Supress updates to selection when mak
 const registerHoverProvider = function (languageId: string) {
     return monaco.languages.registerHoverProvider(languageId, {
         provideHover: function (model, position) {
-            return Parent.callEvent("HoverProvider" + languageId, [JSON.stringify(position)]).then(result => {
+            return Accessor.callEvent("HoverProvider" + languageId, [JSON.stringify(position)]).then(result => {
                 if (result) {
                     return JSON.parse(result);
                 }
@@ -22,7 +22,7 @@ const registerHoverProvider = function (languageId: string) {
 
 const addAction = function (action: monaco.editor.IActionDescriptor) {
     action.run = function (ed) {
-        Parent.callAction("Action" + action.id)
+        Accessor.callAction("Action" + action.id)
     };
 
     editor.addAction(action);
@@ -36,7 +36,7 @@ const addCommand = function (keybindingStr, handlerName, context) {
                 objs.push(JSON.stringify(arguments[i]));
             }
         }
-        Parent.callActionWithParameters(handlerName, objs);
+        Accessor.callActionWithParameters(handlerName, objs);
     }, context);
 };
 
@@ -77,10 +77,10 @@ const updateStyle = function (innerStyle) {
     style.innerHTML = innerStyle;
 };
 
-const getOptions = function (): monaco.editor.IEditorOptions {
+const getOptions = async function (): Promise<monaco.editor.IEditorOptions> {
     let opt = null;
     try {
-        opt = JSON.parse(Parent.getJsonValue("Options"));
+        opt = JSON.parse(await Accessor.getJsonValue("Options"));
     } finally {
 
     }
@@ -115,9 +115,9 @@ const changeTheme = function (theme: string, highcontrast) {
 
 
 
-const keyDown = function (event) {
+const keyDown = async function (event) {
     //Debug.log("Key Down:" + event.keyCode + " " + event.ctrlKey);
-    const result = Keyboard.keyDown(event.keyCode, event.ctrlKey, event.shiftKey, event.altKey, event.metaKey);
+    const result = await Keyboard.keyDown(event.keyCode, event.ctrlKey, event.shiftKey, event.altKey, event.metaKey);
     if (result) {
         event.cancelBubble = true;
         event.preventDefault();

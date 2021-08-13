@@ -1,5 +1,5 @@
 ﻿///<reference path="../monaco-editor/monaco.d.ts" />
-declare var Parent: ParentAccessor;
+declare var Accessor: ParentAccessor;
 
 function isTextEdit(edit: monaco.languages.WorkspaceTextEdit | monaco.languages.WorkspaceFileEdit): edit is monaco.languages.WorkspaceTextEdit {
     return (edit as monaco.languages.WorkspaceTextEdit).edit !== undefined;
@@ -8,7 +8,7 @@ function isTextEdit(edit: monaco.languages.WorkspaceTextEdit | monaco.languages.
 const registerCodeActionProvider = function (languageId) {
     return monaco.languages.registerCodeActionProvider(languageId, {
         provideCodeActions: function (model, range, context, token) {
-            return Parent.callEvent("ProvideCodeActions" + languageId, [JSON.stringify(range), JSON.stringify(context)]).then(result => {
+            return Accessor.callEvent("ProvideCodeActions" + languageId, [JSON.stringify(range), JSON.stringify(context)]).then(result => {
                 if (result) {
                     const list: monaco.languages.CodeActionList = JSON.parse(result);
 
