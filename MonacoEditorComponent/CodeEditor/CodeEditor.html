@@ -60,7 +60,7 @@
             // Listen for Selection Changes
             editor.onDidChangeCursorSelection((event) => {
                 if (!modifingSelection) {
-                    console.log(event.source);
+                    //console.log(event.source);
                     Parent.setValue("SelectedText", model.getValueInRange(event.selection));
                     Parent.setValue("SelectedRange", JSON.stringify(event.selection), "Selection");
                 }
