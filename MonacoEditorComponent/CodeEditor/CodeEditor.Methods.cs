@@ -65,37 +65,37 @@ namespace Monaco
 
         public IAsyncAction RevealPositionAsync(IPosition position, bool revealVerticalInCenter, bool revealHorizontal)
         {
-            return SendScriptAsync("editor.revealPosition(JSON.parse('" + position.ToJson() + "'), " + JsonConvert.ToString(revealVerticalInCenter) + ", " + JsonConvert.ToString(revealHorizontal) + ")").AsAsyncAction();
+            return SendScriptAsync("editor.revealPosition(JSON.parse('" + JsonConvert.SerializeObject(position) + "'), " + JsonConvert.ToString(revealVerticalInCenter) + ", " + JsonConvert.ToString(revealHorizontal) + ")").AsAsyncAction();
         }
 
         public IAsyncAction RevealPositionInCenterAsync(IPosition position)
         {
-            return SendScriptAsync("editor.revealPositionInCenter(JSON.parse('" + position.ToJson() + "'))").AsAsyncAction();
+            return SendScriptAsync("editor.revealPositionInCenter(JSON.parse('" + JsonConvert.SerializeObject(position) + "'))").AsAsyncAction();
         }
 
         public IAsyncAction RevealPositionInCenterIfOutsideViewportAsync(IPosition position)
         {
-            return SendScriptAsync("editor.revealPositionInCenterIfOutsideViewport(JSON.parse('" + position.ToJson() + "'))").AsAsyncAction();
+            return SendScriptAsync("editor.revealPositionInCenterIfOutsideViewport(JSON.parse('" + JsonConvert.SerializeObject(position) + "'))").AsAsyncAction();
         }
 
         public IAsyncAction RevealRangeAsync(IRange range)
         {
-            return SendScriptAsync("editor.revealRange(JSON.parse('" + range.ToJson() + "'))").AsAsyncAction();
+            return SendScriptAsync("editor.revealRange(JSON.parse('" + JsonConvert.SerializeObject(range) + "'))").AsAsyncAction();
         }
 
         public IAsyncAction RevealRangeAtTopAsync(IRange range)
         {
-            return SendScriptAsync("editor.revealRangeAtTop(JSON.parse('" + range.ToJson() + "'))").AsAsyncAction();
+            return SendScriptAsync("editor.revealRangeAtTop(JSON.parse('" + JsonConvert.SerializeObject(range) + "'))").AsAsyncAction();
         }
 
         public IAsyncAction RevealRangeInCenterAsync(IRange range)
         {
-            return SendScriptAsync("editor.revealRangeInCenter(JSON.parse('" + range.ToJson() + "'))").AsAsyncAction();
+            return SendScriptAsync("editor.revealRangeInCenter(JSON.parse('" + JsonConvert.SerializeObject(range) + "'))").AsAsyncAction();
         }
 
         public IAsyncAction RevealRangeInCenterIfOutsideViewportAsync(IRange range)
         {
-            return SendScriptAsync("editor.revealRangeInCenterIfOutsideViewport(JSON.parse('" + range.ToJson() + "'))").AsAsyncAction();
+            return SendScriptAsync("editor.revealRangeInCenterIfOutsideViewport(JSON.parse('" + JsonConvert.SerializeObject(range) + "'))").AsAsyncAction();
         }
         #endregion
 
