@@ -43,7 +43,7 @@
         require(['vs/editor/editor.main'], async function () {
             Debug.log("Grabbing Monaco Options");
 
-            let opt = getOptions();
+            let opt = await getOptions();
 
             Debug.log("Grabbing Initial Text Value");
             opt["value"] = await Accessor.getValue("Text");
