@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
-using Windows.UI;
 using Windows.UI.Text;
 using Windows.UI.Xaml.Media;
 
@@ -9,24 +8,20 @@ namespace Monaco.Helpers
     /// <summary>
     /// Inline styles modify the text style itself and are useful for manipulating the colors and styles of text to indicate conditions.
     /// </summary>
+    [JsonConverter(typeof(CssStyleConverter))]
     public sealed class CssInlineStyle : ICssStyle
     {
-        [JsonIgnore]
         public TextDecoration TextDecoration { get; set; }
 
-        [JsonIgnore]
         public FontWeight? FontWeight { get; set; }
 
-        [JsonIgnore]
         public FontStyle FontStyle { get; set; }
 
         // TODO: Provide Cursor: https://developer.mozilla.org/en-US/docs/Web/CSS/cursor
 
         // Setting a background inline will override any CssLineStyle.
-        [JsonIgnore]
         public Color? BackgroundColor { get; set; }
 
-        [JsonIgnore]
         public Color? ForegroundColor { get; set; }
 
         public uint Id { get; }

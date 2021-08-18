@@ -2,6 +2,7 @@
 
 namespace Monaco.Helpers
 {
+    [JsonConverter(typeof(CssStyleConverter))]
     public sealed class CssGlyphStyle : ICssStyle
     {
         [JsonIgnore]
