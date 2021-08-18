@@ -360,7 +360,7 @@ namespace MonacoEditorTestApp
             }
             else
             {
-                //Editor.Markers.Clear();
+                Editor.Markers.Clear();
                 await Editor.SetModelMarkersAsync("CodeEditor", Array.Empty<IMarkerData>());
 
                 _actionProvider.IsOn = false;
