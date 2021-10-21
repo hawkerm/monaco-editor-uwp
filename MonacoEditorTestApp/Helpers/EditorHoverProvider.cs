@@ -22,7 +22,7 @@ namespace MonacoEditorTestApp.Helpers
                         "*Hit* - press the keys following together.",
                         "Some **more** text is here.",
                         "And a [link](https://www.github.com/)."
-                    }, new Range(position.LineNumber, position.Column, position.LineNumber, position.Column + 5));
+                    }, new Range(position.LineNumber, word.StartColumn, position.LineNumber, word.EndColumn));
                 }
 
                 return default(Hover);
