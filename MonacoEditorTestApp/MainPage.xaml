@@ -56,7 +56,7 @@
                 <Button Content="Highlight Range 3,1-10" Click="ButtonHighlightRange_Click" />
                 <Button Content="Highlight Line 2 &amp; 4" Click="ButtonHighlightLine_Click" />
                 <Button Content="Clear Highlights" Click="ButtonClearHighlights_Click" />
-                <Button Content="Set Marker" Click="ButtonSetMarker_Click" />
+                <Button Content="Toggle Markers" Click="ButtonSetMarker_Click" />
                 <Button Content="Find 'Ctrl'" Click="ButtonFindCtrl_Click" />
                 <TextBlock Text="Options" Style="{StaticResource SubtitleTextBlockStyle}" Margin="8,12,0,0"/>
                 <Button Content="Code Folding" Click="ButtonFolding_Click" />

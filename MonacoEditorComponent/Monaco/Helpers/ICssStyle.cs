@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace Monaco.Helpers
 {
-    [JsonConverter(typeof(CssStyleConverter))]
     public interface ICssStyle
     {
         uint Id { get; }

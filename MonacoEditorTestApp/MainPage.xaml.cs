@@ -40,19 +40,19 @@ namespace MonacoEditorTestApp
         private EditorCodeActionProvider _actionProvider;
 
         #region CSS Style Objects
-        private readonly CssLineStyle CssLineDarkRed = new CssLineStyle()
+        private readonly CssLineStyle CssLineDarkTransparentRed = new CssLineStyle()
         {
-            BackgroundColor = new SolidColorBrush(Colors.DarkRed),
+            BackgroundColor = Color.FromArgb(128, 128, 0, 0),
         };
 
-        private readonly CssLineStyle CssLineAliceBlue = new CssLineStyle()
+        private readonly CssLineStyle CssLineLightBlue = new CssLineStyle()
         {
-            BackgroundColor = new SolidColorBrush(Colors.AliceBlue)
+            BackgroundColor = Colors.LightBlue
         };
 
         private readonly CssInlineStyle CssInlineWhiteBold = new CssInlineStyle()
         {
-            ForegroundColor = new SolidColorBrush(Colors.White),
+            ForegroundColor = Colors.White,
             FontWeight = FontWeights.Bold,
             FontStyle = FontStyle.Italic
         };
@@ -229,7 +229,7 @@ namespace MonacoEditorTestApp
             Editor.Decorations.Add(
                 new IModelDeltaDecoration(new Range(3, 1, 3, 10), new IModelDecorationOptions()
                 {
-                    ClassName = CssLineDarkRed,
+                    ClassName = CssLineDarkTransparentRed,
                     InlineClassName = CssInlineWhiteBold,
                     HoverMessage = new string[]
                     {
@@ -245,7 +245,7 @@ namespace MonacoEditorTestApp
             Editor.Decorations.Add(
                 new IModelDeltaDecoration(new Range(4, 1, 4, 1), new IModelDecorationOptions() {
                     IsWholeLine = true,
-                    ClassName = CssLineAliceBlue,
+                    ClassName = CssLineLightBlue,
                     InlineClassName = CssInlineWhiteBold,
                     GlyphMarginClassName = CssGlyphError,
                     HoverMessage = (new string[]

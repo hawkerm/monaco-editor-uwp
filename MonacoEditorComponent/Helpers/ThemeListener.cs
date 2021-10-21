@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.Toolkit.Uwp;
+using System;
 using System.Diagnostics;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation.Metadata;
+using Windows.System;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 
@@ -14,8 +16,10 @@ namespace Monaco.Helpers
     /// and Signals an Event when they occur.
     /// </summary>
     [AllowForWeb]
-    public sealed class ThemeListener
+    public sealed class ThemeListener // This is a copy of the Toolkit ThemeListener, for some reason if we try and use it directly it's not read by the WebView
     {
+        private readonly DispatcherQueue _queue;
+
         public string CurrentThemeName { get { return CurrentTheme.ToString(); } } // For Web Retrieval
 
         public ApplicationTheme CurrentTheme { get; set; }
@@ -26,8 +30,12 @@ namespace Monaco.Helpers
         private readonly AccessibilitySettings _accessible = new AccessibilitySettings();
         private readonly UISettings _settings = new UISettings();
 
-        public ThemeListener()
+        public ThemeListener() : this(null) { }
+
+        public ThemeListener(DispatcherQueue queue)
         {
+            _queue = queue ?? DispatcherQueue.GetForCurrentThread();
+
             CurrentTheme = Application.Current.RequestedTheme;
             IsHighContrast = _accessible.HighContrast;
 
@@ -59,7 +67,7 @@ namespace Monaco.Helpers
         private async void _settings_ColorValuesChanged(UISettings sender, object args)
         {
             // Getting called off thread, so we need to dispatch to request value.
-            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            await _queue.EnqueueAsync(() =>
             {
                 // TODO: This doesn't stop the multiple calls if we're in our faked 'White' HighContrast Mode below.
                 if (CurrentTheme != Application.Current.RequestedTheme ||

@@ -40,34 +40,42 @@
 
         Debug.log("Starting Monaco Load");
         require.config({ paths: { 'vs': 'ms-appx-web:///Monaco/monaco-editor/min/vs' } });
-        require(['vs/editor/editor.main'], function () {
+        require(['vs/editor/editor.main'], async function () {
             Debug.log("Grabbing Monaco Options");
 
-            let opt = getOptions();
-            opt["value"] = Parent.getValue("Text");
+            let opt = await getOptions();
 
+            Debug.log("Grabbing Initial Text Value");
+            opt["value"] = await Accessor.getValue("Text");
+
+            Debug.log("Creating Monaco Document Model");
             editor = monaco.editor.create(document.getElementById('container'), opt);
             model = editor.getModel();
 
             // Listen for Content Changes
-            model.onDidChangeContent((event) => {
-                Parent.setValue("Text", model.getValue());
+            model.onDidChangeContent(async (event) => {
+                await Accessor.setValue("Text", model.getValue());
                 //console.log("buffers: " + JSON.stringify(model._buffer._pieceTree._buffers));
                 //console.log("commandMgr: " + JSON.stringify(model._commandManager));
                 //console.log("viewState:" + JSON.stringify(editor.saveViewState()));
             });
 
             // Listen for Selection Changes
-            editor.onDidChangeCursorSelection((event) => {
+            editor.onDidChangeCursorSelection(async (event) => {
                 if (!modifingSelection) {
                     //console.log(event.source);
-                    Parent.setValue("SelectedText", model.getValueInRange(event.selection));
-                    Parent.setValue("SelectedRange", JSON.stringify(event.selection), "Selection");
+                    //Debug.log("Setting Selected Text");
+                    await Accessor.setValue("SelectedText", model.getValueInRange(event.selection));
+                    //Debug.log("Setting Selected Range");
+                    await Accessor.setValue("SelectedRange", JSON.stringify(event.selection), "Selection");
+                    //Debug.log("Setting Selection Done");
                 }
             })
 
+            Debug.log("Initializing Theming");
+
             // Set theme
-            let theme = Parent.getJsonValue("RequestedTheme");
+            let theme = await Accessor.getJsonValue("RequestedTheme");
             theme = {
                 "0": "Default",
                 "1": "Light",
@@ -88,7 +96,7 @@
 
             // Callback to Parent that we're loaded
             Debug.log("Loaded Monaco");
-            Parent.callAction("Loaded");
+            Accessor.callAction("Loaded");
         });
     </script>
 </body>

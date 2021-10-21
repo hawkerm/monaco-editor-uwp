@@ -7,10 +7,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-
-// The Templated Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234235
 
 namespace Monaco
 {
@@ -18,11 +17,14 @@ namespace Monaco
     /// UWP Windows Runtime Component wrapper for the Monaco CodeEditor
     /// https://microsoft.github.io/monaco-editor/
     /// </summary>
-    [TemplatePart(Name = "View", Type = typeof(WebView))]
+    [TemplatePart(Name = "RootBorder", Type = typeof(Border))]
     public sealed partial class CodeEditor : Control, INotifyPropertyChanged, IDisposable
     {
         private bool _initialized;
-        private WebView _view;
+        private DispatcherQueue _queue;
+
+        private readonly WebView _view;
+
         private ModelHelper _model;
         private CssStyleBroker _cssBroker;
 
@@ -37,13 +39,32 @@ namespace Monaco
             private set => SetValue(IsEditorLoadedProperty, value);
         }
 
-        public static DependencyProperty IsEditorLoadedProperty { get; } = DependencyProperty.Register(nameof(IsEditorLoaded), typeof(string), typeof(CodeEditor), new PropertyMetadata(false));
+        public static DependencyProperty IsEditorLoadedProperty { get; } = DependencyProperty.Register(
+            nameof(IsEditorLoaded),
+            typeof(string),
+            typeof(CodeEditor),
+            new PropertyMetadata(false, OnIsEditorLoadedChanged));
+
+        private static void OnIsEditorLoadedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            CodeEditor @this = (CodeEditor)d;
+
+            @this._view.Visibility = (bool)e.NewValue ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        /// <summary>
+        /// Construct a new Stand Alone Code Editor, assumes being constructed on UI Thread.
+        /// </summary>
+        public CodeEditor() : this(null) { }
 
         /// <summary>
         /// Construct a new IStandAloneCodeEditor.
         /// </summary>
-        public CodeEditor()
+        /// <param name="queue"><see cref="DispatcherQueue"/> for the UI Thread, if none pass assumes the current thread is the UI thread.</param>
+        public CodeEditor(DispatcherQueue queue)
         {
+            _queue = queue ?? DispatcherQueue.GetForCurrentThread();
+
             DefaultStyleKey = typeof(CodeEditor);
             if (Options != null)
             {
@@ -65,6 +86,23 @@ namespace Monaco
 
             base.Loaded += CodeEditor_Loaded;
             Unloaded += CodeEditor_Unloaded;
+
+            // <WebView
+            //     HorizontalAlignment="Stretch"
+            //     VerticalAlignment="Stretch"
+            _view = new WebView(WebViewExecutionMode.SeparateProcess)
+            {
+                Margin = Padding,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+                Visibility = IsEditorLoaded ? Visibility.Visible : Visibility.Collapsed
+            };
+
+            //     Margin="{TemplateBinding Padding}"
+            RegisterPropertyChangedCallback(PaddingProperty, (s, e) =>
+            {
+                _view.Margin = Padding;
+            });
         }
 
         private async void Options_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -117,8 +155,6 @@ namespace Monaco
             if (_view != null)
             {
                 _view.NavigationStarting -= WebView_NavigationStarting;
-                _view.DOMContentLoaded -= WebView_DOMContentLoaded;
-                _view.NavigationCompleted -= WebView_NavigationCompleted;
                 _view.NewWindowRequested -= WebView_NewWindowRequested;
                 _initialized = false;
             }
@@ -144,19 +180,20 @@ namespace Monaco
             if (_view != null)
             {
                 _view.NavigationStarting -= WebView_NavigationStarting;
-                _view.DOMContentLoaded -= WebView_DOMContentLoaded;
-                _view.NavigationCompleted -= WebView_NavigationCompleted;
                 _view.NewWindowRequested -= WebView_NewWindowRequested;
                 _initialized = false;
             }
 
-            _view = (WebView)GetTemplateChild("View");
+            var border = (Border)GetTemplateChild("RootBorder");
+
+            if (border.Child is null)
+            {
+                border.Child = _view;
+            }
 
             if (_view != null)
             {
                 _view.NavigationStarting += WebView_NavigationStarting;
-                _view.DOMContentLoaded += WebView_DOMContentLoaded;
-                _view.NavigationCompleted += WebView_NavigationCompleted;
                 _view.NewWindowRequested += WebView_NewWindowRequested;
                 _view.Source = new System.Uri("ms-appx-web:///Monaco/CodeEditor/CodeEditor.html");
             }

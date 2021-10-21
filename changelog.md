@@ -5,6 +5,7 @@ v0.9 - 08/??/2021
 - Add *[CodeLens](https://microsoft.github.io/monaco-editor/api/modules/monaco.languages.html#registercodelensprovider)* Language Sergvice Support (onDidChange not supported)
 - Add *[ColorProvider](https://microsoft.github.io/monaco-editor/api/modules/monaco.languages.html#registercolorprovider)* Language Service Support
 - Add *[FindMatches](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.itextmodel.html#findmatches)* Model Methods
+- Moved WebView out-of-process
 - Expose `ReadOnly` property
 - Fix broken Snippet function
 - Optimized Decoration Style generation
@@ -12,6 +13,7 @@ v0.9 - 08/??/2021
 - **Note:** Marked `LanguagesHelper` Obsolete, use <Editor Instance>.Languages.* instead.
 
 **Breaking Changes**: 
+- The CssStyle classes for `IModelDecorationOptions` have been changed from `SolidColorBrush` to `Nullable<Color>` and support alpha
 - The `CommandHandler` delegate has changed to accept arguments to Commands.
 - Use `StandaloneEditorConstructionOptions` for Options instead of `IEditorConstructionOptions`
 - `CompletionItem` constructor has changed

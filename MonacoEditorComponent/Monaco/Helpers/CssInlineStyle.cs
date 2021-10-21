@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using Newtonsoft.Json;
+using System.Text;
+using Windows.UI;
 using Windows.UI.Text;
 using Windows.UI.Xaml.Media;
 
@@ -9,15 +11,23 @@ namespace Monaco.Helpers
     /// </summary>
     public sealed class CssInlineStyle : ICssStyle
     {
+        [JsonIgnore]
         public TextDecoration TextDecoration { get; set; }
+
+        [JsonIgnore]
         public FontWeight? FontWeight { get; set; }
+
+        [JsonIgnore]
         public FontStyle FontStyle { get; set; }
 
         // TODO: Provide Cursor: https://developer.mozilla.org/en-US/docs/Web/CSS/cursor
 
         // Setting a background inline will override any CssLineStyle.
-        public SolidColorBrush BackgroundColor { get; set; }
-        public SolidColorBrush ForegroundColor { get; set; }
+        [JsonIgnore]
+        public Color? BackgroundColor { get; set; }
+
+        [JsonIgnore]
+        public Color? ForegroundColor { get; set; }
 
         public uint Id { get; }
 
@@ -53,18 +63,20 @@ namespace Monaco.Helpers
                 output.AppendLine(string.Format("font-style: {0};", FontStyle.ToString().ToLower()));
             }
 
-            if (BackgroundColor != null)
+            if (BackgroundColor.HasValue)
             {
-                output.AppendLine(string.Format("background: #{0:X2}{1:X2}{2:X2};", BackgroundColor.Color.R,
-                                                                                    BackgroundColor.Color.G,
-                                                                                    BackgroundColor.Color.B));
+                output.AppendLine(string.Format("background: rgba({0:d},{1:d},{2:d},{3:f});", BackgroundColor.Value.R,
+                                                                                              BackgroundColor.Value.G,
+                                                                                              BackgroundColor.Value.B,
+                                                                                              BackgroundColor.Value.A / 255f));
             }
 
-            if (ForegroundColor != null)
+            if (ForegroundColor.HasValue)
             {
-                output.AppendLine(string.Format("color: #{0:X2}{1:X2}{2:X2} !important;", ForegroundColor.Color.R,
-                                                                               ForegroundColor.Color.G,
-                                                                               ForegroundColor.Color.B));
+                output.AppendLine(string.Format("color: rgba({0:d},{1:d},{2:d},{3:f}) !important;", ForegroundColor.Value.R,
+                                                                                                    ForegroundColor.Value.G,
+                                                                                                    ForegroundColor.Value.B,
+                                                                                                    ForegroundColor.Value.A / 255f));
             }
 
             return this.WrapCssClassName(output.ToString());

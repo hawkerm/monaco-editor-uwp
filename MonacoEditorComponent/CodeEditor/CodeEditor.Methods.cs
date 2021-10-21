@@ -1,4 +1,5 @@
-﻿using Monaco.Editor;
+﻿using Microsoft.Toolkit.Uwp;
+using Monaco.Editor;
 using Monaco.Helpers;
 using Newtonsoft.Json;
 using System;
@@ -64,37 +65,37 @@ namespace Monaco
 
         public IAsyncAction RevealPositionAsync(IPosition position, bool revealVerticalInCenter, bool revealHorizontal)
         {
-            return SendScriptAsync("editor.revealPosition(JSON.parse('" + position.ToJson() + "'), " + JsonConvert.ToString(revealVerticalInCenter) + ", " + JsonConvert.ToString(revealHorizontal) + ")").AsAsyncAction();
+            return SendScriptAsync("editor.revealPosition(JSON.parse('" + JsonConvert.SerializeObject(position) + "'), " + JsonConvert.ToString(revealVerticalInCenter) + ", " + JsonConvert.ToString(revealHorizontal) + ")").AsAsyncAction();
         }
 
         public IAsyncAction RevealPositionInCenterAsync(IPosition position)
         {
-            return SendScriptAsync("editor.revealPositionInCenter(JSON.parse('" + position.ToJson() + "'))").AsAsyncAction();
+            return SendScriptAsync("editor.revealPositionInCenter(JSON.parse('" + JsonConvert.SerializeObject(position) + "'))").AsAsyncAction();
         }
 
         public IAsyncAction RevealPositionInCenterIfOutsideViewportAsync(IPosition position)
         {
-            return SendScriptAsync("editor.revealPositionInCenterIfOutsideViewport(JSON.parse('" + position.ToJson() + "'))").AsAsyncAction();
+            return SendScriptAsync("editor.revealPositionInCenterIfOutsideViewport(JSON.parse('" + JsonConvert.SerializeObject(position) + "'))").AsAsyncAction();
         }
 
         public IAsyncAction RevealRangeAsync(IRange range)
         {
-            return SendScriptAsync("editor.revealRange(JSON.parse('" + range.ToJson() + "'))").AsAsyncAction();
+            return SendScriptAsync("editor.revealRange(JSON.parse('" + JsonConvert.SerializeObject(range) + "'))").AsAsyncAction();
         }
 
         public IAsyncAction RevealRangeAtTopAsync(IRange range)
         {
-            return SendScriptAsync("editor.revealRangeAtTop(JSON.parse('" + range.ToJson() + "'))").AsAsyncAction();
+            return SendScriptAsync("editor.revealRangeAtTop(JSON.parse('" + JsonConvert.SerializeObject(range) + "'))").AsAsyncAction();
         }
 
         public IAsyncAction RevealRangeInCenterAsync(IRange range)
         {
-            return SendScriptAsync("editor.revealRangeInCenter(JSON.parse('" + range.ToJson() + "'))").AsAsyncAction();
+            return SendScriptAsync("editor.revealRangeInCenter(JSON.parse('" + JsonConvert.SerializeObject(range) + "'))").AsAsyncAction();
         }
 
         public IAsyncAction RevealRangeInCenterIfOutsideViewportAsync(IRange range)
         {
-            return SendScriptAsync("editor.revealRangeInCenterIfOutsideViewport(JSON.parse('" + range.ToJson() + "'))").AsAsyncAction();
+            return SendScriptAsync("editor.revealRangeInCenterIfOutsideViewport(JSON.parse('" + JsonConvert.SerializeObject(range) + "'))").AsAsyncAction();
         }
         #endregion
 
@@ -152,12 +153,14 @@ namespace Monaco
 
         public IAsyncOperation<ContextKey> CreateContextKeyAsync(string key, bool defaultValue)
         {
-            var ck = new ContextKey(this, key, defaultValue);
-
-            return InvokeScriptAsync("createContext", ck).ContinueWith((noop) =>
+            return AsyncInfo.Run(async delegate (CancellationToken token)
             {
+                var ck = new ContextKey(this, key, defaultValue);
+
+                await InvokeScriptAsync("createContext", ck);
+
                 return ck;
-            }).AsAsyncOperation();
+            });            
         }
 
         public IModel GetModel()
@@ -194,24 +197,23 @@ namespace Monaco
         /// <returns></returns>
         private IAsyncAction DeltaDecorationsHelperAsync([ReadOnlyArray] IModelDeltaDecoration[] newDecorations)
         {
-            var newDecorationsAdjust = newDecorations ?? Array.Empty<IModelDeltaDecoration>();
-
-            if (_cssBroker.AssociateStyles(newDecorations))
+            return AsyncInfo.Run(async delegate (CancellationToken token)
             {
-                // Update Styles First
-                return InvokeScriptAsync("updateStyle", _cssBroker.GetStyles()).ContinueWith((noop) =>
+                await _queue.EnqueueAsync(async () =>
                 {
+                    var newDecorationsAdjust = newDecorations ?? Array.Empty<IModelDeltaDecoration>();
+
+                    if (_cssBroker.AssociateStyles(newDecorations))
+                    {
+                        // Update Styles First
+                        await InvokeScriptAsync("updateStyle", _cssBroker.GetStyles());
+                    }
+
                     // Send Command to Modify Decorations
                     // IMPORTANT: Need to cast to object here as we want this to be a single array object passed as a parameter, not a list of parameters to expand.
-                    return InvokeScriptAsync("updateDecorations", (object)newDecorationsAdjust);
-                }).AsAsyncAction();
-            }
-            else
-            {
-                // Only Send Command to Modify Decorations themselves
-                // IMPORTANT: Need to cast to object here as we want this to be a single array object passed as a parameter, not a list of parameters to expand.
-                return InvokeScriptAsync("updateDecorations", (object)newDecorationsAdjust).AsAsyncAction();
-            }             
+                    await InvokeScriptAsync("updateDecorations", (object)newDecorationsAdjust);
+                });
+            });
         }
     }
 }
