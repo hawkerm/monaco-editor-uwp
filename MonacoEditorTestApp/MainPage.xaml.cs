@@ -456,8 +456,6 @@ namespace MonacoEditorTestApp
 
                 RootGrid.Children.Add(Editor);
 
-                // TODO: My Condition?
-
                 btn.Content = "Remove";
             }           
         }
