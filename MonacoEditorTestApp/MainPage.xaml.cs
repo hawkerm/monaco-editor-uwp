@@ -199,11 +199,15 @@ namespace MonacoEditorTestApp
             });
 
             await Editor.AddActionAsync(new TestAction());
+
+            // we only need to fire loading once to initialize all our model/helpers
+            Editor.Loading -= Editor_Loading;
         }
 
         private void Editor_Loaded(object sender, RoutedEventArgs e)
         {
             // Ready for Display
+            Editor.Loaded -= Editor_Loaded;
         }
 
         private void Editor_OpenLinkRequest(WebView sender, WebViewNewWindowRequestedEventArgs args)
@@ -419,8 +423,6 @@ namespace MonacoEditorTestApp
                 _myCondition = null;
                 Editor.KeyDown -= Editor_KeyDown;
 
-                Editor.Loaded -= Editor_Loaded;
-                Editor.Loading -= Editor_Loading;
                 Editor.OpenLinkRequested -= Editor_OpenLinkRequest;
                 Editor.InternalException -= Editor_InternalException;
 
@@ -444,6 +446,7 @@ namespace MonacoEditorTestApp
 
                 Editor.KeyDown += Editor_KeyDown;
 
+                // Re-setup loading events for new instance
                 Editor.Loading += Editor_Loading;
                 Editor.Loaded += Editor_Loaded;
                 Editor.OpenLinkRequested += Editor_OpenLinkRequest;
