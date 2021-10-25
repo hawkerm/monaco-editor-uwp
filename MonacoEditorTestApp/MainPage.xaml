@@ -30,8 +30,7 @@
                            KeyDown="Editor_KeyDown"
                            GotFocus="Editor_GotFocus"
                            LostFocus="Editor_LostFocus"
-                           Text="{x:Bind CodeContent, Mode=TwoWay}"
-                           Options="{x:Bind options, Mode=OneWay}">
+                           Text="{x:Bind CodeContent, Mode=TwoWay}">
         </monaco:CodeEditor>
         <TextBlock Text="{x:Bind CodeContent, Mode=OneWay}" Grid.Row="1" Grid.Column="1"/>
         <TextBox x:Name="TextEditor"

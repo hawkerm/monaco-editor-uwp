@@ -66,13 +66,14 @@ namespace Monaco
             _queue = queue ?? DispatcherQueue.GetForCurrentThread();
 
             DefaultStyleKey = typeof(CodeEditor);
-            if (Options != null)
+            if (ReadLocalValue(OptionsProperty) == DependencyProperty.UnsetValue)
             {
+                Options = new StandaloneEditorConstructionOptions();
+
                 // Set Pass-Thru Properties
                 Options.GlyphMargin = HasGlyphMargin;
-
-                // Register for changes
-                Options.PropertyChanged += Options_PropertyChanged;
+                Options.Language = CodeLanguage;
+                Options.ReadOnly = ReadOnly;
             }
 
             // Initialize this here so property changed event will fire and register collection changed event.
@@ -126,22 +127,43 @@ namespace Monaco
 
         private void CodeEditor_Loaded(object sender, RoutedEventArgs e)
         {
+            // Sync initial pass-thru properties
+            if (ReadLocalValue(HasGlyphMarginProperty) == DependencyProperty.UnsetValue && Options.GlyphMargin.HasValue)
+            {
+                HasGlyphMargin = Options.GlyphMargin.Value;
+            }
+
+            if (ReadLocalValue(CodeLanguageProperty) == DependencyProperty.UnsetValue && Options.Language != null)
+            {
+                CodeLanguage = Options.Language;
+            }
+
+            if (ReadLocalValue(ReadOnlyProperty) == DependencyProperty.UnsetValue && Options.ReadOnly.HasValue)
+            {
+                ReadOnly = Options.ReadOnly.Value;
+            }
+
             // Do this the 2nd time around.
             if (_model == null && _view != null)
             {
                 _model = new ModelHelper(this);
 
+                Options.PropertyChanged -= Options_PropertyChanged;
                 Options.PropertyChanged += Options_PropertyChanged;
 
+                Decorations.VectorChanged -= Decorations_VectorChanged;
                 Decorations.VectorChanged += Decorations_VectorChanged;
+                Markers.VectorChanged -= Markers_VectorChanged;
                 Markers.VectorChanged += Markers_VectorChanged;
 
+                _view.NewWindowRequested -= WebView_NewWindowRequested;
                 _view.NewWindowRequested += WebView_NewWindowRequested;
 
                 _initialized = true;
 
                 Loading?.Invoke(this, new RoutedEventArgs());
 
+                Unloaded -= CodeEditor_Unloaded;
                 Unloaded += CodeEditor_Unloaded;
 
                 Loaded?.Invoke(this, new RoutedEventArgs());
@@ -193,7 +215,9 @@ namespace Monaco
 
             if (_view != null)
             {
+                _view.NavigationStarting -= WebView_NavigationStarting;
                 _view.NavigationStarting += WebView_NavigationStarting;
+                _view.NewWindowRequested -= WebView_NewWindowRequested;
                 _view.NewWindowRequested += WebView_NewWindowRequested;
                 _view.Source = new System.Uri("ms-appx-web:///Monaco/CodeEditor/CodeEditor.html");
             }
