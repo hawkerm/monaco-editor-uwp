@@ -26,7 +26,7 @@ The following Monaco Editor features are currently supported by this component b
 - KeyDown Events
 - Responds Appropriately to Programmatic Focus Events
 - Render Aware: Only displays once Loading is complete.
-
+- Out-of-process WebView usage.
 
 Usage
 -----
@@ -75,11 +75,11 @@ There are some common caveats though called out here:
 
 Build Notes
 -----------
-Built using Visual Studio 2019 for Windows 10 16299 and above.
+Built using Visual Studio 2019 for Windows 10 17763 and above.
 
 The **released** complete Monaco v0.21.3 build is used as a reference, this is not included in this repository and can be downloaded from the [Monaco site](https://microsoft.github.io/monaco-editor/).  The contents of its uncompressed 'package' directory should be placed in the *MonacoEditorComponent/monaco-editor* directory.  The `install-dependencies.ps1` PowerShell script can install this for you automatically.
 
-This component currently won't move beyond Monaco v0.22.3 as it is the last version compatible with the UWP WebView component running the Legacy Microsoft Edge engine. However, that version seems to have other issues running in Edge as well, so we have last tested with v0.21.3.
+This component currently won't move beyond Monaco v0.22.3 as it is the last version compatible with the UWP WebView component running the Legacy Microsoft Edge engine. However, that version seems to have other issues running in Edge as well, so we have last tested with v0.21.3. In the future we'll investigate moving to WebView2.
 
 In order to re-generate C# typings from a version of Monaco, see the GenerateMonacoTypings Node.js project [readme here](GenerateMonacoTypings/README.md).
 

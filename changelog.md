@@ -11,6 +11,8 @@ v0.9 - 08/??/2021
 - Optimized Decoration Style generation
 - Sync `CodeLanguage` and `Options.Language`, `HasGlyphMargin` and `Options.GlyphMargin`
 - **Note:** Marked `LanguagesHelper` Obsolete, use <Editor Instance>.Languages.* instead.
+- Fixes for #41, #49, #58, #60, #62
+- Added Converter Script to Repo to Generate Typings from Monaco, thanks to @hez2010 for the tool!
 
 **Breaking Changes**: 
 - The CssStyle classes for `IModelDecorationOptions` have been changed from `SolidColorBrush` to `Nullable<Color>` and support alpha
@@ -21,7 +23,7 @@ v0.9 - 08/??/2021
 - Use `HoverProvider` interface instead of original delegate
 - `IUri` has been renamed to `Uri` (see another Future Break #33)
 - Rename `IsLoaded` to `IsEditorLoaded`
-- `CssStyleBroker` made internal
+- `CssStyleBroker` made internal #42
 
 v0.8.1 - 01/15/2019
 -------------------
