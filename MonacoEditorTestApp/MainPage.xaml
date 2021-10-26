@@ -61,6 +61,7 @@
                 <Button Content="Code Folding" Click="ButtonFolding_Click" />
                 <Button Content="Minimap" Click="ButtonMinimap_Click" />
                 <Button Content="Change Language" Click="ButtonChangeLanguage_Click" />
+                <Button Content="Cycle Line Numbers" Click="ButtonLineNumbers_Click" />
                 <Button Content="Load &amp; Set Pos" Click="LoadAndSet_Click" />
                 <Button Content="Set Readonly" Click="ButtonSetReadonly_Click" />
                 <TextBlock Text="Advanced" Style="{StaticResource SubtitleTextBlockStyle}" Margin="8,12,0,0"/>

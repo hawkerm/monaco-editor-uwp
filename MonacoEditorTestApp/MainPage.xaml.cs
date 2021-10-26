@@ -330,6 +330,18 @@ namespace MonacoEditorTestApp
             Editor.CodeLanguage = (Editor.CodeLanguage == "csharp") ? "xml" : "csharp";
         }
 
+        private void ButtonLineNumbers_Click(object sender, RoutedEventArgs e)
+        {
+            options.LineNumbers = options.LineNumbers switch
+            {
+                LineNumbersType.Interval => LineNumbersType.Off,
+                LineNumbersType.Off => LineNumbersType.On,
+                LineNumbersType.On or null => LineNumbersType.Relative,
+                LineNumbersType.Relative => LineNumbersType.Interval,
+                _ => throw new NotImplementedException(),
+            };
+        }
+
         private async void ButtonSetMarker_Click(object sender, RoutedEventArgs e)
         {
             if ((await Editor.GetModelMarkersAsync()).Count() == 0)
