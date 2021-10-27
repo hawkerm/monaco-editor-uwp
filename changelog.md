@@ -1,4 +1,4 @@
-v0.9 - 08/??/2021
+v0.9 - 10/27/2021
 -----------------
 - Updated Monaco Reference to v0.21.3
 - Add *[CodeAction](https://microsoft.github.io/monaco-editor/api/modules/monaco.languages.html#registercodeactionprovider)* Language Service Support
