@@ -200,7 +200,7 @@ namespace MonacoEditorTestApp
 
             await Editor.AddCommandAsync(KeyMod.CtrlCmd | KeyCode.KEY_U, async (args) =>
             {
-                var range = new Range(2, 10, 3, 8);
+                var range = new Monaco.Range(2, 10, 3, 8);
                 var seg = await Editor.GetModel().GetValueInRangeAsync(range);
 
                 var md = new MessageDialog("Segment " + range.ToString() + ": " + seg);
@@ -238,7 +238,7 @@ namespace MonacoEditorTestApp
         private void ButtonHighlightRange_Click(object sender, RoutedEventArgs e)
         {
             Editor.Decorations.Add(
-                new IModelDeltaDecoration(new Range(3, 1, 3, 10), new IModelDecorationOptions()
+                new IModelDeltaDecoration(new Monaco.Range(3, 1, 3, 10), new IModelDecorationOptions()
                 {
                     ClassName = CssLineDarkRed,
                     InlineClassName = CssInlineWhiteBold,
@@ -254,7 +254,7 @@ namespace MonacoEditorTestApp
         private async void ButtonHighlightLine_Click(object sender, RoutedEventArgs e)
         {
             Editor.Decorations.Add(
-                new IModelDeltaDecoration(new Range(4, 1, 4, 1), new IModelDecorationOptions()
+                new IModelDeltaDecoration(new Monaco.Range(4, 1, 4, 1), new IModelDecorationOptions()
                 {
                     IsWholeLine = true,
                     ClassName = CssLineAliceBlue,
@@ -271,7 +271,7 @@ namespace MonacoEditorTestApp
                     }).ToMarkdownString()
                 }));
             Editor.Decorations.Add(
-                new IModelDeltaDecoration(new Range(2, 1, 2, await Editor.GetModel().GetLineLengthAsync(2)), new IModelDecorationOptions()
+                new IModelDeltaDecoration(new Monaco.Range(2, 1, 2, await Editor.GetModel().GetLineLengthAsync(2)), new IModelDecorationOptions()
                 {
                     IsWholeLine = true,
                     InlineClassName = CssInlineStrikeThrough,
