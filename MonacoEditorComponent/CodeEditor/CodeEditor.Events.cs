@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Windows.Foundation;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -40,18 +41,43 @@ namespace Monaco
         public new event WebKeyEventHandler KeyDown;
 
         private ThemeListener _themeListener;
+        internal ParentAccessor _parentAccessor;
+        private KeyboardListener _keyboardListener;
+        private long _themeToken;
 
-        private void WebView_DOMContentLoaded(WebView sender, WebViewDOMContentLoadedEventArgs args)
+        private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
         {
             #if DEBUG
-            Debug.WriteLine("DOM Content Loaded");
+            Debug.WriteLine("Navigation Starting");
             #endif
-            _initialized = true;
-        }
+            _parentAccessor = new ParentAccessor(this, _queue);
+            _parentAccessor.AddAssemblyForTypeLookup(typeof(Range).GetTypeInfo().Assembly);
+            _parentAccessor.RegisterAction("Loaded", CodeEditorLoaded);
 
-        private async void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+            _themeListener = new ThemeListener(_queue);
+            _themeListener.ThemeChanged += ThemeListener_ThemeChanged;
+            _themeToken = RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedTheme_PropertyChanged);
+
+            _keyboardListener = new KeyboardListener(this, _queue);
+
+            _view.AddWebAllowedObject("Debug", new DebugLogger());
+            _view.AddWebAllowedObject("Accessor", _parentAccessor);
+            _view.AddWebAllowedObject("Theme", _themeListener); // TODO: Is this used?
+            _view.AddWebAllowedObject("Keyboard", _keyboardListener);
+        }        
+
+        private async void CodeEditorLoaded()
         {
-            IsEditorLoaded = true;
+            _initialized = true;
+
+            if (Decorations != null && Decorations.Count > 0)
+            {
+                // Need to retrigger highlights after load if they were set before load.
+                await DeltaDecorationsHelperAsync(Decorations.ToArray());
+            }
+
+            // Now we're done loading
+            Loading?.Invoke(this, new RoutedEventArgs());
 
             // Make sure inner editor is focused
             await SendScriptAsync("editor.focus();");
@@ -62,44 +88,9 @@ namespace Monaco
                 _view.Focus(FocusState.Programmatic);
             }
 
+            IsEditorLoaded = true;
+
             Loaded?.Invoke(this, new RoutedEventArgs());
-        }
-
-        internal ParentAccessor _parentAccessor;
-        private KeyboardListener _keyboardListener;
-        private long _themeToken;
-
-        private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
-        {
-            #if DEBUG
-            Debug.WriteLine("Navigation Starting");
-            #endif
-            _parentAccessor = new ParentAccessor(this);
-            _parentAccessor.AddAssemblyForTypeLookup(typeof(Range).GetTypeInfo().Assembly);
-            _parentAccessor.RegisterAction("Loaded", CodeEditorLoaded);
-
-            _themeListener = new ThemeListener();
-            _themeListener.ThemeChanged += ThemeListener_ThemeChanged;
-            _themeToken = RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedTheme_PropertyChanged);
-
-            _keyboardListener = new KeyboardListener(this);
-
-            _view.AddWebAllowedObject("Debug", new DebugLogger());
-            _view.AddWebAllowedObject("Parent", _parentAccessor);
-            _view.AddWebAllowedObject("Theme", _themeListener);
-            _view.AddWebAllowedObject("Keyboard", _keyboardListener);
-        }        
-
-        private async void CodeEditorLoaded()
-        {
-            if (Decorations != null && Decorations.Count > 0)
-            {
-                // Need to retrigger highlights after load if they were set before load.
-                await DeltaDecorationsHelperAsync(Decorations.ToArray());
-            }
-
-            // Now we're done loading
-            Loading?.Invoke(this, new RoutedEventArgs());
         }
 
         private void WebView_NewWindowRequested(WebView sender, WebViewNewWindowRequestedEventArgs args)

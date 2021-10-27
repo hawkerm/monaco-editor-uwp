@@ -13,9 +13,13 @@
 # TypeScript ignores
 *.js
 *.js.map
+package-lock.json
 
 # Monaco Dependency (Download from https://microsoft.github.io/monaco-editor/)
 MonacoEditorComponent/monaco-editor
+
+# Webcomponents.js Dependency (Download from https://github.com/webcomponents/polyfills)
+MonacoEditorComponent/webcomponents-js
 
 # Build results
 [Dd]ebug/

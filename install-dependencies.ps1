@@ -2,12 +2,18 @@
 # install dependencies into the project directory before building.
 
 # Reference to Monaco Version to Use in the Package
-$monaco_version = "0.20.0"
+$monaco_version = "0.21.3"
+# Reference to @webcomponents/webcomponents.js polyfills (for Shadow DOM for Code Action feature)
+$webcomponentsjs_version = "2.5.0"
 
 # ------------------------
 $monaco_tgz_url = "https://registry.npmjs.org/monaco-editor/-/monaco-editor-$monaco_version.tgz"
+$webcomponentsjs_tgz_url = "https://registry.npmjs.org/@webcomponents/webcomponentsjs/-/webcomponentsjs-$webcomponentsjs_version.tgz"
 $sharp_zip_lib_url = "https://github.com/icsharpcode/SharpZipLib/releases/download/0.86.0.518/ICSharpCode.SharpZipLib.dll"
 $temp_dir_name = ".temp"
+
+# Make download faster by not showing progress
+$ProgressPreference = 'SilentlyContinue'
 
 function Get-ScriptDirectory {
     Split-Path -parent $PSCommandPath
@@ -40,12 +46,14 @@ $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentL
 
 $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 if ($decision -eq 0) {
-    # Remove Old Dependency
+    # Remove Old Dependencies
     Remove-Item ".\MonacoEditorComponent\monaco-editor" -Force -Recurse -ErrorAction SilentlyContinue
+    Remove-Item ".\MonacoEditorComponent\webcomponents-js" -Force -Recurse -ErrorAction SilentlyContinue
 
     # Create Temp Directory and Output
     New-Item -Name $temp_dir_name -ItemType Directory | Out-Null
     New-Item -Name ".\MonacoEditorComponent\monaco-editor" -ItemType Directory | Out-Null
+    New-Item -Name ".\MonacoEditorComponent\webcomponents-js" -ItemType Directory | Out-Null
 
     Write-Host "Downloading SharpZipLib"
     [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
@@ -56,6 +64,11 @@ if ($decision -eq 0) {
     [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
     Invoke-WebRequest -Uri $monaco_tgz_url -OutFile ".\$temp_dir_name\monaco.tgz"
 
+    Write-Host "Downloading webcomponents.js"
+
+    [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
+    Invoke-WebRequest -Uri $webcomponentsjs_tgz_url -OutFile ".\$temp_dir_name\webcomponentsjs.tgz"
+
     Write-Host "Extracting..."
 
     # Load Sharp Zip Lib so we can unpack Monaco
@@ -65,6 +78,11 @@ if ($decision -eq 0) {
     Extract-TGZ "$script_dir\$temp_dir_name\monaco.tgz" "$script_dir\$temp_dir_name\monaco"
 
     Copy-Item -Path ".\$temp_dir_name\monaco\package\*" -Destination ".\MonacoEditorComponent\monaco-editor" -Recurse
+
+
+    Extract-TGZ "$script_dir\$temp_dir_name\webcomponentsjs.tgz" "$script_dir\$temp_dir_name\webcomponentsjs"
+
+    Copy-Item -Path ".\$temp_dir_name\webcomponentsjs\package\*" -Destination ".\MonacoEditorComponent\webcomponents-js" -Recurse
 
     # Clean-up Temp Dir
     Remove-Item $temp_dir_name -Force -Recurse -ErrorAction SilentlyContinue

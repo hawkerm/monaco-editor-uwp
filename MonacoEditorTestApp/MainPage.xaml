@@ -28,8 +28,9 @@
                            HasGlyphMargin="True"
                            CodeLanguage="csharp"
                            KeyDown="Editor_KeyDown"
-                           Text="{x:Bind CodeContent, Mode=TwoWay}"
-                           Options="{x:Bind options, Mode=OneWay}">
+                           GotFocus="Editor_GotFocus"
+                           LostFocus="Editor_LostFocus"
+                           Text="{x:Bind CodeContent, Mode=TwoWay}">
         </monaco:CodeEditor>
         <TextBlock Text="{x:Bind CodeContent, Mode=OneWay}" Grid.Row="1" Grid.Column="1"/>
         <TextBox x:Name="TextEditor"
@@ -37,10 +38,7 @@
                  ScrollViewer.VerticalScrollBarVisibility="Visible"
                  Grid.Row="2"
                  Grid.Column="1"
-                 TabIndex="1"
-                 Text="{x:Bind CodeContent, Mode=OneTime}"
-                 >
-        </TextBox>
+                 TabIndex="1"/>
         <TextBox Text="{Binding ElementName=Editor, Path=SelectedText, Mode=TwoWay}" Grid.Row="3" Grid.Column="1"
                  AcceptsReturn="True"/>
         <TextBlock Text="{Binding ElementName=Editor, Path=SelectedRange}" Grid.Row="4" Grid.Column="1"/>
@@ -57,14 +55,17 @@
                 <Button Content="Highlight Range 3,1-10" Click="ButtonHighlightRange_Click" />
                 <Button Content="Highlight Line 2 &amp; 4" Click="ButtonHighlightLine_Click" />
                 <Button Content="Clear Highlights" Click="ButtonClearHighlights_Click" />
+                <Button Content="Toggle Markers" Click="ButtonSetMarker_Click" />
+                <Button Content="Find 'Ctrl'" Click="ButtonFindCtrl_Click" />
+                <TextBlock Text="Options" Style="{StaticResource SubtitleTextBlockStyle}" Margin="8,12,0,0"/>
                 <Button Content="Code Folding" Click="ButtonFolding_Click" />
                 <Button Content="Minimap" Click="ButtonMinimap_Click" />
                 <Button Content="Change Language" Click="ButtonChangeLanguage_Click" />
-                <Button Content="Set Marker" Click="ButtonSetMarker_Click" />
+                <Button Content="Cycle Line Numbers" Click="ButtonLineNumbers_Click" />
                 <Button Content="Load &amp; Set Pos" Click="LoadAndSet_Click" />
                 <Button Content="Set Readonly" Click="ButtonSetReadonly_Click" />
+                <TextBlock Text="Advanced" Style="{StaticResource SubtitleTextBlockStyle}" Margin="8,12,0,0"/>
                 <Button Content="Run Script" Click="ButtonRunScript_Click" />
-                <Line X1="0" X2="100" Y1="0" Y2="0" StrokeThickness="1" Stroke="{ThemeResource AppBarSeparatorForegroundThemeBrush}"/>
                 <Button x:Name="HideButton" Content="Hide" Click="HideButton_Click"/>
                 <Button x:Name="DetachButton" Content="Detach" Click="DetachButton_Click"/>
                 <Button x:Name="RemoveButton" Content="Remove" Click="RemoveButton_Click"/>

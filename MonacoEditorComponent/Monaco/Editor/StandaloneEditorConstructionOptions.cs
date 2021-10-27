@@ -50,6 +50,7 @@ namespace Monaco.Editor
         /// Defaults to 'on'.
         /// </summary>
         [JsonProperty("acceptSuggestionOnEnter", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(AcceptSuggestionOnEnterConverter))]
         public AcceptSuggestionOnEnter? AcceptSuggestionOnEnter { get => GetPropertyValue<AcceptSuggestionOnEnter?>(); set => SetPropertyValue(value); }
 
         /// <summary>
@@ -63,6 +64,7 @@ namespace Monaco.Editor
         /// Defaults to 'auto'. It is best to leave this to 'auto'.
         /// </summary>
         [JsonProperty("accessibilitySupport", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(AccessibilitySupportConverter))]
         public AccessibilitySupport? AccessibilitySupport { get => GetPropertyValue<AccessibilitySupport?>(); set => SetPropertyValue(value); }
 
         /// <summary>
@@ -76,12 +78,14 @@ namespace Monaco.Editor
         /// Defaults to language defined behavior.
         /// </summary>
         [JsonProperty("autoClosingBrackets", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(AutoClosingBracketsConverter))]
         public AutoClosingBrackets? AutoClosingBrackets { get => GetPropertyValue<AutoClosingBrackets?>(); set => SetPropertyValue(value); }
 
         /// <summary>
         /// Options for typing over closing quotes or brackets.
         /// </summary>
         [JsonProperty("autoClosingOvertype", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(AutoClosingOvertypeConverter))]
         public AutoClosingOvertype? AutoClosingOvertype { get => GetPropertyValue<AutoClosingOvertype?>(); set => SetPropertyValue(value); }
 
         /// <summary>
@@ -89,6 +93,7 @@ namespace Monaco.Editor
         /// Defaults to language defined behavior.
         /// </summary>
         [JsonProperty("autoClosingQuotes", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(AutoClosingQuotesConverter))]
         public AutoClosingQuotes? AutoClosingQuotes { get => GetPropertyValue<AutoClosingQuotes?>(); set => SetPropertyValue(value); }
 
         /// <summary>
@@ -96,6 +101,7 @@ namespace Monaco.Editor
         /// Defaults to false.
         /// </summary>
         [JsonProperty("autoIndent", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(AutoIndentConverter))]
         public AutoIndent? AutoIndent { get => GetPropertyValue<AutoIndent?>(); set => SetPropertyValue(value); }
 
         /// <summary>
@@ -112,6 +118,7 @@ namespace Monaco.Editor
         /// Defaults to always allowing auto surrounding.
         /// </summary>
         [JsonProperty("autoSurround", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(AutoSurroundConverter))]
         public AutoSurround? AutoSurround { get => GetPropertyValue<AutoSurround?>(); set => SetPropertyValue(value); }
 
         /// <summary>
@@ -158,6 +165,7 @@ namespace Monaco.Editor
         /// Defaults to 'blink'.
         /// </summary>
         [JsonProperty("cursorBlinking", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(CursorBlinkingConverter))]
         public CursorBlinking? CursorBlinking { get => GetPropertyValue<CursorBlinking?>(); set => SetPropertyValue(value); }
 
         /// <summary>
@@ -172,6 +180,7 @@ namespace Monaco.Editor
         /// Defaults to 'line'.
         /// </summary>
         [JsonProperty("cursorStyle", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(CursorStyleConverter))]
         public CursorStyle? CursorStyle { get => GetPropertyValue<CursorStyle?>(); set => SetPropertyValue(value); }
 
         /// <summary>
@@ -188,6 +197,7 @@ namespace Monaco.Editor
         /// by mouse.
         /// </summary>
         [JsonProperty("cursorSurroundingLinesStyle", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(CursorSurroundingLinesStyleConverter))]
         public CursorSurroundingLinesStyle? CursorSurroundingLinesStyle { get => GetPropertyValue<CursorSurroundingLinesStyle?>(); set => SetPropertyValue(value); }
 
         /// <summary>
@@ -272,6 +282,7 @@ namespace Monaco.Editor
         /// Defaults to 'auto'.
         /// </summary>
         [JsonProperty("foldingStrategy", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(FoldingStrategyConverter))]
         public FoldingStrategy? FoldingStrategy { get => GetPropertyValue<FoldingStrategy?>(); set => SetPropertyValue(value); }
 
         /// <summary>
@@ -389,6 +400,7 @@ namespace Monaco.Editor
         /// Defaults to true.
         /// </summary>
         [JsonProperty("lineNumbers", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(LineNumbersTypeConverter))]
         public LineNumbersType? LineNumbers { get => GetPropertyValue<LineNumbersType?>(); set => SetPropertyValue(value); }
 
         /// <summary>
@@ -411,6 +423,7 @@ namespace Monaco.Editor
         /// Defaults to 'always'.
         /// </summary>
         [JsonProperty("matchBrackets", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(MatchBracketsConverter))]
         public MatchBrackets? MatchBrackets { get => GetPropertyValue<MatchBrackets?>(); set => SetPropertyValue(value); }
 
         /// <summary>
@@ -424,6 +437,7 @@ namespace Monaco.Editor
         /// Defaults to 'text'
         /// </summary>
         [JsonProperty("mouseStyle", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(MouseStyleConverter))]
         public MouseStyle? MouseStyle { get => GetPropertyValue<MouseStyle?>(); set => SetPropertyValue(value); }
 
         /// <summary>
@@ -452,6 +466,7 @@ namespace Monaco.Editor
         /// Defaults to 'alt'
         /// </summary>
         [JsonProperty("multiCursorModifier", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(MultiCursorModifierConverter))]
         public MultiCursorModifier? MultiCursorModifier { get => GetPropertyValue<MultiCursorModifier?>(); set => SetPropertyValue(value); }
 
         /// <summary>
@@ -460,6 +475,7 @@ namespace Monaco.Editor
         /// Defaults to 'spread'.
         /// </summary>
         [JsonProperty("multiCursorPaste", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(MultiCursorPasteConverter))]
         public MultiCursorPaste? MultiCursorPaste { get => GetPropertyValue<MultiCursorPaste?>(); set => SetPropertyValue(value); }
 
         /// <summary>
@@ -543,6 +559,7 @@ namespace Monaco.Editor
         /// Defaults to all.
         /// </summary>
         [JsonProperty("renderLineHighlight", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(RenderLineHighlightConverter))]
         public RenderLineHighlight? RenderLineHighlight { get => GetPropertyValue<RenderLineHighlight?>(); set => SetPropertyValue(value); }
 
         /// <summary>
@@ -557,6 +574,7 @@ namespace Monaco.Editor
         /// Defaults to none.
         /// </summary>
         [JsonProperty("renderWhitespace", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(RenderWhitespaceConverter))]
         public RenderWhitespace? RenderWhitespace { get => GetPropertyValue<RenderWhitespace?>(); set => SetPropertyValue(value); }
 
         /// <summary>
@@ -630,6 +648,7 @@ namespace Monaco.Editor
         /// Defaults to 'mouseover'.
         /// </summary>
         [JsonProperty("showFoldingControls", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(ShowConverter))]
         public Show? ShowFoldingControls { get => GetPropertyValue<Show?>(); set => SetPropertyValue(value); }
 
         /// <summary>
@@ -649,6 +668,7 @@ namespace Monaco.Editor
         /// Enable snippet suggestions. Default to 'true'.
         /// </summary>
         [JsonProperty("snippetSuggestions", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(SnippetSuggestionsConverter))]
         public SnippetSuggestions? SnippetSuggestions { get => GetPropertyValue<SnippetSuggestions?>(); set => SetPropertyValue(value); }
 
         /// <summary>
@@ -690,12 +710,14 @@ namespace Monaco.Editor
         /// The history mode for suggestions.
         /// </summary>
         [JsonProperty("suggestSelection", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(SuggestSelectionConverter))]
         public SuggestSelection? SuggestSelection { get => GetPropertyValue<SuggestSelection?>(); set => SetPropertyValue(value); }
 
         /// <summary>
         /// Enable tab completion.
         /// </summary>
         [JsonProperty("tabCompletion", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(TabCompletionConverter))]
         public TabCompletion? TabCompletion { get => GetPropertyValue<TabCompletion?>(); set => SetPropertyValue(value); }
 
         /// <summary>
@@ -721,6 +743,7 @@ namespace Monaco.Editor
         /// Defaults to "off".
         /// </summary>
         [JsonProperty("wordWrap", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(WordWrapConverter))]
         public WordWrap? WordWrap { get => GetPropertyValue<WordWrap?>(); set => SetPropertyValue(value); }
 
         /// <summary>
@@ -760,6 +783,7 @@ namespace Monaco.Editor
         /// Defaults to 'same' in vscode and to 'none' in monaco-editor.
         /// </summary>
         [JsonProperty("wrappingIndent", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(WrappingIndentConverter))]
         public WrappingIndent? WrappingIndent { get => GetPropertyValue<WrappingIndent?>(); set => SetPropertyValue(value); }
 
         /// <summary>

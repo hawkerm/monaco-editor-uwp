@@ -1,5 +1,5 @@
 ﻿///<reference path="../monaco-editor/monaco.d.ts" />
-declare var Parent: ParentAccessor;
+declare var Accessor: ParentAccessor;
 declare var Keyboard: KeyboardListener;
 
 declare var editor: monaco.editor.IStandaloneCodeEditor;
@@ -8,7 +8,8 @@ declare var contexts: { [index: string]: monaco.editor.IContextKey<any> };//{};
 declare var decorations: string[];
 declare var modifingSelection: boolean; // Supress updates to selection when making edits.
 
-var updateSelectedContent = function (content) {
+// link:CodeEditor.Properties.cs:updateSelectedContent
+const updateSelectedContent = function (content) {
     let selection = editor.getSelection();
 
     // Need to ignore updates from us notifying of a change
@@ -23,8 +24,8 @@ var updateSelectedContent = function (content) {
         model.pushEditOperations([], [op], null);
 
         // Update selection to new text.
-        var newEndLineNumber = selection.startLineNumber + content.split('\r').length - 1;  // TODO: Not sure if line end is situational/platform specific... investigate more.
-        var newEndColumn = (selection.startLineNumber === selection.endLineNumber)
+        const newEndLineNumber = selection.startLineNumber + content.split('\r').length - 1;  // TODO: Not sure if line end is situational/platform specific... investigate more.
+        const newEndColumn = (selection.startLineNumber === selection.endLineNumber)
             ? selection.startColumn + content.length
             : content.length - content.lastIndexOf('\r');
 

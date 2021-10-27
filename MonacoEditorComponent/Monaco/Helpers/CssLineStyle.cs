@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Text;
+using Windows.UI;
 using Windows.UI.Xaml.Media;
 
 namespace Monaco.Helpers
@@ -8,38 +10,48 @@ namespace Monaco.Helpers
     /// Simple Proxy to general CSS Line Styles.
     /// Line styles are overlayed behind text in the editor and are useful for highlighting sections of text efficiently
     /// </summary>
+    [JsonConverter(typeof(CssStyleConverter))]
     public sealed class CssLineStyle : ICssStyle
     {
-        public SolidColorBrush BackgroundColor { get; set; }
+        [JsonIgnore]
+        public Color? BackgroundColor { get; set; }
+
         [Obsolete("Use ForegroundColor on CssInlineStyle instead, this is an overlay.")]
-        public SolidColorBrush ForegroundColor { get; set; }
+        [JsonIgnore]
+        public Color? ForegroundColor { get; set; }
 
-        public string Name { get; private set; }
+        public uint Id { get; }
 
-        public CssLineStyle(CodeEditor editor)
+        public string Name { get; }
+
+        public CssLineStyle()
         {
-            Name = CssStyleBroker.GetInstance(editor).Register(this);
+            Id = CssStyleBroker.Register(this);
+            Name = "generated-style-" + Id;
         }
 
         public string ToCss()
         {
             StringBuilder output = new StringBuilder(40);
-            if (BackgroundColor != null)
+            if (BackgroundColor.HasValue)
             {
-                output.AppendLine(string.Format("background: #{0:X2}{1:X2}{2:X2};", BackgroundColor.Color.R,
-                                                                                    BackgroundColor.Color.G,
-                                                                                    BackgroundColor.Color.B));
+                //// we need to use rgba function like this due to EdgeHTML, otherwise we could use #RRGGBBAA which would be easier using #{n:X2}...
+                output.AppendLine(string.Format("background: rgba({0:d},{1:d},{2:d},{3:f});", BackgroundColor.Value.R,
+                                                                                              BackgroundColor.Value.G,
+                                                                                              BackgroundColor.Value.B,
+                                                                                              BackgroundColor.Value.A / 255f));
             }
 #pragma warning disable CS0618 // Type or member is obsolete
-            if (ForegroundColor != null)
+            if (ForegroundColor.HasValue)
             {
-                output.AppendLine(string.Format("color: #{0:X2}{1:X2}{2:X2} !important;", ForegroundColor.Color.R,
-                                                                               ForegroundColor.Color.G,
-                                                                               ForegroundColor.Color.B));
+                output.AppendLine(string.Format("color: rgba({0:d},{1:d},{2:d},{3:f}) !important;", ForegroundColor.Value.R,
+                                                                                                    ForegroundColor.Value.G,
+                                                                                                    ForegroundColor.Value.B,
+                                                                                                    ForegroundColor.Value.A / 255f));
             }
 #pragma warning restore CS0618 // Type or member is obsolete
 
-            return CssStyleBroker.WrapCssClassName(this, output.ToString());
+            return this.WrapCssClassName(output.ToString());
         }
     }
 }

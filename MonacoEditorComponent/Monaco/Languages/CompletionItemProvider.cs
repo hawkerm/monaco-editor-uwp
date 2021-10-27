@@ -6,13 +6,13 @@ namespace Monaco.Languages
 {
     /// <summary>
     /// The completion item provider interface defines the contract between extensions and
-    /// the [IntelliSense](https://code.visualstudio.com/docs/editor/intellisense)./// When computing *complete* completion items is expensive, providers can optionally implement
+    /// the [IntelliSense](https://code.visualstudio.com/docs/editor/intellisense).
+    /// When computing *complete* completion items is expensive, providers can optionally implement
     /// the `resolveCompletionItem`-function. In that case it is enough to return completion
     /// items with a [label](#CompletionItem.label) from the
     /// [provideCompletionItems](#CompletionItemProvider.provideCompletionItems)-function. Subsequently,
     /// when a completion item is shown in the UI and gains focus this provider is asked to resolve
     /// the item, like adding [doc-comment](#CompletionItem.documentation) or [details](#CompletionItem.detail).
-    /// 
     /// </summary>
     public interface CompletionItemProvider
     {
@@ -27,6 +27,6 @@ namespace Monaco.Languages
         /// or [details](#CompletionItem.detail)./// The editor will only resolve a completion item once.
         /// 
         /// </summary>
-        IAsyncOperation<CompletionItem> ResolveCompletionItemAsync(IModel model, Position position, CompletionItem item);
+        IAsyncOperation<CompletionItem> ResolveCompletionItemAsync(IModel model, CompletionItem item);
     }
 }

@@ -11,10 +11,11 @@
     <AssemblyName>MonacoEditorComponent</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.18362.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.19041.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
+    <LangVersion>8.0</LangVersion>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <AllowCrossPlatformRetargeting>false</AllowCrossPlatformRetargeting>
   </PropertyGroup>
@@ -25,6 +26,10 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptRemoveComments>true</TypeScriptRemoveComments>
     <TypeScriptSourceMap>false</TypeScriptSourceMap>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TypeScriptTarget>ES2015</TypeScriptTarget>
+    <TypeScriptModuleKind>ES6</TypeScriptModuleKind>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -45,7 +50,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\Monaco.xml</DocumentationFile>
-    <GenerateLibraryLayout>false</GenerateLibraryLayout>
+    <GenerateLibraryLayout>true</GenerateLibraryLayout>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
@@ -123,6 +128,9 @@
     <Compile Include="CodeEditor\CodeEditor.Events.cs" />
     <Compile Include="CodeEditor\CodeEditor.Methods.cs" />
     <Compile Include="CodeEditor\CodeEditor.Properties.cs" />
+    <Compile Include="Monaco\Editor\EndOfLinePreference.cs" />
+    <Compile Include="Monaco\Editor\EndOfLineSequence.cs" />
+    <Compile Include="Monaco\Editor\FindMatch.cs" />
     <Compile Include="Monaco\Editor\IEditorCommentsOptions.cs" />
     <Compile Include="Monaco\Editor\ISingleEditOperation.cs" />
     <Compile Include="Extensions\WebViewExtensions.cs" />
@@ -200,25 +208,40 @@
     <Compile Include="Monaco\Helpers\CssLineStyle.cs" />
     <Compile Include="Monaco\Helpers\CssStyleBroker.cs" />
     <Compile Include="Monaco\Helpers\ICssStyle.cs" />
-    <Compile Include="Monaco\Helpers\Json.cs" />
     <Compile Include="Monaco\Helpers\TextDecoration.cs" />
     <Compile Include="Monaco\IMarkdownString.cs" />
     <Compile Include="Monaco\IPosition.cs" />
     <Compile Include="Monaco\IRange.cs" />
     <Compile Include="Monaco\KeyCode.cs" />
     <Compile Include="Monaco\KeyMod.cs" />
+    <Compile Include="Monaco\Languages\CodeAction.cs" />
+    <Compile Include="Monaco\Languages\CodeActionContext.cs" />
+    <Compile Include="Monaco\Languages\CodeActionList.cs" />
+    <Compile Include="Monaco\Languages\CodeActionProvider.cs" />
+    <Compile Include="Monaco\Languages\CodeLens.cs" />
+    <Compile Include="Monaco\Languages\CodeLensList.cs" />
+    <Compile Include="Monaco\Languages\CodeLensProvider.cs" />
     <Compile Include="Monaco\Languages\Command.cs" />
     <Compile Include="Monaco\Languages\CompletionContext.cs" />
+    <Compile Include="Monaco\Languages\ColorPresentation.cs" />
     <Compile Include="Monaco\Languages\CompletionItem.cs" />
     <Compile Include="Monaco\Languages\CompletionItemInsertTextRule.cs" />
     <Compile Include="Monaco\Languages\CompletionItemKind.cs" />
+    <Compile Include="Monaco\Languages\DocumentColorProvider.cs" />
     <Compile Include="Monaco\Languages\CompletionItemProvider.cs" />
     <Compile Include="Monaco\Languages\CompletionList.cs" />
     <Compile Include="Monaco\Languages\Hover.cs" />
     <Compile Include="Monaco\Languages\HoverProvider.cs" />
+    <Compile Include="Monaco\Languages\ColorInformation.cs" />
     <Compile Include="Monaco\Languages\ILanguageExtensionPoint.cs" />
     <Compile Include="Monaco\LanguagesHelper.cs" />
     <Compile Include="Monaco\Languages\SuggestTriggerKind.cs" />
+    <Compile Include="Monaco\Languages\TextEdit.cs" />
+    <Compile Include="Monaco\Languages\WorkspaceEdit.cs" />
+    <Compile Include="Monaco\Languages\WorkspaceEditMetadata.cs" />
+    <Compile Include="Monaco\Languages\WorkspaceFileEdit.cs" />
+    <Compile Include="Monaco\Languages\WorkspaceFileEditOptions.cs" />
+    <Compile Include="Monaco\Languages\WorkspaceTextEdit.cs" />
     <Compile Include="Monaco\MarkerTag.cs" />
     <Compile Include="Monaco\ModelHelper.cs" />
     <Compile Include="Monaco\Position.cs" />
@@ -232,18 +255,21 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.10</Version>
+      <Version>6.2.13</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI">
+      <Version>7.1.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.TypeScript.MSBuild">
-      <Version>3.8.3</Version>
+      <Version>4.4.4</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.3</Version>
+      <Version>13.0.1</Version>
     </PackageReference>
     <PackageReference Include="Nito.AsyncEx">
-      <Version>5.0.0</Version>
+      <Version>5.1.2</Version>
     </PackageReference>
     <PackageReference Include="ObservableVector">
       <Version>2.1.0</Version>
@@ -258,6 +284,18 @@
       <SubType>Designer</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ts-helpermethods\Monaco.Helpers.ParentAccessor.ts">
+      <SubType>Designer</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ts-helpermethods\registerCodeActionProvider.ts">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ts-helpermethods\registerCodeLensProvider.ts">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ts-helpermethods\registerColorProvider.ts">
+      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ts-helpermethods\updateSelectedContent.ts">
@@ -277,7 +315,10 @@
     <Content Include="CodeEditor\CodeEditor.html" />
     <Content Include="monaco-editor\*.*" />
     <Content Include="monaco-editor\min\**\*.*" />
-    <Content Include="ts-helpermethods\*.js" />
+    <Content Include="webcomponents-js\*.*" />
+    <Content Include="ts-helpermethods\*.js">
+      <DependentUpon>%(Filename).ts</DependentUpon>
+    </Content>
     <EmbeddedResource Include="Properties\MonacoEditorComponent.rd.xml" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
