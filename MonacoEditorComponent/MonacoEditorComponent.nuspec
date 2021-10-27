@@ -15,9 +15,10 @@
     <tags>uwp monaco editor controls</tags>
     <dependencies>
       <group targetFramework="UAP10.0">
-        <dependency id="Newtonsoft.Json" version="12.0.3"/>
-        <dependency id="Nito.AsyncEx" version="5.0.0"/>
+        <dependency id="Newtonsoft.Json" version="13.0.1"/>
+        <dependency id="Nito.AsyncEx" version="5.1.2"/>
         <dependency id="ObservableVector" version="2.1.0"/>
+        <dependency id="Microsoft.Toolkit.Uwp.UI" version="7.1.1"/>
       </group>
     </dependencies>
   </metadata>
