@@ -226,27 +226,27 @@ namespace Monaco
 				}}
 			}})()";
 
-			if (_log.IsEnabled(Microsoft.Extensions.Logging.LogLevel.Debug))
+			if (this.Log().IsEnabled(Microsoft.Extensions.Logging.LogLevel.Debug))
 			{
-				_log.Debug("Invoke Script: " + script);
+				this.Log().Debug("Invoke Script: " + script);
 			}
 
 			try
 			{
 				var result = this.ExecuteJavascript(script);
 
-				if (_log.IsEnabled(Microsoft.Extensions.Logging.LogLevel.Debug))
+				if (this.Log().IsEnabled(Microsoft.Extensions.Logging.LogLevel.Debug))
 				{
-					_log.Debug($"Invoke Script result: {result}");
+					this.Log().Debug($"Invoke Script result: {result}");
 				}
 
 				return Task.FromResult(result).AsAsyncOperation();
 			}
 			catch (Exception e)
 			{
-				if (_log.IsEnabled(Microsoft.Extensions.Logging.LogLevel.Error))
+				if (this.Log().IsEnabled(Microsoft.Extensions.Logging.LogLevel.Error))
 				{
-					_log.Error("Invoke Script failed", e);
+					this.Log().Error("Invoke Script failed", e);
 				}
 
 				return Task.FromResult("").AsAsyncOperation();
