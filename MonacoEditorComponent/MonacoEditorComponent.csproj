@@ -69,10 +69,10 @@
 		<PackageReference Include="Nito.AsyncEx">
 			<Version>5.0.0</Version>
 		</PackageReference>
-		<PackageReference Include="Uno.UI" Version="4.0.0-dev.5612" />
-		<PackageReference Include="Uno.UI.Runtime.WebAssembly" Version="4.0.0-dev.5612" />
-		<PackageReference Include="Uno.Core.Extensions.Logging" Version="4.0.0-dev.7" />
-		<PackageReference Include="Uno.Core.Extensions.Logging.Singleton" Version="4.0.0-dev.7"  />
+		<PackageReference Include="Uno.UI" Version="4.0.8" />
+		<PackageReference Include="Uno.UI.Runtime.WebAssembly" Version="4.0.8" />
+		<PackageReference Include="Uno.Core.Extensions.Logging" Version="4.0.1" />
+		<PackageReference Include="Uno.Core.Extensions.Logging.Singleton" Version="4.0.1"  />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
