@@ -11,9 +11,11 @@ using Uno.Foundation;
 using Uno.Foundation.Interop;
 using Uno.Logging;
 using Uno.Extensions;
+using Uno.UI.Runtime.WebAssembly;
 
 namespace Monaco
 {
+	[HtmlElement("div")]
     public partial class CodeEditorPresenter : Control, ICodeEditorPresenter, IJSObject
 	{
 		private static readonly string UNO_BOOTSTRAP_APP_BASE = global::System.Environment.GetEnvironmentVariable(nameof(UNO_BOOTSTRAP_APP_BASE));
