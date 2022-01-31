@@ -44,8 +44,8 @@
 		<!-- Note that for WebAssembly version 1.1.1 of the console logger required -->
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.1.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Filter" Version="1.1.1" />
-		<PackageReference Include="Uno.UI.WebAssembly" Version="4.0.0-dev.5612" />
-		<PackageReference Include="Uno.UI.RemoteControl" Version="4.0.0-dev.5612" Condition="'$(Configuration)'=='Debug'" />
+		<PackageReference Include="Uno.UI.WebAssembly" Version="4.1.0-dev.545" />
+		<PackageReference Include="Uno.UI.RemoteControl" Version="4.1.0-dev.545" Condition="'$(Configuration)'=='Debug'" />
 		<PackageReference Include="Uno.Wasm.Bootstrap" Version="3.0.0" />
 		<PackageReference Include="Uno.Wasm.Bootstrap.DevServer" Version="3.0.0" />
 		<PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.0" />
